@@ -1,4 +1,4 @@
-gg// -*-c++-*-
+// -*-c++-*-
 // $Id: HLTPerformanceInfo.h,v 1.14 2008/08/04 14:52:28 bdahmes Exp $
 #ifndef HLTPERFORMANCEINFO_H
 #define HLTPERFORMANCEINFO_H
@@ -15,7 +15,6 @@ public:
   typedef std::vector<Path> PathList;
   typedef std::vector<Module> Modules;
   typedef std::vector<size_t> ModulesInPath;
-  typedef std::vector<size_t> TimingEvents;
   HLTPerformanceInfo();
   //
   class Module {
@@ -112,12 +111,17 @@ public:
     
   };
   // end Path class definition
-
 private:
   PathList paths_;
   Modules modules_;
+  double dtEvent_;     // for time event
+  double dtCPUEvent_;  // for time event
 
 public:
+  // Time Event Measure
+  void setTimeEvent(double t) {dtEvent_=t;}
+  void setCPUTimeEvent(double t) {dtCPUEvent_=t;}
+
   void addPath(const Path & p) {
     paths_.push_back(p);
   }
@@ -195,18 +199,9 @@ public:
     return modules_.end();
   }
 
-
-  // Total Event Time variables
-  TimingEvent::const_iterator beginEvent() const {
-    return 
-  }
-  double totalEventTime() const;
-  double totalEventCPUTime() const;
-  double setEventTime() const;
-//  void setEventTime(double t) {dtevent_=t;}
-//  void setEventCPUTime(double t) {dtCPUevent_=t;}
-
-
+  double totalTimeEvent() const;     // time event function
+  double totalCPUTimeEvent() const;  // time event function
+    
   double totalTime() const;
   double totalCPUTime() const;
   double longestModuleTime() const;

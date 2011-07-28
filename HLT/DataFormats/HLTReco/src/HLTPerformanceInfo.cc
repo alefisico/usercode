@@ -1,233 +1,212 @@
-gg// -*-c++-*-
-// $Id: HLTPerformanceInfo.h,v 1.1 2011/07/28 15:24:27 algomez Exp $
-#ifndef HLTPERFORMANCEINFO_H
-#define HLTPERFORMANCEINFO_H
+// $Id: HLTPerformanceInfo.cc,v 1.17 2009/01/30 23:32:35 elmer Exp $
 
-#include <string>
-#include <vector>
+#include "DataFormats/Common/interface/HLTenums.h"
+#include "DataFormats/HLTReco/interface/HLTPerformanceInfo.h"
+#include <algorithm>
 
-#include "DataFormats/Common/interface/HLTPathStatus.h"
+HLTPerformanceInfo::HLTPerformanceInfo() {
+  paths_.clear(); modules_.clear();
+}
 
-class HLTPerformanceInfo {
-public:
-  class Path;
-  class Module;
-  typedef std::vector<Path> PathList;
-  typedef std::vector<Module> Modules;
-  typedef std::vector<size_t> ModulesInPath;
-  typedef std::vector<size_t> TimingEvents;
-  HLTPerformanceInfo();
-  //
-  class Module {
-  private:
-    std::string name_; // module instance name
-    double dt_; // Wall-clock time
-    double dtCPU_ ; // CPU time
-    // I am using this even for modules....
-    edm::HLTPathStatus status_;
-  public:
-    Module() 
-      : name_("unknown")
-    {}
-    // new constructor adding cpu time
-    Module(const char *n, const double dt, const double dtCPU, 
-	   edm::HLTPathStatus stat = edm::hlt::Ready)
-      : name_(n), dt_(dt), dtCPU_(dtCPU), status_(stat)
-    { }
-    std::string name() const {
-      return name_;
-    }
-    double time() const { return dt_; }
-    double cputime() const { return dtCPU_; }
-    edm::HLTPathStatus status() const { return status_; }
-    bool operator==(const char *tname ) {
-      return std::string(tname) == name();
-    }
-    void clear() {
-      dt_ = 0 ;
-      dtCPU_ = 0 ; 
-      status_.reset();// = edm::hlt::Ready;
-    }
-    void setTime(double t) { dt_=t;}
-    void setCPUTime(double t) { dtCPU_=t;}
-    void setStatus(edm::HLTPathStatus status) { status_=status;} 
-    // pw - can't a module be on different paths?
-    //void setStatusByPath(Path *path) ; 
-    //int indexInPath(Path path) const ; 
-        
-  };
-  // end Module class definition
+HLTPerformanceInfo::PathList::iterator 
+HLTPerformanceInfo::findPath(const char* pathName) {
+  PathList::iterator l = std::find(paths_.begin(), paths_.end(),
+					 pathName);
+  return l; 
+}
 
-  // in this version the module can no longer iterate over the paths
-  // by itself, since it has no access to the actual module list.
-  class Path {
-  private:
-    std::string name_;
-    ModulesInPath moduleView_; // indices into the module vector
-    edm::HLTPathStatus status_;
-        
-  public:
-    Path(const std::string n = "unknown") : 
-      name_(n),
-      moduleView_(),
-      status_()
-    {}
-    std::string name() const {
-      return name_;
+HLTPerformanceInfo::Modules::iterator 
+HLTPerformanceInfo::findModule(const char* moduleInstanceName) {
+  return std::find(modules_.begin(), modules_.end(),
+		   moduleInstanceName);
+}
+
+double HLTPerformanceInfo::totalTimeEvent() const {
+  double t = 0;
+  t = dtEvent_;
+  return t;
+}
+
+double HLTPerformanceInfo::totalCPUTimeEvent() const {
+  double t = 0;
+  t = dtCPUEvent_;
+ return t;
+}
+
+
+double HLTPerformanceInfo::totalTime() const {
+  double t = 0;
+  for ( size_t i = 0; i < modules_.size(); ++i ) {
+    t += modules_[i].time();
+  }
+  return t;
+}
+
+double HLTPerformanceInfo::totalCPUTime() const {
+  double t = 0;
+  for ( size_t i = 0; i < modules_.size(); ++i ) {
+    t += modules_[i].cputime();
+  }
+  return t;
+}
+
+double HLTPerformanceInfo::totalPathTime(const size_t pathnumber)
+{
+  double t = 0;
+  unsigned int cnt = 0;
+  ModulesInPath::const_iterator i = paths_[pathnumber].begin();
+  for ( ; i != paths_[pathnumber].end(); ++i ) {
+    if ( cnt > paths_[pathnumber].status().index()) break;
+    ++cnt;
+    t += modules_[*i].time();
+  }
+  return t;
+}
+
+double HLTPerformanceInfo::totalPathCPUTime(const size_t pathnumber)
+{
+  double t = 0;
+  unsigned int cnt = 0;
+  ModulesInPath::const_iterator i = paths_[pathnumber].begin();
+  for ( ; i != paths_[pathnumber].end(); ++i ) {
+    if ( cnt > paths_[pathnumber].status().index()) break;
+    ++cnt;
+    t += modules_[*i].cputime();
+  }
+  return t;
+}
+
+
+
+double HLTPerformanceInfo::longestModuleTime() const {
+  double t = -1;
+  for ( Modules::const_iterator i = modules_.begin();
+	i != modules_.end(); ++i ) {
+    t = std::max(i->time(),t);
+  }
+  return t;
+}
+
+double HLTPerformanceInfo::longestModuleCPUTime() const {
+  double t = -1;
+  for ( Modules::const_iterator i = modules_.begin();
+	i != modules_.end(); ++i ) {
+    t = std::max(i->cputime(),t);
+  }
+  return t;
+}
+
+const char* HLTPerformanceInfo::longestModuleTimeName() const 
+{
+  double t = -1;
+  std::string slowpoke("unknown");
+  for ( Modules::const_iterator i = modules_.begin();
+	i != modules_.end(); ++i ) {
+    if ( i->time() > t ) {
+      slowpoke = i->name();
+      t = i->time();
     }
-    void setStatus( const edm::HLTPathStatus & result ) {
-      status_ = result;
-    }
+  }
+  return slowpoke.c_str();
+}
     
-    edm::HLTPathStatus status() const {
-      return status_;
+const char* HLTPerformanceInfo::longestModuleCPUTimeName() const 
+{
+  double t = -1;
+  std::string slowpoke("unknown");
+  for ( Modules::const_iterator i = modules_.begin();
+	i != modules_.end(); ++i ) {
+    if ( i->cputime() > t ) {
+      slowpoke = i->name();
+      t = i->cputime();
     }
-    void clear() {
-      status_.reset();
-      // time is dynamic, nothing to reset
-    }
-    bool operator==( const char* tname) {
-      return (std::string(tname) == name());
-    }
+  }
+  return slowpoke.c_str();
+}
     
-    const size_t operator[](size_t m) const {
-      return moduleView_.at(m);
+
+// I think we can no longer do this as it requires going from path -> modules
+// int HLTPerformanceInfo::Module::indexInPath(Path path) const 
+// {
+//   int ctr = 0 ; 
+//   ModulesInPath::const_iterator iter = path.begin();
+//   for ( ; iter != path.end(); ++iter ) {
+//     if (modules_[*iter].name() == this->name()) return ctr ; 
+//     ctr++ ; 
+//   }
+//   //--- Module not found in path ---
+//   return -1 ; 
+// }
+
+const HLTPerformanceInfo::Module & HLTPerformanceInfo::getModuleOnPath(size_t m, 
+                                                                       size_t p) const 
+{
+  // well if this doesn't get your attention....
+  assert(p<paths_.size()&& m<paths_[p].numberOfModules());
+  size_t j = paths_[p].getModuleIndex(m);
+  return modules_.at(j);
+}
+
+
+bool HLTPerformanceInfo::uniqueModule(const char *mod) const {
+  int mCtr = 0 ;
+  for ( size_t p = 0; p < paths_.size(); ++p ) {
+    for ( size_t m = 0; m < paths_[p].numberOfModules(); ++m ) {
+      size_t modIndex = paths_[p].getModuleIndex(m);
+      if ( modules_[modIndex].name() == std::string(mod) ) 
+	++mCtr;
+      if ( mCtr > 1 ) 
+	return false;
     }
+  }
+
+  if (mCtr == 0) return false ;
+  return true ;
+}
+
+int HLTPerformanceInfo::moduleIndexInPath(const char *mod, const char *path)
+{
+  PathList::iterator p = findPath(path);
+  if ( p == endPaths() ) return -1; // Path doesn't exist
+  int ctr = 0 ; 
+  for ( ModulesInPath::const_iterator j = p->begin(); j != p->end(); ++j ) {
+      if ( modules_.at(*j) == mod ) return ctr ; 
+      ctr++ ; 
+  }
+  return -2; // module not found on path
+}
+
+
+// Set the status of the module based on the path's status
+// make sure not to wipe out ones that come after the last 
+// module run on the particular path
+void HLTPerformanceInfo::setStatusOfModulesFromPath(const char *pathName)
+{
+  PathList::iterator p = findPath(pathName);
+  if ( p == endPaths() ) {
+    return; // do nothing
+  }
+  unsigned int ctr = 0;
+  for ( ModulesInPath::const_iterator j = p->begin(); j != p->end(); ++j ) {
+    edm::hlt::HLTState modState = edm::hlt::Ready ; 
+    unsigned int modIndex = 0 ; 
+
+    // get module in the master list
+    Module & mod = modules_.at(*j);
     
-    void addModuleRef( size_t m) {
-      moduleView_.push_back(m);
+    if ( ! mod.status().wasrun() ) {
+        if (p->status().accept()) {
+            modState = edm::hlt::Pass ;
+        } else {
+            if ( p->status().index() > ctr ) {
+                modState = edm::hlt::Pass ; 
+            } else if ( p->status().index() == ctr ) {
+                modState = p->status().state() ; 
+            }
+        }
+        mod.setStatus(edm::HLTPathStatus(modState,modIndex)) ;
     }
-    
-    ModulesInPath::const_iterator begin() {
-      return moduleView_.begin();
-    }
-    ModulesInPath::const_iterator end() {
-      return moduleView_.end();
-    }
-    size_t getModuleIndex(size_t j) const {
-      return moduleView_.at(j);
-    }
-    
-    size_t numberOfModules() const { return moduleView_.size(); };
-    
-  };
-  // end Path class definition
-
-private:
-  PathList paths_;
-  Modules modules_;
-
-public:
-  void addPath(const Path & p) {
-    paths_.push_back(p);
-  }
-  void addModule(const Module & m ) {
-    modules_.push_back(m);
-  } 
-  // by name
-   void addModuleToPath(const char *mod, const char *path) {
-     // first make sure module exists
-     Modules::iterator m = findModule(mod);
-     if ( m == endModules() ) {
-       // new module - create it and stick it on the end
-       Module newMod(mod, 0, 0); // time (wall and cpu) = 0 since it wasn't run	 
-       modules_.push_back(newMod);
-     }
-
-     for ( size_t i = 0; i < paths_.size(); ++i ) {
-       if ( !( paths_[i] == path ) ) continue;
-       // we found the path, add module to the end
-       for ( size_t j = 0; j < modules_.size(); ++j ) {
-	 if ( !(modules_[j] == mod) ) continue;
-	 paths_[i].addModuleRef(j);
-	 break;
-       }
-       break;
-     }
-   }
-  // by index
-  void addModuleToPath(const size_t mod, const size_t path) {
-    assert(( path <paths_.size()) && (mod < modules_.size()) );
-    paths_[path].addModuleRef(mod);
-  }
-
-  void clear() {
-    modules_.clear(); paths_.clear();
-  }
-  void clearModules() {
-    for ( size_t i = 0; i < modules_.size(); ++i ) {
-      modules_[i].clear();
-    }
-  }
-
-  // non-const?
-  const Module & getModuleOnPath(size_t m, size_t p) const ;
-  const Module & getModule(size_t m) const { return modules_.at(m); }
-  const Path & getPath(size_t p) const { return paths_.at(p); }
-
-
-  // find a module, given its name.
-  // returns endModules() on failure
-  Modules::iterator findModule(const char* moduleInstanceName) ;
-  PathList::iterator findPath(const char* pathName) ;
-
-  int moduleIndexInPath(const char *mod, const char *path);
-
-  size_t numberOfPaths() const {
-    return paths_.size();
-  }
-  size_t numberOfModules() const {
-    return modules_.size();
-  }
-
-  PathList::iterator beginPaths()  {
-       return paths_.begin();
-  }
-  PathList::iterator endPaths()  {
-    return paths_.end();
-  }
-    
-  Modules::const_iterator beginModules() const {
-    return modules_.begin();
+    ctr++ ; 
   }
   
-  Modules::const_iterator endModules() const {
-    return modules_.end();
-  }
-
-
-  // Total Event Time variables
-  TimingEvent::const_iterator beginEvent() const {
-    return 
-  }
-  double totalEventTime() const;
-  double totalEventCPUTime() const;
-  double setEventTime() const;
-//  void setEventTime(double t) {dtevent_=t;}
-//  void setEventCPUTime(double t) {dtCPUevent_=t;}
-
-
-  double totalTime() const;
-  double totalCPUTime() const;
-  double longestModuleTime() const;
-  double longestModuleCPUTime() const;
-  const char* longestModuleTimeName() const;
-  const char* longestModuleCPUTimeName() const;
-
-  double totalPathTime(const size_t path);
-  double totalPathCPUTime(const size_t path);
-
-  
-  void setStatusOfModulesFromPath(const char* pathName);
-    
-//   double lastModuleOnPathTime(const size_t pathnumber);
-//   double lastModuleOnPathCPUTime(const size_t pathnumber);
-  
-  // is this module only on one path?
-  bool uniqueModule(const char *mod) const ;
-};
-
-
-typedef std::vector<HLTPerformanceInfo> HLTPerformanceInfoCollection;
-
-#endif // HLTPERFORMANCEINFO_H
+}

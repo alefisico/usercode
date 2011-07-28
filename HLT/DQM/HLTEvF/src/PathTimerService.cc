@@ -6,7 +6,7 @@
 // Implementation:
 //
 // Original Author:  Jim Kowalkowski
-// $Id: PathTimerService.cc,v 1.1 2011/07/28 15:17:27 algomez Exp $
+// $Id: PathTimerService.cc,v 1.14 2008/07/30 09:35:08 wittich Exp $
 //
 
 #include "DQM/HLTEvF/interface/PathTimerService.h"
@@ -34,6 +34,7 @@ namespace edm {
         }
 
         edm::CPUTimer* PathTimerService::_CPUtimer = 0;
+        edm::CPUTimer* PathTimerService::_CPUtimerevent = 0;
 
         PathTimerService::PathTimerService(const ParameterSet& iPS, ActivityRegistry&iRegistry):
             total_event_count_(0),
@@ -53,6 +54,7 @@ namespace edm {
             _myPS=iPS;
 
             if (!_CPUtimer) _CPUtimer = new edm::CPUTimer();
+            if (!_CPUtimerevent) _CPUtimerevent = new edm::CPUTimer();
         }
 
 
@@ -61,6 +63,10 @@ namespace edm {
                 delete _CPUtimer ;
                 _CPUtimer = 0 ;
             }
+            if (_CPUtimerevent) {
+                delete _CPUtimerevent ;
+                _CPUtimerevent = 0;
+            }  
         }
 
 
@@ -110,8 +116,8 @@ namespace edm {
       curr_event_ = iID;
       curr_event_time_ = getTime();
 
-      _CPUtimerevent->reset() ;
-      _CPUtimerevent->start(); 
+      _CPUtimerevent->reset() ;    // for time event
+      _CPUtimerevent->start();     // for time event
 
       _perfInfo->clearModules();
       
@@ -131,20 +137,19 @@ namespace edm {
     void PathTimerService::postEventProcessing(const Event& e, const EventSetup&)  {
       total_event_count_ = total_event_count_ + 1;
       
+
+      // for time event
       _CPUtimerevent->stop();
       double tWallevent = _CPUtimerevent->realTime();
       double tCPUevent  = _CPUtimerevent->cpuTime();
       _CPUtimerevent->reset() ;
 
-      _eventTime[e] = tWallevent;
-      _eventCPUTime[e] = tCPUevent;
-
-      HLTPerformanceInfo::TimeEvents iEvent = 
-          _perInfo->findEvent(e); 
-      if (iEvent != _perfInfo->endEvents() ) {
-        iEvent->setTimeEvent(tWallevent) ;
-        iEvent->setCPUTimeEvent(tCPUevent) ;
-      }  
+      _perfInfo->setTimeEvent(tWallevent);
+      _perfInfo->setCPUTimeEvent(tCPUevent);
+      
+      //std::cout << "tWallevent" std::endl; 
+//      HLTPerformanceInfo::TotalEventTime iETime = _perfInfo->setTimeEvent(tWallevent);
+//      HLTPerformanceInfo::TotalEventCPUTime iECPUTime = _perfInfo->setCPUTimeEvent(tCPUevent);
     }
 
     void PathTimerService::preModule(const ModuleDescription&) {
