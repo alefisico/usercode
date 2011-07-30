@@ -183,8 +183,9 @@ void initialize(HLTPerformanceInfo hltPerf,
 }
 
 //---- Total Time Event ----//
-double getEventTime(HLTPerformanceInfo::dtEvent_ tTE) {
-  return tTE;
+double getEventTime(HLTPerformanceInfo hltPerf, bool useCPU) {
+  if(useCPU) return hltPerf.totalTimeEvent();
+  return hltPerf.totalCPUTimeEvent();
 }
 //--------------------------//
 
@@ -726,6 +727,7 @@ int main(int argc, char ** argv) {
   bool writeEventSection = true ;
   bool writeRejectionSection = false;
   bool writeSummary = false ;
+//  bool wantTimeSpecific = false ;
   bool takeCPUtime = false ;
   
   int LogYScale = 0;
@@ -1083,8 +1085,11 @@ int main(int argc, char ** argv) {
   std::vector<int> skipEvents ; 
   
   //--- Variables used to set the scale for histograms ---//
+  double longestEventTimeEvent = 0. ;  // time event
   double longestEventTime = 0. ;
+  int longestEventEvent = -1 ;         // time event
   int longestEvent = -1 ; 
+  double sumTimeEvent = 0. ; double sumTimeEventSq = 0. ;     // time event
   double sumTime = 0. ; double sumTimeSq = 0. ; 
   double xmin = 0. ; double xmax = 0. ;
 
@@ -1128,6 +1133,7 @@ int main(int argc, char ** argv) {
   //--- One loop through all events ---//
   bool init = false ; int nSkips = 0 ; 
   std::vector<double> eventTime(n_evts,0.) ;
+  std::vector<double> eventTimeEvent(n_evts,0.) ;  /// total time event
   
   for (int ievt=0; ievt<n_evts; ievt++) {
 
@@ -1338,17 +1344,30 @@ int main(int argc, char ** argv) {
 	}
 	mIdx++ ;
       }
-    }
+    }//----- module loop end 
 
     if (eventTime.at(ievt) > longestEventTime) {
       longestEventTime = eventTime.at(ievt) ;
       longestEvent = ievt ;
     }
-        
+
+
+    //// ----total event 
+    if (eventTimeEvent.at(ievt) > longestEventTimeEvent) {
+      longestEventTimeEvent = eventTimeEvent.at(ievt) ;
+      longestEventEvent = ievt ;
+    }
+
+    eventTimeEvent.at(ievt) = getEventTime((*(HLTPerformanceWrapper->product())),takeCPUtime);   
+    sumTimeEvent += eventTimeEvent.at(ievt);
+    sumTimeEventSq += eventTimeEvent.at(ievt) * eventTimeEvent.at(ievt);
+    //// ---- end total time  
+
+
     sumTime += eventTime.at(ievt) ;
     sumTimeSq += eventTime.at(ievt) * eventTime.at(ievt) ; 
 
-  }
+  }//---------------- event loop end
 
   int xscale = 4 ;
   if (longestEventTime == 0) {
@@ -1410,6 +1429,15 @@ int main(int argc, char ** argv) {
   TH1D* totalTimeEvent = new TH1D("totalTimeEvent", "Total time for Event",
                                   numberOfXbins,xmin,xmax) ;
   totalTimeEvent->StatOverflows(kTRUE) ; totalTimeEvent->GetXaxis()->SetTitle("msec") ;
+
+  TH1D* acceptedTotalTimeEvent = new TH1D("acceptedTotalTimeEvent","Total time for Event per accepted event",
+                                     numberOfXbins,xmin,xmax) ;
+  acceptedTotalTimeEvent->StatOverflows(kTRUE) ; acceptedTotalTimeEvent->GetXaxis()->SetTitle("msec") ;
+
+  TH1D* rejectedTotalTimeEvent = new TH1D("rejectedTotalTimeEvent","Total time for Event per rejected event",
+                                     numberOfXbins,xmin,xmax) ;
+  rejectedTotalTimeEvent->StatOverflows(kTRUE) ; rejectedTotalTimeEvent->GetXaxis()->SetTitle("msec") ;
+
 
   //-------------------------------------------------//
  
@@ -1659,7 +1687,8 @@ int main(int argc, char ** argv) {
     pathVsPathSummary->GetYaxis()->SetBinLabel(i+1,pathNames.at(i).c_str()) ; 
   }
 
-  //determine in the specificPathTimeSummaryVector
+ if (numberOfspecificTotalTime > 0) {
+  // determine in the specificPathTimeSummaryVector
   for (unsigned int ievt=0; ievt<unsigned(n_evts); ievt++) {
     
     int pCtr = 0 ; int pIdx = 0 ;
@@ -1718,6 +1747,7 @@ int main(int argc, char ** argv) {
       }
     }
   }
+ }
 
  // Fill event histograms
   for (unsigned int ievt=0; ievt<unsigned(n_evts); ievt++) {
@@ -1732,11 +1762,13 @@ int main(int argc, char ** argv) {
 
     if (acceptedEvt(eventPathStatus.at(ievt))) {
       acceptedTotalTime->Fill(1000.*eventTime.at(ievt));
+      acceptedTotalTimeEvent->Fill(1000.*eventTimeEvent.at(ievt));
     } else if (!acceptedEvt(eventPathStatus.at(ievt))) {
       rejectedTotalTime->Fill(1000.*eventTime.at(ievt));
+      rejectedTotalTimeEvent->Fill(1000.*eventTimeEvent.at(ievt));
     }
 
-    totalTimeEvent->Fill( 1000. * getEventTime ) ;
+    totalTimeEvent->Fill( 1000. * eventTimeEvent.at(ievt) ) ;  /// total time event
 
 
     totalTime->Fill( 1000. * eventTime.at(ievt) ) ;
@@ -2175,6 +2207,8 @@ int main(int argc, char ** argv) {
     //--- Plot Histograms ---//
     //-----------------------//
     plot1D(totalTimeEvent,c1,writePdf, LogYScale) ;      //time as a stop watch
+    plot1D(acceptedTotalTimeEvent,c1,writePdf, LogYScale) ;
+    plot1D(rejectedTotalTimeEvent,c1,writePdf, LogYScale) ;
 //    plot1D(totalCPUEventTime,c1,writePdf, LogYScale) ;   //CPU time as a stop watch
 
     plot1D(totalTime,c1,writePdf, LogYScale) ;
