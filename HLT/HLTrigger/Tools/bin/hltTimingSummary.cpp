@@ -1086,9 +1086,12 @@ int main(int argc, char ** argv) {
   
   //--- Variables used to set the scale for histograms ---//
   double longestEventTimeEvent = 0. ;  // time event
+  double longestEventCPUTimeEvent = 0. ;  // CPU time event
   double longestEventTime = 0. ;
   int longestEventEvent = -1 ;         // time event
+  int longestEventCPUEvent = -1 ;         // CPU time event
   int longestEvent = -1 ; 
+  double sumCPUTimeEvent = 0. ; double sumCPUTimeEventSq = 0. ;     // CPU time event
   double sumTimeEvent = 0. ; double sumTimeEventSq = 0. ;     // time event
   double sumTime = 0. ; double sumTimeSq = 0. ; 
   double xmin = 0. ; double xmax = 0. ;
@@ -1134,6 +1137,7 @@ int main(int argc, char ** argv) {
   bool init = false ; int nSkips = 0 ; 
   std::vector<double> eventTime(n_evts,0.) ;
   std::vector<double> eventTimeEvent(n_evts,0.) ;  /// total time event
+  std::vector<double> eventCPUTimeEvent(n_evts,0.) ;  /// CPU total time event
   
   for (int ievt=0; ievt<n_evts; ievt++) {
 
@@ -1358,9 +1362,19 @@ int main(int argc, char ** argv) {
       longestEventEvent = ievt ;
     }
 
-    eventTimeEvent.at(ievt) = getEventTime((*(HLTPerformanceWrapper->product())),takeCPUtime);   
+    eventTimeEvent.at(ievt) = getEventTime((*(HLTPerformanceWrapper->product())),!takeCPUtime);   
     sumTimeEvent += eventTimeEvent.at(ievt);
     sumTimeEventSq += eventTimeEvent.at(ievt) * eventTimeEvent.at(ievt);
+
+    if (eventCPUTimeEvent.at(ievt) > longestEventCPUTimeEvent) {
+      longestEventCPUTimeEvent = eventCPUTimeEvent.at(ievt) ;
+      longestEventCPUEvent = ievt ;
+    }
+
+    eventCPUTimeEvent.at(ievt) = getEventTime((*(HLTPerformanceWrapper->product())),takeCPUtime);
+    sumCPUTimeEvent += eventCPUTimeEvent.at(ievt);
+    sumCPUTimeEventSq += eventCPUTimeEvent.at(ievt) * eventCPUTimeEvent.at(ievt);
+
     //// ---- end total time  
 
 
@@ -1430,14 +1444,27 @@ int main(int argc, char ** argv) {
                                   numberOfXbins,xmin,xmax) ;
   totalTimeEvent->StatOverflows(kTRUE) ; totalTimeEvent->GetXaxis()->SetTitle("msec") ;
 
+  TH1D* totalCPUTimeEvent = new TH1D("totalCPUTimeEvent", "Total CPU time for Event",
+                                  numberOfXbins,xmin,xmax) ;
+  totalCPUTimeEvent->StatOverflows(kTRUE) ; totalCPUTimeEvent->GetXaxis()->SetTitle("msec") ;
+
+
   TH1D* acceptedTotalTimeEvent = new TH1D("acceptedTotalTimeEvent","Total time for Event per accepted event",
                                      numberOfXbins,xmin,xmax) ;
   acceptedTotalTimeEvent->StatOverflows(kTRUE) ; acceptedTotalTimeEvent->GetXaxis()->SetTitle("msec") ;
+
+  TH1D* acceptedTotalCPUTimeEvent = new TH1D("acceptedTotalCPUTimeEvent","Total CPU time for Event per accepted event",
+                                     numberOfXbins,xmin,xmax) ;
+  acceptedTotalCPUTimeEvent->StatOverflows(kTRUE) ; acceptedTotalCPUTimeEvent->GetXaxis()->SetTitle("msec") ;
+
 
   TH1D* rejectedTotalTimeEvent = new TH1D("rejectedTotalTimeEvent","Total time for Event per rejected event",
                                      numberOfXbins,xmin,xmax) ;
   rejectedTotalTimeEvent->StatOverflows(kTRUE) ; rejectedTotalTimeEvent->GetXaxis()->SetTitle("msec") ;
 
+  TH1D* rejectedTotalCPUTimeEvent = new TH1D("rejectedTotalCPUTimeEvent","Total CPU time for Event per rejected event",
+                                     numberOfXbins,xmin,xmax) ;
+  rejectedTotalCPUTimeEvent->StatOverflows(kTRUE) ; rejectedTotalCPUTimeEvent->GetXaxis()->SetTitle("msec") ;
 
   //-------------------------------------------------//
  
@@ -1763,12 +1790,15 @@ int main(int argc, char ** argv) {
     if (acceptedEvt(eventPathStatus.at(ievt))) {
       acceptedTotalTime->Fill(1000.*eventTime.at(ievt));
       acceptedTotalTimeEvent->Fill(1000.*eventTimeEvent.at(ievt));
+      acceptedTotalCPUTimeEvent->Fill(1000.*eventTimeEvent.at(ievt));
     } else if (!acceptedEvt(eventPathStatus.at(ievt))) {
       rejectedTotalTime->Fill(1000.*eventTime.at(ievt));
       rejectedTotalTimeEvent->Fill(1000.*eventTimeEvent.at(ievt));
+      rejectedTotalCPUTimeEvent->Fill(1000.*eventTimeEvent.at(ievt));
     }
 
     totalTimeEvent->Fill( 1000. * eventTimeEvent.at(ievt) ) ;  /// total time event
+    totalCPUTimeEvent->Fill( 1000. * eventTimeEvent.at(ievt) ) ;  /// total time event
 
 
     totalTime->Fill( 1000. * eventTime.at(ievt) ) ;
@@ -2206,14 +2236,20 @@ int main(int argc, char ** argv) {
     //-----------------------//
     //--- Plot Histograms ---//
     //-----------------------//
+
+    //--------- Total Event Time ---------------//
     plot1D(totalTimeEvent,c1,writePdf, LogYScale) ;      //time as a stop watch
     plot1D(acceptedTotalTimeEvent,c1,writePdf, LogYScale) ;
     plot1D(rejectedTotalTimeEvent,c1,writePdf, LogYScale) ;
-//    plot1D(totalCPUEventTime,c1,writePdf, LogYScale) ;   //CPU time as a stop watch
+    plot1D(totalCPUTimeEvent,c1,writePdf, LogYScale) ;   //CPU time as a stop watch
+    plot1D(acceptedTotalCPUTimeEvent,c1,writePdf, LogYScale) ;
+    plot1D(rejectedTotalCPUTimeEvent,c1,writePdf, LogYScale) ;
 
+    //------------------------------------------//
     plot1D(totalTime,c1,writePdf, LogYScale) ;
     plot1D(acceptedTotalTime,c1,writePdf, LogYScale) ;
     plot1D(rejectedTotalTime,c1,writePdf, LogYScale) ;
+
 
     //--- Average time (summary) plots ---//
     if (numberOfModules > 0) {
