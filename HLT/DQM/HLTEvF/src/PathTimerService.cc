@@ -116,8 +116,10 @@ namespace edm {
       curr_event_ = iID;
       curr_event_time_ = getTime();
 
-      _CPUtimerevent->reset() ;    // for time event
-      _CPUtimerevent->start();     // for time event
+      //_CPUtimerevent->reset() ;    // for time event
+      //double tWallevent = _CPUtimerevent->realTime();
+      //std::cout << tWallevent << std::endl;
+      //_CPUtimerevent->start();     // for time event
 
       _perfInfo->clearModules();
       
@@ -139,22 +141,29 @@ namespace edm {
       
 
       // for time event
-      _CPUtimerevent->stop();
-      double tWallevent = _CPUtimerevent->realTime();
-      double tCPUevent  = _CPUtimerevent->cpuTime();
-      _CPUtimerevent->reset() ;
+     // _CPUtimerevent->stop();
+     // double tWallevent = _CPUtimerevent->realTime();
+     // double tCPUevent  = _CPUtimerevent->cpuTime();
+     // _CPUtimerevent->reset() ;
 
-      _perfInfo->setTimeEvent(tWallevent);
-      _perfInfo->setCPUTimeEvent(tCPUevent);
+      //_perfInfo->setTimeEvent(tWallevent);
+      //_perfInfo->setCPUTimeEvent(tCPUevent);
       
-      //std::cout << "tWallevent" std::endl; 
-//      HLTPerformanceInfo::TotalEventTime iETime = _perfInfo->setTimeEvent(tWallevent);
-//      HLTPerformanceInfo::TotalEventCPUTime iECPUTime = _perfInfo->setCPUTimeEvent(tCPUevent);
+      //std::cout << "time = " << tWallevent << std::endl; 
     }
 
     void PathTimerService::preModule(const ModuleDescription&) {
         _CPUtimer->reset() ; 
-        _CPUtimer->start() ; 
+        _CPUtimer->start() ;
+ 
+//       HLTPerformanceInfo::Modules::iterator iMod;
+//       if (iMod == _perfInfo->beginModules()+1 ){
+//         _CPUtimerevent->reset() ;    // for time event
+//      double tWallevent = _CPUtimerevent->realTime();
+//      std::cout << tWallevent << std::endl;
+
+//         _CPUtimerevent->start();     // for time event
+//       }
     }
 
       void PathTimerService::postModule(const ModuleDescription& desc) {
@@ -166,13 +175,35 @@ namespace edm {
       
           _moduleTime[desc.moduleLabel()] = tWall ;
           _moduleCPUTime[desc.moduleLabel()] = tCPU ; 
-        
+
+       
           HLTPerformanceInfo::Modules::iterator iMod =
               _perfInfo->findModule(desc.moduleLabel().c_str());
+          std::cout << "modulo = " << desc.moduleLabel().c_str() << std::endl ;
           if ( iMod != _perfInfo->endModules() ) {
 	    iMod->setTime(tWall) ;
 	    iMod->setCPUTime(tCPU) ;
           }
+	//HLTPerformanceInfo::Modules::iterator iEvt;
+       if (iMod == _perfInfo->beginModules()+1 ){
+         _CPUtimerevent->reset() ;    // for time event
+        double tiWallevent = _CPUtimerevent->realTime();
+      std::cout << tiWallevent << std::endl;
+
+         _CPUtimerevent->start();     // for time event
+       }
+
+       else if (iMod == _perfInfo->endModules()-2 ){
+     _CPUtimerevent->stop();
+      double tWallevent = _CPUtimerevent->realTime();
+      double tCPUevent  = _CPUtimerevent->cpuTime();
+      _CPUtimerevent->reset() ;
+
+      _perfInfo->setTimeEvent(tWallevent);
+      _perfInfo->setCPUTimeEvent(tCPUevent);
+
+      std::cout << "time = " << tWallevent << std::endl;
+      }
 
       }
 
