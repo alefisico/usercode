@@ -1,3 +1,4 @@
+//
 // $Id: HLTPerformanceInfo.cc,v 1.17 2009/01/30 23:32:35 elmer Exp $
 
 #include "DataFormats/Common/interface/HLTenums.h"
@@ -21,6 +22,7 @@ HLTPerformanceInfo::findModule(const char* moduleInstanceName) {
 		   moduleInstanceName);
 }
 
+//----- Total Time Event as a Stop Watch 
 double HLTPerformanceInfo::totalTimeEvent() const {
   double t = 0;
   t = dtEvent_;
@@ -32,7 +34,7 @@ double HLTPerformanceInfo::totalCPUTimeEvent() const {
   t = dtCPUEvent_;
  return t;
 }
-
+//---------------------------------------
 
 double HLTPerformanceInfo::totalTime() const {
   double t = 0;
@@ -75,8 +77,6 @@ double HLTPerformanceInfo::totalPathCPUTime(const size_t pathnumber)
   }
   return t;
 }
-
-
 
 double HLTPerformanceInfo::longestModuleTime() const {
   double t = -1;
