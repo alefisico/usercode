@@ -1,4 +1,7 @@
 // -*-c++-*-
+// Original Author: Bryan Dames
+// Modified by: Alejandro Gomez
+//
 // $Id: HLTPerformanceInfo.h,v 1.14 2008/08/04 14:52:28 bdahmes Exp $
 #ifndef HLTPERFORMANCEINFO_H
 #define HLTPERFORMANCEINFO_H
@@ -114,13 +117,14 @@ public:
 private:
   PathList paths_;
   Modules modules_;
-  double dtEvent_;     // for time event
-  double dtCPUEvent_;  // for time event
+  double dtEvent_;     // for Total Time Event as Stop Watch 
+  double dtCPUEvent_;  // for Total CPU Time Event as Stop Watch
 
 public:
-  // Time Event Measure
+  //----- Total Time Event as Stop Watch
   void setTimeEvent(double t) {dtEvent_=t;}
   void setCPUTimeEvent(double t) {dtCPUEvent_=t;}
+  //------------------------------------
 
   void addPath(const Path & p) {
     paths_.push_back(p);
@@ -199,8 +203,8 @@ public:
     return modules_.end();
   }
 
-  double totalTimeEvent() const;     // time event function
-  double totalCPUTimeEvent() const;  // time event function
+  double totalTimeEvent() const;     // total time event as stop watch
+  double totalCPUTimeEvent() const;  // total cpu time event as stop watch
     
   double totalTime() const;
   double totalCPUTime() const;
