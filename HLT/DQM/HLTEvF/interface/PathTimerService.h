@@ -7,7 +7,8 @@
 // 
 //
 // Original Author:  David Lange
-// $Id: PathTimerService.h,v 1.6 2007/09/14 17:33:32 bdahmes Exp $
+// Modified by: Alejandro Gomez
+// $Id: PathTimerService.h,v 1.1 2011/07/28 15:40:54 algomez Exp $
 //
 #include "sigc++/signal.h"
 
@@ -61,8 +62,8 @@ namespace edm {
             std::map<std::string, unsigned int> _lastModuleToRun;
             std::auto_ptr<HLTPerformanceInfo> _perfInfo;
             std::vector< std::vector<unsigned int> > _newPathIndex ;
-            static edm::CPUTimer* _CPUtimer ;
- 	    static edm::CPUTimer* _CPUtimerevent ;    // Time Event
+            static edm::CPUTimer* _CPUtimer ;         // Total Time Event by adding modules  
+ 	    static edm::CPUTimer* _CPUtimerevent ;    // Total Time Event as a Stop Watch
         
         };
     }
