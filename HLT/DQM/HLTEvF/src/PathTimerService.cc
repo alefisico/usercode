@@ -6,6 +6,7 @@
 // Implementation:
 //
 // Original Author:  Jim Kowalkowski
+// Modified by: Alejandro Gomez
 // $Id: PathTimerService.cc,v 1.14 2008/07/30 09:35:08 wittich Exp $
 //
 
@@ -33,8 +34,8 @@ namespace edm {
             return (double)t.tv_sec + (double(t.tv_usec) * 1E-6);
         }
 
-        edm::CPUTimer* PathTimerService::_CPUtimer = 0;
-        edm::CPUTimer* PathTimerService::_CPUtimerevent = 0;
+        edm::CPUTimer* PathTimerService::_CPUtimer = 0;       // for total time event by adding modules
+        edm::CPUTimer* PathTimerService::_CPUtimerevent = 0;  // for total time event as stop watch
 
         PathTimerService::PathTimerService(const ParameterSet& iPS, ActivityRegistry&iRegistry):
             total_event_count_(0),
@@ -53,8 +54,8 @@ namespace edm {
             
             _myPS=iPS;
 
-            if (!_CPUtimer) _CPUtimer = new edm::CPUTimer();
-            if (!_CPUtimerevent) _CPUtimerevent = new edm::CPUTimer();
+            if (!_CPUtimer) _CPUtimer = new edm::CPUTimer();              // for total time event by adding modules
+            if (!_CPUtimerevent) _CPUtimerevent = new edm::CPUTimer();    // for total time event as stop watch
         }
 
 
@@ -116,11 +117,6 @@ namespace edm {
       curr_event_ = iID;
       curr_event_time_ = getTime();
 
-      //_CPUtimerevent->reset() ;    // for time event
-      //double tWallevent = _CPUtimerevent->realTime();
-      //std::cout << tWallevent << std::endl;
-      //_CPUtimerevent->start();     // for time event
-
       _perfInfo->clearModules();
       
       std::map<std::string, double>::iterator iter=_moduleTime.begin();
@@ -138,32 +134,11 @@ namespace edm {
     }
     void PathTimerService::postEventProcessing(const Event& e, const EventSetup&)  {
       total_event_count_ = total_event_count_ + 1;
-      
-
-      // for time event
-     // _CPUtimerevent->stop();
-     // double tWallevent = _CPUtimerevent->realTime();
-     // double tCPUevent  = _CPUtimerevent->cpuTime();
-     // _CPUtimerevent->reset() ;
-
-      //_perfInfo->setTimeEvent(tWallevent);
-      //_perfInfo->setCPUTimeEvent(tCPUevent);
-      
-      //std::cout << "time = " << tWallevent << std::endl; 
     }
 
     void PathTimerService::preModule(const ModuleDescription&) {
         _CPUtimer->reset() ; 
         _CPUtimer->start() ;
- 
-//       HLTPerformanceInfo::Modules::iterator iMod;
-//       if (iMod == _perfInfo->beginModules()+1 ){
-//         _CPUtimerevent->reset() ;    // for time event
-//      double tWallevent = _CPUtimerevent->realTime();
-//      std::cout << tWallevent << std::endl;
-
-//         _CPUtimerevent->start();     // for time event
-//       }
     }
 
       void PathTimerService::postModule(const ModuleDescription& desc) {
@@ -184,27 +159,27 @@ namespace edm {
 	    iMod->setTime(tWall) ;
 	    iMod->setCPUTime(tCPU) ;
           }
-	//HLTPerformanceInfo::Modules::iterator iEvt;
-       if (iMod == _perfInfo->beginModules()+1 ){
-         _CPUtimerevent->reset() ;    // for time event
-        double tiWallevent = _CPUtimerevent->realTime();
-      std::cout << tiWallevent << std::endl;
+	//--------------------------- for Total Time Event as Stop Watch
+      if (iMod == _perfInfo->beginModules()+1 ){
+         _CPUtimerevent->reset() ;   
+         double tiWallevent = _CPUtimerevent->realTime();
+         std::cout << "initial time = " << tiWallevent << std::endl;
 
-         _CPUtimerevent->start();     // for time event
+         _CPUtimerevent->start(); 
        }
 
-       else if (iMod == _perfInfo->endModules()-2 ){
-     _CPUtimerevent->stop();
-      double tWallevent = _CPUtimerevent->realTime();
-      double tCPUevent  = _CPUtimerevent->cpuTime();
-      _CPUtimerevent->reset() ;
+       else if (iMod == _perfInfo->endModules()-1 ){
+         _CPUtimerevent->stop();
+         double tWallevent = _CPUtimerevent->realTime();
+         double tCPUevent  = _CPUtimerevent->cpuTime();
+        //_CPUtimerevent->reset() ;
 
-      _perfInfo->setTimeEvent(tWallevent);
-      _perfInfo->setCPUTimeEvent(tCPUevent);
+        _perfInfo->setTimeEvent(tWallevent);
+        _perfInfo->setCPUTimeEvent(tCPUevent);
 
-      std::cout << "time = " << tWallevent << std::endl;
-      }
-
+        std::cout << "time = " << tWallevent << std::endl;
+       }
+      //------------------------------------------------
       }
 
       void PathTimerService::postPathProcessing(const std::string &name, 
