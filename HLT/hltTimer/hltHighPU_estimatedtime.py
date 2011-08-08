@@ -32,10 +32,10 @@ from ROOT import *
 #just a debug flag
 DEBUG = False
 #threshold for the ratio of the running modules
-#THRATIO = 10.0
+THRATIO = 10.0
 #threshold for the difference of the running modules, used
 #when one instance is zero
-#THDIFF = 100
+THDIFF = 100
 
 gROOT.SetStyle("Plain")
 gStyle.SetOptStat(0)
@@ -56,7 +56,7 @@ def usage():
 def get_histos_info_mean(infile):
 	'''Return mean time of modules for an specific path'''
 ###############################################################
-	repo = {}
+	repo_means = {}
 	f = TFile(infile,"READ")
 	dir = f.GetListOfKeys()
 	for k in dir:
@@ -73,109 +73,122 @@ def get_histos_info_mean(infile):
 				pathname = pathname + fullname[j]
 				if j is not (len(fullname)-2):
 					pathname = pathname + "_"
-			if not pathname in repo:
-				repo[pathname] = {} 
-			repo[pathname][modname] = themean
+			if not pathname in repo_means:
+				repo_means[pathname] = {} 
+			repo_means[pathname][modname] = themean
 #					if pathname == path :           #store information paths and mods
 #						if themean != 0:
 #							repo[modname] = themean
 #	print repo
-	return repo;
+	return repo_means;
 
 
             
 ###############################################################
-def get_histos_info_nentries(infile,repo1):
-        '''Return number of entries of modules for an specific path'''
+def get_histos_info_nominal(infile,repo_means):
+        '''Return number of entries of modules for an specific path
+	   and the max number of events'''
 ###############################################################
-        repo = {}
+        repo_nentries = {}
+        repo_pathtime= {}
         f = TFile(infile,"READ")
         dir = f.GetListOfKeys()
         for k in dir:
                 h = k.ReadObj()
                 allnames = h.GetName()
                 nentries = h.GetEntries()
+		mean = h.GetMean()
                 ishist = allnames.split("_").count("moduleScaledTime")
 		if ishist > 0:
 			fullname = allnames.split("_")
 			fullname.remove("moduleScaledTime")
-			for pathname in repo1:
-				for modname2, mean in repo1[pathname].iteritems():
+			for pathname in repo_means:
+				for modname2, mean in repo_means[pathname].iteritems():
 					for nitem, modname1 in enumerate(fullname):
 		 				if modname1 == modname2:
-							if not pathname in repo:
-								repo[pathname] = {}
- 							repo[pathname][modname1] = nentries
-#	print repo
-	return repo
+							if not pathname in repo_nentries:
+								repo_nentries[pathname] = {}
+ 							repo_nentries[pathname][modname1] = nentries
+
+		#### For total number of events
+		if allnames == "totalTime":
+                        maxentries = nentries
+
+		#### For mean path time 
+		ishist_path = allnames.split("_").count("pathTime")
+                if ishist_path > 0:                                          #get only the running modules in path
+                        fullname_path = allnames.split("_")
+                        fullname_path.remove("pathTime")
+                        pathname_path = ""                                   #form path name
+                        for j in range(len(fullname_path)):
+                                pathname_path = pathname_path + fullname_path[j]
+                                if j is not (len(fullname_path)-1):
+                                        pathname_path = pathname_path + "_"
+                        if not pathname_path in repo_pathtime:
+                                repo_pathtime[pathname_path] = mean
+
+        #print maxentries
+	print repo_pathtime
+	return repo_nentries, repo_pathtime, maxentries
+
 
 ###############################################################
-def get_maxEvents(infile):
-        '''Return max number of events''' 
-###############################################################
-	f = TFile(infile,"READ")
-	dir = f.GetListOfKeys()
-	for k in dir:
-		h = k.ReadObj()
-		name = h.GetName()
-		entries = h.GetEntries()
-		if name == "totalTime":
-			maxentries = entries
- 	#print maxentries
-	return maxentries 
-
-
-###############################################################
-def get_highPU_time(infile,repo1,repo2):
+def get_highPU_time(infile,repo_means,repo_nentries,maxEvents):
         '''Return a new estimated time for high pile up events'''
 ###############################################################
-	repo = {}
-	events = get_maxEvents(infile)
-	for pathname2 in repo2:
-		for modname2, nentries in repo2[pathname2].iteritems():
-			freq = nentries/events
-			for pathname1 in repo1:
-				for modname1, mean in repo1[pathname1].iteritems():
-					if (pathname1 == pathname2) and (modname1 == modname2):
+	repo_newtime = {}
+	repo_newpathtime = {}
+	for pathname_nentries in repo_nentries:
+		for modname_nentries, nentries in repo_nentries[pathname_nentries].iteritems():
+			freq = nentries/maxEvents
+			for pathname_means in repo_means:
+				for modname_means, mean in repo_means[pathname_nentries].iteritems():
+					if (pathname_nentries == pathname_means) and (modname_means == modname_nentries):
 						newtime = freq*mean 
-						if not pathname1 in repo:
-							repo[pathname1] = {}
-						repo[pathname1][modname1] = newtime
-#						print pathname1, modname1, pathname2, modname2 ,freq, newtime
+						if not pathname_nentries in repo_newtime:
+							repo_newtime[pathname_nentries] = {}
+						repo_newtime[pathname_nentries][modname_nentries] = newtime
+
+	## Add new estimated time per modules for each path
+	for pathname_newtime, modname_newtime in repo_newtime.iteritems():
+ 		repo_newpathtime[pathname_newtime] = sum(modname_newtime.values())
+	print repo_newpathtime
 #	print repo
 #	for path in repo:
 #		for mod, time in repo[path].iteritems():
 #			print 'path = ', path, 'module = ',mod,', average time =', mean, ', estimated time =', time
-	return repo
+	return repo_newtime, repo_newpathtime
 
 
 ###############################################################
 def main():
 ###############################################################
 	#check the number of parameter
-	numarg = len(sys.argv)
-	if numarg < 2:
-        	usage()
-	        return 1
+	#numarg = len(sys.argv)
+	#if numarg < 2:
+        ##	usage()
+	#        return 1
 
 	infile1 = sys.argv[1]
-	infile2 = sys.argv[2]
+	#infile2 = sys.argv[2]
 
 	#check if input files exist
-	if  not(os.path.isfile(infile1)):
-		print infile1+" does not exist. Please check."
-		sys.exit(1)
-	if  not(os.path.isfile(infile2)):
-		print infile2+" does not exist. Please check."
-		sys.exit(1)
+	#if  not(os.path.isfile(infile1)):
+	#	print infile1+" does not exist. Please check."
+#		sys.exit(1)
+#	if  not(os.path.isfile(infile2)):
+#		print infile2+" does not exist. Please check."
+#		sys.exit(1)
 
 	#get the histos info in containers 
 	repo1 = get_histos_info_mean(infile1)
-	repo2 = get_histos_info_nentries(infile2,repo1)
-	time1 = get_highPU_time(infile2,repo1,repo2)
+	repo2, repo3, nentries = get_histos_info_nominal(infile1,repo1)
+	time1, repo4 = get_highPU_time(infile1,repo1,repo2, nentries)
+	#repo3 = get_pathtime_mean(infile1)
 
 	#plot results
-	#plot_results(repo1,repo2,infile1,infile2)
+	#plot_results(repo1,repo2,infile1,infile1)
+	#plot_results(repo3,repo4)
 
 #######################################################
 if __name__ =='__main__':
