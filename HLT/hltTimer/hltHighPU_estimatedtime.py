@@ -131,7 +131,7 @@ def get_histos_info_nominal(infile,repo_means):
 
 
 ###############################################################
-def get_highPU_time(infile,repo_means,repo_nentries,maxEvents):
+def get_highPU_time(repo_means,repo_nentries,maxEvents):
         '''Return a new estimated time for high pile up events'''
 ###############################################################
 	repo_newtime = {}
@@ -171,24 +171,26 @@ def plot_results(repo_PathTime, repo_estimatedPathTime, pathlist):#, file1, file
 		for pathname1, time1 in repo_PathTime.iteritems():
 			if path == pathname1:
 				h1.Fill(path, time1)
-				if time1 > maxmean:
-					maxmean = time1
+#				print path, time1
 		for pathname2, time2 in repo_estimatedPathTime.iteritems():
 			if path == pathname2:
 				h2.Fill(path, time2) 
+				if time2 > maxmean:
+					maxmean = time2
+#				print path, time2
 
 	#draw the two histos and save the plot
 	can = TCanvas("can","",800,600);
 	can.cd();
 	h1.Draw();
 	h1.SetLineWidth(2)
-	h1.SetMaximum(maxmean+10)
+	h1.SetMaximum(maxmean+3)
 	h1.GetYaxis().SetTitle("msec")
 	h1.GetXaxis().SetLabelSize(0.03)
 	h2.SetLineColor(2);
 	h2.Draw("same")
 	h2.SetLineWidth(2)
-	can.SetBottomMargin(0.55)
+	can.SetBottomMargin(0.25)
 #	can.SetLogy()
 	can.SetGridx()
 	can.SetGridy()
@@ -199,7 +201,7 @@ def plot_results(repo_PathTime, repo_estimatedPathTime, pathlist):#, file1, file
 	lg.SetBorderSize(0);
 	lg.SetFillColor(0);
 	lg.Draw("same");
-	can.SaveAs("hltHighPU_estimated_time.png")
+	can.SaveAs("hltHighPU_estimatedtime.png")
 	del can
 
 
@@ -212,15 +214,15 @@ def main():
         	usage()
 	        return 1
 
-	print "Python script for estimated High Pile Up time\n"
-	print "For more info, please contact with\n"
-	print "Alejandro Gomez\n"
-	print "alejandro.gomez@cern.ch\n"
+	print "\nPython script for estimated High Pile Up time"
+	print "For more info, please contact:"
+	print "Alejandro Gomez"
+	print "email: alejandro.gomez@cern.ch\n"
 
 	infile1 = sys.argv[1]
 	print infile1+ " is the High Pile Up Skim file "
 	infile2 = sys.argv[2]
-	print  infile2+ " is the Nominal Skim file"
+	print  infile2+ " is the Nominal Skim file\n"
 
 	#check if input files exist
 	if  not(os.path.isfile(infile1)):
@@ -231,21 +233,21 @@ def main():
 		sys.exit(1)
 
 	#get the histos info in containers 
-	pathlist = ['HLT_Ele32_WP70_PFMT50_v?',
+	pathlist = ['HLT_Ele32_WP70_PFMT50_v3',
 		    'HLT_Mu40_v5',
 		    'HLT_Jet300_v5',
 		    'HLT_Photon26_IsoVL_Photon18_IsoVL_v7',
 		    'HLT_HT300_MHT80_v2']
+	
+	print "This process takes a while.... please be patient\n"
 
 	repo1 = get_histos_info_mean(infile1)
 	repo2, repo3, nentries = get_histos_info_nominal(infile2,repo1)
-	time1, repo4 = get_highPU_time(infile1,repo1,repo2, nentries)
-
-	print "This process takes a while.... be patient\n"
+	time1, repo4 = get_highPU_time(repo1,repo2, nentries)
 
 	#plot results
 	plot_results(repo3,repo4, pathlist)
-	print "Final plot is hltHighPU_estimatedtime.png"
+	print "Final plot is hltHighPU_estimatedtime.png\n"
 
 #######################################################
 if __name__ =='__main__':
