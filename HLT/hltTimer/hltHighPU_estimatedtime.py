@@ -1,18 +1,22 @@
 #!/usr/bin/env python
 ############################################################################
+
 # hltHighPU_estimatedtime.py
 # python script created by Alejandro Gomez
 # email: alejandro.gomez@cern.ch
 #
-# Estimate the time per module in each path for two different root files,
-# (this time was made of high pile up events). 
-# Takes infile1 and creates a dict as [pathname][modname] = meantime
-# Takes infile2 and creates a dict as [pathname][modname] = numberofentries
-# Takes infile2 and gets max number of entries
-# Matches pathname and modname of infile1 and infile2, calculate the frequency
-# of each module as numberofentries/maxentries, multiply by meantime to get
-# an estimated time per each module and path and creates a new dict as
-# [pathname][module] = estimatedtime. 
+# 1. Estimate the time per module in each path for two different root files,
+#    (this time was made for high pile up events). 
+# 2. Takes two root files: one with nominal events (1) and the other with high
+#    pile up events (2).
+# 3. From (2) takes paths-modules and mean time for each.
+# 4. From (1) takes number events, max number events and time path.
+# 5. Matches paths and for each path freq = (number of events)/(max events).
+# 6. Multiplies freq*mean time from (2) = estimated time.
+# 7. Returns two repos (dictionaties) with pathnames:meantime and pathnames:estimatedtime
+# 8. This script now takes some paths from pathlist, but is easy to modify for the whole menu.
+# 9. Plots the difference between nominal time and estimated time.
+
 ###########################################################################
 
 """
@@ -31,11 +35,6 @@ from ROOT import *
 
 #just a debug flag
 DEBUG = False
-#threshold for the ratio of the running modules
-THRATIO = 10.0
-#threshold for the difference of the running modules, used
-#when one instance is zero
-THDIFF = 100
 
 gROOT.SetStyle("Plain")
 gStyle.SetOptStat(0)
@@ -55,6 +54,7 @@ def usage():
 ###############################################################
 def get_histos_info_mean(infile):
 	'''Return mean time of modules for an specific path'''
+# This function is for High Pile Up skims
 ###############################################################
 	repo_means = {}
 	f = TFile(infile,"READ")
@@ -63,8 +63,8 @@ def get_histos_info_mean(infile):
 		h = k.ReadObj()
 		allnames = h.GetName()
 		themean = h.GetMean()
-		ishist = allnames.split("_").count("moduleInPathScaledTime")
-		if ishist > 0: 						#get only the running modules in path
+		ishist = allnames.split("_").count("moduleInPathScaledTime")	#get only the running modules in path
+		if ishist > 0: 
 			fullname = allnames.split("_")
 			fullname.remove("moduleInPathScaledTime")
 			pathname = ""                           	#form path name
@@ -76,10 +76,7 @@ def get_histos_info_mean(infile):
 			if not pathname in repo_means:
 				repo_means[pathname] = {} 
 			repo_means[pathname][modname] = themean
-#					if pathname == path :           #store information paths and mods
-#						if themean != 0:
-#							repo[modname] = themean
-#	print repo
+#	print repo_means
 	return repo_means;
 
 
@@ -88,6 +85,7 @@ def get_histos_info_mean(infile):
 def get_histos_info_nominal(infile,repo_means):
         '''Return number of entries of modules for an specific path
 	   and the max number of events'''
+# This is for a nominal skim
 ###############################################################
         repo_nentries = {}
         repo_pathtime= {}
@@ -116,10 +114,10 @@ def get_histos_info_nominal(infile,repo_means):
 
 		#### For mean path time 
 		ishist_path = allnames.split("_").count("pathTime")
-                if ishist_path > 0:                                          #get only the running modules in path
+                if ishist_path > 0:
                         fullname_path = allnames.split("_")
                         fullname_path.remove("pathTime")
-                        pathname_path = ""                                   #form path name
+                        pathname_path = "" 
                         for j in range(len(fullname_path)):
                                 pathname_path = pathname_path + fullname_path[j]
                                 if j is not (len(fullname_path)-1):
@@ -127,8 +125,8 @@ def get_histos_info_nominal(infile,repo_means):
                         if not pathname_path in repo_pathtime:
                                 repo_pathtime[pathname_path] = mean
 
-        #print maxentries
-	print repo_pathtime
+#       print maxentries
+#	print repo
 	return repo_nentries, repo_pathtime, maxentries
 
 
@@ -152,43 +150,102 @@ def get_highPU_time(infile,repo_means,repo_nentries,maxEvents):
 	## Add new estimated time per modules for each path
 	for pathname_newtime, modname_newtime in repo_newtime.iteritems():
  		repo_newpathtime[pathname_newtime] = sum(modname_newtime.values())
-	print repo_newpathtime
-#	print repo
-#	for path in repo:
-#		for mod, time in repo[path].iteritems():
+#	print repo_newpathtime
+#	print repo_newtime
+#	for path in repo_newtime:
+#		for mod, time in repo_newtime[path].iteritems():
 #			print 'path = ', path, 'module = ',mod,', average time =', mean, ', estimated time =', time
 	return repo_newtime, repo_newpathtime
+
+###############################################################
+def plot_results(repo_PathTime, repo_estimatedPathTime, pathlist):#, file1, file2):
+###############################################################
+
+#	fname1 = file1.strip(".root")
+#	fname2 = file2.strip(".root")
+	h1 = TH1F("h1","Estimated Path Time for High Pile Up Events", len(pathlist),0,len(pathlist))
+	h2 = TH1F("h2", " ", len(pathlist),0,len(pathlist))
+
+	maxmean = 0
+	for path in pathlist:
+		for pathname1, time1 in repo_PathTime.iteritems():
+			if path == pathname1:
+				h1.Fill(path, time1)
+				if time1 > maxmean:
+					maxmean = time1
+		for pathname2, time2 in repo_estimatedPathTime.iteritems():
+			if path == pathname2:
+				h2.Fill(path, time2) 
+
+	#draw the two histos and save the plot
+	can = TCanvas("can","",800,600);
+	can.cd();
+	h1.Draw();
+	h1.SetLineWidth(2)
+	h1.SetMaximum(maxmean+10)
+	h1.GetYaxis().SetTitle("msec")
+	h1.GetXaxis().SetLabelSize(0.03)
+	h2.SetLineColor(2);
+	h2.Draw("same")
+	h2.SetLineWidth(2)
+	can.SetBottomMargin(0.55)
+#	can.SetLogy()
+	can.SetGridx()
+	can.SetGridy()
+	lg = TLegend(0.79, 0.89, 1.0, 0.99);
+	lg.AddEntry(h1,"Nominal" ,"L");
+	lg.AddEntry(h2,"High Pile Up","L");
+	lg.SetTextSize(0.025);
+	lg.SetBorderSize(0);
+	lg.SetFillColor(0);
+	lg.Draw("same");
+	can.SaveAs("hltHighPU_estimated_time.png")
+	del can
 
 
 ###############################################################
 def main():
 ###############################################################
 	#check the number of parameter
-	#numarg = len(sys.argv)
-	#if numarg < 2:
-        ##	usage()
-	#        return 1
+	numarg = len(sys.argv)
+	if numarg < 2:
+        	usage()
+	        return 1
+
+	print "Python script for estimated High Pile Up time\n"
+	print "For more info, please contact with\n"
+	print "Alejandro Gomez\n"
+	print "alejandro.gomez@cern.ch\n"
 
 	infile1 = sys.argv[1]
-	#infile2 = sys.argv[2]
+	print infile1+ " is the High Pile Up Skim file "
+	infile2 = sys.argv[2]
+	print  infile2+ " is the Nominal Skim file"
 
 	#check if input files exist
-	#if  not(os.path.isfile(infile1)):
-	#	print infile1+" does not exist. Please check."
-#		sys.exit(1)
-#	if  not(os.path.isfile(infile2)):
-#		print infile2+" does not exist. Please check."
-#		sys.exit(1)
+	if  not(os.path.isfile(infile1)):
+		print infile1+" does not exist. Please check."
+		sys.exit(1)
+	if  not(os.path.isfile(infile2)):
+		print infile2+" does not exist. Please check."
+		sys.exit(1)
 
 	#get the histos info in containers 
+	pathlist = ['HLT_Ele32_WP70_PFMT50_v?',
+		    'HLT_Mu40_v5',
+		    'HLT_Jet300_v5',
+		    'HLT_Photon26_IsoVL_Photon18_IsoVL_v7',
+		    'HLT_HT300_MHT80_v2']
+
 	repo1 = get_histos_info_mean(infile1)
-	repo2, repo3, nentries = get_histos_info_nominal(infile1,repo1)
+	repo2, repo3, nentries = get_histos_info_nominal(infile2,repo1)
 	time1, repo4 = get_highPU_time(infile1,repo1,repo2, nentries)
-	#repo3 = get_pathtime_mean(infile1)
+
+	print "This process takes a while.... be patient\n"
 
 	#plot results
-	#plot_results(repo1,repo2,infile1,infile1)
-	#plot_results(repo3,repo4)
+	plot_results(repo3,repo4, pathlist)
+	print "Final plot is hltHighPU_estimatedtime.png"
 
 #######################################################
 if __name__ =='__main__':
