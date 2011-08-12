@@ -4,6 +4,10 @@
 ## Imports
 ############################################
 
+'''
+   Usage: %prog <file>
+'''
+
 import os
 import re
 import os.path
@@ -13,43 +17,28 @@ import tempfile
 from ROOT import *
 import cStringIO 
 
-############################################
-## Inputs
-###########################################
+gROOT.SetStyle("Plain")
+gStyle.SetOptStat(1111111)
+gStyle.SetHistFillColor(kBlue)
 
-inputtxt = "outfile_v2-bookmark.txt"
-inputroot = 'outputTiming.root'
+###############################################################
+def usage():
+###############################################################
 
+    if False:
+        print "This is the usage function"
 
-############################################
-## Functions
-############################################
-
-def managerootfile(rootfile):
-	'''
-	Manage root file
-	'''
-	file = TFile(inputroot,'read')
-
-def splitmenus(txtfile):
-	'''
-	Split the summary.txt file
-	'''
-	infile = open(txtfile, 'r')
-	for line in infile.readlines():
-		linesplit = line.split('^')
-			#for item in linesplit:
-			#	generalmenu = linesplit[0]
-			#	pgNum = linesplit[-1]
-			#	print generalmenu, pgNum
-#			for i in range(00001,len(infile.readlines()):
-#					if pgNum = 
+    print '\n'
+    print 'Usage: '+sys.argv[0]+' <file1> '
+    print 'e.g.:  '+sys.argv[0]+' outputTiming1.root \n'
 
 
-	else:
-		print 'Summary file doesnt exist'
 
-def texfile(txtfile, outputtex):
+#################################################
+def texfile(rootfile):
+	''' Function to create a .tex file'''
+################################################
+
 	texpreamble = ['\documentclass[10pt,a5paper,landscape]{book}\n',
 			'\usepackage{graphicx}\n',
 			'\usepackage[a5paper,vmargin={5mm,2mm},hmargin={5mm,5mm}]{geometry}\n',
@@ -62,47 +51,120 @@ def texfile(txtfile, outputtex):
 			'\maketitle\n',
 			'\\newpage\n',
 			'\\tableofcontents\n',
-			'\\newpage\n'
-			]
-	chapters = ['Total time per event',
-			'Average module time',
-			'Average module running time',
-			'Average module (in path) time',
-			'Average module (in path) running time',
-			'Avergae path time',
-			'Average incremental path time',
-			'Failing module (by path)',
-			'Per event module time',
-			'Per event module running time',
-			'Per event module (in path) running time',
-			'Per event path time',
-			'Per event incremental path time'
-			]
-	infile = open(txtfile, 'r')
-	texfile = open(outputtex+'.tex', 'w')
+			'\\newpage\n',
+			'\\chapter{Total time per event}\n',
+			'\\newpage \section{Total Time for Event} \centering \includegraphics[scale=0.45]{totalTimeEvent.png}\n',
+			'\\newpage \section{Total Time for Event per accepted event} \centering \includegraphics[scale=0.45]{acceptedTotalTimeEvent.png}\n',
+			'\\newpage \section{Total Time for Event per rejected event} \centering \includegraphics[scale=0.45]{rejectedTotalTimeEvent.png}\n',
+			'\\newpage \section{Total CPU Time for Event} \centering \includegraphics[scale=0.45]{totalCPUTimeEvent.png}\n',
+			'\\newpage \section{Total CPU Time for Event per accepted event} \centering \includegraphics[scale=0.45]{acceptedTotalCPUTimeEvent.png}\n',
+			'\\newpage \section{Total CPU Time for Event per rejected event} \centering \includegraphics[scale=0.45]{rejectedTotalCPUTimeEvent.png}\n',
+			'\\newpage \section{Total time for all modules per event} \centering \includegraphics[scale=0.45]{totalTime.png}\n',
+			'\\newpage \section{Total Time for all modules per accepted event} \centering \includegraphics[scale=0.45]{acceptedTotalTime.png}\n',
+			'\\newpage \section{Total Time for all modules per rejected event} \centering \includegraphics[scale=0.45]{rejectedTotalTime.png}\n',
+			'\\chapter{Average module time}\n',
+			'\\newpage \centering \includegraphics[scale=0.45]{moduleTimeSummary.png}\n',
+			'\\chapter{Average module running time}\n',
+			'\\newpage \centering \includegraphics[scale=0.45]{moduleScaledTimeSummary.png}\n']
+#pathSuccessFraction
+#uniquePathSuccessFraction
+#pathRejection
+#pathRejectAll
+
+	fname = rootfile.strip('.root')
+	texfile = open(fname+'.tex', 'w')
 	texfile.writelines(texpreamble)
-	for line_number, line in enumerate(infile, start = 2):
-		linesplit = line.split('^')
-		for i,u in enumerate(chapters[1:]):
-			if linesplit[0] == chapters[i]: texfile.write('\chapter{{{0}}}\n\\newpage\n'.format(linesplit[0])) 
-		if len(linesplit) == 3: None
-		if len(linesplit) >= 4: texfile.write(('\section{{{0}}}\n'.format(linesplit[1])).replace('_','\_'))
-		texfile.write('\\begin{figure*}[h!]\n')
-		texfile.write('\centering\n')
-		texfile.write('\includegraphics[scale=0.8]{pg_%04d.pdf}\n' %line_number)
-		texfile.write('\end{figure*}\n')
-		texfile.write('\\newpage\n')
+
+	names = {}
+	file = TFile(rootfile,'read')
+	for k in file.GetListOfKeys():
+		h = k.ReadObj() 
+		allnames = h.GetName()
+		mean = 1
+		ishist = allnames.split("_").count("moduleInPathScaledTime")
+		if ishist > 0:
+			fullname = allnames.split("_")
+			fullname.remove("moduleInPathScaledTime")
+			pathname = ""
+			for j in range(len(fullname)-1):
+				pathname = pathname + fullname[j]
+				if j is not (len(fullname)-2):
+					pathname = pathname + "_"
+			modname = fullname[len(fullname)-1]
+			if not pathname in names:
+				names[pathname] = {} 
+			names[pathname][modname] = mean
+
+	texfile.write('\\chapter{Average module (in path) time}\n')
+	for path in names:
+		texfile.write('\\newpage \section{Average module time for path '+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.45]{moduleInPathTimeSummary'+ path.replace('_','') +'.png}\n')	
+ #                       '\\chapter{Average module (in path) running time}\n',
+ #                       '\\chapter{Average path time}\n',
+#                        '\\newpage \centering \includegraphics[scale=0.45]{pathTimeSummary.png}\n',
+ #                       '\\chapter{Average incremental path time}\n',
+  #                      '\\newpage \centering \includegraphics[scale=0.45]{incPathTimeSummary.png}\n',
+#                        '\\chapter{Failing module (by path)}\n',
+#                        '\\chapter{Per event module time}\n',
+#                        '\\chapter{Per event module running time}\n',
+#                        '\\chapter{Per event module (in path) running time}\n',
+#                        '\\chapter{Per event path time}\n',
+#                        '\\chapter{Per event incremental path time}\n'
+#                        ]
+
+#			'\\newpage \section{} \centering \includegraphics[scale=0.45]{.png}\n',
+#	names = []
+#	file = TFile(rootfile,'read')
+#	for k in file.GetListOfKeys():
+#	h = k.ReadObj()
+#	names = h.GetName()
+#	print names
+#		if 'total' in allnames:
+#			texfile.write('\chapter{Total time per event}\n\\newpage\n')
+#			for i in allnames:
+#				texfile.write('\includegraphics[scale=0.5]{%s.png }\n' %i )
+#			if 'totalTime' in allnames:
+#	for line_number, line in enumerate(infile, start = 2):
+#		linesplit = line.split('^')
+#		for i,u in enumerate(chapters[1:]):
+#			if linesplit[0] == chapters[i]: texfile.write('\chapter{{{0}}}\n\\newpage\n'.format(linesplit[0])) 
+#		if len(linesplit) == 3: None
+#		if len(linesplit) >= 4: texfile.write(('\section{{{0}}}\n'.format(linesplit[1])).replace('_','\_'))
+#		texfile.write('\\begin{figure*}[h!]\n')
+#		texfile.write('\centering\n')
+#		texfile.write('\includegraphics[scale=0.8]{pg_%04d.pdf}\n' %line_number)
+		#texfile.write('\end{figure*}\n')
+#		texfile.write('\\newpage\n')
 
 	texfile.write('\end{document}')
 	texfile.close()
 
+###################################################################
+def get_plot(file):
+	''' Function to create the plot and save it as png file '''
+###################################################################
+	file = TFile(file,'read')
+	for k in file.GetListOfKeys():
+		h = k.ReadObj()
+		allnames = h.GetName()
+		name = ''.join(allnames.split('_'))
+		histo = file.Get(allnames)
+
+		can = TCanvas('can', '', 1000,800)
+		can.cd()
+		histo.UseCurrentStyle()
+		histo.Draw()
+		can.SetBorderMode(0)
+		can.SetFillColor(kWhite)
+		can.SaveAs(name+'.png')
+		del can
+	 
+
+
+###########################################################
 def finalpdf(output):
-	'''
-	Compile tex file to pdf
-	'''
-	args = ['pdflatex',
-			output,
-			]
+	''' Compile tex file to pdf '''
+##########################################################
+	args = ['pdflatex', output,]
 	
 	process = subprocess.call(args, 
 			#stdout = subprocess.PIPE,
@@ -112,9 +174,27 @@ def finalpdf(output):
 	pdfout = process.communicate()
 	return pdfout
 
-         
-#splitmenus(inputtxt)
-#splitpdf(inputpdf)
-#name = 'hola'
-#texfile(inputtxt, name)
-#finalpdf(name)
+
+
+###############################################################
+def main():
+###############################################################
+        #check the number of parameter
+	if len(sys.argv) < 1:
+                usage()
+                return 1
+
+        print "Python script that creates the Timing Summary pdf"
+        print "For more info, please contact with"
+        print "Alejandro Gomez"
+        print "alejandro.gomez@cern.ch\n"
+
+        file = sys.argv[1]
+#	test = get_plot(file)         
+	test = texfile(file)
+
+#######################################################
+if __name__ =='__main__':
+#######################################################
+        sys.exit(main())
+
