@@ -35,7 +35,7 @@ def usage():
 
 
 #################################################
-def texfile(rootfile):
+def texfile(rootfile, fname):
 	''' Function to create a .tex file'''
 ################################################
 
@@ -53,25 +53,24 @@ def texfile(rootfile):
 			'\\tableofcontents\n',
 			'\\newpage\n',
 			'\\chapter{Total time per event}\n',
-			'\\newpage \section{Total Time for Event} \centering \includegraphics[scale=0.45]{totalTimeEvent.png}\n',
-			'\\newpage \section{Total Time for Event per accepted event} \centering \includegraphics[scale=0.45]{acceptedTotalTimeEvent.png}\n',
-			'\\newpage \section{Total Time for Event per rejected event} \centering \includegraphics[scale=0.45]{rejectedTotalTimeEvent.png}\n',
-			'\\newpage \section{Total CPU Time for Event} \centering \includegraphics[scale=0.45]{totalCPUTimeEvent.png}\n',
-			'\\newpage \section{Total CPU Time for Event per accepted event} \centering \includegraphics[scale=0.45]{acceptedTotalCPUTimeEvent.png}\n',
-			'\\newpage \section{Total CPU Time for Event per rejected event} \centering \includegraphics[scale=0.45]{rejectedTotalCPUTimeEvent.png}\n',
-			'\\newpage \section{Total time for all modules per event} \centering \includegraphics[scale=0.45]{totalTime.png}\n',
-			'\\newpage \section{Total Time for all modules per accepted event} \centering \includegraphics[scale=0.45]{acceptedTotalTime.png}\n',
-			'\\newpage \section{Total Time for all modules per rejected event} \centering \includegraphics[scale=0.45]{rejectedTotalTime.png}\n',
+			'\\newpage \centering {Total Time for Event} \includegraphics[scale=0.45]{totalTimeEventtemp.png}\n',
+			'\\newpage \section{Total Time for Event per accepted event} \centering \includegraphics[scale=0.45]{acceptedTotalTimeEventtemp.png}\n',
+			'\\newpage \section{Total Time for Event per rejected event} \centering \includegraphics[scale=0.45]{rejectedTotalTimeEventtemp.png}\n',
+			'\\newpage \section{Total CPU Time for Event} \centering \includegraphics[scale=0.45]{totalCPUTimeEventtemp.png}\n',
+			'\\newpage \section{Total CPU Time for Event per accepted event} \centering \includegraphics[scale=0.45]{acceptedTotalCPUTimeEventtemp.png}\n',
+			'\\newpage \section{Total CPU Time for Event per rejected event} \centering \includegraphics[scale=0.45]{rejectedTotalCPUTimeEventtemp.png}\n',
+			'\\newpage \section{Total time for all modules per event} \centering \includegraphics[scale=0.45]{totalTimetemp.png}\n',
+			'\\newpage \section{Total Time for all modules per accepted event} \centering \includegraphics[scale=0.45]{acceptedTotalTimetemp.png}\n',
+			'\\newpage \section{Total Time for all modules per rejected event} \centering \includegraphics[scale=0.45]{rejectedTotalTimetemp.png}\n',
 			'\\chapter{Average module time}\n',
-			'\\newpage \centering \includegraphics[scale=0.45]{moduleTimeSummary.png}\n',
+			'\\newpage \centering \includegraphics[scale=0.45]{moduleTimeSummarytemp.png}\n',
 			'\\chapter{Average module running time}\n',
-			'\\newpage \centering \includegraphics[scale=0.45]{moduleScaledTimeSummary.png}\n']
+			'\\newpage \centering \includegraphics[scale=0.45]{moduleScaledTimeSummarytemp.png}\n']
 #pathSuccessFraction
 #uniquePathSuccessFraction
 #pathRejection
 #pathRejectAll
 
-	fname = rootfile.strip('.root')
 	texfile = open(fname+'.tex', 'w')
 	texfile.writelines(texpreamble)
 
@@ -97,43 +96,34 @@ def texfile(rootfile):
 
 	texfile.write('\\chapter{Average module (in path) time}\n')
 	for path in names:
-		texfile.write('\\newpage \section{Average module time for path '+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.45]{moduleInPathTimeSummary'+ path.replace('_','') +'.png}\n')	
- #                       '\\chapter{Average module (in path) running time}\n',
- #                       '\\chapter{Average path time}\n',
-#                        '\\newpage \centering \includegraphics[scale=0.45]{pathTimeSummary.png}\n',
- #                       '\\chapter{Average incremental path time}\n',
-  #                      '\\newpage \centering \includegraphics[scale=0.45]{incPathTimeSummary.png}\n',
-#                        '\\chapter{Failing module (by path)}\n',
-#                        '\\chapter{Per event module time}\n',
-#                        '\\chapter{Per event module running time}\n',
-#                        '\\chapter{Per event module (in path) running time}\n',
-#                        '\\chapter{Per event path time}\n',
-#                        '\\chapter{Per event incremental path time}\n'
-#                        ]
+		#texfile.write('\\newpage \section{Average module time for path '+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.45]{moduleInPathTimeSummary'+ path.replace('_','') +'temp.png}\n')	
+		texfile.write('\\newpage \section{'+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.45]{moduleInPathTimeSummary'+ path.replace('_','') +'temp.png}\n')	
+	texfile.write('\\chapter{Average module (in path) running time}\n')
+	for path in names:
+		#texfile.write('\\newpage \section{Average module running time for path '+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.45]{moduleInPathScaledTimeSummary'+ path.replace('_','') +'temp.png}\n')	
+		texfile.write('\\newpage \section{'+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.45]{moduleInPathScaledTimeSummary'+ path.replace('_','') +'temp.png}\n')	
+	texfile.write('\\chapter{Average path time} \\newpage \centering \includegraphics[scale=0.45]{pathTimeSummarytemp.png}\n')
+	texfile.write('\\chapter{Average incremental path time} \\newpage \centering \includegraphics[scale=0.45]{incPathTimeSummarytemp.png}\n')
+#	texfile.write('\\chapter{Failing module (by path)}\n')
+#	for path in names:
+		#texfile.write('\\newpage \section{Failure fraction (\%) by module '+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.45]{failedModule'+ path.replace('_','') +'temp.png}\n')	
+#		texfile.write('\\newpage \section{'+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.45]{failedModule'+ path.replace('_','') +'temp.png}\n')	
+#	texfile.write('\\chapter{Per event module time}\n')
+#	for path in names:
+#	for modules in names[path]:
+#		texfile.write('\\newpage \section{Time per event for module '+ modules+'} \centering \includegraphics[scale=0.45]{moduleTime'+modules+'temp.png}\n')	
+			
+
+	texfile.write('\\chapter{Per event module running time}\n')
+
+	texfile.write('\\chapter{Per event module (in path) running time}\n')
+
+	texfile.write('\\chapter{Per event path time}\n')
+
+	texfile.write('\\chapter{Per event incremental path time}\n')
+
 
 #			'\\newpage \section{} \centering \includegraphics[scale=0.45]{.png}\n',
-#	names = []
-#	file = TFile(rootfile,'read')
-#	for k in file.GetListOfKeys():
-#	h = k.ReadObj()
-#	names = h.GetName()
-#	print names
-#		if 'total' in allnames:
-#			texfile.write('\chapter{Total time per event}\n\\newpage\n')
-#			for i in allnames:
-#				texfile.write('\includegraphics[scale=0.5]{%s.png }\n' %i )
-#			if 'totalTime' in allnames:
-#	for line_number, line in enumerate(infile, start = 2):
-#		linesplit = line.split('^')
-#		for i,u in enumerate(chapters[1:]):
-#			if linesplit[0] == chapters[i]: texfile.write('\chapter{{{0}}}\n\\newpage\n'.format(linesplit[0])) 
-#		if len(linesplit) == 3: None
-#		if len(linesplit) >= 4: texfile.write(('\section{{{0}}}\n'.format(linesplit[1])).replace('_','\_'))
-#		texfile.write('\\begin{figure*}[h!]\n')
-#		texfile.write('\centering\n')
-#		texfile.write('\includegraphics[scale=0.8]{pg_%04d.pdf}\n' %line_number)
-		#texfile.write('\end{figure*}\n')
-#		texfile.write('\\newpage\n')
 
 	texfile.write('\end{document}')
 	texfile.close()
@@ -155,7 +145,7 @@ def get_plot(file):
 		histo.Draw()
 		can.SetBorderMode(0)
 		can.SetFillColor(kWhite)
-		can.SaveAs(name+'.png')
+		can.SaveAs(name+'temp.png')
 		del can
 	 
 
@@ -171,8 +161,8 @@ def finalpdf(output):
 			stderr = subprocess.PIPE,
 			stdin  = subprocess.PIPE)
 
-	pdfout = process.communicate()
-	return pdfout
+#	pdfout = process.communicate()
+#	return pdfout
 
 
 
@@ -190,8 +180,11 @@ def main():
         print "alejandro.gomez@cern.ch\n"
 
         file = sys.argv[1]
+	fname = file.strip('.root')
 #	test = get_plot(file)         
-	test = texfile(file)
+	test = texfile(file,fname)
+	pdf = finalpdf(fname+'.tex')
+	pdf1= finalpdf(fname+'.tex')
 
 #######################################################
 if __name__ =='__main__':
