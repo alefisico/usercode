@@ -8,11 +8,11 @@
    Usage: %prog <file>
 '''
 
-import os
+import os, glob
 import re
 import os.path
 import subprocess 
-import sys
+import sys, getopt
 import tempfile
 from ROOT import *
 import cStringIO 
@@ -25,12 +25,51 @@ gStyle.SetHistFillColor(kBlue)
 def usage():
 ###############################################################
 
-    if False:
-        print "This is the usage function"
+#    if False:
+    print "This is the usage function"
 
     print '\n'
     print 'Usage: '+sys.argv[0]+' <file1> '
     print 'e.g.:  '+sys.argv[0]+' outputTiming1.root \n'
+
+
+###############################################################
+def maininfo(infile, outfile):
+##############################################################
+        texpreamble = ['\documentclass[10pt,a5paper,landscape]{report}\n',
+                        '\usepackage{graphicx}\n',
+                        '\usepackage[a5paper,vmargin={5mm,2mm},hmargin={5mm,5mm}]{geometry}\n',
+                        '\usepackage[linktocpage]{hyperref}\n',
+                        '\hypersetup{backref, colorlinks=true}\n',
+                        '\\title{ \\textbf{\Huge{HLT Timing Summary}} \\footnote{\large{Documentation at \url{https://twiki.cern.ch/twiki/bin/view/CMS/SWGuideHLTTimingSummary}}} \\\\ Main Info }\n',
+                        '\\author{\Large{CMS Experiment}}\n',
+                        '\date{\\today}\n',
+                        '\\begin{document}\n',
+                        '\maketitle\n',
+                        '\\newpage\n',
+                        '\centering \\section*{Total time per event} \includegraphics[scale=0.45]{totalTimeEventtemp.png}\n',
+                        '\\newpage \section*{Total Time for Event per accepted event} \includegraphics[scale=0.45]{acceptedTotalTimeEventtemp.png}\n',
+                        '\\newpage \section*{Total Time for Event per rejected event} \includegraphics[scale=0.45]{rejectedTotalTimeEventtemp.png}\n',
+                        '\\newpage \section*{Total CPU Time for Event} \includegraphics[scale=0.45]{totalCPUTimeEventtemp.png}\n',
+                        '\\newpage \section*{Total CPU Time for Event per accepted event} \includegraphics[scale=0.45]{acceptedTotalCPUTimeEventtemp.png}\n',
+                        '\\newpage \section*{Total CPU Time for Event per rejected event} \includegraphics[scale=0.45]{rejectedTotalCPUTimeEventtemp.png}\n',
+                        '\\newpage \section*{Total time for all modules per event} \includegraphics[scale=0.45]{totalTimetemp.png}\n',
+                        '\\newpage \section*{Total Time for all modules per accepted event} \includegraphics[scale=0.45]{acceptedTotalTimetemp.png}\n',
+                        '\\newpage \section*{Total Time for all modules per rejected event} \includegraphics[scale=0.45]{rejectedTotalTimetemp.png}\n'
+			'\end{document}']
+
+        texfile = open(outfile+'.tex', 'w')
+        texfile.writelines(texpreamble)
+        texfile.close()
+	get_plot1(infile,'totalTimeEvent')
+	get_plot1(infile,'acceptedTotalTimeEvent')
+	get_plot1(infile,'rejectedTotalTimeEvent')
+	get_plot1(infile,'totalCPUTimeEvent')
+	get_plot1(infile,'acceptedTotalCPUTimeEvent')
+	get_plot1(infile,'rejectedTotalCPUTimeEvent')
+	get_plot1(infile,'totalTime')
+	get_plot1(infile,'acceptedTotalTime')
+	get_plot1(infile,'rejectedTotalTime')
 
 
 
@@ -44,7 +83,7 @@ def texfile(rootfile, fname):
 			'\usepackage[a5paper,vmargin={5mm,2mm},hmargin={5mm,5mm}]{geometry}\n',
 			'\usepackage[linktocpage]{hyperref}\n',
 			'\hypersetup{backref, colorlinks=true}\n',
-			'\\title{ \\textbf{\Huge{HLT Timing Summary}} \\footnote{\large{Documentation at \url{https://twiki.cern.ch/twiki/bin/view/CMS/SWGuideHLTTimingSummary}}}}\n',
+			'\\title{ \\textbf{\Huge{HLT Timing Summary}} \\footnote{\large{Documentation at \url{https://twiki.cern.ch/twiki/bin/view/CMS/SWGuideHLTTimingSummary}}} \\\\ Main Info }\n',
 			'\\author{\Large{CMS Experiment}}\n',
 			'\date{\\today}\n',
 			'\\begin{document}\n',
@@ -129,24 +168,23 @@ def texfile(rootfile, fname):
 	texfile.close()
 
 ###################################################################
-def get_plot(file):
+def get_plot1(file,allnames):
 	''' Function to create the plot and save it as png file '''
 ###################################################################
 	file = TFile(file,'read')
-	for k in file.GetListOfKeys():
-		h = k.ReadObj()
-		allnames = h.GetName()
-		name = ''.join(allnames.split('_'))
-		histo = file.Get(allnames)
-
-		can = TCanvas('can', '', 1000,800)
-		can.cd()
-		histo.UseCurrentStyle()
-		histo.Draw()
-		can.SetBorderMode(0)
-		can.SetFillColor(kWhite)
-		can.SaveAs(name+'temp.png')
-		del can
+#	for k in file.GetListOfKeys():
+#		h = k.ReadObj()
+#		allnames = h.GetName()
+#		name = ''.join(allnames.split('_'))
+	histo = file.Get(allnames)
+	can = TCanvas('can', '', 1000,800)
+	can.cd()
+	histo.UseCurrentStyle()
+	histo.Draw()
+	can.SetBorderMode(0)
+	can.SetFillColor(kWhite)
+	can.SaveAs(allnames+'temp.png')
+	del can
 	 
 
 
@@ -154,10 +192,10 @@ def get_plot(file):
 def finalpdf(output):
 	''' Compile tex file to pdf '''
 ##########################################################
-	args = ['pdflatex', output,]
+	args = ['pdflatex', output, '-interaction=batchmode']
 	
 	process = subprocess.call(args, 
-			#stdout = subprocess.PIPE,
+			stdout = subprocess.PIPE,
 			stderr = subprocess.PIPE,
 			stdin  = subprocess.PIPE)
 
@@ -167,27 +205,62 @@ def finalpdf(output):
 
 
 ###############################################################
-def main():
+def main(argv):
 ###############################################################
-        #check the number of parameter
-	if len(sys.argv) < 1:
-                usage()
-                return 1
+        print "\nPython script that creates the Timing Summary pdf"
+        print "For more info, please contact Alejandro Gomez"
+        print "email: alejandro.gomez@cern.ch\n"
 
-        print "Python script that creates the Timing Summary pdf"
-        print "For more info, please contact with"
-        print "Alejandro Gomez"
-        print "alejandro.gomez@cern.ch\n"
+	infile = None
+	outfile = None
+	call_maininfo = False
+	try:
+		opts, args = getopt.getopt(argv, 'hi:o:tb', ['help', 'input=', 'output='])
+		if not opts:
+			print 'No options supplied'
+			usage()
+	except getopt.GetoptError,e:
+		print e
+		usage()
+		sys.exit(2)
+	for opt, arg in opts:
+		if opt in ('-h', '--help'):
+			usage()
+			sys.exit(2)
+		elif opt == '-b':
+			print 'Running in batch mode' 
+		elif opt in ('-i', '--input'):
+			infile = arg
+		elif opt in ('-o', '--output'):
+			outfile = arg
+		elif opt == '-t':
+			call_maininfo = True
+#		elif opt == 'p':
+#			global _paths
+#			_paths = True
+#		elif opt == 'm':
+#			global _modules
+#			_modules = True
+		else:
+			usage()
+			sys.exit(2)
+		 
+	
+	if call_maininfo:
+		print 'Creating the Main Info Timing Summary pdf'
+		maininfo(infile,outfile)
+		pdf = finalpdf(outfile+'.tex')
+		pdf1= finalpdf(outfile+'.tex')
+		os.remove(outfile+'.aux')
+		os.remove(outfile+'.log')
+		os.remove(outfile+'.out')
+		os.remove(outfile+'.tex')
+		for filename in glob.glob('*.png'):
+			os.remove(filename)
+		print '{0}.pdf is done'.format(outfile)
 
-        file = sys.argv[1]
-	fname = file.strip('.root')
-#	test = get_plot(file)         
-	test = texfile(file,fname)
-	pdf = finalpdf(fname+'.tex')
-	pdf1= finalpdf(fname+'.tex')
 
 #######################################################
 if __name__ =='__main__':
 #######################################################
-        sys.exit(main())
-
+	main(sys.argv[1:])
