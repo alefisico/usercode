@@ -38,15 +38,16 @@ def usage():
 	print 'Please, it is strongly suggested to put the -b option in order '
 	print 'to run the process in batch mode. Otherwise it could be last forever.'
 	print '\n-----Options-----'
-	print ' -b	For batch mode'
-	print ' -i 	Input File'
-	print ' -o 	Output File'
-	print ' -t 	For only main time info per event. It is the faster option.'
-	print ' -p	For path time info. It will take like 6-9 min.'
-	print ' -m 	For module time info. It will take like 3-6 min.'
+	print ' -b			For batch mode'
+	print ' -i		 	Input File'
+	print ' -o 			Output File'
+	print ' -t 			For only main time info per event. It is the faster option.'
+	print ' -p			For path time info. It will take like 6-9 min.'
+	print ' -m 			For module time info. It will take like 3-6 min.'
+	print ' -s Path_Name_and_version   For an specific path.'
 	print '\n For -p or -m option, the process needs like 300 Mb in disk space,'
-	print ' but please dont be afraid, before the process ends it will erase'
-	print ' all the temporal files.'
+	print ' but please dont be afraid. Before the process ends, all the temporal files'
+	print ' will be erased.'
 
 
 ###############################################################
@@ -202,18 +203,99 @@ def moduleinfo(infile,outfile):
 
         get_plot2(infile,'moduleTimeSummary')
         get_plot2(infile,'moduleScaledTimeSummary')
-	texfile.write('\\chapter{Time per event for module}\n')
+	texfile.write('\\chapter{Module Info} \n \\newpage')#Time per event for module}\n')
 	for modules in names:
-		texfile.write('\\newpage \section{'+ modules +'} \centering \includegraphics[scale=0.4]{moduleTime'+ modules +'temp.png}\n')
+		texfile.write('\section{'+modules+'}')
+		#texfile.write('\\newpage \section{Time per event for '+ modules +'} \centering \includegraphics[scale=0.4]{moduleTime'+ modules +'temp.png}\n')
+		texfile.write('\centering \includegraphics[scale=0.4]{moduleTime'+ modules +'temp.png}\n')
 		get_plot1(infile,'moduleTime_'+modules)
 
-	texfile.write('\\chapter{Running Time per event for module}\n')
-	for modules in names:
-		texfile.write('\\newpage \section{'+ modules+'} \centering \includegraphics[scale=0.45]{moduleScaledTime'+modules+'temp.png}\n')    
+#	texfile.write('\\chapter{Running Time per event for module}\n')
+#	for modules in names:
+		texfile.write('\centering \includegraphics[scale=0.45]{moduleScaledTime'+modules+'temp.png}\n')    
 		get_plot1(infile,'moduleScaledTime_'+ modules)
 
         texfile.write('\end{document}')
         texfile.close()
+
+###############################################################
+def specificpathinfo(infile, outfile, path):
+        ''' Creates an specific path info tex file'''
+##############################################################
+        texpreamble = ['\documentclass[10pt,a5paper,landscape]{report}\n',
+                        '\usepackage{graphicx}\n',
+                        '\usepackage[a5paper,vmargin={5mm,2mm},hmargin={5mm,5mm}]{geometry}\n',
+                        '\usepackage[linktocpage]{hyperref}\n',
+                        '\hypersetup{backref, colorlinks=true}\n',
+                        '\\title{ \\textbf{\Huge{HLT Timing Summary}} \\footnote{\large{Documentation at \url{https://twiki.cern.ch/twiki/bin/view/CMS/SWGuideHLTTimingSummary}}} \\\\ Main Info + ' + path.replace('_','\_') +' info }\n',
+                        '\\author{\Large{CMS Experiment}}\n',
+                        '\date{\\today}\n',
+                        '\\begin{document}\n',
+                        '\maketitle\n',
+			'\\tableofcontents \n'
+                        '\\newpage\n \\chapter{Main Info} \n',
+                        '\\newpage \n \centering \\section{Total time per event} \includegraphics[scale=0.45]{totalTimeEventtemp.png}\n',
+                        '\\newpage \section{Total Time for Event per accepted event} \includegraphics[scale=0.45]{acceptedTotalTimeEventtemp.png}\n',
+                        '\\newpage \section{Total Time for Event per rejected event} \includegraphics[scale=0.45]{rejectedTotalTimeEventtemp.png}\n',
+                        '\\newpage \section{Total CPU Time for Event} \includegraphics[scale=0.45]{totalCPUTimeEventtemp.png}\n',
+                        '\\newpage \section{Total CPU Time for Event per accepted event} \includegraphics[scale=0.45]{acceptedTotalCPUTimeEventtemp.png}\n',
+                        '\\newpage \section{Total CPU Time for Event per rejected event} \includegraphics[scale=0.45]{rejectedTotalCPUTimeEventtemp.png}\n',
+                        '\\newpage \section{Total time for all modules per event} \includegraphics[scale=0.45]{totalTimetemp.png}\n',
+                        '\\newpage \section{Total Time for all modules per accepted event} \includegraphics[scale=0.45]{acceptedTotalTimetemp.png}\n',
+                        '\\newpage \section{Total Time for all modules per rejected event} \includegraphics[scale=0.45]{rejectedTotalTimetemp.png}\n']
+
+        texfile = open(outfile+'_'+path+'.tex', 'w')
+        texfile.writelines(texpreamble)
+        get_plot1(infile,'totalTimeEvent')
+        get_plot1(infile,'acceptedTotalTimeEvent')
+        get_plot1(infile,'rejectedTotalTimeEvent')
+        get_plot1(infile,'totalCPUTimeEvent')
+        get_plot1(infile,'acceptedTotalCPUTimeEvent')
+        get_plot1(infile,'rejectedTotalCPUTimeEvent')
+        get_plot1(infile,'totalTime')
+        get_plot1(infile,'acceptedTotalTime')
+        get_plot1(infile,'rejectedTotalTime')
+
+	names = {}
+	f = TFile(infile, "READ")
+	dir = f.GetListOfKeys()
+        for k in dir:
+                h = k.ReadObj()
+                allnames = h.GetName()
+                themean = 1
+                ishist = allnames.split("_").count("moduleInPathScaledTime")    #get only the running modules in path
+                if ishist > 0:
+                        fullname = allnames.split("_")
+                        fullname.remove("moduleInPathScaledTime")
+                        pathname = ""                                   #form path name
+                        modname = fullname[len(fullname)-1]             #get module name
+                        for j in range(len(fullname)-1):
+                                pathname = pathname + fullname[j]
+                                if j is not (len(fullname)-2):
+                                        pathname = pathname + "_"
+                        if not pathname in names:
+                                names[pathname] = {}
+                        names[pathname][modname] = themean
+
+	for pathname in names:
+		if path in pathname:
+			texfile.write('\chapter{' + path.replace('_','\_')+ ' Info} \n')
+#			for path in names:
+			texfile.write('\\newpage \section{Average module in '+ path.replace('_','\_') +' time} \centering \includegraphics[scale=0.4]{moduleInPathTimeSummary'+ path.replace('_','') +'temp.png}\n')
+			get_plot2(infile,'moduleInPathTimeSummary_'+path)
+			texfile.write('\\newpage \section{Average module in '+ path.replace('_','\_') +' running time} \centering \includegraphics[scale=0.4]{moduleInPathScaledTimeSummary'+ path.replace('_','') +'temp.png}\n')
+			get_plot2(infile,'moduleInPathScaledTimeSummary_'+path)
+			texfile.write('\\newpage \section{Per event time for '+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.45]{pathTime'+ path.replace('_','') +'temp.png}\n')
+			get_plot1(infile,'pathTime_'+path)
+			texfile.write('\\newpage \section{Per event incremental time for '+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.45]{incPathTime'+ path.replace('_','') +'temp.png}\n')
+			get_plot1(infile,'incPathTime_'+path)
+
+			texfile.write('\section{Running time per event for '+path.replace('_','\_')+'}')	
+			for modules in names[path]:
+				texfile.write('\subsection{'+ modules +'} \centering \includegraphics[scale=0.45]{moduleInPathScaledTime'+ path.replace('_','') + modules +'temp.png}\n')
+		                get_plot1(infile,'moduleInPathScaledTime_'+ path +'_'+ modules)
+	texfile.write('\\end{document}')
+	texfile.close()
 
 
 ###################################################################
@@ -262,11 +344,13 @@ def main(argv):
 
 	infile = None
 	outfile = None
+	path = None
 	call_maininfo = False
 	call_pathsinfo = False
 	call_modulesinfo = False
+	call_specificinfo = False
 	try:
-		opts, args = getopt.getopt(argv, 'hi:o:tbpm', ['help', 'input=', 'output='])
+		opts, args = getopt.getopt(argv, 'hi:o:tbpms:', ['help', 'input=', 'output='])
 		if not opts:
 			print 'No options supplied'
 			usage()
@@ -290,6 +374,9 @@ def main(argv):
 			call_pathsinfo = True
 		elif opt == '-m':
 			call_modulesinfo = True
+		elif opt == '-s':
+			path = arg
+			call_specificinfo = True
 		else:
 			usage()
 			sys.exit(2)
@@ -314,7 +401,7 @@ def main(argv):
 
 	if call_pathsinfo:
 		print 'Creating the Paths Info Timing Summary pdf'
-		print 'This process takes a while... please be patient'
+		print 'This process takes awhile... please be patient'
 		print 'Creating plots...'
 		pathsinfo(infile,outfile)
 		print 'Compiling tex file......'
@@ -333,7 +420,7 @@ def main(argv):
 
         if call_modulesinfo:
                 print 'Creating the Modules Info Timing Summary pdf'
-                print 'This process takes a while... please be patient'
+                print 'This process takes awhile... please be patient'
                 print 'Creating plots...'
                 moduleinfo(infile,outfile)
                 print 'Compiling tex file......'
@@ -349,6 +436,25 @@ def main(argv):
                 for filename in glob.glob('*temp.png'):
                         os.remove(filename) 
                 print '{0}-modules.pdf is done'.format(outfile) 
+
+        if call_specificinfo:
+                print 'Creating the Main Info + '+ path +' Timing Summary pdf'
+                print 'This process takes awhile... please be patient'
+                print 'Creating plots...'
+                specificpathinfo(infile,outfile,path)
+                print 'Compiling tex file......'
+                subprocess.call(['pdflatex', '-interaction=batchmode', outfile+'_'+path+'.tex'])
+                print 'Verifing......'
+                subprocess.call(['pdflatex', '-interaction=batchmode', outfile+'_'+path+'.tex'])    #twice for better compilation
+                print 'Removing temp files.........'
+                os.remove(outfile+'_'+path+'.aux')
+                os.remove(outfile+'_'+path+'.log')
+                os.remove(outfile+'_'+path+'.out')
+                os.remove(outfile+'_'+path+'.tex')
+                os.remove(outfile+'_'+path+'.toc')
+                for filename in glob.glob('*temp.png'):
+                        os.remove(filename)
+                print '{0}_'.format(outfile)+path+'.pdf is done'
 
 
 #######################################################
