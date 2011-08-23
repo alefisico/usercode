@@ -101,12 +101,12 @@ def deltaR(infile):
 		gens = handleGen.product()
 		
 		for p in gens:
-			if p.pdgId() in leptons:
-				if p.status() == 1:			# for final particles
+			if abs(p.pdgId()) in range(11,16):
+				if p.status() == 3:			# for final particles
 					count += 1
 					L[count] = {}
 					L[count][int(p.pdgId())] = p.p4()
-			if p.pdgId() in quarks: 	# for particles before parton showering
+			if abs(p.pdgId()) in range(1,7):
 				if p.status() == 3: 
 					count2 += 1
 					Q[count2] = {}
@@ -145,34 +145,49 @@ def getBR(infile):
         leptons = [11, 13, 15, -11, -13, -15]
         quarks = [1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6]
 
-        hBR = TH1F('hBR','Branching Ratio',100,0,250)
-	hBR.SetXTitle('Mass (GeV)')
-	hBR.SetYTitle('BR')
+        hBR = TH1F('h1','Branching Ratio',3,0,3)
+#	hBR.SetXTitle('Mass (GeV)')
+#	hBR.SetYTitle('BR')
 	hBR.SetStats(0)
 	
 	e = 0
+	hadronically = 0
+	dilepton = 0
+	leptonJets = 0
         for event in events:
-		print event
+#		print event
 		e += 1
-		hadronically = 0
-		leptonically = 0
+		ntotal = 0
+		leptons = 0
+		quarks = 0
+		others = 0
                 event.getByLabel (label, handleGen)
                 gens = handleGen.product()
 
                 for p in gens:
-			id = p.pdgId()
-			st = p.status()
-			nmom = p.numberOfMothers()
-			if nmom == 1:
-				if st == 3:
-#				for i in nmom:
-#					mom = p.mother(i)
-					print id, st, nmom
-					if id in leptons:
-						leptonically += 1
-					if not id in leptons:
-						hadronically +=1
-	print e, hadronically, leptonically
+			if p.status() == 3:
+#				print e, p.status(), p.pdgId()
+				ntotal += 1
+				if abs(p.pdgId()) in range(11,16):
+					leptons +=1
+				elif abs(p.pdgId()) in range(1,7):
+					quarks += 1
+				else:
+					others += 1
+#		print e, ntotal, quarks, leptons, others
+		if leptons == 0:
+			hadronically += 1
+		elif leptons == 4:
+			dilepton += 1
+		elif (others == 4) and (leptons == 2):
+			leptonJets += 1
+			
+	print e, hadronically, dilepton, leptonJets
+	hBR.Fill('hadronically', hadronically)
+	hBR.Fill('dilepton', dilepton)
+	hBR.Fill('lepton + Jets', leptonJets)
+	hBR.Draw()
+	c1.SaveAs('ttbarBR.png')
 
 
 #######################################
