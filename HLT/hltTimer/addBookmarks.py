@@ -80,6 +80,7 @@ def maininfo(infile, outfile):
 #			'\end{document}']
 
         names1 = {}
+	specific = {}
         file1 = TFile(infile,'read')
         for k in file1.GetListOfKeys():
                 allnames = k.ReadObj().GetName()
@@ -87,6 +88,8 @@ def maininfo(infile, outfile):
                         pathname = '_'.join(allnames.split('_')[1:])
                         if not pathname in names1:
                                 names1[pathname] = k.ReadObj().GetMean()
+#		elif 'specificPathTimeSummary_' in allnames:
+#			specific[allnames] = 1
         names2 = dict(sorted(names1.iteritems(), key=operator.itemgetter(1),reverse=True)[:10])
 	names = names2.keys()
 	names.sort()
@@ -95,13 +98,20 @@ def maininfo(infile, outfile):
         texfile.writelines(texpreamble)
 	if os.path.exists('exclude.txt'):
 		excludefile = open('exclude.txt', 'r')
-		texfile.write('\\newpage \section{Exclude modules} \n')  
+		texfile.write('\\newpage \section{Excluded Modules} \n')  
 		texfile.write('\\begin{enumerate}\n')  
 		for line in excludefile.readlines():
 			texfile.write('\item '+line)
 		texfile.write('\end{enumerate}\n')  
 		excludefile.close()
-        texfile.write('\\chapter{10 most slowest paths}\n')
+	if os.path.exists(infile.replace('.root','')+'-summary.txt'):
+                excludefile = open(infile.replace('.root','')+'-summary.txt', 'r')
+                texfile.write('\\newpage \section{Summary} \n \\begin{verbatim} \n')
+                for line in excludefile.readlines():
+                        texfile.write(line+'\n')
+                excludefile.close()
+		texfile.write('\end{verbatim}')
+        texfile.write('\\newpage \\chapter{10 Slowest Paths}\n')
         texfile.write('\section{Average module (in path) time}\n')
         for path in names:
                 texfile.write('\\newpage \subsection{'+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.35]{moduleInPathTimeSummary'+ path.replace('_','') +'temp.png}\n')
@@ -118,7 +128,11 @@ def maininfo(infile, outfile):
         for path in names:
                 texfile.write('\\newpage \subsection{'+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.6]{incPathTime'+ path.replace('_','') +'temp.png}\n')
                 get_plot1(infile,'incPathTime_'+path)
-
+#	if specific:
+#		texfile.write('\\newpage \chapter{Specific Path Time Summary} \n')
+#		for i in specific:
+#			texfile.write('\\newpage \subsection{'+i.replace('_','\_') +'} \centering \includegraphics[scale=0.35]{'+ i.replace('_','') +'temp.png}\n')
+#			get_plot2(infile,i)
         texfile.write('\end{document}')
         texfile.close()
 
