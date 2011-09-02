@@ -27,7 +27,7 @@ PDG =  {'d':1, 'dbar':-1, 'down':1,
 	'Higgs0':25}
 
 ######################################
-def get_info(infile,particle):
+def get_info(infile,particle, outfile):
 #####################################
         events = Events (infile)
         handleGen = Handle ("vector<reco::GenParticle>")
@@ -39,15 +39,15 @@ def get_info(infile,particle):
 		hmass.SetXTitle('Mass [GeV]')
 		hmass1 = TH1F(particle+particle+'bar mass',particle+particle+'bar mass',100,140,220)
 		hmass1.SetXTitle('Mass [GeV]')
-		hnparticles = TH1F('number of '+particle+' and '+particle+'bar','number of '+particle+' and '+particle+'bar',5,0,4)
-		hpt = TH1F(particle+' pt', particle+' pt',100,50,250)
+		hnparticles = TH1F('number of '+particle+' and '+particle+'bar','number of '+particle+' and '+particle+'bar',10,0,10)
+		hpt = TH1F(particle+' pt', particle+' pt',100,0,500)
 		heta = TH1F(particle+' eta',particle+' eta',100,-10,10)
 
 #		entry = 0
 		for event in events:
 			#entry += 1
 			nparticles = 0
-#			print "Event ", count
+		#	print "Event ", count
 			event.getByLabel (label, handleGen)
 			gens = handleGen.product()
     
@@ -57,7 +57,7 @@ def get_info(infile,particle):
 #					print p.mass()
 					hmass.Fill(float(p.mass()))
 	
-#				print 'id',p.pdgId(), p.status(), 'status'
+				#print 'id',p.pdgId(), p.status(), 'status'
 				if abs( int(p.pdgId()) ) == int(PDG[particle]):
 					if p.status() == 3:
 						nparticles += 1
@@ -68,85 +68,94 @@ def get_info(infile,particle):
 			hnparticles.Fill(nparticles)
 
 		hmass.Draw()
-		c1.SaveAs(particle+'_mass.png')
+		c1.SaveAs(outfile+'_'+particle+'_mass.png')
 	        hpt.Draw()
-	        c1.SaveAs(particle+'_pt.png')
+	        c1.SaveAs(outfile+'_'+particle+'_pt.png')
 	        heta.Draw()
-	        c1.SaveAs(particle+'_eta.png')
+	        c1.SaveAs(outfile+'_'+particle+'_eta.png')
 	        hnparticles.Draw()
-	        c1.SaveAs(particle+'_nparticles.png')
+	        c1.SaveAs(outfile+'_'+particle+'_nparticles.png')
 	        hmass1.Draw()
-	        c1.SaveAs(particle+particle+'bar_mass.png')
+	        c1.SaveAs(outfile+'_'+particle+particle+'bar_mass.png')
 
 #######################################
-def deltaR(infile):
+def deltaR(infile,outfile):
 ######################################
 	events = Events (infile)
 	handleGen = Handle ("vector<reco::GenParticle>")
 	label = "genParticles"
 
-	leptons = [11, 13, 15, -11, -13, -15]
-	quarks = [1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6]
-
-	hdeltaR = TH1F('deltaR','deltaR',100,0,2)
+	hdeltaR = TH1F('deltaR','deltaR',100,0,5)
 
 	L = {}
 	Q = {}
 	dR = {}	
-	count = 0
-	count2 = 0 
+	nevent = 0
 	for event in events:
 #		print event
+		nevent += 1
+		count2 = 0 
+		count = 0
+		L[nevent] = {}
+		Q[nevent] = {}
 		event.getByLabel (label, handleGen)
 		gens = handleGen.product()
 		
 		for p in gens:
-			if abs(p.pdgId()) in range(11,16):
-				if p.status() == 3:			# for final particles
+#			print 'particle', p.pdgId(), 'status', p.status()
+			if abs(p.pdgId()) in range(11,14):
+				if p.status() == 3:
+#					print 'name', p.pdgId(), p.status(), p.p4()
 					count += 1
-					L[count] = {}
-					L[count][int(p.pdgId())] = p.p4()
-			if abs(p.pdgId()) in range(1,7):
+					L[nevent][count] = {}
+					L[nevent][count][int(p.pdgId())] = p.p4()
+			if (abs(p.pdgId()) in range(1,7)) or (p.pdgId() == 21) :
 				if p.status() == 3: 
+#					print 'name', p.pdgId(), p.status()
 					count2 += 1
-					Q[count2] = {}
-					Q[count2][int(p.pdgId())] = p.p4()
-		for i in L.keys():
-			dR[i] = {}
-			for lepton, ivalue in L[i].iteritems():
-				for j in Q.keys():
-					dR[i][j] = {}
-					for quark, jvalue in Q[j].iteritems():
-						deltaR = Math.VectorUtil.DeltaR(ivalue, jvalue)
-						if (0 < deltaR < 50):
-							dR[i][j] = deltaR
-						elif deltaR > 50:
-							dR[i][j] = 50
-						else:
-							dR[i][j] = 1000
+					Q[nevent][count2] = {}
+					Q[nevent][count2][int(p.pdgId())] = p.p4()
+		for e in L.keys():
+			dR[e] = {}
+			for i in L[e].keys():
+				dR[e][i] = {}
+				for lepton, ivalue in L[e][i].iteritems():
+					for j in Q[e].keys():
+						dR[e][i][j] = {}
+#		print dR
+						for quark, jvalue in Q[e][j].iteritems():
+							deltaR = Math.VectorUtil.DeltaR(ivalue, jvalue)
+							if (0 < deltaR < 100):
+								dR[e][i][j] = deltaR
+							elif deltaR > 100:
+								dR[e][i][j] = 100
+							else:
+								del dR[e][i][j]
+#		print dR
+		dR = dict([(k,v) for k,v in dR.items() if len(v)>0])
 
-		for k in dR.keys():
-			for x in dR[k].keys():
-				myMin = min(dR[k].values())
-			hdeltaR.Fill(myMin)
+		for ev in dR.keys():
+			for k in dR[ev].keys():
+				for x in dR[ev][k].keys():
+					myMin = min(dR[ev][k].values())
+				hdeltaR.Fill(myMin)
 
 	c1 = TCanvas('c1','c1',800,600)
 	hdeltaR.Draw()
 	c1.SetLogy()
-	c1.SaveAs('deltaRTotal.png')
+	c1.SaveAs(outfile+'_deltaR.png')
 
 #######################################
-def getBR(infile):
+def getBR(infile,outfile):
 #######################################
         events = Events (infile)
         handleGen = Handle ("vector<reco::GenParticle>")
         label = "genParticles"
 
-        leptons = [11, 13, 15, -11, -13, -15]
-        quarks = [1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6]
+        #leptons = [11, 13, 15, -11, -13, -15]
+        #quarks = [1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6]
 
         hBR = TH1F('h1','Branching Ratio',3,0,3)
-#	hBR.SetXTitle('Mass (GeV)')
 #	hBR.SetYTitle('BR')
 	hBR.SetStats(0)
 	
@@ -168,7 +177,7 @@ def getBR(infile):
 			if p.status() == 3:
 #				print e, p.status(), p.pdgId()
 				ntotal += 1
-				if abs(p.pdgId()) in range(11,16):
+				if abs(p.pdgId()) in range(11,14):
 					leptons +=1
 				elif abs(p.pdgId()) in range(1,7):
 					quarks += 1
@@ -179,7 +188,7 @@ def getBR(infile):
 			hadronically += 1
 		elif leptons == 4:
 			dilepton += 1
-		elif (others == 4) and (leptons == 2):
+		elif leptons == 2:
 			leptonJets += 1
 			
 	print e, hadronically, dilepton, leptonJets
@@ -187,15 +196,18 @@ def getBR(infile):
 	hBR.Fill('dilepton', dilepton)
 	hBR.Fill('lepton + Jets', leptonJets)
 	hBR.Draw()
-	c1.SaveAs('ttbarBR.png')
+	c1.SetGridx()
+	c1.SetGridy()
+	c1.SaveAs(outfile+'_ttbarBR.png')
 
 
 #######################################
 def main(argv):
 #######################################
 	infile = None
+	outfile = None
 	try: 
-		opts, args = getopt.getopt(argv, 'hbi:p:dr', ['help','input=', 'particle='])
+		opts, args = getopt.getopt(argv, 'hbi:o:p:dr', ['help','input=', 'particle=', 'output='])
 		if not opts:
 			print 'No options supplied. Please insert input -i and pdgID -p'
 	except getopt.GetoptError,e:
@@ -209,13 +221,15 @@ def main(argv):
 			continue
 		elif opt in ('-i', '--input'):
 			infile = arg
+		elif opt in ('-o', '--output'):
+			outfile = arg
 		elif opt in ('-p', '--particle'):
 			particle = arg
-			get_info(infile, particle)
+			get_info(infile, particle, outfile)
 		elif opt == '-d':	
-			deltaR(infile)
+			deltaR(infile, outfile)
 		elif opt == '-r':
-			getBR(infile)
+			getBR(infile, outfile)
 		else:
 			sys.exit(2)
 
