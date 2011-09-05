@@ -3,6 +3,7 @@
 
 #include "DataFormats/Common/interface/HLTenums.h"
 #include "DataFormats/HLTReco/interface/HLTPerformanceInfo.h"
+#include <iostream>
 #include <algorithm>
 
 HLTPerformanceInfo::HLTPerformanceInfo() {
@@ -38,7 +39,7 @@ double HLTPerformanceInfo::totalCPUTimeEvent() const {
 
 double HLTPerformanceInfo::totalTime() const {
   double t = 0;
-  for ( size_t i = 0; i < modules_.size(); ++i ) {
+  for ( size_t i = 1; i < modules_.size(); ++i ) {
     t += modules_[i].time();
   }
   return t;
@@ -209,4 +210,16 @@ void HLTPerformanceInfo::setStatusOfModulesFromPath(const char *pathName)
     ctr++ ; 
   }
   
+}
+
+void HLTPerformanceInfo::modStatus() const {
+  for (size_t i =0; i < modules_.size(); ++i){
+//   if ((modules_[i].name()).find("hltL1") == 0 ){
+     if (modules_[i].status().wasrun() == 1){
+       std::cout << modules_[i].name() << ", true" << std::endl; 
+       }
+     else {
+       std::cout << modules_[i].name() << ", false" << std::endl; 
+     }
+  }
 }

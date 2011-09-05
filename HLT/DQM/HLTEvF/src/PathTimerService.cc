@@ -36,6 +36,7 @@ namespace edm {
 
         edm::CPUTimer* PathTimerService::_CPUtimer = 0;       // for total time event by adding modules
         edm::CPUTimer* PathTimerService::_CPUtimerevent = 0;  // for total time event as stop watch
+        edm::CPUTimer* PathTimerService::_CPUtimerModules = 0;  // for total time only for modules
 
         PathTimerService::PathTimerService(const ParameterSet& iPS, ActivityRegistry&iRegistry):
             total_event_count_(0),
@@ -56,6 +57,7 @@ namespace edm {
 
             if (!_CPUtimer) _CPUtimer = new edm::CPUTimer();              // for total time event by adding modules
             if (!_CPUtimerevent) _CPUtimerevent = new edm::CPUTimer();    // for total time event as stop watch
+            if (!_CPUtimerModules) _CPUtimerModules = new edm::CPUTimer(); 
         }
 
 
@@ -68,6 +70,10 @@ namespace edm {
                 delete _CPUtimerevent ;
                 _CPUtimerevent = 0;
             }  
+	    if (_CPUtimerModules) {
+                delete _CPUtimerModules ;
+                _CPUtimerModules = 0;
+            }
         }
 
 
@@ -134,17 +140,42 @@ namespace edm {
     }
     void PathTimerService::postEventProcessing(const Event& e, const EventSetup&)  {
       total_event_count_ = total_event_count_ + 1;
+	_CPUtimerModules->reset();
+        _perfInfo->modStatus(); 
     }
 
-    void PathTimerService::preModule(const ModuleDescription&) {
+    void PathTimerService::preModule(const ModuleDescription& desc) {
         _CPUtimer->reset() ; 
         _CPUtimer->start() ;
+	//double tWall = _CPUtimer->realTime() ;
+        //_CPUtimerModules->start() ;
+	//double tWallModules = _CPUtimerModules->realTime() ;
+	//std::cout << "preMod = " << tWall << ", preMod_Mod = " << tWallModules << std::endl ;
+
+	//----------------- for in between modules time
+          HLTPerformanceInfo::Modules::iterator iMod =
+              _perfInfo->findModule(desc.moduleLabel().c_str());
+        _CPUtimerModules->stop() ;
+	double tbModules = _CPUtimerModules->realTime();
+	//std::cout << desc.moduleLabel().c_str() << ", Time between this module = " << tbModules << std::endl;
+	//std::cout << desc.moduleLabel().c_str() << ", " << tbModules << std::endl;
+
     }
 
       void PathTimerService::postModule(const ModuleDescription& desc) {
 
           _CPUtimer->stop() ;
           double tWall = _CPUtimer->realTime() ; 
+          //----------------------------------------------------
+          //_CPUtimerModules->stop() ;
+          //double tWallModules = _CPUtimerModules->realTime() ;
+	  //double tiWallevent = _CPUtimerevent->realTime();
+ 	  //double Twall = _perfInfo->totalTime();
+          //double timWallevent1 = tiWallevent - Twall;  
+          //double timWallevent2 = tiWallevent - tWallModules;
+          //std::cout << desc.moduleLabel().c_str() << ", time event 1 = " << tiWallevent << ", time per module = " << tWall << ", total time = " << Twall << ", Module time = " << tWallModules << ", diff1 = " << timWallevent1 << ", diff2 = " << timWallevent2 << std::endl ;
+//          std::cout << desc.moduleLabel().c_str() << "," << tWall << std::endl;
+          //----------------------------------------------------
           double tCPU  = _CPUtimer->cpuTime() ;
           _CPUtimer->reset() ; 
       
@@ -154,32 +185,78 @@ namespace edm {
        
           HLTPerformanceInfo::Modules::iterator iMod =
               _perfInfo->findModule(desc.moduleLabel().c_str());
-          std::cout << "modulo = " << desc.moduleLabel().c_str() << std::endl ;
+
+	//------------------------------------------------------------------
+	  //double tiWallevent1 = _CPUtimerevent->realTime();
+ 	  //double Twall1 = _perfInfo->totalTime();
+          //double tWallModules1 = _CPUtimerModules->realTime() ;
+          //double tWall1 = _CPUtimer->realTime() ; 
+	  //double timWallevent11 = tiWallevent1 - Twall1; 
+	  //double timWallevent12 = tiWallevent1 - tWallModules1; 
+	  //double timWallevent12 = Twall1 - tWallModules1; 
+          //std::cout << desc.moduleLabel().c_str() << ", total time = " << Twall1 << status.state() << std::endl; //", time event 2 = " << tiWallevent1 << ", time per module = " << tWall1 << ", total time = " << Twall1 << ", Module time = " << tWallModules1 << ", diff1 = " << timWallevent11 << ", diff2 = " << timWallevent12 << std::endl ;
+          //std::cout << desc.moduleLabel().c_str() << ", total time = " << Twall1 << ", between Module time = " << tWallModules1 << ", diff1 = " << timWallevent12 << std::endl ;
+	//---------------------------------------------------------------------
+
+	//--------------------------- Module Status
+	//for (HLTPerformanceInfo::ModulesInPath::const_iterator j = _perfInfo->beginModules(); j != _perfInfo->endModules(); ++j){
+	//	HLTPerformanceInfo::Module & mod = _perfInfo_>Modules.at(*j);
+	//	mod.status()
+ 	//}
+	//std::cout << modStatus << std::endl; 
+	//double modStatus = _perfInfo->status();
+	//--------------------------------------
+
+
+	//---------------------- Summed Modules
           if ( iMod != _perfInfo->endModules() ) {
 	    iMod->setTime(tWall) ;
 	    iMod->setCPUTime(tCPU) ;
           }
+
 	//--------------------------- for Total Time Event as Stop Watch
-      if (iMod == _perfInfo->beginModules()+1 ){
-         _CPUtimerevent->reset() ;   
-         double tiWallevent = _CPUtimerevent->realTime();
-         std::cout << "initial time = " << tiWallevent << std::endl;
+          //if (iMod == _perfInfo->beginModules()+1 ){
+            //_CPUtimerevent->reset() ;   
+            //double tiWallevent = _CPUtimerevent->realTime();
+            //std::cout << "initial time = " << tiWallevent << std::endl;
 
-         _CPUtimerevent->start(); 
-       }
+            //_CPUtimerevent->start(); 
+          //}
 
-       else if (iMod == _perfInfo->endModules()-1 ){
-         _CPUtimerevent->stop();
-         double tWallevent = _CPUtimerevent->realTime();
-         double tCPUevent  = _CPUtimerevent->cpuTime();
-        //_CPUtimerevent->reset() ;
+          //else if (iMod == _perfInfo->endModules()-1 ){
+            //_CPUtimerevent->stop();
+            //double tWallevent = _CPUtimerevent->realTime();
+            //double tCPUevent  = _CPUtimerevent->cpuTime();
+            //_CPUtimerevent->reset() ;
 
-        _perfInfo->setTimeEvent(tWallevent);
-        _perfInfo->setCPUTimeEvent(tCPUevent);
+	    //---------------------------------------
+	    //_CPUtimerModules->stop();
+	    //double tWallModules = _CPUtimerModules->realTime();
+	    //_CPUtimerModules->reset();
+ 	    //---------------------------------------
 
-        std::cout << "time = " << tWallevent << std::endl;
-       }
+            //_perfInfo->setTimeEvent(tWallevent);
+            //_perfInfo->setCPUTimeEvent(tCPUevent);
+
+            //std::cout << "final time event= " << tWallevent << std::endl;//", final Module time = " << tWallModules << std::endl;
+          //}
       //------------------------------------------------
+
+	//double tiWallevent2 = _CPUtimerevent->realTime();
+          //double Twall2 = _perfInfo->totalTime();
+          //double tWallModules2 = _CPUtimerModules->realTime() ;
+          //double tWall2 = _CPUtimer->realTime() ; 
+          //double timWallevent21 = tiWallevent2 - Twall2; 
+          //double timWallevent22 = tiWallevent2 - tWallModules2;
+          //std::cout << desc.moduleLabel().c_str() << ", time event 3 = " << tiWallevent2 << ", time per module = " << tWall2 << ", total time = " << Twall2 << ", Module time = " << tWallModules2 << ", diff1 = " << timWallevent21 << ", diff2 = " << timWallevent22 <<  std::endl ;
+	//--------------------------------------------------
+
+
+	//---------------------- For in between module time
+        _CPUtimerModules->reset() ;
+        _CPUtimerModules->start() ;
+
+	//----------------------------------------------
       }
 
       void PathTimerService::postPathProcessing(const std::string &name, 
@@ -194,7 +271,6 @@ namespace edm {
 	    }
 	    iPath++;
 	    ctr++; 
-
 	  }
 
       }
