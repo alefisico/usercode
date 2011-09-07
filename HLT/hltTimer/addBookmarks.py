@@ -33,7 +33,7 @@ gStyle.SetHistFillColor(kBlue)
 def usage():
 ###############################################################
 	print "\nThis is the usage function\n"
-	print 'Usage: '+sys.argv[0]+' -i <file1>  -o <file2> -b -option'
+	print 'Usage: '+sys.argv[0]+' -i <file1>  -o <file2> -b [option]'
 	print 'e.g.:  '+sys.argv[0]+' -i outputTiming.root -o outputTiming -b -t\n'
 
 	print 'Please, it is strongly suggested to put the -b option in order '
@@ -43,9 +43,9 @@ def usage():
 	print ' -i		 	Input File'
 	print ' -o 			Output File'
 	print ' -t 			For only main time info per event. It is the faster option.'
-	print ' -p			For path time info. It will take like 6-9 min.'
-	print ' -m 			For module time info. It will take like 3-6 min.'
-	print ' -s Path_Name_and_version   For an specific path.'
+	print ' -p			For path time info. It will take 6-9 min.'
+	print ' -m 			For module time info. It will take 3-6 min.'
+	print ' -s Path_Name            (For an specific path)'
 	print '\n For -p or -m option, the process needs like 300 Mb in disk space,'
 	print ' but please dont be afraid. Before the process ends, all the temporal files'
 	print ' will be erased.'
@@ -66,6 +66,7 @@ def maininfo(infile, outfile):
                         '\\begin{document}\n',
                         '\maketitle\n',
                         '\\newpage\n',
+			'\clearpage\n'
                         '\\tableofcontents\n',
                         '\\newpage\n',
 #                        '\centering \\section*{Total time per event} \includegraphics[scale=0.45]{totalTimeEventtemp.png}\n',
@@ -84,26 +85,31 @@ def maininfo(infile, outfile):
         file1 = TFile(infile,'read')
         for k in file1.GetListOfKeys():
                 allnames = k.ReadObj().GetName()
-                if 'pathTime_' in allnames:
+                #if 'pathTime_' in allnames:
+                if 'moduleInPathTimeSummary_' in allnames:
                         pathname = '_'.join(allnames.split('_')[1:])
                         if not pathname in names1:
                                 names1[pathname] = k.ReadObj().GetMean()
 #		elif 'specificPathTimeSummary_' in allnames:
 #			specific[allnames] = 1
         names2 = dict(sorted(names1.iteritems(), key=operator.itemgetter(1),reverse=True)[:10])
+	names3 = sorted(names2, key=names2.get, reverse=True)
+#	items = names2.items()
+#	items.sort(key=lambda item: (item[1]))#, item[0]))
+#	names3 = [ item[0] for item in items ]
 	names = names2.keys()
 	names.sort()
 
         texfile = open(outfile+'-main.tex', 'w')
         texfile.writelines(texpreamble)
-	if os.path.exists('exclude.txt'):
-		excludefile = open('exclude.txt', 'r')
-		texfile.write('\\newpage \section{Excluded Modules} \n')  
-		texfile.write('\\begin{enumerate}\n')  
-		for line in excludefile.readlines():
-			texfile.write('\item '+line)
-		texfile.write('\end{enumerate}\n')  
-		excludefile.close()
+#	if os.path.exists('exclude.txt'):
+#		excludefile = open('exclude.txt', 'r')
+#		texfile.write('\\newpage \section{Excluded Modules} \n')  
+#		texfile.write('\\begin{enumerate}\n')  
+#		for line in excludefile.readlines():
+#			texfile.write('\item '+line)
+#		texfile.write('\end{enumerate}\n')  
+#		excludefile.close()
 	if os.path.exists(infile.replace('.root','')+'-summary.txt'):
                 excludefile = open(infile.replace('.root','')+'-summary.txt', 'r')
                 texfile.write('\\newpage \section{Summary} \n \\begin{verbatim} \n')
@@ -113,19 +119,19 @@ def maininfo(infile, outfile):
 		texfile.write('\end{verbatim}')
         texfile.write('\\newpage \\chapter{10 Slowest Paths}\n')
         texfile.write('\section{Average module (in path) time}\n')
-        for path in names:
+        for path in names3:
                 texfile.write('\\newpage \subsection{'+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.35]{moduleInPathTimeSummary'+ path.replace('_','') +'temp.png}\n')
                 get_plot2(infile,'moduleInPathTimeSummary_'+path)
         texfile.write('\section{Average module (in path) running time}\n')
-        for path in names:
+        for path in names3:
                 texfile.write('\\newpage \subsection{'+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.35]{moduleInPathScaledTimeSummary'+ path.replace('_','') +'temp.png}\n')
                 get_plot2(infile,'moduleInPathScaledTimeSummary_'+path)
         texfile.write('\section{Per event time for path}\n')
-        for path in names:
+        for path in names3:
                 texfile.write('\\newpage \subsection{'+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.6]{pathTime'+ path.replace('_','') +'temp.png}\n')
                 get_plot1(infile,'pathTime_'+path)
         texfile.write('\section{Per event incremental time for path}\n')
-        for path in names:
+        for path in names3:
                 texfile.write('\\newpage \subsection{'+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.6]{incPathTime'+ path.replace('_','') +'temp.png}\n')
                 get_plot1(infile,'incPathTime_'+path)
 #	if specific:
