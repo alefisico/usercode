@@ -69,47 +69,24 @@ def maininfo(infile, outfile):
 			'\clearpage\n'
                         '\\tableofcontents\n',
                         '\\newpage\n',
-#                        '\centering \\section*{Total time per event} \includegraphics[scale=0.45]{totalTimeEventtemp.png}\n',
-#                        '\\newpage \section*{Total Time for Event per accepted event} \includegraphics[scale=0.45]{acceptedTotalTimeEventtemp.png}\n',
-#                        '\\newpage \section*{Total Time for Event per rejected event} \includegraphics[scale=0.45]{rejectedTotalTimeEventtemp.png}\n',
-#                        '\\newpage \section*{Total CPU Time for Event} \includegraphics[scale=0.45]{totalCPUTimeEventtemp.png}\n',
-#                        '\\newpage \section*{Total CPU Time for Event per accepted event} \includegraphics[scale=0.45]{acceptedTotalCPUTimeEventtemp.png}\n',
-#                        '\\newpage \section*{Total CPU Time for Event per rejected event} \includegraphics[scale=0.45]{rejectedTotalCPUTimeEventtemp.png}\n',
                         '\\newpage \chapter{Total time for all modules per event} \\newpage \centering \includegraphics[scale=0.6]{totalTimetemp.png}\n']
-#                        '\\newpage \section*{Total Time for all modules per accepted event} \includegraphics[scale=0.45]{acceptedTotalTimetemp.png}\n',
-#                        '\\newpage \section*{Total Time for all modules per rejected event} \includegraphics[scale=0.45]{rejectedTotalTimetemp.png}\n'
-#			'\end{document}']
 
         names1 = {}
 	specific = {}
         file1 = TFile(infile,'read')
         for k in file1.GetListOfKeys():
                 allnames = k.ReadObj().GetName()
-                #if 'pathTime_' in allnames:
                 if 'moduleInPathTimeSummary_' in allnames:
                         pathname = '_'.join(allnames.split('_')[1:])
                         if not pathname in names1:
                                 names1[pathname] = k.ReadObj().GetMean()
-#		elif 'specificPathTimeSummary_' in allnames:
-#			specific[allnames] = 1
         names2 = dict(sorted(names1.iteritems(), key=operator.itemgetter(1),reverse=True)[:10])
-	names3 = sorted(names2, key=names2.get, reverse=True)
-#	items = names2.items()
-#	items.sort(key=lambda item: (item[1]))#, item[0]))
-#	names3 = [ item[0] for item in items ]
-	names = names2.keys()
-	names.sort()
+	names = sorted(names2, key=names2.get, reverse=True)
 
         texfile = open(outfile+'-main.tex', 'w')
         texfile.writelines(texpreamble)
-#	if os.path.exists('exclude.txt'):
-#		excludefile = open('exclude.txt', 'r')
-#		texfile.write('\\newpage \section{Excluded Modules} \n')  
-#		texfile.write('\\begin{enumerate}\n')  
-#		for line in excludefile.readlines():
-#			texfile.write('\item '+line)
-#		texfile.write('\end{enumerate}\n')  
-#		excludefile.close()
+	get_plot1(infile,'totalTime')
+
 	if os.path.exists(infile.replace('.root','')+'-summary.txt'):
                 excludefile = open(infile.replace('.root','')+'-summary.txt', 'r')
                 texfile.write('\\newpage \section{Summary} \n \\begin{verbatim} \n')
@@ -119,40 +96,25 @@ def maininfo(infile, outfile):
 		texfile.write('\end{verbatim}')
         texfile.write('\\newpage \\chapter{10 Slowest Paths}\n')
         texfile.write('\section{Average module (in path) time}\n')
-        for path in names3:
+
+        for path in names:
                 texfile.write('\\newpage \subsection{'+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.35]{moduleInPathTimeSummary'+ path.replace('_','') +'temp.png}\n')
                 get_plot2(infile,'moduleInPathTimeSummary_'+path)
         texfile.write('\section{Average module (in path) running time}\n')
-        for path in names3:
+        for path in names:
                 texfile.write('\\newpage \subsection{'+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.35]{moduleInPathScaledTimeSummary'+ path.replace('_','') +'temp.png}\n')
                 get_plot2(infile,'moduleInPathScaledTimeSummary_'+path)
         texfile.write('\section{Per event time for path}\n')
-        for path in names3:
+        for path in names:
                 texfile.write('\\newpage \subsection{'+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.6]{pathTime'+ path.replace('_','') +'temp.png}\n')
                 get_plot1(infile,'pathTime_'+path)
         texfile.write('\section{Per event incremental time for path}\n')
-        for path in names3:
+        for path in names:
                 texfile.write('\\newpage \subsection{'+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.6]{incPathTime'+ path.replace('_','') +'temp.png}\n')
                 get_plot1(infile,'incPathTime_'+path)
-#	if specific:
-#		texfile.write('\\newpage \chapter{Specific Path Time Summary} \n')
-#		for i in specific:
-#			texfile.write('\\newpage \subsection{'+i.replace('_','\_') +'} \centering \includegraphics[scale=0.35]{'+ i.replace('_','') +'temp.png}\n')
-#			get_plot2(infile,i)
         texfile.write('\end{document}')
         texfile.close()
 
-        texfile.close()
-
-#	get_plot1(infile,'totalTimeEvent')
-#	get_plot1(infile,'acceptedTotalTimeEvent')
-#	get_plot1(infile,'rejectedTotalTimeEvent')
-#	get_plot1(infile,'totalCPUTimeEvent')
-#	get_plot1(infile,'acceptedTotalCPUTimeEvent')
-#	get_plot1(infile,'rejectedTotalCPUTimeEvent')
-	get_plot1(infile,'totalTime')
-#	get_plot1(infile,'acceptedTotalTime')
-#	get_plot1(infile,'rejectedTotalTime')
 
 
 
@@ -176,10 +138,6 @@ def pathsinfo(infile,outfile):
 			'\\newpage\n',
 			'\\tableofcontents\n',
 			'\\newpage\n']
-#			'\\chapter{Average time per path}\n',
-#			'\\newpage \centering \includegraphics[scale=0.6]{pathTimeSummarytemp.png}\n',
-#			'\\chapter{Average incremental time per path}\n',
-#			'\\newpage \centering \includegraphics[scale=0.6]{incPathTimeSummarytemp.png}\n']
 
 	names1 = {}
 	file = TFile(infile,'read')
@@ -196,8 +154,6 @@ def pathsinfo(infile,outfile):
         texfile = open(outfile+'-paths.tex', 'w')
         texfile.writelines(texpreamble)
 
-#	get_plot2(infile,'pathTimeSummary')
-#	get_plot2(infile,'incPathTimeSummary')
 	texfile.write('\\chapter{Average module (in path) time}\n')
 	for path in names:
 		texfile.write('\\newpage \section{'+ path.replace('_','\_') +'} \centering \includegraphics[scale=0.35]{moduleInPathTimeSummary'+ path.replace('_','') +'temp.png}\n')	
@@ -243,10 +199,6 @@ def moduleinfo(infile,outfile):
                         '\\newpage\n',
                         '\\tableofcontents\n',
                         '\\newpage\n']
-#			'\\chapter{Average time per module}',
-#			'\\newpage \centering \includegraphics[scale=0.45]{moduleTimeSummarytemp.png}\n',
-#			'\\chapter{Average running time per module}\n',
-#			'\\newpage \centering \includegraphics[scale=0.45]{moduleScaledTimeSummarytemp.png}\n']
 
         names1 = {}
         file = TFile(infile,'read')
@@ -264,8 +216,6 @@ def moduleinfo(infile,outfile):
         texfile1 = open(outfile+'-modules.tex', 'w')
         texfile1.writelines(texpreamble)
 
-#        get_plot2(infile,'moduleTimeSummary')
-#        get_plot2(infile,'moduleScaledTimeSummary')
 	texfile1.write('\\chapter{Time per event for module} \n \\newpage')
 	for modules in names:
 		texfile1.write('\section{'+modules+'}')
@@ -303,27 +253,11 @@ def specificpathinfo(infile, outfile, path):
                         '\maketitle\n',
 			'\\tableofcontents \n'
                         '\\newpage\n \\chapter{Main Info} \n',
-#                        '\\newpage \n \centering \\section{Total time per event} \includegraphics[scale=0.45]{totalTimeEventtemp.png}\n',
- #                       '\\newpage \section{Total Time for Event per accepted event} \includegraphics[scale=0.45]{acceptedTotalTimeEventtemp.png}\n',
-#                        '\\newpage \section{Total Time for Event per rejected event} \includegraphics[scale=0.45]{rejectedTotalTimeEventtemp.png}\n',
-#                        '\\newpage \section{Total CPU Time for Event} \includegraphics[scale=0.45]{totalCPUTimeEventtemp.png}\n',
-#                        '\\newpage \section{Total CPU Time for Event per accepted event} \includegraphics[scale=0.45]{acceptedTotalCPUTimeEventtemp.png}\n',
-#                        '\\newpage \section{Total CPU Time for Event per rejected event} \includegraphics[scale=0.45]{rejectedTotalCPUTimeEventtemp.png}\n',
                         '\\newpage \centering \section{Total time for all modules per event} \includegraphics[scale=0.6]{totalTimetemp.png}\n']
-#                        '\\newpage \section{Total Time for all modules per accepted event} \includegraphics[scale=0.45]{acceptedTotalTimetemp.png}\n',
-#                        '\\newpage \section{Total Time for all modules per rejected event} \includegraphics[scale=0.45]{rejectedTotalTimetemp.png}\n']
 
         texfile = open(outfile+'-'+path+'.tex', 'w')
         texfile.writelines(texpreamble)
-#        get_plot1(infile,'totalTimeEvent')
-#        get_plot1(infile,'acceptedTotalTimeEvent')
-#        get_plot1(infile,'rejectedTotalTimeEvent')
-#        get_plot1(infile,'totalCPUTimeEvent')
-#        get_plot1(infile,'acceptedTotalCPUTimeEvent')
-#        get_plot1(infile,'rejectedTotalCPUTimeEvent')
         get_plot1(infile,'totalTime')
-#        get_plot1(infile,'acceptedTotalTime')
-#        get_plot1(infile,'rejectedTotalTime')
 
 	names = {}
 	file1 = TFile(infile,'read')
@@ -391,7 +325,6 @@ def get_plot2(infile,allnames):
 		histo.GetXaxis().SetLabelSize(0.02)
 	else:
 		histo.GetXaxis().SetLabelSize(0.03)
-	#histo.SetLabelOffset(-0.01,"x")
         can.SetBorderMode(0)
 	can.SetBorderSize(0)
         can.SetFillColor(kWhite)
