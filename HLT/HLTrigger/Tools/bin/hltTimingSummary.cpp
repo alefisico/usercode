@@ -5,7 +5,6 @@
 #include <TAttText.h>
 #include <TCanvas.h>
 #include <TStyle.h>
-#include <TPDF.h>
 #include <TTree.h>
 #include <TBranch.h>
 #include <TSystem.h>
@@ -26,6 +25,9 @@
 
 //--- Created by:  
 //--- Bryan Dahmes (Bryan.Michael.Dahmes@cern.ch), January 2007
+//--- Modified by: Elim Cheung (elim.yee.lam.cheung@cern.ch) Jun 2011
+//--- Modified by: Alejandro Gomez (alejandro.gomez@cern.ch) Sep 2011
+
 
 // This function is for optimization purposes only (not used)
 void printTiming(double cpu, double real) {
@@ -618,77 +620,6 @@ void slowestModules(std::vector<TH1D*> histo,
   }
 }
 
-//void createTOC(TPDF* pdf, std::vector<std::string> TOC) {
-    
-//  double textSize    = 0.032 ; 
-//  double textSpacing = 0.040 ;
-//  double tocXval     = 0.10 ; 
-//  double tocYval     = 0.93 ; 
-//  double pageXval    = 0.90 ; 
-
-//  pdf->SetTextSize(textSize) ;
-//  pdf->SetTextColor(1) ; 
-
-//  int nTOCentries = 0 ; 
-//  std::string page ; std::string TOCentry ; 
-//  for (unsigned int i=0; i<TOC.size(); i++) {
-//    std::string TOCline = TOC.at(i) ;
-//    size_t locPage = TOCline.find("^^",0) ; 
-//    size_t locSub  = TOCline.find("^",0) ; 
-//    if (locSub == locPage) {
-//      nTOCentries++ ;
-//      page = TOCline.substr(locPage+2) ;
-//      TOCentry = TOCline.substr(0,locPage) ; 
-//    }
-//  }
-
-//  tocYval -= textSpacing * nTOCentries ;
-//  pdf->Text(tocXval,tocYval,TOCentry.c_str()) ; 
-//  pdf->Text(pageXval,tocYval,page.c_str()) ; 
-//}
-
-//void createTOCentry(TPDF* pdf, std::string tocEntry, int& page, std::vector<std::string>* TOC) {
-
-//  char tocPage[5] ;
-//  sprintf(tocPage,"%d",page++) ;
-//  TOC->push_back( tocEntry + "^^" + std::string(tocPage) ) ;
-//  createTOC(pdf,*TOC) ;
-//}
-
-//void createTOCentry(TPDF* pdf, std::string tocEntry, int& page,
-//                    std::vector<std::string>* TOC,
-//                    std::vector<std::string> names) {
-
-//  char tocPage[5] ;
-//  sprintf(tocPage,"%d",page) ;
-//  TOC->push_back( tocEntry + "^^" + std::string(tocPage) ) ; 
-
-//  for (unsigned int i=0; i<names.size(); i++) {
-//    sprintf(tocPage,"%d",page++) ;
-//    TOC->push_back( tocEntry + "^" + names.at(i) + "^^" + std::string(tocPage) ) ; 
-//  }
-//  createTOC(pdf,*TOC) ;
-//}
-
-//void createTOCentry(TPDF* pdf, std::string tocEntry, int& page,
-//                    std::vector<std::string>* TOC,
-//                    std::vector<std::string> pNames,
-//                    std::vector< std::vector<std::string> > mipNames) {
-
-//  char tocPage[5] ;
-//  sprintf(tocPage,"%d",page) ;
-//  TOC->push_back( tocEntry + "^^" + std::string(tocPage) ) ; 
-
-//  for (unsigned int i=0; i<pNames.size(); i++) {
-//    sprintf(tocPage,"%d",page) ;
-//    TOC->push_back( tocEntry+"^"+pNames.at(i)+"^^"+std::string(tocPage) ) ; 
-//    for (unsigned int j=0; j<mipNames.at(i).size(); j++) {
-//      sprintf(tocPage,"%d",page++) ;
-//      TOC->push_back( tocEntry+"^"+pNames.at(i)+"^"+mipNames.at(i).at(j)+"^^"+std::string(tocPage) ) ; 
-//    }
-//  }
-//  createTOC(pdf,*TOC) ;
-//}
 
 int main(int argc, char ** argv) {
     
@@ -704,8 +635,6 @@ int main(int argc, char ** argv) {
   std::string filename = "hlt.root" ;
   std::string outbase  = "hltTimingSummary" ; 
   std::string outname = outbase + ".root" ;
-//  std::string pdfname = outbase + ".pdf" ;
-//  std::string txtname = outbase + "-bookmark.txt" ;
   std::string sumname ; 
   std::vector<std::string> skipTimingMod ; skipTimingMod.clear() ; 
   std::vector<std::string> skipTimingPath ; skipTimingPath.clear() ;
@@ -716,14 +645,11 @@ int main(int argc, char ** argv) {
   std::vector<std::string> modInterested ; modInterested.clear() ; 
   
   //--- Boolean flags ---//
-//  bool writePdf = false; //true ;
-//  bool writeEventSection = true ;
-//  bool writeRejectionSection = false;
   bool writeSummary = false ;
   bool takeCPUtime = false ;
   
   int LogYScale = 0;
-//  int LinYScale = 0;
+  int LinYScale = 0;
   double userMaxTime = -1. ;
   double userBinWidth = -1. ; 
   bool skipFirstEvent = false ;
@@ -744,9 +670,6 @@ int main(int argc, char ** argv) {
        "Input file name (Default is hlt.root)") 
       ("outfile,o",  boost::program_options::value<std::string>(),
        "Sets output files to <UserName>.root (default is hltTimingSummary)")
-//       "Sets output files to <UserName>.root/.pdf/-bookmark.txt (default is hltTimingSummary)")
-//      ("pdfLevel,p", boost::program_options::value<int>(),
-//       "Set the level of pdf verbosity: 0 (none), 1 (summary plots only), 2 (default), or 3 (full, inc Rejection")
       ("summary,s",
        "Creates user-friendly timing summary file <UserName>-summary.txt.  See \"-o\" option for <UserName>")
       ("cpu,c",
@@ -779,13 +702,10 @@ int main(int argc, char ** argv) {
   std::string usage = "\nSample hltTimingSummary usage::\n" ; 
   usage += "\"hltTimingSummary -t 50 -b 5 -r filter1 -p 1\" " ; 
   usage += "inputs hlt.root, outputs hltTimingsummary.root,\n" ;
-//  usage += "                         -bookmark.txt, and .pdf.\n" ; 
   usage += "                         Timing histograms run from 0 to 50 msec with 5 msec bins.\n" ;
   usage += "                         Rejection factor recalculated for paths including filter1.\n" ; 
-  usage += "                         PDF output file contains summary plots only.\n" ; 
   usage += "\"hltTimingSummary -i in.root -f -e exclude.txt -o out -s\" " ;
   usage += "inputs in.root, outputs out.root, out-summary.txt\n" ;
-//  usage += "                         out-bookmark.txt, out-summary.txt and out.pdf.\n" ;
   usage += "                         Also skips events where modules are first run, and excludes \n" ;
   usage += "                         the modules listed in exclude.txt from timing calculations.\n\n" ;
   usage += "NOTE: To exclude files or use filters, the following formats are acceptable:\n" ; 
@@ -817,9 +737,6 @@ int main(int argc, char ** argv) {
   if (vmap.count("outfile")) {
     outbase = vmap["outfile"].as<std::string>() ; 
     outname = outbase + ".root" ;
-//    writePdf = true ; 
-//    pdfname = outbase + ".pdf" ;
-//    txtname = outbase + "-bookmark.txt" ; 
   }
   if (vmap.count("summary") || vmap.count("timelimit") || vmap.count("pathlimit") || vmap.count("modulelimit")) {
     writeSummary = true ; 
@@ -831,19 +748,6 @@ int main(int argc, char ** argv) {
     if (vmap.count("pathlimit")) pathTimeThreshold = vmap["pathlimit"].as<double>() ; 
     if (vmap.count("modulelimit")) moduleTimeThreshold = vmap["modulelimit"].as<double>() ;
   }
-//  if (vmap.count("pdfLevel")) {
-//    writePdf = false ;
-//    writeEventSection = false ;
-//    int setPdflevel = vmap["pdfLevel"].as<int>() ;
-//    if (setPdflevel >= 1) writePdf = true ;
-//    if (setPdflevel >= 2) writeEventSection = true ;
-//    if (setPdflevel == 3) writeRejectionSection = true;
-//    if (setPdflevel > 3 || setPdflevel < 0) {
-//      std::cout << "Unknown PDF specification." << std::endl ; 
-//      std::cerr << desc << usage << std::endl ;
-//      return 1 ;
-//    }
-//  }
   if (vmap.count("cpu")) {
     takeCPUtime = true ;
     std::cout << "NOTE: You have elected to display results using CPU time." << std::endl ; 
@@ -1058,17 +962,11 @@ int main(int argc, char ** argv) {
   TFile* outFile = new TFile(outname.c_str(), "recreate") ;
   ofstream txtfile ; 
   ofstream sumfile ; 
-//  if ( !writePdf && !writeSummary ) {
   if ( !writeSummary ) {
     std::cout << "Output to file: " << outname << std::endl ;
   } else {
-//    std::cout << "Output to files " << outname ;
- //   if ( writePdf ) std::cout << ", .pdf and -bookmark.txt" ;
-//    if ( writePdf && writeSummary ) std::cout << "," ;
-//    if ( writeSummary ) std::cout << " and " << sumname ;
-//    std::cout << std::endl ; 
-    if ( writeSummary ) sumfile.open(sumname.c_str()) ; 
-//    if ( writePdf ) txtfile.open(txtname.c_str()) ; 
+    //if ( writeSummary ) sumfile.open(sumname.c_str()) ; 
+    sumfile.open(sumname.c_str()) ; 
   }
 
   int n_evts = events->GetEntries() ;
@@ -2074,144 +1972,6 @@ int main(int argc, char ** argv) {
     sumfile << "NOTE: The mean and rms values are calculated for all events (that INCLUDES overflows)"
 	    << std::endl ;
   }
-
-  //--- Output to PDF ---//
-//  {
-//    TCanvas* c1 = new TCanvas("c1") ;
-//    TPDF* pdf = 0 ;
-//    if (writePdf) pdf = new TPDF(pdfname.c_str()) ;
-//    int pageNumber = 2 ;
-//    double titleSize = 0.050 ; 
-      
-//    gROOT->SetStyle("Plain") ; 
-//    gStyle->SetPalette(1) ; 
-//    gStyle->SetOptStat(111111) ;
-//    c1->UseCurrentStyle() ; 
-//    gROOT->ForceStyle() ;
-      
-//    if (writePdf) {
-//      pdf->SetTextColor(1) ; 
-//      pdf->SetTextSize(titleSize) ; 
-//      pdf->Text(0.33,0.93,"Timing Summary Output") ;
-//      pdf->SetTextColor(2) ;
-//      pdf->SetTextSize(0.037) ;
-//      pdf->Text(0.05,0.02,
-//		"Documentation at https://twiki.cern.ch/twiki/bin/view/CMS/SWGuideHLTTimingSummary") ;
-      
-//      std::string tocEntry ;
-
-//      createTOCentry(pdf,"Total time per event",pageNumber,&tocList) ; 
-//      if (numberOfModules > 0) {
-//	createTOCentry(pdf,"Average module time",pageNumber,&tocList) ; 
-//	createTOCentry(pdf,"Average module running time",pageNumber,&tocList) ; 
-//      }
-          
-//      if ((*HLTPerformanceWrapper)->numberOfPaths() > 1) {
-//	createTOCentry(pdf,"Average module (in path) time",pageNumber,&tocList,pathNames) ; 
-//	createTOCentry(pdf,"Cumulative Average module (in path) time",pageNumber,&tocList,pathNames) ; 
-//	createTOCentry(pdf,"Average module (in path) running time",pageNumber,&tocList,pathNames) ; 
-//	createTOCentry(pdf,"Average path time",pageNumber, &tocList) ; 
-//	for (int k=0; k<numberOfspecificTotalTime; k++){
-////	  char titleBuffer[1000];
-//	  sprintf(titleBuffer, "Average path time from %6.0f msec to %6.0f msec", specificTotalTime.at(k).first, specificTotalTime.at(k).second);
-//	  std::string title = titleBuffer;
-//	  createTOCentry(pdf,titleBuffer,pageNumber, &tocList) ; 
-//	}
-//	createTOCentry(pdf,"Average incremental path time",pageNumber, &tocList) ;
-//      }
-      
-  //    if (writeRejectionSection) {
-//	createTOCentry(pdf,"Path rejection factor",pageNumber,&tocList) ; 
-//	createTOCentry(pdf,"Path success rate",pageNumber,&tocList) ; 
-//	if ((*HLTPerformanceWrapper)->numberOfPaths() > 1) {
-//	  createTOCentry(pdf,"Path vs. Path success rate",pageNumber,&tocList) ; 
-//	  createTOCentry(pdf,"Fraction of single path success",pageNumber,&tocList) ; 
-//	}
-//      }
-      
-//      createTOCentry(pdf,"Failing module (by path)",pageNumber,&tocList,pathNames) ; 
-      
-  //    if (writeRejectionSection) {
-//	createTOCentry(pdf,"Module Rejection factor (by path)",pageNumber,&tocList,pathNames) ; 
-//	createTOCentry(pdf,"Module Rejection factor per unit running time (by path)",
-//		       pageNumber,&tocList,pathNames) ; 
-//      }
-      
-  //    if (writeEventSection) {
-//	createTOCentry(pdf,"Per event module time",pageNumber,&tocList,moduleNames) ; 
-//	createTOCentry(pdf,"Per event module running time",pageNumber,&tocList,moduleNames) ; 
-//	if ((*HLTPerformanceWrapper)->numberOfPaths() > 1) {
-//	  createTOCentry(pdf,"Per event module (in path) running time",pageNumber,&tocList,
-//			 pathNames,moduleInPathNames) ;
-//	}
-//	createTOCentry(pdf,"Per event path time",pageNumber,&tocList,pathNames) ; 
-//	if ((*HLTPerformanceWrapper)->numberOfPaths() > 1) 
-//	  createTOCentry(pdf,"Per event incremental path time",pageNumber,&tocList,pathNames) ;
-//      }
-          
-      //--- Bookmarks output ---//
-//      for (unsigned int i=0; i<tocList.size(); i++) {
-//	std::string entry = tocList.at(i).append("\n") ; txtfile << entry ;
-//      }
-//    }
-
-    //-----------------------//
-    //--- Plot Histograms ---//
-    //-----------------------//
-//    plot1D(totalTime,c1,writePdf, LogYScale) ;
-//    plot1D(acceptedTotalTime,c1,writePdf, LogYScale) ;
-//    plot1D(rejectedTotalTime,c1,writePdf, LogYScale) ;
-
-    //--- Average time (summary) plots ---//
-//    if (numberOfModules > 0) {
-//      plot1D(moduleTimeSummary,c1,writePdf, LinYScale) ; 
-//      plot1D(moduleScaledTimeSummary,c1,writePdf, LinYScale) ;
-//    }
-        
-//    if ((*HLTPerformanceWrapper)->numberOfPaths() > 1) {
-//      plotMany(moduleInPathTimeSummary,c1,writePdf, LinYScale) ;
-//      plotMany(cumulativeModuleInPathTimeSummary,c1,writePdf, LinYScale) ;
-//      plotMany(moduleInPathScaledTimeSummary,c1,writePdf, LinYScale) ;
-//    }
-//    if ((*HLTPerformanceWrapper)->numberOfPaths() > 1) {
-//      plot1D(pathTimeSummary,c1,writePdf, LinYScale) ; 
-//      if( numberOfspecificTotalTime > 0){
-//	for (int k=0; k<numberOfspecificTotalTime; k++){
-//      	  plot1D(specificPathTimeSummary.at(k),c1,writePdf, LinYScale) ; 
-//	}
-//      }
-//      plot1D(incPathTimeSummary,c1,writePdf, LinYScale) ; 
-//    }
-        
-    //--- Success/Rejection plots ---//
-//    plot1D(pathRejection,pathRejectAll,c1,writeRejectionSection, LinYScale) ; 
-//    plot1D(pathSuccessFraction,c1,writeRejectionSection, LinYScale) ; 
-//     if ((*HLTPerformanceWrapper)->numberOfPaths() > 1) {
-//      plot2D(pathVsPathSummary,c1,writeRejectionSection) ; 
-//      plot1D(uniquePathSuccessFraction,c1,writeRejectionSection, LinYScale) ; 
-//    }
-//    plotMany(failedModule,c1,writePdf, LinYScale) ;
-//    plotMany(moduleInPathRejection,moduleInPathRejectAll,c1,writeRejectionSection, LinYScale) ;
-//    plotMany(moduleInPathRejectTime,c1,writeRejectionSection, LinYScale) ;
-        
-    //--- Event timing ---//
-//    plotMany(moduleTime,c1,writeEventSection, LogYScale) ;
-//    plotMany(moduleScaledTime,c1,writeEventSection, LogYScale) ; 
-//    if ((*HLTPerformanceWrapper)->numberOfPaths() > 1) {
-//      plotModuleInPath(moduleInPathScaledTime,c1,
-//		       numberOfPaths,numberOfModulesInPath,writeEventSection, LogYScale) ; 
-//    }
-//    if (numberOfspecificTotalTime==0){
-//      plotMany(pathTime,c1,writeEventSection, LogYScale) ;
-//    } else {
-//      plotMany(specificPathTime, c1,writeEventSection, LogYScale) ;
-//    }
-//    if ((*HLTPerformanceWrapper)->numberOfPaths() > 1) {
-//      plotMany(incPathTime,c1,writeEventSection, LogYScale) ;
-//    }
-        
-//    if (writePdf) pdf->Close() ; 
-//  }
 
   txtfile.close() ;
   sumfile.close() ; 
