@@ -22,6 +22,7 @@ import os.path
 import operator
 import subprocess 
 import sys, getopt
+sys.argv.append('-b')
 from ROOT import *
 import cStringIO 
 
@@ -33,20 +34,18 @@ gStyle.SetHistFillColor(kBlue)
 def usage():
 ###############################################################
 	print "\nThis is the usage function\n"
-	print 'Usage: '+sys.argv[0]+' -i <file1>  -o <file2> -b [option]'
-	print 'e.g.:  '+sys.argv[0]+' -i outputTiming.root -o outputTiming -b -t\n'
+	print 'Usage: '+sys.argv[0]+' -i <file1>  -o <file2> [option]'
+	print 'e.g.:  '+sys.argv[0]+' -i outputTiming.root -o outputTiming -t\n'
 
-	print 'Please, it is strongly suggested to put the -b option in order '
-	print 'to run the process in batch mode. Otherwise it could be last forever.'
 	print '\n-----Options-----'
 	print ' -b			For batch mode'
 	print ' -i		 	Input File'
-	print ' -o 			Output File'
-	print ' -t 			For only main time info per event. It is the faster option.'
-	print ' -p			For path time info. It will take 6-9 min.'
-	print ' -m 			For module time info. It will take 3-6 min.'
-	print ' -s Path_Name            (For an specific path)'
-	print '\n For -p or -m option, the process needs like 300 Mb in disk space,'
+	print ' -o 			Output File (Optional, otherwise it will take input file name)'
+	print ' -t 			For only main time info per event. It will take less than 1 min.'
+	print ' -p			For path time info. It will take approx 25 min.'
+	print ' -m 			For module time info. It will take approx 25 min.'
+	print ' -s Path_Name            (For an specific path).  It will take less than 1 min.'
+	print '\n For -p or -m option, the process needs like 200 Mb in disk space,'
 	print ' but please dont be afraid. Before the process ends, all the temporal files'
 	print ' will be erased.'
 
