@@ -26,7 +26,8 @@ PDG =  {'d':1, 'dbar':-1, 'down':1,
 	'nu_tau':16, 'nu_taubar':-16,
 	'gluon':21, 'photon':22, 'Z0':23, 
 	'W+':24, 'W-':-24, 
-	'Higgs0':25}
+	'Higgs0':25,
+	'gh': 10025, 'GH':10025}
 
 ######################################
 def get_info(infile,particle, outfile):
@@ -37,13 +38,12 @@ def get_info(infile,particle, outfile):
 
 	if particle in PDG.keys():
 		# For histos 
-		hmass = TH1F( particle+' mass', particle+' mass',100,140,220)
+		hmass = TH1F( particle+' mass', particle+' mass',100,450,550)
 		hmass.SetXTitle('Mass [GeV]')
-		hmass1 = TH1F(particle+particle+'bar mass',particle+particle+'bar mass',100,140,220)
-		hmass1.SetXTitle('Mass [GeV]')
-		hnparticles = TH1F('number of '+particle+' and '+particle+'bar','number of '+particle+' and '+particle+'bar',10,0,10)
-		hpt = TH1F(particle+' pt', particle+' pt',100,0,500)
-		heta = TH1F(particle+' eta',particle+' eta',100,-10,10)
+		hnparticles = TH1F('number of '+particle+' and '+particle+'bar','number of '+particle+' and '+particle+'bar',5,0,5)
+		hpt2 = TH1F(particle +' pt', 'hardest '+ particle + 'pt',100,0,500)
+		hpt = TH1F('pt','pt',100,0,500)
+		heta = TH1F(particle+' eta',particle+' eta',100,-5,5)
 
 #		entry = 0
 		for event in events:
@@ -52,33 +52,33 @@ def get_info(infile,particle, outfile):
 		#	print "Event ", count
 			event.getByLabel (label, handleGen)
 			gens = handleGen.product()
+			highpt = []
     
 			for p in gens:
-#				print p.pdgId()
-				if int(p.pdgId()) == int(PDG[particle]):
-#					print p.mass()
-					hmass.Fill(float(p.mass()))
-	
 				#print 'id',p.pdgId(), p.status(), 'status'
 				if abs( int(p.pdgId()) ) == int(PDG[particle]):
 					if p.status() == 3:
 						nparticles += 1
+						highpt.append(p.pt())
 #						print 'nparticles', nparticles
 						hpt.Fill(float(p.pt())) 
 						heta.Fill(float(p.eta())) 
-						hmass1.Fill(float(p.mass()))
+						hmass.Fill(float(p.mass()))
 			hnparticles.Fill(nparticles)
+			hpt2.Fill(max(highpt))
 
 		hmass.Draw()
 		c1.SaveAs(outfile+'_'+particle+'_mass.png')
-	        hpt.Draw()
+		hpt2.SetFillColor(kBlue)
+		hpt.SetFillColor(kWhite)
+		hpt2.GetYaxis().SetRangeUser(0.,400)
+	        hpt2.Draw()
+		hpt.Draw("same")
 	        c1.SaveAs(outfile+'_'+particle+'_pt.png')
 	        heta.Draw()
 	        c1.SaveAs(outfile+'_'+particle+'_eta.png')
 	        hnparticles.Draw()
 	        c1.SaveAs(outfile+'_'+particle+'_nparticles.png')
-	        hmass1.Draw()
-	        c1.SaveAs(outfile+'_'+particle+particle+'bar_mass.png')
 
 #######################################
 def deltaR(infile,outfile):
@@ -91,45 +91,28 @@ def deltaR(infile,outfile):
 
 	for event in events:
 #		print event
-		count2 = 0 
-		count = 0
-		L1 = {}
-		Q1 = {}
-		dR = {}	
-		Min = {}
+		L1 = []
+		Q1 = []
 		event.getByLabel (label, handleGen)
 		gens = handleGen.product()
 		
 		for p in gens:
 #			print 'particle', p.pdgId(), 'status', p.status()
-			if p.status() == 1:
+			if p.status() == 3:
 				if (abs(p.pdgId()) == 11) or (abs(p.pdgId()) == 13):
 #					print 'name', p.pdgId(), p.status(), p.p4()
-					count += 1
-					L1[count] = p.p4()
-			if p.status() == 3: 
+					L1.append(p.p4())
+#			if p.status() == 3: 
 				if (abs(p.pdgId()) in range(1,7)) or (p.pdgId() == 21) :
 #					print 'name', p.pdgId(), p.status()
-					count2 += 1
-					Q1[count2] = p.p4()
+					Q1.append(p.p4())
 #		print L1
 #		print Q1
-		for lepton, pLepton in L1.iteritems():
-			dR[lepton] = {}
-			for quark, pQuark in Q1.iteritems():
-				deltaR = Math.VectorUtil.DeltaR(pLepton, pQuark)
-				dR[lepton][quark] = deltaR
-#				print lepton, quark, deltaR
-#		print dR
-		for l in dR:
-			myMin = min(dR[l].values())
-			Min[l] = myMin
-#			print l, myMin
-#		print Min
-		for i in Min:
-			myMin2 = min(Min.values())
-#		print myMin2
-		hdeltaR.Fill(myMin2)
+		for pLepton in L1:
+			deltaR = []
+			for pQuark in Q1:
+				deltaR.append(Math.VectorUtil.DeltaR(pLepton, pQuark))
+			hdeltaR.Fill(min(deltaR))
 #
 	c1 = TCanvas('c1','c1',800,600)
 	hdeltaR.Draw()
@@ -163,8 +146,8 @@ def getBR(infile,outfile):
                 for p in gens:
 			if p.mother():
 				#print e, p.status(), p.pdgId(), mother
-				if p.status() == 1:
-					if ((abs(p.pdgId()) == 11) or (abs(p.pdgId()) == 13) or (abs(p.pdgId()) == 15)) and ((abs(p.mother().pdgId()) == 11) or (abs(p.mother().pdgId()) == 13) or (abs(p.mother().pdgId()) == 15)): 
+				if p.status() == 3:
+					if ((abs(p.pdgId()) == 11) or (abs(p.pdgId()) == 13) or (abs(p.pdgId()) == 15)):# and ((abs(p.mother().pdgId()) == 11) or (abs(p.mother().pdgId()) == 13) or (abs(p.mother().pdgId()) == 15)): 
 						leptonsTau +=1
 						if not (abs(p.pdgId()) == 15) : leptons += 1
 #		print e, leptons
@@ -213,13 +196,13 @@ def accepEfficiency(infile,outfile):
 		gens = handleGen.product()
 
 		for p in gens:
-			if p.status() == 1:
+			if p.status() == 3:
 				if (abs(p.pdgId()) == 13) and (abs(p.eta()) < 2.1):
 					muons += 1
 				elif (abs(p.pdgId()) == 11) and (abs(p.eta()) < 2.5):
 					electrons += 1
-			if p.status() == 3:	
-				if (abs(p.pdgId()) in range (1,7)) and (abs(p.eta()) < 2.4):
+#			if p.status() == 3:	
+				elif (abs(p.pdgId()) in range (1,7)) and (abs(p.eta()) < 2.4):
 					jets += 1
 		if muons: accepMuons += 1
 		if electrons: accepElectrons += 1
@@ -249,30 +232,40 @@ def acceptance(infile,outfile):
         hAE.SetYTitle('percentage')
         hAE.SetStats(0)
 
-	hpt = TH1F('partons pt for all jets', 'partons pt for all jets',100,0,300)
+	hpt = TH1F('pt for all jets', 'pt for all jets',100,0,500)
+	hpt2 = TH1F('partons pt for all jets', 'partons pt for all jets',100,0,500)
 	heta = TH1F('partons eta for all jets','partons eta for all jets',100,-3,3)
+	hdeltaR = TH1F('deltaR for all jets','deltaR for all jets',100,0,2)
 
-	llpt = TH1F('leptons pt for lepton + jets', 'leptons pt for lepton + jets',100,0,100)
-	lleta = TH1F('leptons eta for lepton + jets','leptons eta for lepton + jets',100,-10,10)
-	lppt = TH1F('partons pt for lepton + jets', 'partons pt for lepton + jets',100,0,300)
+	llpt = TH1F('lpt for lepton + jets', 'lpt for lepton + jets',100,0,200)
+	llpt2 = TH1F('leptons pt for lepton + jets', 'leptons pt for lepton + jets',100,0,200)
+	lleta = TH1F('leptons eta for lepton + jets','leptons eta for lepton + jets',100,-5,5)
+	lppt = TH1F('ppt for lepton + jets', 'ppt for lepton + jets',100,0,500)
+	lppt2 = TH1F('partons pt for lepton + jets', 'partons pt for lepton + jets',100,0,500)
 	lpeta = TH1F('partons eta for lepton + jets','partons eta for lepton + jets',100,-3,3)
 	ldeltaR = TH1F('deltaR for lepton + jets','deltaR for lepton + jets',100,0,2)
 
-        dlpt = TH1F('leptons pt for dilepton + jets', 'leptons pt for dilepton + jets',100,0,100)
-        dleta = TH1F('leptons eta for dilepton + jets','leptons eta for dilepton + jets',100,-10,10)
-        dppt = TH1F('partons pt for dilepton + jets', 'partons pt for dilepton + jets',100,0,300)
+        dlpt = TH1F('lpt for dilepton + jets', 'lpt for dilepton + jets',100,0,200)
+        dlpt2 = TH1F('leptons pt for dilepton + jets', 'leptons pt for dilepton + jets',100,0,200)
+        dleta = TH1F('leptons eta for dilepton + jets','leptons eta for dilepton + jets',100,-5,5)
+        dppt = TH1F('ppt for dilepton + jets', 'ppt for dilepton + jets',100,0,400)
+        dppt2 = TH1F('partons pt for dilepton + jets', 'partons pt for dilepton + jets',100,0,400)
         dpeta = TH1F('partons eta for dilepton + jets','partons eta for dilepton + jets',100,-3,3)
 	ddeltaR = TH1F('deltaR for dilepton + jets','deltaR for dilepton + jets',100,0,2)
 
-        tlpt = TH1F('leptons pt for 3 lepton + jets', 'leptons pt for 3 lepton + jets',100,0,100)
-        tleta = TH1F('leptons eta for 3 lepton + jets','leptons eta for 3 lepton + jets',100,-10,10)
-        tppt = TH1F('partons pt for 3 lepton + jets', 'partons pt for 3 lepton + jets',100,0,300)
+        tlpt = TH1F('lpt for 3 lepton + jets', 'lpt for 3 lepton + jets',100,0,200)
+        tlpt2 = TH1F('leptons pt for 3 lepton + jets', 'leptons pt for 3 lepton + jets',100,0,200)
+        tleta = TH1F('leptons eta for 3 lepton + jets','leptons eta for 3 lepton + jets',100,-5,5)
+        tppt = TH1F('ppt for 3 lepton + jets', 'ppt for 3 lepton + jets',100,0,500)
+        tppt2 = TH1F('partons pt for 3 lepton + jets', 'partons pt for 3 lepton + jets',100,0,500)
         tpeta = TH1F('partons eta for 3 lepton + jets','partons eta for 3 lepton + jets',100,-3,3)
 	tdeltaR = TH1F('deltaR for 3 lepton + jets','deltaR for 3 lepton + jets',100,0,2)
 
-        flpt = TH1F('leptons pt for 4 lepton + jets', 'leptons pt for 4 lepton + jets',100,0,100)
-        fleta = TH1F('leptons eta for 4 lepton + jets','leptons eta for 4 lepton + jets',100,-10,10)
-        fppt = TH1F('partons pt for 4 lepton + jets', 'partons pt for 4 lepton + jets',100,0,300)
+        flpt = TH1F('lpt for 4 lepton + jets', 'lpt for 4 lepton + jets',100,50,200)
+        flpt2 = TH1F('leptons pt for 4 lepton + jets', 'leptons pt for 4 lepton + jets',100,50,200)
+        fleta = TH1F('leptons eta for 4 lepton + jets','leptons eta for 4 lepton + jets',100,-5,5)
+        fppt = TH1F('ppt for 4 lepton + jets', 'ppt for 4 lepton + jets',100,50,300)
+        fppt2 = TH1F('partons pt for 4 lepton + jets', 'partons pt for 4 lepton + jets',100,50,300)
         fpeta = TH1F('partons eta for 4 lepton + jets','partons eta for 4 lepton + jets',100,-3,3)
 	fdeltaR = TH1F('deltaR for 4 lepton + jets','deltaR for 4 lepton + jets',100,0,2)
 
@@ -322,214 +315,196 @@ def acceptance(infile,outfile):
                 gens = handleGen.product()
 
                 for p in gens:
-			if p.mother():
+#			if p.mother():
 				#print e, p.status(), p.pdgId(), mother
-				if p.status() == 1:
-					if ((abs(p.pdgId()) == 11) or (abs(p.pdgId()) == 13) or (abs(p.pdgId()) == 15)) and ((abs(p.mother().pdgId()) == 11) or (abs(p.mother().pdgId()) == 13) or (abs(p.mother().pdgId()) == 15)):
-						leptonsTau +=1
-						if not (abs(p.pdgId()) == 15) : leptons += 1
+			if p.status() == 3:
+				if ((abs(p.pdgId()) == 11) or (abs(p.pdgId()) == 13) or (abs(p.pdgId()) == 15)):# and ((abs(p.mother().pdgId()) == 11) or (abs(p.mother().pdgId()) == 13) or (abs(p.mother().pdgId()) == 15)):
+					leptonsTau +=1
+					if not (abs(p.pdgId()) == 15) : leptons += 1
 #		print nevent, leptons
 		if leptonsTau == 0 :
 			hadronically += 1
+			highpt = []
 			for p in gens:
 				if p.status() == 3: 
-					if (abs(p.pdgId()) in range (1,7)) and (abs(p.eta()) < 2.4):
+					if ((abs(p.pdgId()) in range (1,7)) or (p.pdgId() == 21)) and (abs(p.eta()) < 2.4):
 						hjets += 1
 						hpt.Fill(float(p.pt()))
+						highpt.append(p.pt())
 						heta.Fill(float(p.eta()))
+			hpt2.Fill(max(highpt))
 			if hjets: 
 				haccepJets += 1
-#				deltaR(infile,outfile+'_alljets')
+				Q1 = []
+				for p in gens:
+					if p.status() == 3:
+						if ((abs(p.pdgId()) in range(1,7)) or (p.pdgId() == 21)):
+							Q1.append(p.p4())
+				deltaR = []
+				for pQuark in Q1:
+					deltaR.append(Math.VectorUtil.DeltaR(pQuark, pQuark))
+				hdeltaR.Fill(min(deltaR))
 			#print nevent, htotal
 
 		if leptons == 1: 
 			leptonJets += 1
+			llhighpt = []
+			lphighpt = []
 			for p in gens:
-				if p.status() == 1:
+				if p.status() == 3:
 					if (abs(p.pdgId()) == 13) and (abs(p.eta()) < 2.1): lmuons += 1
 					elif (abs(p.pdgId()) == 11) and (abs(p.eta()) < 2.5): lelectrons += 1
 					elif (abs(p.pdgId()) in range(11,15)):
+						llhighpt.append(p.pt())
 						llpt.Fill(float(p.pt()))
 						lleta.Fill(float(p.eta()))
-				if p.status() == 3:
-					if (abs(p.pdgId()) in range (1,7)) and (abs(p.eta()) < 2.4):
+#				if p.status() == 3:
+					elif ((abs(p.pdgId()) in range (1,7)) or (p.pdgId() == 21)) and (abs(p.eta()) < 2.4):
 						ljets += 1
+						lphighpt.append(p.pt())
 						lppt.Fill(float(p.pt()))
                                                 lpeta.Fill(float(p.eta()))
+			llpt2.Fill(max(llhighpt))
+			lppt2.Fill(max(lphighpt))
                         if lmuons: laccepMuons += 1
                         if lelectrons: laccepElectrons += 1
                         if ljets: laccepJets += 1
                         if (lmuons and lelectrons and ljets): 
 				ltotal +=1
-				count2 = 0 
-				count = 0
-				L1 = {}
-				Q1 = {}
-				dR = {}	
-				Min = {}
-		
+				L1 = []
+				Q1 = []
 				for p in gens:
-					if p.status() == 1:
+					if p.status() == 3:
 						if (abs(p.pdgId()) == 11) or (abs(p.pdgId()) == 13):
-							count += 1
-							L1[count] = p.p4()
-					if p.status() == 3: 
+							L1.append(p.p4())
+#					if p.status() == 3: 
 						if (abs(p.pdgId()) in range(1,7)) or (p.pdgId() == 21) :
-							count2 += 1
-							Q1[count2] = p.p4()
-				for lepton, pLepton in L1.iteritems():
-					dR[lepton] = {}
-					for quark, pQuark in Q1.iteritems():
-						deltaR = Math.VectorUtil.DeltaR(pLepton, pQuark)
-						dR[lepton][quark] = deltaR
-				for l in dR:
-					myMin = min(dR[l].values())
-					Min[l] = myMin
-				for i in Min:
-					myMin2 = min(Min.values())
-				ldeltaR.Fill(myMin2)
-#			print nevent, ltotal
+							Q1.append(p.p4())
+				for pLepton in L1:
+					deltaR = []
+					for pQuark in Q1:
+						deltaR.append(Math.VectorUtil.DeltaR(pLepton, pQuark))
+					ldeltaR.Fill(min(deltaR))
 
 		elif leptons == 2:
 			dilepton += 1
+			dlhighpt = []
+			dphighpt = []
                         for p in gens:
-                                if p.status() == 1:
+                                if p.status() == 3:
                                         if (abs(p.pdgId()) == 13) and (abs(p.eta()) < 2.1): dmuons += 1
                                         elif (abs(p.pdgId()) == 11) and (abs(p.eta()) < 2.5): delectrons += 1
                                         elif (abs(p.pdgId()) in range(11,15)):
-                                                dlpt.Fill(float(p.pt()))
-                                                dleta.Fill(float(p.eta()))
-                                if p.status() == 3:
-                                        if (abs(p.pdgId()) in range (1,7)) and (abs(p.eta()) < 2.4): 
+						dlhighpt.append(p.pt())
+						dlpt.Fill(float(p.pt()))
+						dleta.Fill(float(p.eta()))
+#				if p.status() == 3:
+					elif ((abs(p.pdgId()) in range (1,7)) or (p.pdgId() == 21)) and (abs(p.eta()) < 2.4):
 						djets += 1
-                                                dppt.Fill(float(p.pt()))
+						dphighpt.append(p.pt())
+						dppt.Fill(float(p.pt()))
                                                 dpeta.Fill(float(p.eta()))
+			dlpt2.Fill(max(dlhighpt))
+			dppt2.Fill(max(dphighpt))
                         if dmuons: daccepMuons += 1
                         if delectrons: daccepElectrons += 1
                         if djets: daccepJets += 1
                         if (dmuons and delectrons and djets):
 				dtotal +=1
-				count2 = 0 
-				count = 0
-				L1 = {}
-				Q1 = {}
-				dR = {}	
-				Min = {}
-		
+				L1 = []
+				Q1 = []
 				for p in gens:
-					if p.status() == 1:
+					if p.status() == 3:
 						if (abs(p.pdgId()) == 11) or (abs(p.pdgId()) == 13):
-							count += 1
-							L1[count] = p.p4()
-					if p.status() == 3: 
+							L1.append(p.p4())
+#					if p.status() == 3: 
 						if (abs(p.pdgId()) in range(1,7)) or (p.pdgId() == 21) :
-							count2 += 1
-							Q1[count2] = p.p4()
-				for lepton, pLepton in L1.iteritems():
-					dR[lepton] = {}
-					for quark, pQuark in Q1.iteritems():
-						deltaR = Math.VectorUtil.DeltaR(pLepton, pQuark)
-						dR[lepton][quark] = deltaR
-				for l in dR:
-					myMin = min(dR[l].values())
-					Min[l] = myMin
-				for i in Min:
-					myMin2 = min(Min.values())
-				ddeltaR.Fill(myMin2)
+							Q1.append(p.p4())
+				for pLepton in L1:
+					deltaR = []
+					for pQuark in Q1:
+						deltaR.append(Math.VectorUtil.DeltaR(pLepton, pQuark))
+					ddeltaR.Fill(min(deltaR))
 
                 elif leptons == 3:
                         tlepton += 1
+			tlhighpt = []
+			tphighpt = []
                         for p in gens:
-                                if p.status() == 1:
+                                if p.status() == 3:
                                         if (abs(p.pdgId()) == 13) and (abs(p.eta()) < 2.1): tmuons += 1
                                         elif (abs(p.pdgId()) == 11) and (abs(p.eta()) < 2.5): telectrons += 1
                                         elif (abs(p.pdgId()) in range(11,15)):
-                                                tlpt.Fill(float(p.pt()))
-                                                tleta.Fill(float(p.eta()))
-                                if p.status() == 3:
-                                        if (abs(p.pdgId()) in range (1,7)) and (abs(p.eta()) < 2.4):
-                                                tjets += 1
-                                                tppt.Fill(float(p.pt()))
+						tlhighpt.append(p.pt())
+						tlpt.Fill(float(p.pt()))
+						tleta.Fill(float(p.eta()))
+#				if p.status() == 3:
+					elif ((abs(p.pdgId()) in range (1,7)) or (p.pdgId() == 21)) and (abs(p.eta()) < 2.4):
+						tjets += 1
+						tphighpt.append(p.pt())
+						tppt.Fill(float(p.pt()))
                                                 tpeta.Fill(float(p.eta()))
+			tlpt2.Fill(max(tlhighpt))
+			tppt2.Fill(max(tphighpt))
                         if tmuons: taccepMuons += 1
                         if telectrons: taccepElectrons += 1
                         if tjets: taccepJets += 1
                         if (tmuons and telectrons and tjets): 
 				ttotal +=1
-				count2 = 0 
-				count = 0
-				L1 = {}
-				Q1 = {}
-				dR = {}	
-				Min = {}
-		
+				L1 = []
+				Q1 = []
 				for p in gens:
-					if p.status() == 1:
+					if p.status() == 3:
 						if (abs(p.pdgId()) == 11) or (abs(p.pdgId()) == 13):
-							count += 1
-							L1[count] = p.p4()
-					if p.status() == 3: 
+							L1.append(p.p4())
+#					if p.status() == 3: 
 						if (abs(p.pdgId()) in range(1,7)) or (p.pdgId() == 21) :
-							count2 += 1
-							Q1[count2] = p.p4()
-				for lepton, pLepton in L1.iteritems():
-					dR[lepton] = {}
-					for quark, pQuark in Q1.iteritems():
-						deltaR = Math.VectorUtil.DeltaR(pLepton, pQuark)
-						dR[lepton][quark] = deltaR
-				for l in dR:
-					myMin = min(dR[l].values())
-					Min[l] = myMin
-				for i in Min:
-					myMin2 = min(Min.values())
-				tdeltaR.Fill(myMin2)
+							Q1.append(p.p4())
+				for pLepton in L1:
+					deltaR = []
+					for pQuark in Q1:
+						deltaR.append(Math.VectorUtil.DeltaR(pLepton, pQuark))
+					tdeltaR.Fill(min(deltaR))
 
                 elif leptons == 4:
                         flepton += 1
+			flhighpt = []
+			fphighpt = []
                         for p in gens:
-                                if p.status() == 1:
+                                if p.status() == 3:
                                         if (abs(p.pdgId()) == 13) and (abs(p.eta()) < 2.1): fmuons += 1
                                         elif (abs(p.pdgId()) == 11) and (abs(p.eta()) < 2.5): felectrons += 1
                                         elif (abs(p.pdgId()) in range(11,15)):
+						flhighpt.append(p.pt())
                                                 flpt.Fill(float(p.pt()))
                                                 fleta.Fill(float(p.eta()))
-                                if p.status() == 3:
-                                        if (abs(p.pdgId()) in range (1,7)) and (abs(p.eta()) < 2.4):
+#                                if p.status() == 3:
+                                        elif ((abs(p.pdgId()) in range (1,7)) or (p.pdgId() == 21)) and (abs(p.eta()) < 2.4):
                                                 fjets += 1
+						fphighpt.append(p.pt())
                                                 fppt.Fill(float(p.pt()))
                                                 fpeta.Fill(float(p.eta()))
+			flpt2.Fill(max(flhighpt))
+			fppt2.Fill(max(fphighpt))
                         if fmuons: faccepMuons += 1
                         if felectrons: faccepElectrons += 1
                         if fjets: faccepJets += 1
                         if (fmuons and felectrons and fjets):
 				ftotal +=1
-				count2 = 0 
-				count = 0
-				L1 = {}
-				Q1 = {}
-				dR = {}	
-				Min = {}
-		
+				L1 = []
+				Q1 = []
 				for p in gens:
-					if p.status() == 1:
+					if p.status() == 3:
 						if (abs(p.pdgId()) == 11) or (abs(p.pdgId()) == 13):
-							count += 1
-							L1[count] = p.p4()
-					if p.status() == 3: 
+							L1.append(p.p4())
+#					if p.status() == 3: 
 						if (abs(p.pdgId()) in range(1,7)) or (p.pdgId() == 21) :
-							count2 += 1
-							Q1[count2] = p.p4()
-				for lepton, pLepton in L1.iteritems():
-					dR[lepton] = {}
-					for quark, pQuark in Q1.iteritems():
-						deltaR = Math.VectorUtil.DeltaR(pLepton, pQuark)
-						dR[lepton][quark] = deltaR
-				for l in dR:
-					myMin = min(dR[l].values())
-					Min[l] = myMin
-				for i in Min:
-					myMin2 = min(Min.values())
-				fdeltaR.Fill(myMin2)
+							Q1.append(p.p4())
+				for pLepton in L1:
+					deltaR = []
+					for pQuark in Q1:
+						deltaR.append(Math.VectorUtil.DeltaR(pLepton, pQuark))
+					fdeltaR.Fill(min(deltaR))
 
 	
         hAE.Fill('alljets |eta| jets < 2.4', (haccepJets*100/hadronically))
@@ -566,52 +541,103 @@ def acceptance(infile,outfile):
 	c1 = TCanvas('c1', '', 800, 600)
 	heta.Draw()
 	c1.SaveAs(outfile+'_alljets_eta.png')
-        hpt.Draw()
+	hpt2.SetFillColor(kBlue)
+	hpt.SetFillColor(kWhite)
+	hpt2.GetYaxis().SetRangeUser(0,800)
+	hpt2.Draw()
+        hpt.Draw("same")
         c1.SaveAs(outfile+'_alljets_pt.png')
-        llpt.Draw()
+	hdeltaR.Draw()
+	c1.SaveAs(outfile+'_alljets_deltaR.png')
+	del c1
+
+	c1 = TCanvas('c1', '', 800, 600)
+	llpt2.SetFillColor(kBlue)
+	llpt.SetFillColor(kWhite)
+	llpt2.GetYaxis().SetRangeUser(0,100)
+	llpt2.Draw()
+        llpt.Draw("same")
         c1.SaveAs(outfile+'_leptonjets_lepton_pt.png')
-        lleta.Draw()
+	lleta.Draw()
         c1.SaveAs(outfile+'_leptonjets_lepton_eta.png')
-	lppt.Draw()
+	lppt2.SetFillColor(kBlue)
+	lppt.SetFillColor(kWhite)
+	lppt2.GetYaxis().SetRangeUser(0,1000)
+	lppt2.Draw()
+	lppt.Draw("same")
         c1.SaveAs(outfile+'_leptonjets_parton_pt.png')
-        lpeta.Draw()
+	lpeta.Draw()
         c1.SaveAs(outfile+'_leptonjets_parton_eta.png')
         ldeltaR.Draw()
         c1.SetLogy()
         c1.SaveAs(outfile+'_leptonjets_deltaR.png')
-        dlpt.Draw()
+	del c1
+
+	c1 = TCanvas('c1', '', 800, 600)
+	dlpt2.SetFillColor(kBlue)
+	dlpt.SetFillColor(kWhite)
+	dlpt2.GetYaxis().SetRangeUser(0,50)
+	dlpt2.Draw()
+        dlpt.Draw("same")
         c1.SaveAs(outfile+'_dilepton_lepton_pt.png')
         dleta.Draw()
         c1.SaveAs(outfile+'_dilepton_lepton_eta.png')
-        dppt.Draw()
+	dppt2.SetFillColor(kBlue)
+	dppt.SetFillColor(kWhite)
+	dppt2.GetYaxis().SetRangeUser(0,500)
+	dppt2.Draw()
+        dppt.Draw("same")
         c1.SaveAs(outfile+'_dilepton_parton_pt.png')
         dpeta.Draw()
         c1.SaveAs(outfile+'_dilepton_parton_eta.png')
         ddeltaR.Draw()
         c1.SetLogy()
         c1.SaveAs(outfile+'_dilepton_deltaR.png')
-	tlpt.Draw()
+	del c1
+
+	c1 = TCanvas('c1', '', 800, 600)
+	tlpt2.SetFillColor(kBlue)
+	tlpt.SetFillColor(kWhite)
+	tlpt2.GetYaxis().SetRangeUser(0,70)
+	tlpt2.Draw()
+	tlpt.Draw("same")
         c1.SaveAs(outfile+'_3lepton_lepton_pt.png')
         tleta.Draw()
         c1.SaveAs(outfile+'_3lepton_lepton_eta.png')
-        tppt.Draw()
+	tppt2.SetFillColor(kBlue)
+	tppt.SetFillColor(kWhite)
+	tppt2.GetYaxis().SetRangeUser(0,50)
+	tppt2.Draw()
+        tppt.Draw("same")
         c1.SaveAs(outfile+'_3lepton_parton_pt.png')
         tpeta.Draw()
         c1.SaveAs(outfile+'_3lepton_parton_eta.png')
         tdeltaR.Draw()
         c1.SetLogy()
         c1.SaveAs(outfile+'_3lepton_deltaR.png')
-        flpt.Draw()
+	del c1
+
+	c1 = TCanvas('c1', '', 800, 600)
+	flpt2.SetFillColor(kBlue)
+	flpt.SetFillColor(kWhite)
+	flpt2.GetYaxis().SetRangeUser(0,10)
+	flpt2.Draw()
+        flpt.Draw("same")
         c1.SaveAs(outfile+'_4lepton_lepton_pt.png')
         fleta.Draw()
         c1.SaveAs(outfile+'_4lepton_lepton_eta.png')
-        fppt.Draw()
+	fppt2.SetFillColor(kBlue)
+	fppt.SetFillColor(kWhite)
+	fppt2.GetYaxis().SetRangeUser(0,10)
+	fppt2.Draw()
+        fppt.Draw("same")
         c1.SaveAs(outfile+'_4lepton_parton_pt.png')
         fpeta.Draw()
         c1.SaveAs(outfile+'_4lepton_parton_eta.png')
         fdeltaR.Draw()
         c1.SetLogy()
         c1.SaveAs(outfile+'_4lepton_deltaR.png')
+	del c1
 
 
 
