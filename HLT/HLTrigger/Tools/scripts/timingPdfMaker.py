@@ -364,7 +364,7 @@ def main(argv):
 		usage()
 		sys.exit(2)
 	for opt, arg in opts:
-		if opt in ('-h', '--help'):
+		if opt in ('h', '--help'):
 			usage()
 			sys.exit(2)
 		elif opt == '-b':
