@@ -61,7 +61,7 @@ def usage():
 
 
 ###############################################################
-def get_histos_info_mean(infile):
+def get_histos_info_mean(infile, pathlist):
 	'''Return mean time of modules for an specific path'''
 # This function is for High Pile Up skims
 ###############################################################
@@ -86,6 +86,15 @@ def get_histos_info_mean(infile):
 				pathname = pathname + fullname[j]
 				if j is not (len(fullname)-2):
 					pathname = pathname + "_"
+			# lines suggested by Edgar
+			if not pathname in pathlist:
+				continue
+
+#			for pathname in pathlist:
+#				if not pathname in repo_means:
+#					repo_means[pathname] = {}
+#				repo_means[pathname][modname] = themean
+		
 			##### For mean time per module in each path
                         if not pathname in repo_means:
                                 repo_means[pathname] = {}
@@ -115,6 +124,7 @@ def get_histos_info_mean(infile):
 #							repo_nentries_hltPre[pathname2] = {}
 #						repo_nentries_hltPre[pathname2][hltPrepath] = nentries
 #	print repon_entries
+#	print repo_means
 	#######################################################################################
 
 
@@ -128,7 +138,7 @@ def get_histos_info_mean(infile):
 
             
 ###############################################################
-def get_histos_info_nominal(infile,repo_means):
+def get_histos_info_nominal(infile,repo_means, pathlist):
         '''Return number of entries of modules for an specific path
 	   and the max number of events'''
 # This is for a nominal skim
@@ -174,15 +184,19 @@ def get_histos_info_nominal(infile,repo_means):
                                         pathname_path = pathname_path + "_"
                         if not pathname_path in repo_pathtime:
                                 repo_pathtime[pathname_path] = mean
+#			for pathname_path in pathlist:
+#				if not pathname_path in repo_pathtime:
+#					repo_pathtime[pathname_path] = mean
 		###############################################################
 		
-#       #print maxentries
-	#print repo_pathtime
+#	print repo_nentries
+#	print maxentries
+#	print repo_pathtime
 	return repo_nentries, repo_pathtime, maxentries
 
 
 ###############################################################
-def get_highPU_time(repo_means,repo_nentries,maxEvents):
+def get_highPU_time(repo_means,repo_nentries,maxEvents, pathlist):
         '''Return a new estimated time for high pile up events'''
 #  This is the first try to get a HPU estimated time
 ###############################################################
@@ -203,11 +217,11 @@ def get_highPU_time(repo_means,repo_nentries,maxEvents):
 	for pathname_newtime, modname_newtime in repo_newtime.iteritems():
  		repo_newpathtime[pathname_newtime] = sum(modname_newtime.values())
 	##########################################################################
-#	#print repo_newpathtime
-#	#print repo_newtime
+#	print repo_newpathtime
+#	print repo_newtime
 #	for path in repo_newtime:
 #		for mod, time in repo_newtime[path].iteritems():
-#			#print 'path = ', path, 'module = ',mod,', average time =', mean, ', estimated time =', time
+#			print 'path = ', path, 'module = ',mod,', average time =', mean, ', estimated time =', time
 	return repo_newtime, repo_newpathtime
 
 
@@ -297,6 +311,7 @@ def plot_results(repo_PathTime, repo_estimatedPathTime, repo_HPUPathTime, pathli
 	h1.Draw();
 	h1.SetLineWidth(2)
 	h1.SetMaximum(maxmean+3)
+	#h1.SetMinimum(0)
 	h1.GetYaxis().SetTitle("msec")
 	h1.GetXaxis().SetLabelSize(0.03)
 	h2.SetLineColor(2);
@@ -308,7 +323,7 @@ def plot_results(repo_PathTime, repo_estimatedPathTime, repo_HPUPathTime, pathli
 	can.SetBottomMargin(0.25)
 	can.SetGridx()
 	can.SetGridy()
-	can.SetLogy()
+	#can.SetLogy()
 	lg = TLegend(0.79, 0.89, 1.0, 0.99);
 	lg.AddEntry(h1,"Nominal" ,"L");
 	lg.AddEntry(h2,"Estimated High Pile Up","L");
@@ -317,7 +332,9 @@ def plot_results(repo_PathTime, repo_estimatedPathTime, repo_HPUPathTime, pathli
 	lg.SetBorderSize(0);
 	lg.SetFillColor(0);
 	lg.Draw("same");
-	can.SaveAs("hltHighPU_estimatedtime.png")
+#	can.SaveAs("hltHighPU_estimatedtime_David_L1JetHPF.png")
+	can.SaveAs("hltHighPU_estimatedtime_David_L1MuHPF.png")
+#	can.SaveAs("hltHighPU_estimatedtime_David_L1EGHPF.png")
 	del can
 
 
@@ -412,18 +429,26 @@ def main():
 #	pathlist = ['HLT_Mu40_v5']
 #	pathlist = ['HLT_Ele32_WP70_PFMT50_v3']
 #	pathlist = ['HLT_Jet300_v5']
-	pathlist = ['HLT_60Jet10_v1']
+#	pathlist = ['HLT_60Jet10_v1']
 #	pathlist = ['HLT_Photon26_IsoVL_Photon18_IsoVL_v7']
 #	pathlist = ['HLT_HT300_MHT80_v2']
 	###################################################
 
 	########## For plot_results
-	pathlist = ['HLT_Mu40_v5',
-		'HLT_Ele32_WP70_PFMT50_v3',
-		'HLT_Jet300_v5',
-		'HLT_Photon26_IsoVL_Photon18_IsoVL_v7',
-		'HLT_60Jet10_v1',
-		'HLT_HT300_MHT80_v2']
+	pathlist = ['HLT_Ele80_CaloIdVT_TrkIdT_v2',
+		    'HLT_HT350_Ele5_CaloIdVL_CaloIsoVL_TrkIdVL_TrkIsoVL_PFMHT45_v10', #EG y HT
+		    'HLT_Photon36_CaloIdL_IsoVL_Photon22_CaloIdL_IsoVL_v6', 
+		    'HLT_Mu12_v11', #prescaled
+		    'HLT_DoubleMu7_v11', 
+		    'HLT_Jet240_v9']
+		    #'HLT_Mu100_eta2p1_v4',
+ 		    #'HLT_IsoMu30_eta2p1_v6',	
+		    #'HLT_Jet370_NoJetID_v10',
+		    #'HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v9',
+		    #'HLT_IsoMu30_eta2p1_v6',
+		    #'HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_v7',
+		    #'HLT_Mu17_TkMu8_v3',
+		    #'HLT_Mu200_eta2p1_v1']
 	###################################################
 
 	
@@ -445,10 +470,15 @@ def main():
 
 
 	############### For the first estimated HPU time
-	repo_means1 = get_histos_info_mean(infile1)
-	repo_nentries_nominal, repo_pathtime_nominal, maxentries = get_histos_info_nominal(infile2,repo_means1)
-	repo_nentries_HPU, repo_pathtime_HPU, maxentriesHPU = get_histos_info_nominal(infile1,repo_means1)
-	repoHPU_module, repoHPU = get_highPU_time(repo_means1,repo_nentries_nominal, maxentries)
+ 	print " Getting info mean\n"
+  	repo_means1 = get_histos_info_mean(infile1, pathlist)
+ 	print " Getting info nominal\n"
+ 	repo_nentries_nominal, repo_pathtime_nominal, maxentries = get_histos_info_nominal(infile2,repo_means1, pathlist)
+ 	print " Getting info high pile-up\n"	
+  	repo_nentries_HPU, repo_pathtime_HPU, maxentriesHPU = get_histos_info_nominal(infile1,repo_means1, pathlist)
+ 	print " Getting high pile-up estimate\n"	
+  	repoHPU_module, repoHPU = get_highPU_time(repo_means1,repo_nentries_nominal, maxentries, pathlist)
+ 	print " Plotting\n"	
 	plot_results(repo_pathtime_nominal,repoHPU, repo_pathtime_HPU, pathlist)
 	print "Final plot is hltHighPU_estimatedtime.png\n"
 	#plot_results_permodule(repo_pathtime_nominal,repo_pathtime_HPU, repoHPU_module, pathlist)
