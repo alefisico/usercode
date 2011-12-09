@@ -161,6 +161,10 @@ void Analyzer::SlaveBegin(TTree * tree)
    TString hname = "_"+fSample;
    
    hmuons["N_muons"] = new TH1F("N_muons"+hname,"Number of Muons",6,-0.5,5.5);
+   hmuons["N_isomuons"] = new TH1F("N_isomuons"+hname,"Number of Isolated Muons",6,-0.5,5.5);
+   hmuons["N_tisomuons"] = new TH1F("N_tisomuons"+hname,"Number of Tight Isolated Muons",6,-0.5,5.5);
+   hmuons["charge_tiso"] = new TH1F("muon_charge_tiso"+hname,"Charge", 5, -2.5, 2.5);
+   hmuons["charge_iso"] = new TH1F("muon_charge_iso"+hname,"Charge", 5, -2.5, 2.5);
    hmuons["pt_1jet"] = new TH1F("muon_pt_1jet"+hname,"p_{T}^{#mu} [GeV/c]", 50, 0, 500);
    hmuons["pt_2jet"] = new TH1F("muon_pt_2jet"+hname,"p_{T}^{#mu} [GeV/c]", 50, 0, 500);
    hmuons["pt_fin"] = new TH1F("muon_pt_fin"+hname,"p_{T}^{#mu} [GeV/c]", 50, 0, 500);
@@ -175,6 +179,9 @@ void Analyzer::SlaveBegin(TTree * tree)
    hmuons["reliso"] = new TH1F("muon_reliso"+hname,"Relative Isolation", 40, 0, 0.2);
    hmuons["reliso_1jet"] = new TH1F("muon_reliso_1jet"+hname,"Relative Isolation", 40, 0, 0.2);
    hmuons["reliso_2jet"] = new TH1F("muon_reliso_2jet"+hname,"Relative Isolation", 40, 0, 0.2);
+   hmuons["reliso_1muon"] = new TH1F("muon_reliso_1muon"+hname,"Relative Isolation of leading muon [GeV/c]", 40, 0, 500); // for leading muon
+   hmuons["reliso_2muon"] = new TH1F("muon_reliso_2muon"+hname,"Relative Isolation of second muon [GeV/c]", 40, 0, 1000); // for second muon
+   hmuons["reliso_1jet"] = new TH1F("muon_reliso_1jet"+hname,"Relative Isolation", 40, 0, 0.2);
    hmuons["reliso_fin"] = new TH1F("muon_reliso_fin"+hname,"Relative Isolation", 40, 0, 0.2);
    hmuons["deltaR_cut0"] = new TH1F("deltaR_cut0"+hname,"#DeltaR(#mu,jet)",80, 0, 4);
    hmuons["deltaR"] = new TH1F("deltaR"+hname,"#DeltaR(#mu,jet)", 80, 0, 4);
@@ -221,6 +228,7 @@ void Analyzer::SlaveBegin(TTree * tree)
    helectrons["dz"] = new TH1F("electron_dz"+hname,"|z(#mu) - z_{PV}| [cm]", 25, 0, 1.);
       
    hMET["MET"] = new TH1F("MET"+hname,"Missing Transverse Energy [GeV]", 50, 0, 300);
+   hMET["MET_5jet"] = new TH1F("MET_5jet"+hname,"Missing Transverse Energy [GeV]", 50, 0, 300);
    //hMET["MET"] = new TH1F("MET"+hname,"Missing Transverse Energy [GeV]", 50, 0, 600);       // for 1 TeV
    hMET["MET_2jet"] = new TH1F("MET_2jet"+hname,"Missing Transverse Energy [GeV]", 50, 0, 300);
    hMET["MET_fin"] = new TH1F("MET_fin"+hname,"Missing Transverse Energy [GeV]", 50, 0, 300);
@@ -238,12 +246,13 @@ void Analyzer::SlaveBegin(TTree * tree)
 
    hM["WMt"] = new TH1F("Mt"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 300);        // Transverse Mass sqrt(Wpt*Wpt - Wpx*Wpx - Wpy*Wpy)
    hM["WMt_2jet"] = new TH1F("Mt_2jet"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 300);
+   hM["WMt_5jet"] = new TH1F("Mt_5jet"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 300);   // MT for njets >= 5
    hM["WMt_fin"] = new TH1F("Mt_fin"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 300);
    hM["dijet"] = new TH1F("dijet"+hname,"(jj) mass [GeV/c^{2}]", 50, 0, 1000);
    hM["trijet"] = new TH1F("trijet"+hname,"(jjj) mass [GeV/c^{2}]", 50, 0, 1000);
    hM["top_1btag"] = new TH1F("top_1btag"+hname,"top mass [GeV/c^{2}]",50,0,500);
    hM["top_2btag"] = new TH1F("top_2btag"+hname,"top mass [GeV/c^{2}]",50,0,500);
-   hM["Wprime"] = new TH1F("Wprime"+hname,"W' invariant mass [GeV/c^{2}]", 70, 100, 3000);
+/*   hM["Wprime"] = new TH1F("Wprime"+hname,"W' invariant mass [GeV/c^{2}]", 70, 100, 3000);
    hM["Wprime_0btag"] = new TH1F("Wprime_0btag"+hname,"W' invariant mass [GeV/c^{2}]", 70, 100, 3000);
    hM["Wprime_0btag_light"] = new TH1F("Wprime_0btag_light"+hname,"W' invariant mass [GeV/c^{2}]", 70, 100, 3000);
    hM["Wprime_0btag_bb"] = new TH1F("Wprime_0btag_bb"+hname,"W' invariant mass [GeV/c^{2}]", 70, 100, 3000);
@@ -273,7 +282,7 @@ void Analyzer::SlaveBegin(TTree * tree)
        hM["Wprime_1btag_MCsemimu"] = new TH1F("Wprime_1btag_MCsemimu"+hname,"W' invariant mass [GeV/c^{2}]", 70, 100, 3000);
        hM["Wprime_1btag_MCsemie"] = new TH1F("Wprime_1btag_MCsemie"+hname,"W' invariant mass [GeV/c^{2}]", 70, 100, 3000);
      }
-
+*/
    hjets["pt"] = new TH1F("jet_pt"+hname,"jet p_{T} [GeV/c]", 60, 30, 800);
    hjets["pt_b_mc"] = new TH1F("jet_pt_b_mc"+hname,"jet p_{T} [GeV/c]", 60, 30, 800);
    hjets["pt_c_mc"] = new TH1F("jet_pt_c_mc"+hname,"jet p_{T} [GeV/c]", 60, 30, 800);
@@ -297,6 +306,8 @@ void Analyzer::SlaveBegin(TTree * tree)
    hjets["2nd_eta_fin"] = new TH1F("jet2_eta_fin"+hname,"2nd jet #eta",50, -2.4, 2.4);
    hjets["phi"] = new TH1F("jet_phi"+hname,"jet #phi",50, 0, 3.15);
    hjets["Njets"] = new TH1F("Njets"+hname,"jet multiplicity",13,-0.5,12.5);
+   hjets["Njets_cut1"] = new TH1F("Njets_cut1"+hname,"jet multiplicity",13,-0.5,12.5);
+   hjets["Njets_cut12"] = new TH1F("Njets_cut12"+hname,"jet multiplicity",13,-0.5,12.5);
    hjets["Njets_1tag"] = new TH1F("Njets_1tag"+hname,"jet multiplicity",6,0.5,6.5);
    hjets["Njets_2tag"] = new TH1F("Njets_2tag"+hname,"jet multiplicity",6,0.5,6.5);
    hjets["Nbtags_TCHPM"] = new TH1F("Nbjets_TCHPM_N2j"+hname,"Tagged b-jets",3,-0.5,2.5);
@@ -466,6 +477,8 @@ Bool_t Analyzer::Process(Long64_t entry)
   TLorentzVector p4QCDmuon;
 
   vector< TLorentzVector > p4jets;
+  // introducing leading muon
+  vector< TLorentzVector > p4Othermuon;
 
   ////////////////////
   // GENERATOR
@@ -562,14 +575,19 @@ Bool_t Analyzer::Process(Long64_t entry)
 
 	nloosemuons++;
 
-	if ( fMuSelector.MuonTight( muon, PVz) )  hmuons["pt_cut2"]->Fill( muon.pt, PUweight );
+	if ( fMuSelector.MuonTight( muon, PVz) ) {
+          hmuons["pt_cut2"]->Fill( muon.pt, PUweight );
+          hmuons["charge_tiso"]->Fill( muon.charge, PUweight );
+          hmuons["N_tisomuons"]->Fill( nloosemuons );  
+	}     
 	if ( fMuSelector.MuonTightDeltaR( muon, PVz, jets) ) {
 	  ntightmuons++;
 	  deltaR = fMuSelector.GetDeltaR();
 	}
 	p4muon.SetPtEtaPhiE( muon.pt, muon.eta, muon.phi, muon.e );
 	RelIso = muon.pfreliso; //muon.reliso03;
-	
+
+	p4Othermuon.push_back( p4muon ); // for leading muon
       }
     // check muon in QCD control region
     if ( fMuSelector.MuonRelax02IsoQCD( muon, PVz, jets ) ) 
@@ -779,10 +797,17 @@ Bool_t Analyzer::Process(Long64_t entry)
 	else SF_JEC = 1.-jec_unc;
       }
 
+    if ( SF_JEC*jet.pt > 35. && fabs(jet.eta) < 2.4 ) 
+      {
+
+        hjets["Njets_cut12"]->Fill( njets, PUweight );         // number of jets with kinematic cuts
+      }	      
+
     if ( SF_JEC*jet.pt > 35. && fabs(jet.eta) < 2.4 && SF_JEC*jets[0].pt > 120. ) 
       {
 	if (fVerbose) cout << " jet pt " << SF_JEC*jet.pt << endl;
 	
+        hjets["Njets_cut1"]->Fill( njets, PUweight );         // number of jets with kinematic cuts
 	//hjets["pt"]->Fill( jet.pt, PUweight );
 	//hjets["eta"]->Fill( jet.eta, PUweight );
 	//hjets["phi"]->Fill( jet.phi, PUweight );
@@ -1242,6 +1267,22 @@ Bool_t Analyzer::Process(Long64_t entry)
 
     }
 
+  if (njets >= 5)
+    {
+      hmuons["reliso_1muon"]->Fill( p4Othermuon[0].Pt(), PUweight );  // isolation of leading muon 
+      hmuons["reliso_2muon"]->Fill( p4Othermuon[1].Pt(), PUweight );  // isolation of second muon 
+      hMET["MET_5jet"]->Fill( p4MET.Pt(), PUweight );
+      hM["WMt_5jet"]->Fill( WMt, PUweight ); 
+
+      for ( size_t imu=0; imu < total_muons; ++imu) {
+     
+        TopMuonEvent muon = muons[imu];
+        if ( fMuSelector.MuonLoose( muon ) ) {
+           hmuons["charge_iso"]->Fill( muon.charge, PUweight );
+           hmuons["N_isomuons"]->Fill( nloosemuons );  // number of isolated muons with loose isolation (<0.2) and Njets >=5
+	}
+      }
+    }
 
   if (fVerbose) cout << "done analysis" << endl;
 
