@@ -236,7 +236,7 @@ void Analyzer::SlaveBegin(TTree * tree)
    hMET["LepWmassNoPt"]=new TH1F("LepWmassNoPt"+hname,"W#rightarrow#mu#nu Mass [GeV/c^{2}]",20, 0, 150);
    hMET["deltaPhi"] = new TH1F("deltaPhi"+hname,"#Delta #phi(#mu,MET)",50, -3.15, 3.15);
 
-   hM["WMt"] = new TH1F("Mt"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 300);
+   hM["WMt"] = new TH1F("Mt"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 300);        // Transverse Mass sqrt(Wpt*Wpt - Wpx*Wpx - Wpy*Wpy)
    hM["WMt_2jet"] = new TH1F("Mt_2jet"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 300);
    hM["WMt_fin"] = new TH1F("Mt_fin"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 300);
    hM["dijet"] = new TH1F("dijet"+hname,"(jj) mass [GeV/c^{2}]", 50, 0, 1000);
@@ -296,7 +296,7 @@ void Analyzer::SlaveBegin(TTree * tree)
    hjets["1st_eta_fin"] = new TH1F("jet1_eta_fin"+hname,"Leading jet #eta",50, -2.4, 2.4);
    hjets["2nd_eta_fin"] = new TH1F("jet2_eta_fin"+hname,"2nd jet #eta",50, -2.4, 2.4);
    hjets["phi"] = new TH1F("jet_phi"+hname,"jet #phi",50, 0, 3.15);
-   hjets["Njets"] = new TH1F("Njets"+hname,"jet multiplicity",13,0.5,12.5);
+   hjets["Njets"] = new TH1F("Njets"+hname,"jet multiplicity",13,-0.5,12.5);
    hjets["Njets_1tag"] = new TH1F("Njets_1tag"+hname,"jet multiplicity",6,0.5,6.5);
    hjets["Njets_2tag"] = new TH1F("Njets_2tag"+hname,"jet multiplicity",6,0.5,6.5);
    hjets["Nbtags_TCHPM"] = new TH1F("Nbjets_TCHPM_N2j"+hname,"Tagged b-jets",3,-0.5,2.5);
@@ -686,12 +686,13 @@ Bool_t Analyzer::Process(Long64_t entry)
   hMET["Ht"]->Fill( ntuple->PFHt, PUweight );
   hMET["Htlep"]->Fill( ntuple->PFHt + p4lepton.Pt(), PUweight );
 
+  
   double Wpt = p4lepton.Pt() + p4MET.Pt();
   double Wpx = p4lepton.Px() + p4MET.Px();
   double Wpy = p4lepton.Py() + p4MET.Py();
   double WMt = sqrt(Wpt*Wpt-Wpx*Wpx-Wpy*Wpy);
-
-  if ( WMt <= 40. ) return kTRUE; 
+  
+  //if ( WMt <= 40. ) return kTRUE; 
   cutmap["MET"] += PUweight;
 
   if (fVerbose) cout << "pass W MT cut " << endl;
@@ -815,7 +816,7 @@ Bool_t Analyzer::Process(Long64_t entry)
       }
     }
 
-  if (njets>0) hM["WMt"]->Fill( WMt, PUweight );
+  if (njets>0) hM["WMt"]->Fill( WMt, PUweight ); 
 
   hjets["Njets"]->Fill( njets, PUweight );
 
@@ -904,10 +905,10 @@ Bool_t Analyzer::Process(Long64_t entry)
       double Dijet_deltaPhi = p4jets[0].DeltaPhi(p4jets[1]);
       TLorentzVector p4Top = p4jets[2] + p4LepW;
 
-      TLorentzVector p4Wprime = p4LepW + p4Dijet;
-      hM["Wprime"]->Fill( p4Wprime.M(), PUweight );
+      //TLorentzVector p4Wprime = p4LepW + p4Dijet;
+      //hM["Wprime"]->Fill( p4Wprime.M(), PUweight );
 
-      if (fVerbose) cout << "Wprime mass calculated" << endl;
+      //if (fVerbose) cout << "Wprime mass calculated" << endl;
 
       // count number of b-tags
       int Nbtags_TCHPM = 0;
@@ -1038,7 +1039,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 		}
 	    }
 	  p4Top = bestp4Top;
-	  bool passcutWlep = false;
+	  /*bool passcutWlep = false;
 	  if ( p4LepW.M() < 90 ) passcutWlep = true;
 
 	  if (passcutWlep) {
@@ -1070,8 +1071,8 @@ Bool_t Analyzer::Process(Long64_t entry)
 		  else hM["Wprime_0btag_MChad"]->Fill( p4Wprime.M(), PUweight*SFb_0tag );
 		}
 	    } // top mass cut
-	  }// Wlep cut
-	}// 0 tag
+	  }// Wlep cut */
+	}// 0 tag 
 
       // check if the two leading jets have a b jet 
       if ( Nbtags_TCHPM >= 1 && (isTagb["TCHPM"][0] || isTagb["TCHPM"][1]) )
@@ -1134,7 +1135,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 	  hMET["LepWmass"]->Fill(p4LepW.M(), PUweight*SFb_1tag );
 	  hMET["LepWmassNoPt"]->Fill(WmassNoPt, PUweight*SFb_1tag );
 
-	  bool passcutWlep = false;
+	  /*bool passcutWlep = false;
 	  if ( p4LepW.M() < 90 ) passcutWlep = true;
 
 	  if (passcutWlep) {
@@ -1232,12 +1233,12 @@ Bool_t Analyzer::Process(Long64_t entry)
 		}
 
 	    }//passcut mtop cut if requested
-	  }//passcutWlep cut
+	  }//passcutWlep cut */
 	  }// njets < 5
 
 	}
 
-      if ( Nbtags_TCHPM == 1 ) hM["Wprime_1onlybtag"]->Fill( p4Wprime.M(), PUweight*SFb_only1tag );
+     // if ( Nbtags_TCHPM == 1 ) hM["Wprime_1onlybtag"]->Fill( p4Wprime.M(), PUweight*SFb_only1tag );
 
     }
 
@@ -1270,7 +1271,7 @@ void Analyzer::SlaveTerminate()
       fFile->cd();
       h1test->Write();
       hcutflow->Write();
-      h2_pt_Wprime->Write();
+      //h2_pt_Wprime->Write();
       fFile->mkdir("muons");
       fFile->cd("muons");
       for ( map<string,TH1* >::const_iterator imap=hmuons.begin(); imap!=hmuons.end(); ++imap )
@@ -1326,7 +1327,7 @@ void Analyzer::SlaveTerminate()
       cleanup = kTRUE;
     }
 
-    h2_pt_Wprime->SetDirectory(0);
+    //h2_pt_Wprime->SetDirectory(0);
 
     h1test->SetDirectory(0);
     hcutflow->SetDirectory(0);
