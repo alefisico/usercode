@@ -530,6 +530,11 @@ Bool_t Analyzer::Process(Long64_t entry)
     //}
   }
 
+  // For 4 tops
+  if (fIsMC && fSample.Contains("4Top") ) {
+	  PUweight = 1;
+  }
+
   hPVs["Nreweight"]->Fill( total_pvs, PUweight );
 
   /////////////
