@@ -12,41 +12,32 @@ void runAnalysis(TString sample="all",bool NoGUI=false, bool getLogs=false)
   p->Archive(" ",desdir);
 
   //p->AddInput(new TNamed("PROOF_OUTPUTFILE_LOCATION", "LOCAL"));
-/* 
-  if (NoGUI) p->SetBit(TProof::kUsingSessionGui);
-  if (sample=="MC"||sample=="4Top_1000"||sample=="all")
-    {
-      TDSet *mc_ttbar = new TDSet("top","*","/PATNtupleMaker");
-      mc_ttbar->Add("/uscms_data/d3/algomez/files/fourtop/4top-Tuple-PATskim.root");
-      mc_ttbar->Process("Analyzer.C+","sample=4Top_1000");
-    }
  
   if (NoGUI) p->SetBit(TProof::kUsingSessionGui);
   if (sample=="MC"||sample=="4Top_1000"||sample=="all")
     {
-      TDSet *mc_ttbar = new TDSet("top","*","/PATNtupleMaker");
-      mc_ttbar->Add("/uscms_data/d3/algomez/files/fourtop/4Top_1000_Tuple-PATskim.root");
-      mc_ttbar->Process("Analyzer.C+","sample=4Top_1000");
+      TDSet *mc_4Top_1000 = new TDSet("top","*","/PATNtupleMaker");
+      mc_4Top_1000->Add("/uscms_data/d3/algomez/files/fourtop/4Top_1000_Tuple-PATskim.root");
+      mc_4Top_1000->Process("Analyzer.C+","sample=4Top_1000");
     }
-*/
+ 
   if (NoGUI) p->SetBit(TProof::kUsingSessionGui);
   if (sample=="MC"||sample=="4Top_500"||sample=="all")
     {
-      TDSet *mc_ttbar = new TDSet("top","*","/PATNtupleMaker");
-      mc_ttbar->Add("/uscms_data/d3/algomez/files/fourtop/4Top_500_Tuple-PATskim.root");
-      mc_ttbar->Process("Analyzer.C+","sample=4Top_500");
+      TDSet *mc_4Top_500 = new TDSet("top","*","/PATNtupleMaker");
+      mc_4Top_500->Add("/uscms_data/d3/algomez/files/fourtop/4Top_500_Tuple-PATskim.root");
+      mc_4Top_500->Process("Analyzer.C+","sample=4Top_500");
     }
 
   if (NoGUI) p->SetBit(TProof::kUsingSessionGui);
-
   if (sample=="MC"||sample=="ttbar"||sample=="all")
     {
       TDSet *mc_ttbar = new TDSet("top","*","/PATNtupleMaker");
       mc_ttbar->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/MC/v9_3/TTbar_Mu.root");
       mc_ttbar->Process("Analyzer.C+","sample=ttbar");
     }
-  if (NoGUI) p->SetBit(TProof::kUsingSessionGui);
 /*
+  if (NoGUI) p->SetBit(TProof::kUsingSessionGui);
   if (sample=="ttbarM"||sample=="all")
     {
       TDSet *mc_ttbarm = new TDSet("top","*","/PATNtupleMaker");
@@ -77,7 +68,7 @@ void runAnalysis(TString sample="all",bool NoGUI=false, bool getLogs=false)
       mc_ttbarm->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/MC/v9_3/TTbar_scaledown_Mu.root");
       mc_ttbarm->Process("Analyzer.C+","sample=ttbarScaledown");
     }
-
+*/
 
   if (NoGUI) p->SetBit(TProof::kUsingSessionGui);
   if (sample=="MC"||sample=="WJets"||sample=="all")
@@ -155,7 +146,8 @@ void runAnalysis(TString sample="all",bool NoGUI=false, bool getLogs=false)
       TDSet *mc_ZJets = new TDSet("top","*","/PATNtupleMaker");
       mc_ZJets->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/MC/v9_3/ZJets_Mu.root");
       mc_ZJets->Process("Analyzer.C+","sample=ZJets");
-    }
+    } 
+  /*
   if (NoGUI) p->SetBit(TProof::kUsingSessionGui);
 
   if (sample=="MCsyst"||sample=="WJetsScaleUp"||sample=="all")
@@ -184,6 +176,9 @@ void runAnalysis(TString sample="all",bool NoGUI=false, bool getLogs=false)
       data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_3/SingleMu_PromptReco-v6_Run_172620_173198_Mu.root");
       data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_3/SingleMu_PromptReco-v6_Run_173236_173692_Mu.root");
       data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_3/SingleMu_Run2011B-PromptReco-v1_Mu.root");
+      data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_3/SingleMu_Run2011B-PromptReco-v1_178098_178160_Mu.root"); 
+      data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_3/SingleMu_Run2011B-PromptReco-v1_178162_178380_Mu.root"); 
+      data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_3/SingleMu_Run2011B-PromptReco-v1_178420_180252_Mu.root");
       data->Process("Analyzer.C+","sample=data");
       // get log files
       if (getLogs)
