@@ -34,6 +34,7 @@
 #include <vector>
 #include <stdio.h>
 #include <stdlib.h>
+#define NMAX 100
 
 void Analyzer::ParseInput()
 {
@@ -54,8 +55,8 @@ void Analyzer::ParseInput()
   if (fMyOpt.Contains("JECDOWN")) { fdoJECunc = true; fdoJECup = false; }
   if (fMyOpt.Contains("PUUP")) { fpuhistogram = "WHistUp";}
   if (fMyOpt.Contains("PUDOWN")) { fpuhistogram = "WHistDown";}
-  if (fMyOpt.Contains("QCD1")) fdoQCD1SideBand = true;
-  if (fMyOpt.Contains("QCD2")) fdoQCD2SideBand = true;
+  if (fMyOpt.Contains("QCD1")) fdoQCD1SideBand = true;//anti-isolation
+  if (fMyOpt.Contains("QCD2")) fdoQCD2SideBand = true;//MET < 20 GeV
   if (fMyOpt.Contains("mtop")) fdoMtopCut = true;
   if (fMyOpt.Contains("outdir")) {
     TString tmp = fMyOpt;
@@ -128,8 +129,7 @@ void Analyzer::SlaveBegin(TTree * tree)
    if (nm) {
      // Just create the object
      UInt_t opt = TProofOutputFile::kRegister | TProofOutputFile::kOverwrite | TProofOutputFile::kVerify;
-     fProofFile = new TProofOutputFile("SimpleNtuple.root",
-				       TProofOutputFile::kDataset, opt, nm->GetTitle());
+     fProofFile = new TProofOutputFile("SimpleNtuple.root", TProofOutputFile::kDataset, opt, nm->GetTitle());
    } else {
      // For the ntuple, we use the automatic file merging facility
      // Check if an output URL has been given
@@ -151,7 +151,7 @@ void Analyzer::SlaveBegin(TTree * tree)
    }
 
    // Get PU weights
-   TString weightfilename = "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Weight3Dfinebin4p7.root"; //Weight3D.root";
+   TString weightfilename = "/uscms/home/yumiceva/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Weight3Dfinebin4p7.root"; //Weight3D.root";
    fweightfile =  new TFile(weightfilename,"read");
    f3Dweight = (TH1D*) fweightfile->Get(fpuhistogram);
 
@@ -229,7 +229,9 @@ void Analyzer::SlaveBegin(TTree * tree)
    hMET["phi"] = new TH1F("MET_phi"+hname,"#phi Missing Transverse Energy [GeV]", 20, 0, 3.15);
    hMET["Ht0"] = new TH1F("Ht0"+hname,"H_{T} [GeV]", 50, 0, 3000);
    hMET["Ht"] = new TH1F("Ht"+hname,"H_{T} [GeV]", 50, 0, 3000);
-   hMET["Htlep"] = new TH1F("Htlep"+hname,"H_{T,lep} [GeV]", 50, 0, 1000);
+   hMET["Htlep"] = new TH1F("Htlep"+hname,"H_{T,lep} [GeV]", 100, 0, 1000);
+   hMET["Stlep"] = new TH1F("Stlep"+hname,"S_{MET + p_{T}^{#mu}} [GeV]", 100, 0, 1000);
+   hMET["Stjet"] = new TH1F("Stjet"+hname,"S_{MET + p_{T}^{#mu} + p_{T}^{j} } [GeV]", 100, 0, 3000);
    hMET["PzNu"] = new TH1F("PzNu"+hname,"p_{z} #nu [GeV]", 40, -300,300);
    hMET["EtaNu"] = new TH1F("EtaNu"+hname,"#eta",50,-2.2,2.2);
    hMET["LepWmass"] = new TH1F("LepWmass"+hname,"W#rightarrow#mu#nu Mass [GeV/c^{2}]",20, 0, 150);
@@ -292,6 +294,15 @@ void Analyzer::SlaveBegin(TTree * tree)
    hjets["pt_top"]  = new TH1F("pt_top"+hname,"top p_{T} [GeV]",60,0,1500);
    hjets["pt_b"]  = new TH1F("pt_b"+hname,"b-jet p_{T} [GeV]",60,0,1500);
    hjets["gen_deltaR_mub"] = new TH1F("gen_deltaR_mub"+hname,"#Delta R(#mu,b)",40,0,4);
+   hjets["1st_bdisc"] = new TH1F("1st_bdisc"+hname,"b discriminator Leading jet", 50, -0.01, 1.01);
+   hjets["2nd_bdisc"] = new TH1F("2nd_bdisc"+hname,"b discriminator 2nd jet", 50, -0.01, 1.01);
+   hjets["3rd_bdisc"] = new TH1F("3rd_bdisc"+hname,"b discriminator 3rd jet", 50, -0.01, 1.01);
+   hjets["4th_bdisc"] = new TH1F("4th_bdisc"+hname,"b discriminator 4th jet", 50, -0.01, 1.01);
+   hjets["5th_bdisc"] = new TH1F("5th_bdisc"+hname,"b discriminator 5th jet", 50, -0.01, 1.01);
+   hjets["6th_bdisc"] = new TH1F("6th_bdisc"+hname,"b discriminator 6th jet", 50, -0.01, 1.01);
+   hjets["7th_bdisc"] = new TH1F("7th_bdisc"+hname,"b discriminator 7th jet", 50, -0.01, 1.01);
+
+
 
    map<string,TH1* > allhistos = hmuons;
    allhistos.insert( helectrons.begin(), helectrons.end() );
@@ -387,7 +398,35 @@ void Analyzer::SlaveBegin(TTree * tree)
    fpu_weights_vec.assign( pu_weights, pu_weights + 35 );
 
    // For JEC uncertainties
-   if (fdoJECunc) fJECunc = new JetCorrectionUncertainty("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/GR_R_42_V19_AK5PF_Uncertainty.txt");
+   if (fdoJECunc) fJECunc = new JetCorrectionUncertainty("/uscms/home/yumiceva/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/GR_R_42_V19_AK5PF_Uncertainty.txt");
+
+   //------- Store information in a Tree
+   MyStoreTree = new StoreTreeVariable();
+
+   if(fChannel == 1){
+      MyStoreTree->SetElectronFalse();
+      //MyStoreTree->SetJetFalse();
+      MyStoreTree->SetVertexFalse();
+      MyStoreTree->SetTriggerFalse();
+      //MyStoreTree->SetMetFalse();
+      MyStoreTree->SetMuonFalse();
+   }
+
+   if(fChannel == 2){
+
+      MyStoreTree->SetElectronFalse();
+      //MyStoreTree->SetJetFalse();
+      MyStoreTree->SetVertexFalse();
+      MyStoreTree->SetTriggerFalse();
+      //MyStoreTree->SetMetFalse();
+      MyStoreTree->SetMuonFalse();
+   //////////////////////////////////////////
+   }
+
+   MyStoreTree->InitialAll();
+   //Get the Store Tree
+   MyStoreTree->GetStoreTree()->SetDirectory(fFile);
+   MyStoreTree->GetStoreTree()->AutoSave();
 
 }
 
@@ -413,8 +452,8 @@ Bool_t Analyzer::Process(Long64_t entry)
 
    //TString option = GetOption();
 
-  //if ( entry % 100 == 0 )
-  //cout<< "process entry " << entry << endl;
+  if ( entry % 100 == 0 )
+  cout<< "process entry " << entry << endl;
 
   //TString sEntry = Form("%f", float(entry) );
   //   Info("Process",
@@ -750,9 +789,12 @@ Bool_t Analyzer::Process(Long64_t entry)
   //JetCombinatorics myCombi = JetCombinatoric();
 
   int njets = 0;
+  MyStoreTree->GetJetVariable()->numjets = 0;
   map< string, vector<float> > bdisc;
   map< string, vector<bool> >  isTagb;
   vector<int> listflavor;
+  vector<float> bdiscriminator;
+
 
   for ( size_t ijet=0; ijet < total_jets; ++ijet)  {
 
@@ -767,11 +809,9 @@ Bool_t Analyzer::Process(Long64_t entry)
 		else SF_JEC = 1.-jec_unc;
 	}
 
-
-	//if ( SF_JEC*jet.pt > 35. && fabs(jet.eta) < 2.4 && SF_JEC*jets[0].pt > 120. ) {
 	if ( SF_JEC*jet.pt > 40. && fabs(jet.eta) < 2.4 && SF_JEC*jets[0].pt > 100. && SF_JEC*jets[1].pt > 60. ) {    //first cut
 		
-		if (fVerbose) cout << " jet pt " << SF_JEC*jet.pt << endl;
+		//if (fVerbose) cout << " jet pt " << SF_JEC*jet.pt << endl;
 	
 		//hjets["pt"]->Fill( jet.pt, PUweight );
 		//hjets["eta"]->Fill( jet.eta, PUweight );
@@ -781,15 +821,18 @@ Bool_t Analyzer::Process(Long64_t entry)
 		tmpjet.SetPtEtaPhiE(SF_JEC*jet.pt, jet.eta, jet.phi, SF_JEC*jet.e);
 		p4jets.push_back( tmpjet);
 		listflavor.push_back( jet.mc.flavor );
+		if (jet.btag_CSV > 0) bdiscriminator.push_back( jet.btag_CSV );      // for bdiscriminator plot
+		else bdiscriminator.push_back( 0 );
 
 		if (fVerbose) {
 			cout << "done storing njets " << njets << endl;
-			cout << " bdisc " << jet.btag_TCHP << endl;
+			//cout << " bdisc " << jet.btag_TCHP << endl;
 			cout << " bdisc " << jet.btag_CSV << endl;
 		}
 
+		
 		// store discriminators
-		bdisc["TCHP"].push_back( jet.btag_TCHP );
+		//bdisc["TCHP"].push_back( jet.btag_TCHP );
 		bdisc["CSV"].push_back( jet.btag_CSV );
 		if (fVerbose) cout << "store bdisc" << endl;
 		// TCHPL cut at 1.19
@@ -804,6 +847,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 		// CSVM cut at 0.679 MEDIUM
 		
 		njets++;
+                (MyStoreTree->GetJetVariable()->numjets)++;
 	}
   }
 
@@ -819,7 +863,7 @@ Bool_t Analyzer::Process(Long64_t entry)
   if (njets > 2 ) cutmap["3Jet"] += PUweight;
   if (njets > 3 ) cutmap["4Jet"] += PUweight;
 
-  if (njets >= 2) {
+  if (njets >= 3) {
 
 	// count partons
 	int number_of_b = 0;
@@ -837,12 +881,20 @@ Bool_t Analyzer::Process(Long64_t entry)
 	//float SFb_1tag_systhighpt[2] = {1.};
 
 	double Ht = 0; 
+	double Stlep = 0; 
+	double Stjet = 0; 
 	double deltaRjj = 999.; 
+
 
 	for ( size_t kk=0; kk < p4jets.size(); ++kk) {
 		// Ht calculation
 		Ht += p4jets[kk].Pt();
 
+		// St Calculation
+		Stlep = p4MET.Pt() + p4lepton.Pt() ;
+		Stjet = p4MET.Pt() + p4lepton.Pt() + Ht ;
+		
+		 
 		// deltaR(jet,jet)
         	for ( vector< TopJetEvent>::iterator ijet=jets.begin(); ijet != jets.end(); ++ijet) {
 
@@ -860,6 +912,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 		if ( abs(listflavor[kk])==1 || abs(listflavor[kk])==2 || abs(listflavor[kk])==3 || abs(listflavor[kk])==21 ) { number_of_l++; hjets["pt_l_mc"]->Fill( p4jets[kk].Pt(), PUweight );}
 		if ( abs(listflavor[kk])==5 && p4jets[kk].Pt()>240 ) { number_of_b_highpt++; hjets["pt_b_mc"]->Fill( p4jets[kk].Pt(), PUweight );}
 		if ( abs(listflavor[kk])==4 && p4jets[kk].Pt()>240 ) { number_of_c_highpt++; hjets["pt_c_mc"]->Fill( p4jets[kk].Pt(), PUweight );}
+
 	}
 
 	/////////// plots without cuts 
@@ -880,6 +933,16 @@ Bool_t Analyzer::Process(Long64_t entry)
 	hmuons["deltaR_cut0"]->Fill( deltaR, PUweight ); 
 	hjets["Dijet_deltaR_cut0"]->Fill( deltaRjj, PUweight );
 	/////////////////////////////////////////////////////////////////////
+
+	// plot bdiscriminator
+	if ( bdiscriminator[0] ) { MyStoreTree->GetJetVariable()->bdisc_1st[njets] = bdiscriminator[0]; hjets["1st_bdisc"]->Fill( bdiscriminator[0], PUweight );}
+	if ( bdiscriminator[1] ) { MyStoreTree->GetJetVariable()->bdisc_2nd[njets] = bdiscriminator[1]; hjets["2nd_bdisc"]->Fill( bdiscriminator[1], PUweight );}
+	if ( bdiscriminator[2] ) { MyStoreTree->GetJetVariable()->bdisc_3rd[njets] = bdiscriminator[2]; hjets["3rd_bdisc"]->Fill( bdiscriminator[2], PUweight );}
+	if ( bdiscriminator[3] ) { MyStoreTree->GetJetVariable()->bdisc_4th[njets] = bdiscriminator[3]; hjets["4th_bdisc"]->Fill( bdiscriminator[3], PUweight );}
+	if ( bdiscriminator[4] ) { MyStoreTree->GetJetVariable()->bdisc_5th[njets] = bdiscriminator[4]; hjets["5th_bdisc"]->Fill( bdiscriminator[4], PUweight );}
+	if ( bdiscriminator[5] ) { MyStoreTree->GetJetVariable()->bdisc_6th[njets] = bdiscriminator[5]; hjets["6th_bdisc"]->Fill( bdiscriminator[5], PUweight );}
+	if ( bdiscriminator[6] ) { MyStoreTree->GetJetVariable()->bdisc_7th[njets] = bdiscriminator[6]; hjets["7th_bdisc"]->Fill( bdiscriminator[6], PUweight );}
+	//////////////////////////////////////////////////////////////////////////////////
 
 	// count number of b-tags
 	//int Nbtags_TCHPM = 0;
@@ -975,6 +1038,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 			for(int i=0;i<number_of_c_highpt;i++)jk.push_back(cjDOWNhighpt);
 			for(int i=0;i<number_of_l;i++)jk.push_back(lj);
 			SFb_1tag_syst[1] = b1.weight(jk,1);
+
 		}
 
 		// at least two tags
@@ -1033,10 +1097,17 @@ Bool_t Analyzer::Process(Long64_t entry)
 
 		if ( Nbtags_CSVM >= 1 ) {
 			hjets["Njets_1tag"]->Fill(njets, PUweight*SFb_1tag );
+			hMET["Stlep"]->Fill( Stlep , PUweight );
+			hMET["Stjet"]->Fill( Stjet , PUweight );
 		}
 	}
   }
 
+   MyStoreTree->GetMetVariable()->Run = ntuple->run;
+   MyStoreTree->GetMetVariable()->Lumi = ntuple->lumi;
+   MyStoreTree->GetMetVariable()->Event = ntuple->event;
+
+  MyStoreTree->GetStoreTree()->Fill();
   if (fVerbose) cout << "done analysis" << endl;
   return kTRUE;
 }
@@ -1056,69 +1127,72 @@ void Analyzer::SlaveTerminate()
       hcutflow->SetBinContent( ibin, cutmap[ *ivec ] );
       ibin++;
     }
+
   // Write the ntuple to the file
   if (fFile) {
-    Bool_t cleanup = kFALSE;
-    TDirectory *savedir = gDirectory;
-    if ( h1test->GetEntries() > 0) {
-      fFile->cd();
-      h1test->Write();
-      hcutflow->Write();
-      //h2_pt_Wprime->Write();
-      fFile->mkdir("muons");
-      fFile->cd("muons");
-      for ( map<string,TH1* >::const_iterator imap=hmuons.begin(); imap!=hmuons.end(); ++imap )
-        {
-          TH1 *temp = imap->second;
-          if ( temp->GetEntries() > 0 )
-            temp->Write();
-          //else cout << "Warning: empty histogram " << temp->GetName() << " will not be written to file." << endl;
-        }
-      fFile->cd();
-      fFile->mkdir("PVs");
-      fFile->cd("PVs");
-      for ( map<string,TH1* >::const_iterator imap=hPVs.begin(); imap!=hPVs.end(); ++imap )
-        {
-          TH1 *temp = imap->second;
-          if ( temp->GetEntries() > 0 )
-            temp->Write();
-          //else cout << "Warning: empty histogram " << temp->GetName() << " will not be written to file." << endl;                                                                                                      
-        }
-      fFile->cd();
-      fFile->mkdir("jets");
-      fFile->cd("jets");
-      for ( map<string,TH1* >::const_iterator imap=hjets.begin(); imap!=hjets.end(); ++imap )
-        {
-          TH1 *temp = imap->second;
-          if ( temp->GetEntries() > 0 )
-            temp->Write();
-        }
-      fFile->cd();
-      fFile->mkdir("mass");
-      fFile->cd("mass");
-      for ( map<string,TH1* >::const_iterator imap=hM.begin(); imap!=hM.end(); ++imap )
-        {
-          TH1 *temp = imap->second;
-          if ( temp->GetEntries() > 0 )
-            temp->Write();
-        }
-      fFile->cd();
-      fFile->mkdir("MET");
-      fFile->cd("MET");
-      for ( map<string,TH1* >::const_iterator imap=hMET.begin(); imap!=hMET.end(); ++imap )
-        {
-          TH1 *temp = imap->second;
-          if ( temp->GetEntries() > 0 )
-            temp->Write();
-        }
+	Bool_t cleanup = kFALSE;
+	TDirectory *savedir = gDirectory;
+	if ( h1test->GetEntries() > 0) {
+		fFile->cd();
+		h1test->Write();
+		hcutflow->Write();
+		MyStoreTree->GetStoreTree()->Write();
+		//h2_pt_Wprime->Write();
+		fFile->mkdir("muons");
+		fFile->cd("muons");
+		for ( map<string,TH1* >::const_iterator imap=hmuons.begin(); imap!=hmuons.end(); ++imap ) {
+			TH1 *temp = imap->second;
+			if ( temp->GetEntries() > 0 )
+			temp->Write();
+			//else cout << "Warning: empty histogram " << temp->GetName() << " will not be written to file." << endl;
+		}
+		fFile->cd();
+		fFile->mkdir("PVs");
+		fFile->cd("PVs");
+		for ( map<string,TH1* >::const_iterator imap=hPVs.begin(); imap!=hPVs.end(); ++imap ) {
+			TH1 *temp = imap->second;
+			if ( temp->GetEntries() > 0 )
+			temp->Write();
+			//else cout << "Warning: empty histogram " << temp->GetName() << " will not be written to file." << endl;
+		}
+		fFile->cd();
+		fFile->mkdir("jets");
+		fFile->cd("jets");
+		for ( map<string,TH1* >::const_iterator imap=hjets.begin(); imap!=hjets.end(); ++imap ) {
+			TH1 *temp = imap->second;
+			if ( temp->GetEntries() > 0 )
+			temp->Write();
+		}
+		fFile->cd();
+		fFile->mkdir("mass");
+		fFile->cd("mass");
+		for ( map<string,TH1* >::const_iterator imap=hM.begin(); imap!=hM.end(); ++imap ) {
+			TH1 *temp = imap->second;
+			if ( temp->GetEntries() > 0 )
+			temp->Write();
+		}
+		fFile->cd();
+		fFile->mkdir("MET");
+		fFile->cd("MET");
+		for ( map<string,TH1* >::const_iterator imap=hMET.begin(); imap!=hMET.end(); ++imap ) {
+			TH1 *temp = imap->second;
+			if ( temp->GetEntries() > 0 )
+			temp->Write();
+		}
+		fFile->cd();
+//		fFile->mkdir("TMVA");
+//		fFile->cd("TMVA");
+//		fBdisc->Write();
+//		fBdisc->Print();
+//		TMVA->Write();
+//
+		fFile->cd();
 
-      fFile->cd();
-
-      fProofFile->Print();
-      fOutput->Add(fProofFile);
-    } else {
-      cleanup = kTRUE;
-    }
+		fProofFile->Print();
+		fOutput->Add(fProofFile);
+	} else {
+		cleanup = kTRUE;
+	}
 
 
     h1test->SetDirectory(0);
@@ -1127,10 +1201,10 @@ void Analyzer::SlaveTerminate()
     fFile->Close();
     // Cleanup, if needed
     if (cleanup) {
-      TUrl uf(*(fFile->GetEndpointUrl()));
-      SafeDelete(fFile);
-      gSystem->Unlink(uf.GetFile());
-      SafeDelete(fProofFile);
+	TUrl uf(*(fFile->GetEndpointUrl()));
+	SafeDelete(fFile);
+	gSystem->Unlink(uf.GetFile());
+	SafeDelete(fProofFile);
     }
   }
 
