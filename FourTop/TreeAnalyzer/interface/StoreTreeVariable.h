@@ -21,6 +21,7 @@ class StoreTreeVariable {
       void SetVertexFalse(){StoreVertex = kFALSE;}
       void SetTriggerFalse(){StoreTrigger = kFALSE;}
       void SetMetFalse(){StoreMet = kFALSE;}
+      void SetGeneralFalse(){StoreGeneral = kFALSE;}
 
       //typedef struct MuonVariables{
       typedef struct {
@@ -101,13 +102,10 @@ class StoreTreeVariable {
 	 */
 
 	 // B discriminator
-	 Double_t bdisc_1st[NMAX];
-	 Double_t bdisc_2nd[NMAX];
-	 Double_t bdisc_3rd[NMAX];
-	 Double_t bdisc_4th[NMAX];
-	 Double_t bdisc_5th[NMAX];
-	 Double_t bdisc_6th[NMAX];
-	 Double_t bdisc_7th[NMAX];
+	 Double_t bdisc_1st;
+	 Double_t bdisc_2nd;
+	 Double_t bdisc_3rd;
+	 Double_t bdisc_4th;
 
       };
 
@@ -128,7 +126,6 @@ class StoreTreeVariable {
 
       struct MetVariables{
 
-      /*
          Double_t met;
          Double_t metphi;
          Double_t mht;
@@ -153,11 +150,14 @@ class StoreTreeVariable {
          Int_t csvbtagjetnum_up;
          Int_t csvbtagjetnum_down;
          Int_t    flavorhistory;
-	 */
+      };
+
+      struct GeneralVariables {
 
          Int_t Run;
          Int_t Lumi;
          Int_t Event;
+	 Double_t PUWeight;
 
       };
 
@@ -169,6 +169,7 @@ class StoreTreeVariable {
       VertexVariables *GetVertexVariable(){return &VStoreVertex;}
       TriggerVariables *GetTriggerVariable(){return &VStoreTrigger;}
       MetVariables *GetMetVariable(){return &VStoreMet;}
+      GeneralVariables *GetGeneralVariable(){return &VStoreGeneral;}
 
       void InitialAll();
       void InitialVertex();
@@ -177,6 +178,7 @@ class StoreTreeVariable {
       void InitialJet();
       void InitialTrigger();
       void InitialMet();
+      void InitialGeneral();
 
    private:
 
@@ -188,6 +190,7 @@ class StoreTreeVariable {
       bool StoreJet;
       bool StoreTrigger;
       bool StoreMet;
+      bool StoreGeneral;
 
       //V mean variables
       MuonVariables VStoreMuon;
@@ -196,6 +199,7 @@ class StoreTreeVariable {
       VertexVariables VStoreVertex;
       TriggerVariables VStoreTrigger;
       MetVariables VStoreMet;
+      GeneralVariables VStoreGeneral;
 
 };
 
@@ -212,6 +216,7 @@ StoreTreeVariable::StoreTreeVariable(){
   StoreJet = kTRUE;
   StoreTrigger = kTRUE;
   StoreMet = kTRUE;
+  StoreGeneral = kTRUE;
 
 }
 
@@ -297,13 +302,10 @@ void StoreTreeVariable::InitialJet(){
       Top->Branch("jet_btag_csv",VStoreJet.jetcsv,"jetcsv[numjets]/D");
       */
       //b discriminant
-      Top->Branch("jet_bdisc_1st",VStoreJet.bdisc_1st,"bdisc_1st[numjets]/D");
-      Top->Branch("jet_bdisc_2nd",VStoreJet.bdisc_2nd,"bdisc_2nd[numjets]/D");
-      Top->Branch("jet_bdisc_3rd",VStoreJet.bdisc_3rd,"bdisc_3rd[numjets]/D");
-      Top->Branch("jet_bdisc_4th",VStoreJet.bdisc_4th,"bdisc_4th[numjets]/D");
-      Top->Branch("jet_bdisc_5th",VStoreJet.bdisc_5th,"bdisc_5th[numjets]/D");
-      Top->Branch("jet_bdisc_6th",VStoreJet.bdisc_6th,"bdisc_6th[numjets]/D");
-      Top->Branch("jet_bdisc_7th",VStoreJet.bdisc_7th,"bdisc_7th[numjets]/D");
+      Top->Branch("jet_bdisc_1st",&VStoreJet.bdisc_1st,"bdisc_1st/D");
+      Top->Branch("jet_bdisc_2nd",&VStoreJet.bdisc_2nd,"bdisc_2nd/D");
+      Top->Branch("jet_bdisc_3rd",&VStoreJet.bdisc_3rd,"bdisc_3rd/D");
+      Top->Branch("jet_bdisc_4th",&VStoreJet.bdisc_4th,"bdisc_4th/D");
 
       //Jet track size
       //Top->Branch("jet_tracksize",VStoreJet.jettracksize,"jettracksize[numjets]/I");
@@ -316,8 +318,7 @@ void StoreTreeVariable::InitialMet(){
 
   if(StoreMet){
       cout<<"We are inital Met Branch"<<endl;
-
-      /*
+     
       Top->Branch("MET_energy",&VStoreMet.met,"met/D");
       Top->Branch("MET_phi",&VStoreMet.metphi,"metphi/D");
       Top->Branch("MHT_energy",&VStoreMet.mht,"mht/D");
@@ -341,13 +342,21 @@ void StoreTreeVariable::InitialMet(){
       Top->Branch("csvbtagjetnum_up",&VStoreMet.csvbtagjetnum_up,"csvbtagjetnum_up/I");
       Top->Branch("csvbtagjetnum_down",&VStoreMet.csvbtagjetnum_down,"csvbtagjetnum_down/I");
       Top->Branch("flavorhistory",&VStoreMet.flavorhistory,"flavorhistory/I");
-      */
-      Top->Branch("run",&VStoreMet.Run,"Run/I");
-      Top->Branch("lumi",&VStoreMet.Lumi,"Lumi/I");
-      Top->Branch("event",&VStoreMet.Event,"Event/I");
+    
+  }
+}
+
+void StoreTreeVariable::InitialGeneral(){
+
+  if(StoreGeneral){
+      cout<<"We are inital General Branch"<<endl;
+
+      Top->Branch("run",&VStoreGeneral.Run,"Run/I");
+      Top->Branch("lumi",&VStoreGeneral.Lumi,"Lumi/I");
+      Top->Branch("event",&VStoreGeneral.Event,"Event/I");
+      Top->Branch("PUWeight",&VStoreGeneral.PUWeight,"PUWeight/D");
 
   }
-
 }
 
 void StoreTreeVariable::InitialTrigger(){
@@ -382,4 +391,5 @@ void StoreTreeVariable::InitialAll(){
      InitialElectron();
      InitialJet();
      InitialMet();
+     InitialGeneral();
 }
