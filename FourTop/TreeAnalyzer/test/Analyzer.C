@@ -24,7 +24,8 @@
 //
 
 #include "Analyzer.h"
-#include "BTagWeight.h"
+//#include "BTagWeight.h"
+#include "BTagSFUtil_lite.h"
 //#include "Yumiceva/TreeAnalyzer/interface/JetCombinatorics.h"
 
 #include <TStyle.h>
@@ -400,6 +401,24 @@ void Analyzer::SlaveBegin(TTree * tree)
    // For JEC uncertainties
    if (fdoJECunc) fJECunc = new JetCorrectionUncertainty("/uscms/home/yumiceva/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/GR_R_42_V19_AK5PF_Uncertainty.txt");
 
+   // LOT for b-tagging SF
+   //bSF_table.LoadTable("/uscms/home/yumiceva/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Table_CSVM_beff_SF.txt");
+   lSF_table.LoadTable("/uscms/home/yumiceva/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Table_CSVM_lmistag_SF.txt");
+   leff_table.LoadTable("/uscms/home/yumiceva/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Table_CSVM_lmistag_Eff.txt");
+ 
+   //leff_tablebtag efficiency file and 2D histogram
+   //TString btagefffilename = "/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/BtagEff.root";
+   //btagefffile = new TFile(btagefffilename,"read");
+   //ttbar
+   //f2Dttbarbtag = (TH2D*) btagefffile->Get("ttbar_csv_btageff");
+   //f2Dttbarctag = (TH2D*) btagefffile->Get("ttbar_csv_ctageff");
+   //f2Dttbarlighttag = (TH2D*) btagefffile->Get("ttbar_csv_lighttageff");
+   //wprime
+   //f2Dwprimebtag = (TH2D*) btagefffile->Get("wprime_csv_btageff");
+   //f2Dwprimectag = (TH2D*) btagefffile->Get("wprime_csv_ctageff");
+   //f2Dwprimelighttag = (TH2D*) btagefffile->Get("wprime_csv_lighttageff");
+
+
    //------- Store information in a Tree
    MyStoreTree = new StoreTreeVariable();
 
@@ -408,7 +427,7 @@ void Analyzer::SlaveBegin(TTree * tree)
       //MyStoreTree->SetJetFalse();
       MyStoreTree->SetVertexFalse();
       MyStoreTree->SetTriggerFalse();
-      //MyStoreTree->SetMetFalse();
+      MyStoreTree->SetMetFalse();
       MyStoreTree->SetMuonFalse();
    }
 
@@ -418,15 +437,15 @@ void Analyzer::SlaveBegin(TTree * tree)
       //MyStoreTree->SetJetFalse();
       MyStoreTree->SetVertexFalse();
       MyStoreTree->SetTriggerFalse();
-      //MyStoreTree->SetMetFalse();
+      MyStoreTree->SetMetFalse();
       MyStoreTree->SetMuonFalse();
-   //////////////////////////////////////////
    }
 
    MyStoreTree->InitialAll();
    //Get the Store Tree
    MyStoreTree->GetStoreTree()->SetDirectory(fFile);
    MyStoreTree->GetStoreTree()->AutoSave();
+   //////////////////////////////////////////
 
 }
 
@@ -551,9 +570,13 @@ Bool_t Analyzer::Process(Long64_t entry)
   // HLT scale factor for MC
   ////////////
   double SF_hlt = 1.;
-  if (fIsMC) SF_hlt = 0.966;
-
-  PUweight = PUweight*SF_hlt;   // LETS INCLUDE THE TRIGGER SF INTO THE PU WEIGHTS
+  if (fIsMC) SF_hlt = 0.97; //0.966;
+  double SF_iso = 1.;
+  if (fIsMC) SF_iso = 0.996;
+  PUweight = PUweight*SF_hlt*SF_iso;  // LETS INCLUDE THE TRIGGER SF INTO THE PU WEIGHTS
+  
+  //TEMP
+  //PUweight = 1.;
 
   cutmap["Processed"] += PUweight;
 
@@ -566,6 +589,7 @@ Bool_t Analyzer::Process(Long64_t entry)
   int nloosemuons = 0;
   int ntightmuons = 0;
   int nqcdmuons = 0;
+  int nmuonID[8] = {0};
 
   double RelIso = -1.;
   double deltaR = -1.;
@@ -576,23 +600,46 @@ Bool_t Analyzer::Process(Long64_t entry)
   for ( size_t imu=0; imu < total_muons; ++imu) {
      
 	TopMuonEvent muon = muons[imu];
-
+     
 	h1test->Fill( muon.pt );
-	//hmuons["N_muons"]->Fill( total_muons );
 	hmuons["pt_cut1"]->Fill( muon.pt, PUweight );
+ 
+	if (muon.pt > 32. && fabs(muon.eta)<2.1 && muon.IsTrackerMuon==1 ) {
+  		nmuonID[0] += 1;
+		if (fabs(muon.d0)<0.02 ) {
+			nmuonID[1] += 1;
+			if (muon.trackerhits>=11 ) {
+				nmuonID[2] += 1;
+				if (muon.normchi2<10 ) {
+					nmuonID[3] +=1;
+					if (muon.muonhits>0 ) {
+						nmuonID[4] += 1;
+						if (muon.pixelhits >= 1 ) {
+							nmuonID[5] += 1;
+							if (muon.muonstations > 1 ) {
+								nmuonID[6] +=1;
+								if (fabs(muon.vz - PVz) < 1.) {
+									nmuonID[7] +=1;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
 	if ( fMuSelector.MuonID( muon, PVz ) ) ngoodIDmuons++;
-
+ 
 	// select only good muons
+     
 	if ( fMuSelector.MuonLoose( muon ) ) {
+  
 		nloosemuons++;
-
-		if ( fMuSelector.MuonTight( muon, PVz) ) {
+  
+		if ( fMuSelector.MuonTight( muon, PVz) )  hmuons["pt_cut2"]->Fill( muon.pt, PUweight );
 			//hmuons["N_tisomuons"]->Fill( nloosemuons );  
 			//hmuons["charge_tiso"]->Fill( muon.charge, PUweight );
-			hmuons["pt_cut2"]->Fill( muon.pt, PUweight );
-		}     
-		
 		if ( fMuSelector.MuonTightDeltaR( muon, PVz, jets) ) {
 			ntightmuons++;
 			deltaR = fMuSelector.GetDeltaR();
@@ -600,13 +647,13 @@ Bool_t Analyzer::Process(Long64_t entry)
 
 		p4muon.SetPtEtaPhiE( muon.pt, muon.eta, muon.phi, muon.e );
 		RelIso = muon.pfreliso; //muon.reliso03;
-
 		p4Othermuon.push_back( p4muon ); // for leading muon
-	}
+ 	}
 
 	// check muon in QCD control region
 	if ( fMuSelector.MuonRelax02IsoQCD( muon, PVz, jets ) ) {
 		nqcdmuons++;
+
 		// keep the leading muon for selection
 		if (nqcdmuons==1) {
 			p4QCDmuon.SetPtEtaPhiE( muon.pt, muon.eta, muon.phi, muon.e );
@@ -661,6 +708,16 @@ Bool_t Analyzer::Process(Long64_t entry)
 		deltaR = QCDdeltaR;
 	}
        	else {
+		/*
+		if (nmuonID[0] == 1) cutmap["MuID1"] += PUweight;
+		if (nmuonID[1] == 1) cutmap["MuID2"] +=PUweight;
+		if (nmuonID[2] == 1) cutmap["MuID3"] +=PUweight;
+		if (nmuonID[3] == 1) cutmap["MuID4"] +=PUweight;
+		if (nmuonID[4] == 1) cutmap["MuID5"] +=PUweight;
+		if (nmuonID[5] == 1) cutmap["MuID6"] +=PUweight;
+		if (nmuonID[6] == 1) cutmap["MuID7"] +=PUweight;
+		if (nmuonID[7] == 1) cutmap["MuID8"] +=PUweight;
+		if (ngoodIDmuons == 1) cutmap["MuID"] += PUweight;*/  // TEMP
 
 		if ( ngoodIDmuons > 0 ) hmuons["Ngood"]->Fill( total_pvs, PUweight);
 		if ( ntightmuons > 0 ) hmuons["Niso"]->Fill( total_pvs, PUweight);
@@ -737,15 +794,22 @@ Bool_t Analyzer::Process(Long64_t entry)
   if (fChannel==2) {
 	fzCalculator.SetLeptonType("electron");
   }
-
+  
   double pzNu = fzCalculator.Calculate();
+  double pzOtherNu = fzCalculator.getOther();
+  if (fabs(pzNu) > fabs(pzOtherNu) ) {
+	double tmppzNu = pzNu;
+	double tmppzOtherNu = pzOtherNu;
+	pzNu = tmppzOtherNu;
+	pzOtherNu = tmppzNu;
+  }
+
   p4Nu = TLorentzVector();
   p4OtherNu = TLorentzVector();
 
   p4Nu.SetPxPyPzE(p4MET.Px(), p4MET.Py(), pzNu, sqrt(p4MET.Px()*p4MET.Px()+p4MET.Py()*p4MET.Py()+pzNu*pzNu));
   //print "pzNu = " +str(pzNu)
   //print "p4Nu =("+str(p4Nu.Px())+","+str(p4Nu.Py())+","+str(p4Nu.Pz())+","+str(p4Nu.E())
-  double pzOtherNu = fzCalculator.getOther();
   p4OtherNu.SetPxPyPzE( p4MET.Px(), p4MET.Py(),pzOtherNu,sqrt(p4MET.Px()*p4MET.Px()+p4MET.Py()*p4MET.Py()+pzOtherNu*pzOtherNu));
 
   //double WmassNoPt = (p4Nu+p4lepton).M();
@@ -792,6 +856,8 @@ Bool_t Analyzer::Process(Long64_t entry)
   MyStoreTree->GetJetVariable()->numjets = 0;
   map< string, vector<float> > bdisc;
   map< string, vector<bool> >  isTagb;
+  map< string, vector<bool> >  isTagbUp;
+  map< string, vector<bool> >  isTagbDown;
   vector<int> listflavor;
   vector<float> bdiscriminator;
 
@@ -821,7 +887,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 		tmpjet.SetPtEtaPhiE(SF_JEC*jet.pt, jet.eta, jet.phi, SF_JEC*jet.e);
 		p4jets.push_back( tmpjet);
 		listflavor.push_back( jet.mc.flavor );
-		if (jet.btag_CSV > 0) bdiscriminator.push_back( jet.btag_CSV );      // for bdiscriminator plot
+		if (jet.btag_CSV > 0) bdiscriminator.push_back( jet.btag_CSV );      // for bdiscriminator
 		else bdiscriminator.push_back( 0 );
 
 		if (fVerbose) {
@@ -841,8 +907,15 @@ Bool_t Analyzer::Process(Long64_t entry)
 		//else isTagb["TCHPM"].push_back(false);
 		//if (fVerbose) cout << "done tchpl" << endl;
 		// check SSVHEM cut at 1.74
-		if ( jet.btag_CSV > 0.679) isTagb["CSVM"].push_back(true);
-		else isTagb["CSVM"].push_back(false);
+		if ( jet.btag_CSV > 0.679) {
+			isTagb["CSVM"].push_back(true);
+			isTagbUp["CSVM"].push_back(true);
+			isTagbDown["CSVM"].push_back(true);
+		} else {
+			isTagb["CSVM"].push_back(false);
+			isTagbUp["CSVM"].push_back(false);
+			isTagbDown["CSVM"].push_back(false);
+		}
 		if (fVerbose) cout << "done csvm" << endl;
 		// CSVM cut at 0.679 MEDIUM
 		
@@ -869,16 +942,6 @@ Bool_t Analyzer::Process(Long64_t entry)
 	int number_of_b = 0;
 	int number_of_c = 0;
 	int number_of_l = 0;
-	int number_of_b_highpt = 0;
-	int number_of_c_highpt = 0;
-	float SFb_0tag = 1.;
-	float SFb_only1tag = 1.;
-	float SFb_1tag = 1.;
-	float SFb_2tag = 1.;
-	//float SFb_0tag_syst[2] = {1.}; // for systematics
-	float SFb_1tag_syst[2] = {1.};
-	float SFb_2tag_syst[2] = {1.};
-	//float SFb_1tag_systhighpt[2] = {1.};
 
 	double Ht = 0; 
 	double Stlep = 0; 
@@ -910,9 +973,84 @@ Bool_t Analyzer::Process(Long64_t entry)
 		if ( abs(listflavor[kk])==5 && p4jets[kk].Pt()<=240 ) { number_of_b++; hjets["pt_b_mc"]->Fill( p4jets[kk].Pt(), PUweight );}
 		if ( abs(listflavor[kk])==4 && p4jets[kk].Pt()<=240 ) { number_of_c++; hjets["pt_c_mc"]->Fill( p4jets[kk].Pt(), PUweight );}
 		if ( abs(listflavor[kk])==1 || abs(listflavor[kk])==2 || abs(listflavor[kk])==3 || abs(listflavor[kk])==21 ) { number_of_l++; hjets["pt_l_mc"]->Fill( p4jets[kk].Pt(), PUweight );}
-		if ( abs(listflavor[kk])==5 && p4jets[kk].Pt()>240 ) { number_of_b_highpt++; hjets["pt_b_mc"]->Fill( p4jets[kk].Pt(), PUweight );}
-		if ( abs(listflavor[kk])==4 && p4jets[kk].Pt()>240 ) { number_of_c_highpt++; hjets["pt_c_mc"]->Fill( p4jets[kk].Pt(), PUweight );}
+		//if ( abs(listflavor[kk])==5 && p4jets[kk].Pt()>240 ) { number_of_b_highpt++; hjets["pt_b_mc"]->Fill( p4jets[kk].Pt(), PUweight );}
+		//if ( abs(listflavor[kk])==4 && p4jets[kk].Pt()>240 ) { number_of_c_highpt++; hjets["pt_c_mc"]->Fill( p4jets[kk].Pt(), PUweight );}
 
+
+		hjets["pt"]->Fill( p4jets[kk].Pt(), PUweight );
+		//float b_mc_eff = f2Dttbarbtag->GetBinContent(f2Dttbarbtag->FindBin(p4jets[kk].Pt(),fabs(p4jets[kk].Eta())));
+		//float c_mc_eff = f2Dttbarctag->GetBinContent(f2Dttbarctag->FindBin(p4jets[kk].Pt(),fabs(p4jets[kk].Eta())));
+		//float l_mc_eff = f2Dttbarlighttag->GetBinContent(f2Dttbarlighttag->FindBin(p4jets[kk].Pt(),fabs(p4jets[kk].Eta())));
+		float b_data_eff = 0.705;
+		float c_data_eff = b_data_eff/5.;
+
+		float b_SF = 0.972; //bSF_table.GetValue(  p4jets[kk].Pt(), fabs(p4jets[kk].Eta()) );
+		float l_SF = lSF_table.GetValue(  p4jets[kk].Pt(), fabs(p4jets[kk].Eta()) );
+		float l_data_eff = leff_table.GetValue( p4jets[kk].Pt(), fabs(p4jets[kk].Eta()) );
+
+		double seed = abs(static_cast<int>(sin(p4jets[kk].Phi()*1000000)*100000));
+		BTagSFUtil btsfutil = BTagSFUtil( seed );
+
+		if ( fIsMC && abs(listflavor[kk])==5 ) { 
+			number_of_b++; hjets["pt_b_mc"]->Fill( p4jets[kk].Pt(), PUweight );
+			//Info("Process",TString("btag SF= ")+TString(Form("%f",b_SF)));
+
+			bool tmp_IsTag = isTagb["CSVM"][kk];
+			isTagb["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), b_SF, b_data_eff, l_SF, l_data_eff);
+	    
+			if (p4jets[kk].Pt()<=240 ) {
+				tmp_IsTag = isTagbUp["CSVM"][kk];
+				isTagbUp["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag  , abs(listflavor[kk]), b_SF*1.04, b_data_eff, l_SF, l_data_eff);
+				tmp_IsTag = isTagbDown["CSVM"][kk];
+				isTagbDown["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), b_SF*0.96, b_data_eff, l_SF, l_data_eff);
+			} else {
+				tmp_IsTag = isTagbUp["CSVM"][kk];
+				isTagbUp["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag  , abs(listflavor[kk]), b_SF*1.15, b_data_eff, l_SF, l_data_eff);
+				tmp_IsTag = isTagbDown["CSVM"][kk];
+				isTagbDown["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), b_SF*0.85, b_data_eff, l_SF, l_data_eff);
+			}
+		}
+
+		if ( fIsMC && abs(listflavor[kk])==4 ) { 
+			number_of_c++; hjets["pt_c_mc"]->Fill( p4jets[kk].Pt(), PUweight );
+			bool tmp_IsTag = isTagb["CSVM"][kk];
+			isTagb["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), b_SF, c_data_eff, l_SF, l_data_eff);
+			if (p4jets[kk].Pt()<=240 ) {
+				tmp_IsTag = isTagbUp["CSVM"][kk];
+				isTagbUp["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag  , abs(listflavor[kk]), b_SF*1.08, c_data_eff, l_SF, l_data_eff);
+				tmp_IsTag = isTagbDown["CSVM"][kk];
+				isTagbDown["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), b_SF*0.92, c_data_eff, l_SF, l_data_eff);
+			} else {
+				tmp_IsTag = isTagbUp["CSVM"][kk];
+				isTagbUp["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag  , abs(listflavor[kk]), b_SF*1.15, c_data_eff, l_SF, l_data_eff);
+				tmp_IsTag = isTagbDown["CSVM"][kk];
+				isTagbDown["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), b_SF*0.85, c_data_eff, l_SF, l_data_eff);
+			}
+		}
+
+		if ( fIsMC && (abs(listflavor[kk])==1 || abs(listflavor[kk])==2 || abs(listflavor[kk])==3 || abs(listflavor[kk])==21 )) { 
+			number_of_l++; hjets["pt_l_mc"]->Fill( p4jets[kk].Pt(), PUweight );
+			bool tmp_IsTag = isTagb["CSVM"][kk];
+			isTagb["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), b_SF, b_data_eff, l_SF, l_data_eff);
+			if (p4jets[kk].Pt()<=240 ) {
+				tmp_IsTag = isTagbUp["CSVM"][kk];
+				isTagbUp["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag  , abs(listflavor[kk]), b_SF, b_data_eff, l_SF*1.13, l_data_eff);
+				tmp_IsTag = isTagbDown["CSVM"][kk];
+				isTagbDown["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), b_SF, b_data_eff, l_SF*1.13, l_data_eff);
+			} else {
+				tmp_IsTag = isTagbUp["CSVM"][kk];
+				isTagbUp["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag  , abs(listflavor[kk]), b_SF, b_data_eff, l_SF*1.20, l_data_eff);
+				tmp_IsTag = isTagbDown["CSVM"][kk];
+				isTagbDown["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), b_SF, b_data_eff, l_SF*1.20, l_data_eff);
+			}
+		}
+	  
+		if ( isTagb["CSVM"][kk] ) {
+			hjets["pt_btag"]->Fill( p4jets[kk].Pt(), PUweight );
+			if ( abs(listflavor[kk])==5 ) hjets["pt_btag_b"]->Fill( p4jets[kk].Pt(), PUweight );
+			if ( abs(listflavor[kk])==4 ) hjets["pt_btag_c"]->Fill( p4jets[kk].Pt(), PUweight );
+			if ( abs(listflavor[kk])==1 || abs(listflavor[kk])==2 || abs(listflavor[kk])==3 || abs(listflavor[kk])==21 ) hjets["pt_btag_l"]->Fill( p4jets[kk].Pt(), PUweight );
+		}	
 	}
 
 	/////////// plots without cuts 
@@ -935,14 +1073,31 @@ Bool_t Analyzer::Process(Long64_t entry)
 	/////////////////////////////////////////////////////////////////////
 
 	// plot bdiscriminator
-	if ( bdiscriminator[0] ) { MyStoreTree->GetJetVariable()->bdisc_1st[njets] = bdiscriminator[0]; hjets["1st_bdisc"]->Fill( bdiscriminator[0], PUweight );}
-	if ( bdiscriminator[1] ) { MyStoreTree->GetJetVariable()->bdisc_2nd[njets] = bdiscriminator[1]; hjets["2nd_bdisc"]->Fill( bdiscriminator[1], PUweight );}
-	if ( bdiscriminator[2] ) { MyStoreTree->GetJetVariable()->bdisc_3rd[njets] = bdiscriminator[2]; hjets["3rd_bdisc"]->Fill( bdiscriminator[2], PUweight );}
-	if ( bdiscriminator[3] ) { MyStoreTree->GetJetVariable()->bdisc_4th[njets] = bdiscriminator[3]; hjets["4th_bdisc"]->Fill( bdiscriminator[3], PUweight );}
-	if ( bdiscriminator[4] ) { MyStoreTree->GetJetVariable()->bdisc_5th[njets] = bdiscriminator[4]; hjets["5th_bdisc"]->Fill( bdiscriminator[4], PUweight );}
-	if ( bdiscriminator[5] ) { MyStoreTree->GetJetVariable()->bdisc_6th[njets] = bdiscriminator[5]; hjets["6th_bdisc"]->Fill( bdiscriminator[5], PUweight );}
-	if ( bdiscriminator[6] ) { MyStoreTree->GetJetVariable()->bdisc_7th[njets] = bdiscriminator[6]; hjets["7th_bdisc"]->Fill( bdiscriminator[6], PUweight );}
+	if ( njets >=4 ) {
+        	if ( bdiscriminator[0] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_1st = bdiscriminator[0]; hjets["1st_bdisc"]->Fill( bdiscriminator[0], PUweight );}
+		if ( bdiscriminator[1] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_2nd = bdiscriminator[1]; hjets["2nd_bdisc"]->Fill( bdiscriminator[1], PUweight );}
+		if ( bdiscriminator[2] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_3rd = bdiscriminator[2]; hjets["3rd_bdisc"]->Fill( bdiscriminator[2], PUweight );}
+		if ( bdiscriminator[3] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_4th = bdiscriminator[3]; hjets["4th_bdisc"]->Fill( bdiscriminator[3], PUweight );}
+		MyStoreTree->GetGeneralVariable()->PUWeight = PUweight;
+	}
 	//////////////////////////////////////////////////////////////////////////////////
+
+	// W+jets h.f. corrections
+	int FH = 2; // 0=Wbb, 1=Wcc, 2=Wqq
+	if ( number_of_b > 0 ) FH = 0;
+	else if ( number_of_b == 0 && number_of_c > 0 ) FH = 1;
+	else FH = 2;
+	float SF_W = 1.;
+	if (fSample=="WJets") {
+		// from TOP-11-003
+		if ( FH == 0 ) SF_W = 1.21;
+		if ( FH == 1 ) SF_W = 1.66;
+	}
+
+	// Split W+jets if requested
+	if (fSample=="Wbb" && FH != 0 ) return kTRUE;
+	if (fSample=="Wcc" && FH != 1 ) return kTRUE;
+	if (fSample=="Wqq" && FH != 2 ) return kTRUE;
 
 	// count number of b-tags
 	//int Nbtags_TCHPM = 0;
@@ -955,7 +1110,10 @@ Bool_t Analyzer::Process(Long64_t entry)
 
 	// compute b-tag event weight
 	if ( fIsMC ) {
-
+		hMET["genMET_2jet"]->Fill( ntuple->gen.MET, PUweight*SF_W );
+		hMET["deltaMET_2jet"]->Fill( p4MET.Pt() - ntuple->gen.MET, PUweight*SF_W );
+	}
+		/*
 		// zeto tag
 		BTagWeight b0(0,0); // number of tags 
 		//BTagWeight::JetInfo bj(0.63,0.91); // mean MC eff and mean SF. For TCHPM=0.91\pm0.09, CSVM=0.96\pm0.096
@@ -1064,12 +1222,34 @@ Bool_t Analyzer::Process(Long64_t entry)
 			for(int i=0;i<number_of_c_highpt;i++)jk.push_back(cjDOWNhighpt);
 			for(int i=0;i<number_of_l;i++)jk.push_back(lj);
 			SFb_2tag_syst[1] = b2.weight(jk,2);
-		}
-	}
-	else hjets["Nbtags_CSVM"]->Fill( Nbtags_CSVM );
+		}*/
+	//else hjets["Nbtags_CSVM"]->Fill( Nbtags_CSVM );
 
 	//hjets["Nbtags_TCHPM"]->Fill( Nbtags_TCHPM, PUweight*SFb );
 	//hjets["Nbtags_CSVM"]->Fill( Nbtags_CSVM, PUweight*SFb );
+
+	// count number of b-tags
+	int Nbtags_TCHPM = 0;
+	//int Nbtags_CSVM = 0;
+	int NbtagsUp_CSVM = 0;
+	int NbtagsDown_CSVM = 0;
+	//float SFb_0tag = 1.;
+	//float SFb_only1tag = 1.;
+	float SFb_1tag = 1.;
+	//float SFb_2tag = 1.;
+	//float SFb_0tag_syst[2] = {1.}; // for systematics
+	//float SFb_1tag_syst[2] = {1.};
+	//float SFb_2tag_syst[2] = {1.};
+
+	for ( size_t itag=0; itag< isTagb["CSVM"].size(); ++itag ) {
+		if ( isTagb["TCHPM"][itag] ) Nbtags_TCHPM++;
+		if ( isTagb["CSVM"][itag] ) Nbtags_CSVM++;
+		if ( isTagbUp["CSVM"][itag] ) NbtagsUp_CSVM++;
+		if ( isTagbDown["CSVM"][itag] ) NbtagsDown_CSVM++;
+	}
+      
+	// store b tags
+	hjets["Nbtags_CSVM"]->Fill( Nbtags_CSVM, PUweight*SF_W ); 
 
 	//   Cuts
 	bool passcut = true;
@@ -1103,9 +1283,9 @@ Bool_t Analyzer::Process(Long64_t entry)
 	}
   }
 
-   MyStoreTree->GetMetVariable()->Run = ntuple->run;
-   MyStoreTree->GetMetVariable()->Lumi = ntuple->lumi;
-   MyStoreTree->GetMetVariable()->Event = ntuple->event;
+   MyStoreTree->GetGeneralVariable()->Run = ntuple->run;
+   MyStoreTree->GetGeneralVariable()->Lumi = ntuple->lumi;
+   MyStoreTree->GetGeneralVariable()->Event = ntuple->event;
 
   MyStoreTree->GetStoreTree()->Fill();
   if (fVerbose) cout << "done analysis" << endl;
