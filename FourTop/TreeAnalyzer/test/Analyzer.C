@@ -163,8 +163,10 @@ void Analyzer::SlaveBegin(TTree * tree)
    
    hmuons["N_cut0"] = new TH1F("N_muons_cut0"+hname,"Number of Muons",6,-0.5,5.5);
    hmuons["N"] = new TH1F("N_muons"+hname,"Number of Muons",6,-0.5,5.5);
+   hmuons["N_1btag"] = new TH1F("N_muons_1btag"+hname,"Number of Muons",6,-0.5,5.5);
    hmuons["Nelectrons_cut0"] = new TH1F("Nelectrons_cut0"+hname,"Number of Loose Electrons",6,-0.5,5.5);
    hmuons["Nelectrons"] = new TH1F("Nelectrons"+hname,"Number of Loose Electrons",6,-0.5,5.5);
+   hmuons["Nelectrons_1btag"] = new TH1F("Nelectrons_1btag"+hname,"Number of Loose Electrons",6,-0.5,5.5);
    hmuons["pt_1jet"] = new TH1F("muon_pt_1jet"+hname,"p_{T}^{#mu} [GeV/c]", 50, 0, 500);
    hmuons["pt_2jet"] = new TH1F("muon_pt_2jet"+hname,"p_{T}^{#mu} [GeV/c]", 50, 0, 500);
    hmuons["pt_fin"] = new TH1F("muon_pt_fin"+hname,"p_{T}^{#mu} [GeV/c]", 50, 0, 500);
@@ -180,11 +182,13 @@ void Analyzer::SlaveBegin(TTree * tree)
    hmuons["reliso_fin"] = new TH1F("muon_reliso_fin"+hname,"Relative Isolation", 40, 0, 0.2);
    hmuons["deltaR_cut0"] = new TH1F("deltaR_cut0"+hname,"#DeltaR(#mu,jet)",80, 0, 4);
    hmuons["deltaR"] = new TH1F("deltaR"+hname,"#DeltaR(#mu,jet)", 80, 0, 4);
+   hmuons["deltaR_1btag"] = new TH1F("deltaR_1btag"+hname,"#DeltaR(#mu,jet)", 80, 0, 4);
    hmuons["d0_cut1"] = new TH1F("d0_cut1"+hname,"#mu Impact Parameter [cm]",20,-0.1,0.1);
    hmuons["pt_cut1"] = new TH1F("muon_pt_cut1"+hname,"p_{T}^{#mu} [GeV/c]", 50, 0, 500);
    hmuons["pt_cut2"] = new TH1F("muon_pt_cut2"+hname,"p_{T}^{#mu} [GeV/c]", 50, 0, 500);
    hmuons["pt_cut3"] = new TH1F("muon_pt_cut3"+hname,"p_{T}^{#mu} [GeV/c]", 50, 0, 500);
    hmuons["pt"] = new TH1F("muon_pt"+hname,"p_{T}^{#mu} [GeV/c]", 50, 0, 500);
+   hmuons["pt_1btag"] = new TH1F("muon_pt_1btag"+hname,"p_{T}^{#mu} [GeV/c]", 50, 0, 500);
    hmuons["dz"] = new TH1F("dz"+hname,"|z(#mu) - z_{PV}| [cm]", 25, 0, 1.);
    hmuons["Niso"] = new TH1F("Niso"+hname,"Number of Primary Vertices", 25,-0.5,24.5);
    hmuons["Ngood"] = new TH1F("Ngood"+hname,"Number of Primary Vertices",25,-0.5,24.5);
@@ -192,6 +196,7 @@ void Analyzer::SlaveBegin(TTree * tree)
    hPVs["N"] = new TH1F("NPV"+hname,"Number of PVs",25,-0.5,24.5);
    hPVs["Nreweight"] = new TH1F("NPVreweight"+hname,"Number of PVs",25,-0.5,24.5);
    hPVs["Nreweight_2jet"] = new TH1F("NPVreweight_2jet"+hname,"Number of PVs",25,-0.5,24.5);
+   hPVs["Nreweight_2jet_1btag"] = new TH1F("NPVreweight_2jet_1btag"+hname,"Number of PVs",25,-0.5,24.5);
 
    helectrons["pt"] = new TH1F("electron_pt"+hname,"p_{T}^{#mu} [GeV/c]", 50, 20, 500);
    helectrons["pt_cut2"] = new TH1F("electron_pt_cut2"+hname,"p_{T}^{#mu} [GeV/c]", 50, 20, 500);
@@ -222,6 +227,7 @@ void Analyzer::SlaveBegin(TTree * tree)
    helectrons["dz"] = new TH1F("electron_dz"+hname,"|z(#mu) - z_{PV}| [cm]", 25, 0, 1.);
       
    hMET["MET"] = new TH1F("MET"+hname,"Missing Transverse Energy [GeV]", 50, 0, 500);
+   hMET["MET_1btag"] = new TH1F("MET_1btag"+hname,"Missing Transverse Energy [GeV]", 50, 0, 500);
    hMET["MET_cut0"] = new TH1F("MET_cut0"+hname,"Missing Transverse Energy [GeV]", 50, 0, 300);
    hMET["MET_2jet"] = new TH1F("MET_2jet"+hname,"Missing Transverse Energy [GeV]", 50, 0, 300);
    hMET["MET_fin"] = new TH1F("MET_fin"+hname,"Missing Transverse Energy [GeV]", 50, 0, 300);
@@ -230,9 +236,12 @@ void Analyzer::SlaveBegin(TTree * tree)
    hMET["phi"] = new TH1F("MET_phi"+hname,"#phi Missing Transverse Energy [GeV]", 20, 0, 3.15);
    hMET["Ht0"] = new TH1F("Ht0"+hname,"H_{T} [GeV]", 50, 0, 3000);
    hMET["Ht"] = new TH1F("Ht"+hname,"H_{T} [GeV]", 50, 0, 3000);
+   hMET["Ht_1btag"] = new TH1F("Ht_1btag"+hname,"H_{T} [GeV]", 50, 0, 3000);
    hMET["Htlep"] = new TH1F("Htlep"+hname,"H_{T,lep} [GeV]", 100, 0, 1000);
-   hMET["Stlep"] = new TH1F("Stlep"+hname,"S_{MET + p_{T}^{#mu}} [GeV]", 100, 0, 1000);
-   hMET["Stjet"] = new TH1F("Stjet"+hname,"S_{MET + p_{T}^{#mu} + p_{T}^{j} } [GeV]", 100, 0, 3000);
+   hMET["Stlep"] = new TH1F("Stlep"+hname,"S_{t}^{lep} [GeV]", 100, 0, 1000);
+   hMET["Stlep_1btag"] = new TH1F("Stlep_1btag"+hname,"S_{t}^{lep} [GeV]", 100, 0, 1000);
+   hMET["Stjet"] = new TH1F("Stjet"+hname,"S_{t}^{jet} [GeV]", 100, 0, 3000);
+   hMET["Stjet_1btag"] = new TH1F("Stjet_1btag"+hname,"S_{t}^{jet} [GeV]", 100, 0, 3000);
    hMET["PzNu"] = new TH1F("PzNu"+hname,"p_{z} #nu [GeV]", 40, -300,300);
    hMET["EtaNu"] = new TH1F("EtaNu"+hname,"#eta",50,-2.2,2.2);
    hMET["LepWmass"] = new TH1F("LepWmass"+hname,"W#rightarrow#mu#nu Mass [GeV/c^{2}]",20, 0, 150);
@@ -242,6 +251,7 @@ void Analyzer::SlaveBegin(TTree * tree)
 
    hM["WMt"] = new TH1F("Mt"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 500);        // Transverse Mass sqrt(Wpt*Wpt - Wpx*Wpx - Wpy*Wpy)
    hM["WMt_2jet"] = new TH1F("Mt_2jet"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 300);
+   hM["WMt_2jet_1btag"] = new TH1F("Mt_2jet_1btag"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 300);
    hM["WMt_fin"] = new TH1F("Mt_fin"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 300);
    hM["dijet"] = new TH1F("dijet"+hname,"(jj) mass [GeV/c^{2}]", 50, 0, 1000);
    hM["trijet"] = new TH1F("trijet"+hname,"(jjj) mass [GeV/c^{2}]", 50, 0, 1000);
@@ -258,50 +268,66 @@ void Analyzer::SlaveBegin(TTree * tree)
    hjets["pt_btag_l"] = new TH1F("jet_pt_btag_l"+hname,"jet p_{T} [GeV/c]", 60, 30, 800);
    hjets["1st_pt_cut0"] = new TH1F("jet1_pt_cut0"+hname,"Leading jet p_{T} [GeV/c]",60, 30, 1000);
    hjets["1st_pt"] = new TH1F("jet1_pt"+hname,"Leading jet p_{T} [GeV/c]",60, 30, 1000);
+   hjets["1st_pt_1btag"] = new TH1F("jet1_pt_1btag"+hname,"Leading jet p_{T} [GeV/c]",60, 30, 1000);
    hjets["2nd_pt_cut0"] = new TH1F("jet2_pt_cut0"+hname,"2nd jet p_{T} [GeV/c]",60, 30, 1000);
    hjets["2nd_pt"] = new TH1F("jet2_pt"+hname,"2nd jet p_{T} [GeV/c]",60, 30, 1000);
+   hjets["2nd_pt_1btag"] = new TH1F("jet2_pt_1btag"+hname,"2nd jet p_{T} [GeV/c]",60, 30, 1000);
    hjets["3rd_pt_cut0"] = new TH1F("jet3_pt_cut0"+hname,"3rd jet p_{T} [GeV/c]",60, 30, 800);
    hjets["3rd_pt"] = new TH1F("jet3_pt"+hname,"3rd jet p_{T} [GeV/c]",60, 30, 800);
+   hjets["3rd_pt_1btag"] = new TH1F("jet3_pt_1btag"+hname,"3rd jet p_{T} [GeV/c]",60, 30, 800);
    hjets["4th_pt_cut0"] = new TH1F("jet4_pt_cut0"+hname,"4th jet p_{T} [GeV/c]",60, 30, 800);
    hjets["4th_pt"] = new TH1F("jet4_pt"+hname,"4th jet p_{T} [GeV/c]",60, 30, 800);
+   hjets["4th_pt_1btag"] = new TH1F("jet4_pt_1btag"+hname,"4th jet p_{T} [GeV/c]",60, 30, 800);
    hjets["5th_pt_cut0"] = new TH1F("jet5_pt_cut0"+hname,"5th jet p_{T} [GeV/c]",60, 30, 800);
    hjets["5th_pt"] = new TH1F("jet5_pt"+hname,"5th jet p_{T} [GeV/c]",60, 30, 800);
+   hjets["5th_pt_1btag"] = new TH1F("jet5_pt_1btag"+hname,"5th jet p_{T} [GeV/c]",60, 30, 800);
    hjets["6th_pt_cut0"] = new TH1F("jet6_pt_cut0"+hname,"6th jet p_{T} [GeV/c]",60, 30, 800);
    hjets["6th_pt"] = new TH1F("jet6_pt"+hname,"6th jet p_{T} [GeV/c]",60, 30, 800);
+   hjets["6th_pt_1btag"] = new TH1F("jet6_pt_1btag"+hname,"6th jet p_{T} [GeV/c]",60, 30, 800);
    hjets["7th_pt_cut0"] = new TH1F("jet7_pt_cut0"+hname,"7th jet p_{T} [GeV/c]",60, 30, 800);
    hjets["7th_pt"] = new TH1F("jet7_pt"+hname,"7th jet p_{T} [GeV/c]",60, 30, 800); 
+   hjets["7th_pt_1btag"] = new TH1F("jet7_pt_1btag"+hname,"7th jet p_{T} [GeV/c]",60, 30, 800); 
    hjets["1st_pt_fin"] = new TH1F("jet1_pt_fin"+hname,"Leading jet p_{T} [GeV/c]",60, 30, 800);
    hjets["2nd_pt_fin"] = new TH1F("jet2_pt_fin"+hname,"2nd jet p_{T} [GeV/c]",60, 30, 800);
    hjets["eta"] = new TH1F("jet_eta"+hname,"jet #eta",50, -2.4, 2.4);
    hjets["1st_eta_cut0"] = new TH1F("jet1_eta_cut0"+hname,"Leading jet #eta",50, -2.4, 2.4);
    hjets["1st_eta"] = new TH1F("jet1_eta"+hname,"Leading jet #eta",50, -2.4, 2.4);
+   hjets["1st_eta_1btag"] = new TH1F("jet1_eta_1btag"+hname,"Leading jet #eta",50, -2.4, 2.4);
    hjets["2nd_eta_cut0"] = new TH1F("jet2_eta_cut0"+hname,"2nd jet #eta",50, -2.4, 2.4);
    hjets["2nd_eta"] = new TH1F("jet2_eta"+hname,"2nd jet #eta",50, -2.4, 2.4);
+   hjets["2nd_eta_1btag"] = new TH1F("jet2_eta_1btag"+hname,"2nd jet #eta",50, -2.4, 2.4);
    hjets["1st_eta_fin"] = new TH1F("jet1_eta_fin"+hname,"Leading jet #eta",50, -2.4, 2.4);
    hjets["2nd_eta_fin"] = new TH1F("jet2_eta_fin"+hname,"2nd jet #eta",50, -2.4, 2.4);
    hjets["phi"] = new TH1F("jet_phi"+hname,"jet #phi",50, 0, 3.15);
    hjets["Njets"] = new TH1F("Njets"+hname,"jet multiplicity",13,-0.5,12.5);
    hjets["Njets_cut0"] = new TH1F("Njets_cut0"+hname,"jet multiplicity",13,-0.5,12.5);
    hjets["Njets_cut1"] = new TH1F("Njets_cut1"+hname,"jet multiplicity",13,-0.5,12.5);
-   hjets["Njets_1tag"] = new TH1F("Njets_1tag"+hname,"jet multiplicity",13,-0.5,12.5);
-   hjets["Njets_2tag"] = new TH1F("Njets_2tag"+hname,"jet multiplicity",6,0.5,6.5);
-   hjets["Nbtags_TCHPM"] = new TH1F("Nbjets_TCHPM_N2j"+hname,"Tagged b-jets",3,-0.5,2.5);
-   hjets["Nbtags_CSVM"] = new TH1F("Nbjets_CSVM_N2j"+hname,"Tagged b-jets",4,-0.5,3.5);
+   hjets["Njets_1btag"] = new TH1F("Njets_1tag"+hname,"jet multiplicity",13,-0.5,12.5);
+   hjets["Njets_2btag"] = new TH1F("Njets_2tag"+hname,"jet multiplicity",6,0.5,6.5);
+   hjets["Nbtags_TCHPM"] = new TH1F("Nbjets_TCHPM"+hname,"Tagged b-jets",3,-0.5,2.5);
+   hjets["Nbtags_CSVM"] = new TH1F("Nbjets_CSVM"+hname,"Tagged b-jets",8,-0.5,7.5);
    hjets["Dijet_deltaPhi"] = new TH1F("Dijet_deltaPhi"+hname,"#Delta #phi(j,j)",30,-3.15,3.15);
    hjets["Dijet_deltaR_cut0"] = new TH1F("Dijet_deltaR_cut0"+hname,"#DeltaR(j,j)",80,0.,4.);
    hjets["Dijet_deltaR"] = new TH1F("Dijet_deltaR"+hname,"#DeltaR(j,j)",80,0.,4.);
+   hjets["Dijet_deltaR_1btag"] = new TH1F("Dijet_deltaR_1btag"+hname,"#DeltaR(j,j)",80,0.,4.);
    hjets["tb_deltaPhi"] = new TH1F("tb_deltaPhi"+hname,"#Delta #phi(t,b)",30,0.,3.15);
    hjets["tb_deltaEta"] = new TH1F("tb_deltaEta"+hname,"#Delta #eta(t,b)",30,-5,5);
    hjets["pt_top"]  = new TH1F("pt_top"+hname,"top p_{T} [GeV]",60,0,1500);
    hjets["pt_b"]  = new TH1F("pt_b"+hname,"b-jet p_{T} [GeV]",60,0,1500);
    hjets["gen_deltaR_mub"] = new TH1F("gen_deltaR_mub"+hname,"#Delta R(#mu,b)",40,0,4);
    hjets["1st_bdisc"] = new TH1F("1st_bdisc"+hname,"b discriminator Leading jet", 50, -0.01, 1.01);
+   hjets["1st_bdisc_1btag"] = new TH1F("1st_bdisc_1btag"+hname,"b discriminator Leading jet", 50, -0.01, 1.01);
    hjets["2nd_bdisc"] = new TH1F("2nd_bdisc"+hname,"b discriminator 2nd jet", 50, -0.01, 1.01);
+   hjets["2nd_bdisc_1btag"] = new TH1F("2nd_bdisc_1btag"+hname,"b discriminator 2nd jet", 50, -0.01, 1.01);
    hjets["3rd_bdisc"] = new TH1F("3rd_bdisc"+hname,"b discriminator 3rd jet", 50, -0.01, 1.01);
+   hjets["3rd_bdisc_1btag"] = new TH1F("3rd_bdisc_1btag"+hname,"b discriminator 3rd jet", 50, -0.01, 1.01);
    hjets["4th_bdisc"] = new TH1F("4th_bdisc"+hname,"b discriminator 4th jet", 50, -0.01, 1.01);
+   hjets["4th_bdisc_1btag"] = new TH1F("4th_bdisc_1btag"+hname,"b discriminator 4th jet", 50, -0.01, 1.01);
    hjets["5th_bdisc"] = new TH1F("5th_bdisc"+hname,"b discriminator 5th jet", 50, -0.01, 1.01);
    hjets["6th_bdisc"] = new TH1F("6th_bdisc"+hname,"b discriminator 6th jet", 50, -0.01, 1.01);
    hjets["7th_bdisc"] = new TH1F("7th_bdisc"+hname,"b discriminator 7th jet", 50, -0.01, 1.01);
+   hjets["prod_bdisc"] = new TH1F("prod_bdisc"+hname,"discriminators product", 50, -0.01, 1.01);
+   hjets["prod_bdisc_1btag"] = new TH1F("prod_bdisc_1btag"+hname,"discriminators product", 50, -0.01, 1.01);
 
 
 
@@ -427,7 +453,7 @@ void Analyzer::SlaveBegin(TTree * tree)
       //MyStoreTree->SetJetFalse();
       MyStoreTree->SetVertexFalse();
       MyStoreTree->SetTriggerFalse();
-      MyStoreTree->SetMetFalse();
+      //MyStoreTree->SetMetFalse();
       MyStoreTree->SetMuonFalse();
    }
 
@@ -437,7 +463,7 @@ void Analyzer::SlaveBegin(TTree * tree)
       //MyStoreTree->SetJetFalse();
       MyStoreTree->SetVertexFalse();
       MyStoreTree->SetTriggerFalse();
-      MyStoreTree->SetMetFalse();
+      //MyStoreTree->SetMetFalse();
       MyStoreTree->SetMuonFalse();
    }
 
@@ -853,6 +879,7 @@ Bool_t Analyzer::Process(Long64_t entry)
   //JetCombinatorics myCombi = JetCombinatoric();
 
   int njets = 0;
+  double prod_bdisc =0;
   MyStoreTree->GetJetVariable()->numjets = 0;
   map< string, vector<float> > bdisc;
   map< string, vector<bool> >  isTagb;
@@ -920,14 +947,31 @@ Bool_t Analyzer::Process(Long64_t entry)
 		// CSVM cut at 0.679 MEDIUM
 		
 		njets++;
-                (MyStoreTree->GetJetVariable()->numjets)++;
 	}
   }
 
-  if (njets>0) {
-	hM["WMt"]->Fill( WMt, PUweight ); 
-	hjets["Njets"]->Fill( njets, PUweight );
-  }	
+//  if (njets>0) {
+//	/////////// plots without cuts 
+//	hM["WMt"]->Fill( WMt, PUweight ); 
+//	hjets["Njets"]->Fill( njets, PUweight );
+//   	hMET["Ht0"]->Fill( ntuple->PFHt, PUweight );
+//	hjets["Njets_cut0"]->Fill( njets, PUweight ); 
+//	hjets["1st_pt_cut0"]->Fill( p4jets[0].Pt(), PUweight );
+//	hjets["1st_eta_cut0"]->Fill( p4jets[0].Eta(), PUweight );
+//	hjets["2nd_pt_cut0"]->Fill( p4jets[1].Pt(), PUweight );
+//	hjets["2nd_eta_cut0"]->Fill( p4jets[1].Eta(), PUweight );
+//	hjets["3rd_pt_cut0"]->Fill( p4jets[2].Pt(), PUweight );
+//	hjets["4th_pt_cut0"]->Fill( p4jets[3].Pt(), PUweight );
+//	hjets["5th_pt_cut0"]->Fill( p4jets[4].Pt(), PUweight );
+//	hjets["6th_pt_cut0"]->Fill( p4jets[5].Pt(), PUweight );
+//	hjets["7th_pt_cut0"]->Fill( p4jets[6].Pt(), PUweight );
+//	hmuons["N_cut0"]->Fill( total_muons, PUweight );
+//	hmuons["Nelectrons_cut0"]->Fill( nlooseelectrons, PUweight  );
+//	hMET["MET_cut0"]->Fill( p4MET.Pt(), PUweight );
+//	hmuons["deltaR_cut0"]->Fill( deltaR, PUweight ); 
+//	//hjets["Dijet_deltaR_cut0"]->Fill( deltaRjj, PUweight );
+//	/////////////////////////////////////////////////////////////////////
+//  }	
 
   if (fVerbose) cout << "done jets" << endl;
 
@@ -936,7 +980,7 @@ Bool_t Analyzer::Process(Long64_t entry)
   if (njets > 2 ) cutmap["3Jet"] += PUweight;
   if (njets > 3 ) cutmap["4Jet"] += PUweight;
 
-  if (njets >= 3) {
+  if (njets >= 4) {
 
 	// count partons
 	int number_of_b = 0;
@@ -1053,35 +1097,6 @@ Bool_t Analyzer::Process(Long64_t entry)
 		}	
 	}
 
-	/////////// plots without cuts 
-   	hMET["Ht0"]->Fill( ntuple->PFHt, PUweight );
-	hjets["Njets_cut0"]->Fill( njets, PUweight ); 
-	hjets["1st_pt_cut0"]->Fill( p4jets[0].Pt(), PUweight );
-	hjets["1st_eta_cut0"]->Fill( p4jets[0].Eta(), PUweight );
-	hjets["2nd_pt_cut0"]->Fill( p4jets[1].Pt(), PUweight );
-	hjets["2nd_eta_cut0"]->Fill( p4jets[1].Eta(), PUweight );
-	hjets["3rd_pt_cut0"]->Fill( p4jets[2].Pt(), PUweight );
-	hjets["4th_pt_cut0"]->Fill( p4jets[3].Pt(), PUweight );
-	hjets["5th_pt_cut0"]->Fill( p4jets[4].Pt(), PUweight );
-	hjets["6th_pt_cut0"]->Fill( p4jets[5].Pt(), PUweight );
-	hjets["7th_pt_cut0"]->Fill( p4jets[6].Pt(), PUweight );
-	hmuons["N_cut0"]->Fill( total_muons, PUweight );
-	hmuons["Nelectrons_cut0"]->Fill( nlooseelectrons, PUweight  );
-	hMET["MET_cut0"]->Fill( p4MET.Pt(), PUweight );
-	hmuons["deltaR_cut0"]->Fill( deltaR, PUweight ); 
-	hjets["Dijet_deltaR_cut0"]->Fill( deltaRjj, PUweight );
-	/////////////////////////////////////////////////////////////////////
-
-	// plot bdiscriminator
-	if ( njets >=4 ) {
-        	if ( bdiscriminator[0] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_1st = bdiscriminator[0]; hjets["1st_bdisc"]->Fill( bdiscriminator[0], PUweight );}
-		if ( bdiscriminator[1] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_2nd = bdiscriminator[1]; hjets["2nd_bdisc"]->Fill( bdiscriminator[1], PUweight );}
-		if ( bdiscriminator[2] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_3rd = bdiscriminator[2]; hjets["3rd_bdisc"]->Fill( bdiscriminator[2], PUweight );}
-		if ( bdiscriminator[3] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_4th = bdiscriminator[3]; hjets["4th_bdisc"]->Fill( bdiscriminator[3], PUweight );}
-		MyStoreTree->GetGeneralVariable()->PUWeight = PUweight;
-	}
-	//////////////////////////////////////////////////////////////////////////////////
-
 	// W+jets h.f. corrections
 	int FH = 2; // 0=Wbb, 1=Wcc, 2=Wqq
 	if ( number_of_b > 0 ) FH = 0;
@@ -1100,13 +1115,27 @@ Bool_t Analyzer::Process(Long64_t entry)
 	if (fSample=="Wqq" && FH != 2 ) return kTRUE;
 
 	// count number of b-tags
-	//int Nbtags_TCHPM = 0;
+	int Nbtags_TCHPM = 0;
 	int Nbtags_CSVM = 0;
-	//for ( size_t itag=0; itag< isTagb["TCHPM"].size(); ++itag ) {
+	int NbtagsUp_CSVM = 0;
+	int NbtagsDown_CSVM = 0;
+	float SFb_0tag = 1.;
+	float SFb_only1tag = 1.;
+	float SFb_1tag = 1.;
+	float SFb_2tag = 1.;
+	float SFb_0tag_syst[2] = {1.}; // for systematics
+	float SFb_1tag_syst[2] = {1.};
+	float SFb_2tag_syst[2] = {1.};
+
 	for ( size_t itag=0; itag< isTagb["CSVM"].size(); ++itag ) {
-		//if ( isTagb["TCHPM"][itag] ) Nbtags_TCHPM++;
+		if ( isTagb["TCHPM"][itag] ) Nbtags_TCHPM++;
 		if ( isTagb["CSVM"][itag] ) Nbtags_CSVM++;
+		if ( isTagbUp["CSVM"][itag] ) NbtagsUp_CSVM++;
+		if ( isTagbDown["CSVM"][itag] ) NbtagsDown_CSVM++;
 	}
+      
+	// store b tags
+	hjets["Nbtags_CSVM"]->Fill( Nbtags_CSVM, PUweight*SF_W ); 
 
 	// compute b-tag event weight
 	if ( fIsMC ) {
@@ -1228,28 +1257,6 @@ Bool_t Analyzer::Process(Long64_t entry)
 	//hjets["Nbtags_TCHPM"]->Fill( Nbtags_TCHPM, PUweight*SFb );
 	//hjets["Nbtags_CSVM"]->Fill( Nbtags_CSVM, PUweight*SFb );
 
-	// count number of b-tags
-	int Nbtags_TCHPM = 0;
-	//int Nbtags_CSVM = 0;
-	int NbtagsUp_CSVM = 0;
-	int NbtagsDown_CSVM = 0;
-	//float SFb_0tag = 1.;
-	//float SFb_only1tag = 1.;
-	float SFb_1tag = 1.;
-	//float SFb_2tag = 1.;
-	//float SFb_0tag_syst[2] = {1.}; // for systematics
-	//float SFb_1tag_syst[2] = {1.};
-	//float SFb_2tag_syst[2] = {1.};
-
-	for ( size_t itag=0; itag< isTagb["CSVM"].size(); ++itag ) {
-		if ( isTagb["TCHPM"][itag] ) Nbtags_TCHPM++;
-		if ( isTagb["CSVM"][itag] ) Nbtags_CSVM++;
-		if ( isTagbUp["CSVM"][itag] ) NbtagsUp_CSVM++;
-		if ( isTagbDown["CSVM"][itag] ) NbtagsDown_CSVM++;
-	}
-      
-	// store b tags
-	hjets["Nbtags_CSVM"]->Fill( Nbtags_CSVM, PUweight*SF_W ); 
 
 	//   Cuts
 	bool passcut = true;
@@ -1258,6 +1265,9 @@ Bool_t Analyzer::Process(Long64_t entry)
 	if (passcut) {
 		hPVs["Nreweight_2jet"]->Fill( total_pvs, PUweight );
 		hMET["Ht"]->Fill( Ht, PUweight );
+		hMET["MET"]->Fill( p4MET.Pt(), PUweight );
+		hMET["Stlep"]->Fill( Stlep , PUweight );
+		hMET["Stjet"]->Fill( Stjet , PUweight );
 		hjets["Njets_cut1"]->Fill( njets, PUweight ); 
 		hjets["1st_pt"]->Fill( p4jets[0].Pt(), PUweight );
 		hjets["1st_eta"]->Fill( p4jets[0].Eta(), PUweight );
@@ -1268,17 +1278,58 @@ Bool_t Analyzer::Process(Long64_t entry)
 		hjets["5th_pt"]->Fill( p4jets[4].Pt(), PUweight );
 		hjets["6th_pt"]->Fill( p4jets[5].Pt(), PUweight );
 		hjets["7th_pt"]->Fill( p4jets[6].Pt(), PUweight );
+		hjets["Dijet_deltaR"]->Fill( deltaRjj, PUweight );
 		hmuons["N"]->Fill( total_muons, PUweight );
 		hmuons["Nelectrons"]->Fill( nlooseelectrons, PUweight  );
-		hMET["MET"]->Fill( p4MET.Pt(), PUweight );
+		hmuons["pt"]->Fill( p4lepton.Pt(), PUweight );
 		hmuons["deltaR"]->Fill( deltaR, PUweight );
-		hjets["Dijet_deltaR"]->Fill( deltaRjj, PUweight );
 		hM["WMt_2jet"]->Fill( WMt, PUweight ); 
 
+		// plot bdiscriminator
+       		if ( bdiscriminator[0] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_1st = bdiscriminator[0]; hjets["1st_bdisc"]->Fill( bdiscriminator[0], PUweight );}
+		if ( bdiscriminator[1] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_2nd = bdiscriminator[1]; hjets["2nd_bdisc"]->Fill( bdiscriminator[1], PUweight );}
+		if ( bdiscriminator[2] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_3rd = bdiscriminator[2]; hjets["3rd_bdisc"]->Fill( bdiscriminator[2], PUweight );}
+		if ( bdiscriminator[3] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_4th = bdiscriminator[3]; hjets["4th_bdisc"]->Fill( bdiscriminator[3], PUweight );}
+		prod_bdisc = bdiscriminator[0]*bdiscriminator[1]*bdiscriminator[2]*bdiscriminator[3];
+		hjets["prod_bdisc"]->Fill( prod_bdisc, PUweight );
+		MyStoreTree->GetGeneralVariable()->PUWeight = PUweight;
+		MyStoreTree->GetMetVariable()->Ht = Ht;
+		MyStoreTree->GetMetVariable()->Stlep = Stlep;
+		MyStoreTree->GetMetVariable()->Stjet = Stjet;
+                MyStoreTree->GetJetVariable()->numjets= njets;
+		//////////////////////////////////////////////////////////////////////////////////
+
 		if ( Nbtags_CSVM >= 1 ) {
-			hjets["Njets_1tag"]->Fill(njets, PUweight*SFb_1tag );
-			hMET["Stlep"]->Fill( Stlep , PUweight );
-			hMET["Stjet"]->Fill( Stjet , PUweight );
+			hPVs["Nreweight_2jet_1btag"]->Fill( total_pvs, PUweight );
+			hMET["Ht_1btag"]->Fill( Ht, PUweight );
+			hMET["MET_1btag"]->Fill( p4MET.Pt(), PUweight );
+			hMET["Stlep_1btag"]->Fill( Stlep , PUweight );
+			hMET["Stjet_1btag"]->Fill( Stjet , PUweight );
+			hjets["Njets_1btag"]->Fill(njets, PUweight*SFb_1tag );
+			hjets["1st_pt_1btag"]->Fill( p4jets[0].Pt(), PUweight );
+			hjets["1st_eta_1btag"]->Fill( p4jets[0].Eta(), PUweight );
+			hjets["2nd_pt_1btag"]->Fill( p4jets[1].Pt(), PUweight );
+			hjets["2nd_eta_1btag"]->Fill( p4jets[1].Eta(), PUweight );
+			hjets["3rd_pt_1btag"]->Fill( p4jets[2].Pt(), PUweight );
+			hjets["4th_pt_1btag"]->Fill( p4jets[3].Pt(), PUweight );
+			hjets["5th_pt_1btag"]->Fill( p4jets[4].Pt(), PUweight );
+			hjets["6th_pt_1btag"]->Fill( p4jets[5].Pt(), PUweight );
+			hjets["7th_pt_1btag"]->Fill( p4jets[6].Pt(), PUweight );
+			hjets["Dijet_deltaR_1btag"]->Fill( deltaRjj, PUweight );
+			hmuons["N_1btag"]->Fill( total_muons, PUweight );
+			hmuons["Nelectrons_1btag"]->Fill( nlooseelectrons, PUweight  );
+			hmuons["pt_1btag"]->Fill( p4lepton.Pt(), PUweight );
+			hmuons["deltaR_1btag"]->Fill( deltaR, PUweight );
+			hM["WMt_2jet_1btag"]->Fill( WMt, PUweight ); 
+
+			// plot bdiscriminator
+	       		//if ( bdiscriminator[0] >= 0 ) hjets["1st_bdisc"]->Fill( bdiscriminator[0], PUweight );
+	       		hjets["1st_bdisc_1btag"]->Fill( bdiscriminator[0], PUweight );
+			if ( bdiscriminator[1] >= 0 ) hjets["2nd_bdisc_1btag"]->Fill( bdiscriminator[1], PUweight );
+			if ( bdiscriminator[2] >= 0 ) hjets["3rd_bdisc_1btag"]->Fill( bdiscriminator[2], PUweight );
+			if ( bdiscriminator[3] >= 0 ) hjets["4th_bdisc_1btag"]->Fill( bdiscriminator[3], PUweight );
+			hjets["prod_bdisc_1btag"]->Fill( prod_bdisc, PUweight );
+			//////////////////////////////////////////////////////////////////////////////////
 		}
 	}
   }
