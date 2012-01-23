@@ -305,7 +305,9 @@ void Analyzer::SlaveBegin(TTree * tree)
    hjets["Njets_1btag"] = new TH1F("Njets_1tag"+hname,"jet multiplicity",13,-0.5,12.5);
    hjets["Njets_2btag"] = new TH1F("Njets_2tag"+hname,"jet multiplicity",6,0.5,6.5);
    hjets["Nbtags_TCHPM"] = new TH1F("Nbjets_TCHPM"+hname,"Tagged b-jets",3,-0.5,2.5);
+   hjets["Nbtags_CSVL"] = new TH1F("Nbjets_CSVL"+hname,"Tagged b-jets",8,-0.5,7.5);
    hjets["Nbtags_CSVM"] = new TH1F("Nbjets_CSVM"+hname,"Tagged b-jets",8,-0.5,7.5);
+   hjets["Nbtags_CSVT"] = new TH1F("Nbjets_CSVT"+hname,"Tagged b-jets",8,-0.5,7.5);
    hjets["Dijet_deltaPhi"] = new TH1F("Dijet_deltaPhi"+hname,"#Delta #phi(j,j)",30,-3.15,3.15);
    hjets["Dijet_deltaR_cut0"] = new TH1F("Dijet_deltaR_cut0"+hname,"#DeltaR(j,j)",80,0.,4.);
    hjets["Dijet_deltaR"] = new TH1F("Dijet_deltaR"+hname,"#DeltaR(j,j)",80,0.,4.);
@@ -879,8 +881,11 @@ Bool_t Analyzer::Process(Long64_t entry)
   //JetCombinatorics myCombi = JetCombinatoric();
 
   int njets = 0;
-  double prod_bdisc =0;
+  //double prod_bdisc =0;
   MyStoreTree->GetJetVariable()->numjets = 0;
+  MyStoreTree->GetJetVariable()->numBjets_csvl = 0;
+  MyStoreTree->GetJetVariable()->numBjets_csvm = 0;
+  MyStoreTree->GetJetVariable()->numBjets_csvt = 0; 
   map< string, vector<float> > bdisc;
   map< string, vector<bool> >  isTagb;
   map< string, vector<bool> >  isTagbUp;
@@ -923,7 +928,6 @@ Bool_t Analyzer::Process(Long64_t entry)
 			cout << " bdisc " << jet.btag_CSV << endl;
 		}
 
-		
 		// store discriminators
 		//bdisc["TCHP"].push_back( jet.btag_TCHP );
 		bdisc["CSV"].push_back( jet.btag_CSV );
@@ -934,6 +938,17 @@ Bool_t Analyzer::Process(Long64_t entry)
 		//else isTagb["TCHPM"].push_back(false);
 		//if (fVerbose) cout << "done tchpl" << endl;
 		// check SSVHEM cut at 1.74
+		
+		if ( jet.btag_CSV > 0.244) {
+			isTagb["CSVL"].push_back(true);
+			//isTagbUp["CSVL"].push_back(true);
+			//isTagbDown["CSVL"].push_back(true);
+		} else {
+			isTagb["CSVL"].push_back(false);
+			//isTagbUp["CSVL"].push_back(false);
+			//isTagbDown["CSVL"].push_back(false);
+		}
+		// CSVM cut at 0.244 LOOSE 
 		if ( jet.btag_CSV > 0.679) {
 			isTagb["CSVM"].push_back(true);
 			isTagbUp["CSVM"].push_back(true);
@@ -943,8 +958,20 @@ Bool_t Analyzer::Process(Long64_t entry)
 			isTagbUp["CSVM"].push_back(false);
 			isTagbDown["CSVM"].push_back(false);
 		}
-		if (fVerbose) cout << "done csvm" << endl;
 		// CSVM cut at 0.679 MEDIUM
+
+		if ( jet.btag_CSV > 0.898) {
+			isTagb["CSVT"].push_back(true);
+			//isTagbUp["CSVT"].push_back(true);
+			//isTagbDown["CSVT"].push_back(true);
+		} else {
+			isTagb["CSVT"].push_back(false);
+			//isTagbUp["CSVT"].push_back(false);
+			//isTagbDown["CSVT"].push_back(false);
+		}
+		// CSVM cut at 0.898 TIGHT 
+		
+		if (fVerbose) cout << "done csv" << endl;
 		
 		njets++;
 	}
@@ -1115,27 +1142,33 @@ Bool_t Analyzer::Process(Long64_t entry)
 	if (fSample=="Wqq" && FH != 2 ) return kTRUE;
 
 	// count number of b-tags
-	int Nbtags_TCHPM = 0;
+	//int Nbtags_TCHPM = 0;
+	int Nbtags_CSVL = 0;
+	int Nbtags_CSVT = 0;
 	int Nbtags_CSVM = 0;
 	int NbtagsUp_CSVM = 0;
 	int NbtagsDown_CSVM = 0;
-	float SFb_0tag = 1.;
-	float SFb_only1tag = 1.;
+	//float SFb_0tag = 1.;
+	//float SFb_only1tag = 1.;
 	float SFb_1tag = 1.;
-	float SFb_2tag = 1.;
-	float SFb_0tag_syst[2] = {1.}; // for systematics
-	float SFb_1tag_syst[2] = {1.};
-	float SFb_2tag_syst[2] = {1.};
+	//float SFb_2tag = 1.;
+	//float SFb_0tag_syst[2] = {1.}; // for systematics
+	//float SFb_1tag_syst[2] = {1.};
+	//float SFb_2tag_syst[2] = {1.};
 
 	for ( size_t itag=0; itag< isTagb["CSVM"].size(); ++itag ) {
-		if ( isTagb["TCHPM"][itag] ) Nbtags_TCHPM++;
+		//if ( isTagb["TCHPM"][itag] ) Nbtags_TCHPM++;
+		if ( isTagb["CSVL"][itag] ) Nbtags_CSVL++;
 		if ( isTagb["CSVM"][itag] ) Nbtags_CSVM++;
 		if ( isTagbUp["CSVM"][itag] ) NbtagsUp_CSVM++;
 		if ( isTagbDown["CSVM"][itag] ) NbtagsDown_CSVM++;
+		if ( isTagb["CSVT"][itag] ) Nbtags_CSVT++;
 	}
       
 	// store b tags
-	hjets["Nbtags_CSVM"]->Fill( Nbtags_CSVM, PUweight*SF_W ); 
+	//hjets["Nbtags_CSVL"]->Fill( Nbtags_CSVL, PUweight*SF_W ); 
+	//hjets["Nbtags_CSVM"]->Fill( Nbtags_CSVM, PUweight*SF_W ); 
+	//hjets["Nbtags_CSVT"]->Fill( Nbtags_CSVT, PUweight*SF_W ); 
 
 	// compute b-tag event weight
 	if ( fIsMC ) {
@@ -1285,18 +1318,27 @@ Bool_t Analyzer::Process(Long64_t entry)
 		hmuons["deltaR"]->Fill( deltaR, PUweight );
 		hM["WMt_2jet"]->Fill( WMt, PUweight ); 
 
+		// B-tagging
+		hjets["Nbtags_CSVL"]->Fill( Nbtags_CSVL, PUweight ); 
+		hjets["Nbtags_CSVM"]->Fill( Nbtags_CSVM, PUweight ); 
+		hjets["Nbtags_CSVT"]->Fill( Nbtags_CSVT, PUweight ); 
+
 		// plot bdiscriminator
        		if ( bdiscriminator[0] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_1st = bdiscriminator[0]; hjets["1st_bdisc"]->Fill( bdiscriminator[0], PUweight );}
 		if ( bdiscriminator[1] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_2nd = bdiscriminator[1]; hjets["2nd_bdisc"]->Fill( bdiscriminator[1], PUweight );}
 		if ( bdiscriminator[2] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_3rd = bdiscriminator[2]; hjets["3rd_bdisc"]->Fill( bdiscriminator[2], PUweight );}
 		if ( bdiscriminator[3] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_4th = bdiscriminator[3]; hjets["4th_bdisc"]->Fill( bdiscriminator[3], PUweight );}
-		prod_bdisc = bdiscriminator[0]*bdiscriminator[1]*bdiscriminator[2]*bdiscriminator[3];
-		hjets["prod_bdisc"]->Fill( prod_bdisc, PUweight );
+		//prod_bdisc = bdiscriminator[0]*bdiscriminator[1]*bdiscriminator[2]*bdiscriminator[3];
+		//hjets["prod_bdisc"]->Fill( prod_bdisc, PUweight );
+		
 		MyStoreTree->GetGeneralVariable()->PUWeight = PUweight;
 		MyStoreTree->GetMetVariable()->Ht = Ht;
 		MyStoreTree->GetMetVariable()->Stlep = Stlep;
 		MyStoreTree->GetMetVariable()->Stjet = Stjet;
                 MyStoreTree->GetJetVariable()->numjets= njets;
+                MyStoreTree->GetJetVariable()->numBjets_csvl= Nbtags_CSVL;
+                MyStoreTree->GetJetVariable()->numBjets_csvm= Nbtags_CSVM;
+                MyStoreTree->GetJetVariable()->numBjets_csvt= Nbtags_CSVT;
 		//////////////////////////////////////////////////////////////////////////////////
 
 		if ( Nbtags_CSVM >= 1 ) {
@@ -1328,7 +1370,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 			if ( bdiscriminator[1] >= 0 ) hjets["2nd_bdisc_1btag"]->Fill( bdiscriminator[1], PUweight );
 			if ( bdiscriminator[2] >= 0 ) hjets["3rd_bdisc_1btag"]->Fill( bdiscriminator[2], PUweight );
 			if ( bdiscriminator[3] >= 0 ) hjets["4th_bdisc_1btag"]->Fill( bdiscriminator[3], PUweight );
-			hjets["prod_bdisc_1btag"]->Fill( prod_bdisc, PUweight );
+			//hjets["prod_bdisc_1btag"]->Fill( prod_bdisc, PUweight );
 			//////////////////////////////////////////////////////////////////////////////////
 		}
 	}

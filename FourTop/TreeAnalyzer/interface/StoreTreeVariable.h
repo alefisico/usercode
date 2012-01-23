@@ -95,11 +95,14 @@ class StoreTreeVariable {
          Double_t jettche[NMAX];
          Double_t jetsvhe[NMAX];
          Double_t jetsvhp[NMAX];
-         Double_t jetcsv[NMAX];
+         Double_t jetcsv[NMAX]; */
+	 Int_t numBjets_csvl;
+	 Int_t numBjets_csvm;
+	 Int_t numBjets_csvt;
 
          //Jet Track number
-         Int_t   jettracksize[NMAX];
-	 */
+         //Int_t   jettracksize[NMAX];
+	 
 
 	 // B discriminator
 	 Double_t bdisc_1st;
@@ -126,6 +129,7 @@ class StoreTreeVariable {
 
       struct MetVariables{
 
+	      /*
          Double_t met;
          Double_t metphi;
          Double_t mht;
@@ -150,6 +154,10 @@ class StoreTreeVariable {
          Int_t csvbtagjetnum_up;
          Int_t csvbtagjetnum_down;
          Int_t    flavorhistory;
+	 */
+         Double_t Ht;
+         Double_t Stlep;
+         Double_t Stjet;
       };
 
       struct GeneralVariables {
@@ -301,15 +309,18 @@ void StoreTreeVariable::InitialJet(){
       Top->Branch("jet_btag_SVhighputy",VStoreJet.jetsvhp,"jetsvhp[numjets]/D");
       Top->Branch("jet_btag_csv",VStoreJet.jetcsv,"jetcsv[numjets]/D");
       */
+      Top->Branch("numBjets_csvl",&VStoreJet.numBjets_csvl,"numBjets_csvl/I");
+      Top->Branch("numBjets_csvm",&VStoreJet.numBjets_csvm,"numBjets_csvm/I");
+      Top->Branch("numBjets_csvt",&VStoreJet.numBjets_csvt,"numBjets_csvt/I");
+
       //b discriminant
-      Top->Branch("jet_bdisc_1st",&VStoreJet.bdisc_1st,"bdisc_1st/D");
-      Top->Branch("jet_bdisc_2nd",&VStoreJet.bdisc_2nd,"bdisc_2nd/D");
-      Top->Branch("jet_bdisc_3rd",&VStoreJet.bdisc_3rd,"bdisc_3rd/D");
-      Top->Branch("jet_bdisc_4th",&VStoreJet.bdisc_4th,"bdisc_4th/D");
+      Top->Branch("bdisc_1st",&VStoreJet.bdisc_1st,"bdisc_1st/D");
+      Top->Branch("bdisc_2nd",&VStoreJet.bdisc_2nd,"bdisc_2nd/D");
+      Top->Branch("bdisc_3rd",&VStoreJet.bdisc_3rd,"bdisc_3rd/D");
+      Top->Branch("bdisc_4th",&VStoreJet.bdisc_4th,"bdisc_4th/D");
 
       //Jet track size
       //Top->Branch("jet_tracksize",VStoreJet.jettracksize,"jettracksize[numjets]/I");
-
  }
 
 }
@@ -318,7 +329,7 @@ void StoreTreeVariable::InitialMet(){
 
   if(StoreMet){
       cout<<"We are inital Met Branch"<<endl;
-     
+    /* 
       Top->Branch("MET_energy",&VStoreMet.met,"met/D");
       Top->Branch("MET_phi",&VStoreMet.metphi,"metphi/D");
       Top->Branch("MHT_energy",&VStoreMet.mht,"mht/D");
@@ -342,7 +353,10 @@ void StoreTreeVariable::InitialMet(){
       Top->Branch("csvbtagjetnum_up",&VStoreMet.csvbtagjetnum_up,"csvbtagjetnum_up/I");
       Top->Branch("csvbtagjetnum_down",&VStoreMet.csvbtagjetnum_down,"csvbtagjetnum_down/I");
       Top->Branch("flavorhistory",&VStoreMet.flavorhistory,"flavorhistory/I");
-    
+    */
+      Top->Branch("ht",&VStoreMet.Ht,"Ht/D");
+      Top->Branch("Stlep",&VStoreMet.Stlep,"Stlep/D");
+      Top->Branch("Stjet",&VStoreMet.Stjet,"Stjet/D");
   }
 }
 
