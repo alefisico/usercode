@@ -191,14 +191,17 @@ void myTMVAClassification( TString myMethodList = "" )
    // [all types of expressions that can also be parsed by TTree::Draw( "expression" )]
 
    // B discriminant
-   factory->AddVariable("bdisc_1st", 'F');
-   factory->AddVariable("bdisc_2nd", 'F');
-   factory->AddVariable("bdisc_3rd", 'F');
-   factory->AddVariable("bdisc_4th", 'F');
+   //factory->AddVariable("bdisc_1st", 'F');
+   //factory->AddVariable("bdisc_2nd", 'F');
+   //factory->AddVariable("bdisc_3rd", 'F');
+   //factory->AddVariable("bdisc_4th", 'F');
    factory->AddVariable("Ht", 'F');
    factory->AddVariable("Stlep", 'F');
    factory->AddVariable("Stjet", 'F');
    factory->AddVariable("jet_number", 'I');
+   factory->AddVariable("numBjets_csvl", 'I');
+   //factory->AddVariable("numBjets_csvm", 'I');
+   //factory->AddVariable("numBjets_csvt", 'I');
 
    // You can add so-called "Spectator variables", which are not used in the MVA training, 
    // but will appear in the final "TestTree" produced by TMVA. This TestTree will contain the 
@@ -208,16 +211,14 @@ void myTMVAClassification( TString myMethodList = "" )
    factory->AddSpectator("event", "I");
 
    // read training and test data
-   // TFile *input1 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_4Top_1000.root" );
-    //TFile *input1 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_4Top_1000_test.root" );
-    TFile *input1 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_4Top_500.root" );
-    //TFile *input1 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_4Top_500_test.root" );
-    TFile *input8 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_QCD.root" );
-    TFile *input4 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_WJets.root" );
-    TFile *input5 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_ZJets.root" );
-    TFile *input6 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_WW.root" );
-    TFile *input7 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_WZ.root" );
-    TFile *input3 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_ttbar.root" );
+    //TFile *input1 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/preresults_4Top_1000.root" );
+    TFile *input1 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/preresults_4Top_500.root" );
+    TFile *input8 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/preresults_QCD.root" );
+    TFile *input4 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/preresults_WJets.root" );
+    TFile *input5 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/preresults_ZJets.root" );
+    TFile *input6 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/preresults_WW.root" );
+    TFile *input7 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/preresults_WZ.root" );
+    TFile *input3 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/preresults_ttbar.root" );
  
    std::cout << "--- myTMVAClassification : Using input file: " << input1->GetName() << std::endl;
    
@@ -293,7 +294,7 @@ void myTMVAClassification( TString myMethodList = "" )
  //   TCut mycuts = "abs(eta)>1.5"; // for example: TCut mycuts = "abs(var1)<0.5 && abs(var2-0.5)<1";
 //    TCut mycutb = "abs(eta)>1.5"; // for example: TCut mycutb = "abs(var1)<0.5";
 
-  TCut mycuts = "bdisc_1st>0 && bdisc_1st<1 && bdisc_2nd>0 && bdisc_2nd <1 && bdisc_3rd>0 && bdisc_3rd <1 && bdisc_4th>0 && bdisc_4th <1 && jet_number > 0";
+  TCut mycuts = "bdisc_1st>0 && bdisc_1st<1 && bdisc_2nd>0 && bdisc_2nd <1 && bdisc_3rd>0 && bdisc_3rd <1 && bdisc_4th>0 && bdisc_4th <1 && jet_number > 0 && numBjets_csvl > 0 && numBjets_csvm > 0 && numBjets_csvt > 0" ;
 
    // tell the factory to use all remaining events in the trees after training for testing:
    factory->PrepareTrainingAndTestTree( mycuts, mycuts, 
