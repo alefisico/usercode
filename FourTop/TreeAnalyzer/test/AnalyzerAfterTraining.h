@@ -22,11 +22,10 @@ const Int_t kMaxtop = 1;
 #include "Yumiceva/TreeAnalyzer/interface/MuonSelector.h"
 #include "Yumiceva/TreeAnalyzer/interface/ElectronSelector.h"
 //#include "Yumiceva/TreeAnalyzer/interface/HistoManager.h"
-#include "Yumiceva/TreeAnalyzer/interface/StoreTreeVariable.h"
 #include "Yumiceva/TreeAnalyzer/interface/METzCalculator.h"
 #include "CondFormats/JetMETObjects/interface/JetCorrectionUncertainty.h"
-//#include "TMVA/weights/myTMVAClassification_BDT_1000_allB.class.C"
-#include "TMVA/weights/myTMVAClassification_BDT_500_allB.class.C"
+#include "myTMVAClassification_BDT_1000.class.C"
+//#include "myTMVAClassification_BDT_500.class.C"
 
 #include <map>
 #include <string>
@@ -82,7 +81,6 @@ public :
 
    TTree            *fChain;   //!pointer to the analyzed TTree or TChain
    TopEventNtuple   *ntuple;
-   StoreTreeVariable *MyStoreTree;  // My Storing Tree
    TFile            *fFile;
    TProofOutputFile *fProofFile; // For optimized merging of the ntuple
    MuonSelector     fMuSelector;
