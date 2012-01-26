@@ -1,0 +1,83 @@
+<cuy>
+  <validation type="data" file="./results_data.root" weight="1">
+    <TH1 name="mu_disc__DATA" source="/MET/bdtresponse_data"/>
+  </validation>
+
+  <validation type="4Top_1000" file="./results_4Top_1000.root" weight="MCScaleFactors.txt:4Top_1000"> 
+  <!--<validation type="4Top_500" file="./results_4Top_500.root" weight="MCScaleFactors.txt:4Top_500"> -->
+    <TH1 name="mu_disc__fourtop1000" source="/MET/bdtresponse_4Top_1000"/>
+    <!--<TH1 name="mu_disc__fourtop500" source="/MET/bdtresponse_4Top_500"/>-->
+  </validation>
+
+  <validation type="ttbar" file="./results_ttbar.root" weight="MCScaleFactors.txt:ttbar"> 
+    <TH1 name="mu_disc__ttbar" source="/MET/bdtresponse_ttbar"/>
+  </validation>
+
+  <validation type="WJets" file="./results_WJets.root" weight="MCScaleFactors.txt:WJets">
+    <TH1 name="mu_disc__wjets" source="/MET/bdtresponse_WJets"/>
+  </validation>
+
+  <validation type="ZJets" file="./results_ZJets.root" weight="MCScaleFactors.txt:ZJets">
+    <TH1 name="mu_disc__zjets" source="/MET/bdtresponse_ZJets"/>
+  </validation>
+
+  <validation type="STtch" file="./results_STtch.root" weight="MCScaleFactors.txt:tch">
+    <TH1 name="mu_disc__STtch" source="/MET/bdtresponse_STtch"/>
+  </validation>
+
+  <validation type="STtch_bar" file="./results_STtch_bar.root" weight="MCScaleFactors.txt:tch_bar">
+    <TH1 name="mu_disc__STtch_bar" source="/MET/bdtresponse_STtch_bar"/>
+  </validation>
+
+  <validation type="STtWch" file="./results_STtWch.root" weight="MCScaleFactors.txt:tWch">
+    <TH1 name="mu_disc__STtWch" source="/MET/bdtresponse_STtWch"/>
+  </validation>
+
+  <validation type="STtWch_bar" file="./results_STtWch_bar.root" weight="MCScaleFactors.txt:tWch_bar">
+    <TH1 name="mu_disc__STtWch_bar" source="/MET/bdtresponse_STtWch_bar"/>
+  </validation>
+
+  <validation type="STsch" file="./results_STsch.root" weight="MCScaleFactors.txt:sch">
+    <TH1 name="mu_disc__STsch" source="/MET/bdtresponse_STsch"/>
+  </validation>
+
+  <validation type="STsch_bar" file="./results_STsch_bar.root" weight="MCScaleFactors.txt:sch_bar">
+    <TH1 name="mu_disc__STsch_bar" source="/MET/bdtresponse_STsch_bar"/>
+  </validation>
+
+  <validation type="WW" file="./results_WW.root" weight="MCScaleFactors.txt:WW">
+    <TH1 name="mu_disc__WW" source="/MET/bdtresponse_WW"/>
+  </validation>
+
+  <validation type="WZ" file="./results_WZ.root" weight="MCScaleFactors.txt:WZ">
+    <TH1 name="mu_disc__WZ" source="/MET/bdtresponse_WZ"/>
+  </validation>
+
+  <additionArray name="singletop" title="singletop">
+    <additionArrayItem array="STtch"/>
+    <additionArrayItem array="STtWch"/>
+    <additionArrayItem array="STsch"/>
+    <additionArrayItem array="STtch_bar"/>
+    <additionArrayItem array="STtWch_bar"/>
+    <additionArrayItem array="STsch_bar"/>
+  </additionArray>
+
+  <additionArray name="dibosons" title="dibosons">
+    <additionArrayItem array="WW"/>
+    <additionArrayItem array="WZ"/>
+  </additionArray>
+
+
+  <superimpose name="mu_disc__1000" title="BDT_response" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" Maximum="10e4"  Minimum="10e-6" PlotDiff="true" >
+  <!--<superimpose name="mu_disc__500" title="BDT_response" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" Maximum="10e4"  Minimum="10e-6" PlotDiff="true" > -->
+    <superimposeItem name="mu_disc__DATA" color="top" legend="Data"/>
+    <superimposeItem name="mu_disc__wjets" color="top" legend="Wjets"/>
+    <superimposeItem name="mu_disc__zjets" color="top" legend="Zjets"/>
+    <superimposeItem name="mu_disc__singletop" color="top" legend="ST"/>
+    <superimposeItem name="mu_disc__dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="mu_disc__ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="mu_disc__fourtop1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <!--<superimposeItem name="mu_disc__fourtop500" color="1" legend="Gh 0.5 TeV" NoStack="true" />-->
+  </superimpose>
+
+</cuy>
