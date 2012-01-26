@@ -1,4 +1,3 @@
-
 // The class definition in Analyzer.h has been generated automatically
 // by the ROOT utility TTree::MakeSelector(). This class is derived
 // from the ROOT class TSelector. For more information on the TSelector
@@ -136,9 +135,9 @@ void Analyzer::SlaveBegin(TTree * tree)
      // Check if an output URL has been given
      TNamed *out = (TNamed *) fInput->FindObject("PROOF_OUTPUTFILE_LOCATION");
      Info("SlaveBegin", "PROOF_OUTPUTFILE_LOCATION: %s", (out ? out->GetTitle() : "undef"));
-     TString tmpfilename = "results";
+     TString tmpfilename = "preresults";
      if ( fSample != "" ) tmpfilename += "_"+fSample+".root";
-     else tmpfilename = "results.root";
+     else tmpfilename = "preresults.root";
      fProofFile = new TProofOutputFile(tmpfilename, (out ? out->GetTitle() : "M"));
      out = (TNamed *) fInput->FindObject("PROOF_OUTPUTFILE");
      if (out) fProofFile->SetOutputFileName(fOutdir + out->GetTitle());
@@ -353,31 +352,29 @@ void Analyzer::SlaveBegin(TTree * tree)
        fCutLabels.push_back("OneIsoMu");
        fCutLabels.push_back("LooseMuVeto");
        fCutLabels.push_back("ElectronVeto");
-       fCutLabels.push_back("MET");
-       fCutLabels.push_back("1Jet");
-       fCutLabels.push_back("2Jet");
-       fCutLabels.push_back("3Jet");
-       fCutLabels.push_back("4Jet");
-       fCutLabels.push_back("2Jet1b");
-       fCutLabels.push_back("2Jet2b");
-       fCutLabels.push_back("MaxJets");
-       fCutLabels.push_back("phi");
-       fCutLabels.push_back("topmass");
+       //fCutLabels.push_back("MET");
+       //fCutLabels.push_back("1Jet");
+       //fCutLabels.push_back("2Jet");
+       //fCutLabels.push_back("3Jet");
+       //fCutLabels.push_back("4Jet");
+       fCutLabels.push_back("5Jet");
+       fCutLabels.push_back("Ht");
+       fCutLabels.push_back("5Jet1b");
      }
    else
      { //electron+jets
        fCutLabels.push_back("Processed");
-       fCutLabels.push_back("OneIsoElectron");
+       fCutLabels.push_back("OneIsoMu");
        fCutLabels.push_back("LooseMuVeto");
-       fCutLabels.push_back("ZVeto");
-       fCutLabels.push_back("ConversionVeto");
-       fCutLabels.push_back("MET");
-       fCutLabels.push_back("1Jet");
-       fCutLabels.push_back("2Jet");
-       fCutLabels.push_back("3Jet");
-       fCutLabels.push_back("4Jet");
-       fCutLabels.push_back("2Jet1b");
-       fCutLabels.push_back("2Jet2b");
+       fCutLabels.push_back("ElectronVeto");
+       //fCutLabels.push_back("MET");
+       //fCutLabels.push_back("1Jet");
+       //fCutLabels.push_back("2Jet");
+       //fCutLabels.push_back("3Jet");
+       //fCutLabels.push_back("4Jet");
+       fCutLabels.push_back("5Jet");
+       fCutLabels.push_back("Ht");
+       fCutLabels.push_back("5Jet1b");
      }
    hcutflow = new TH1D("cutflow","cut flow", fCutLabels.size(), 0.5, fCutLabels.size() +0.5 );
 
@@ -451,16 +448,6 @@ void Analyzer::SlaveBegin(TTree * tree)
    MyStoreTree = new StoreTreeVariable();
 
    if(fChannel == 1){
-      MyStoreTree->SetElectronFalse();
-      //MyStoreTree->SetJetFalse();
-      MyStoreTree->SetVertexFalse();
-      MyStoreTree->SetTriggerFalse();
-      //MyStoreTree->SetMetFalse();
-      MyStoreTree->SetMuonFalse();
-   }
-
-   if(fChannel == 2){
-
       MyStoreTree->SetElectronFalse();
       //MyStoreTree->SetJetFalse();
       MyStoreTree->SetVertexFalse();
@@ -624,7 +611,6 @@ Bool_t Analyzer::Process(Long64_t entry)
   double QCDRelIso = -1.;
   double QCDdeltaR = -1;
 
-
   for ( size_t imu=0; imu < total_muons; ++imu) {
      
 	TopMuonEvent muon = muons[imu];
@@ -665,7 +651,8 @@ Bool_t Analyzer::Process(Long64_t entry)
   
 		nloosemuons++;
   
-		if ( fMuSelector.MuonTight( muon, PVz) )  hmuons["pt_cut2"]->Fill( muon.pt, PUweight );
+		//if ( fMuSelector.MuonTight( muon, PVz) )  
+			//hmuons["pt_cut2"]->Fill( muon.pt, PUweight );
 			//hmuons["N_tisomuons"]->Fill( nloosemuons );  
 			//hmuons["charge_tiso"]->Fill( muon.charge, PUweight );
 		if ( fMuSelector.MuonTightDeltaR( muon, PVz, jets) ) {
@@ -711,9 +698,9 @@ Bool_t Analyzer::Process(Long64_t entry)
 		if (ntightelectrons == 0) {
 			IsConversion = electron.IsConversion;
 			p4ele.SetPtEtaPhiE( electron.pt, electron.eta, electron.phi, electron.e );
-			helectrons["pt_cut2"]->Fill( p4ele.Pt(), PUweight );
+			/*helectrons["pt_cut2"]->Fill( p4ele.Pt(), PUweight );
 			helectrons["eta_cut2"]->Fill( p4ele.Eta(), PUweight );
-			helectrons["phi_cut2"]->Fill( p4ele.Phi(), PUweight );
+			helectrons["phi_cut2"]->Fill( p4ele.Phi(), PUweight );*/
 		}
 		ntightelectrons++;
 	}
@@ -762,11 +749,12 @@ Bool_t Analyzer::Process(Long64_t entry)
 		if (fVerbose) cout << "got a good lepton" << endl;
 	}
 
+	/*
 	hmuons["pt"]->Fill( p4lepton.Pt(), PUweight );
 	hmuons["eta"]->Fill( p4lepton.Eta(), PUweight );
 	hmuons["phi"]->Fill( p4lepton.Phi(), PUweight );
 	hmuons["reliso"]->Fill( RelIso, PUweight );
-	//hmuons["deltaR"]->Fill( deltaR, PUweight );
+	hmuons["deltaR"]->Fill( deltaR, PUweight ); */
 
   }
   else // electron+jets
@@ -809,7 +797,7 @@ Bool_t Analyzer::Process(Long64_t entry)
   double WMt = sqrt(Wpt*Wpt-Wpx*Wpx-Wpy*Wpy);
   
   //if ( WMt <= 40. ) return kTRUE; 
-  cutmap["MET"] += PUweight;
+  //cutmap["MET"] += PUweight;
 
   if (fVerbose) cout << "pass W MT cut " << endl;
 
@@ -865,7 +853,7 @@ Bool_t Analyzer::Process(Long64_t entry)
   }
 
 
-  hMET["PzNu"]->Fill(pzNu, PUweight ); //change this to 2d with two sol and as a function of jets
+  //hMET["PzNu"]->Fill(pzNu, PUweight ); //change this to 2d with two sol and as a function of jets
                                                                                                                        
   TLorentzVector p4LepW = p4lepton + p4Nu;
   TLorentzVector p4OtherLepW = p4lepton + p4OtherNu;
@@ -1041,14 +1029,14 @@ Bool_t Analyzer::Process(Long64_t entry)
 		}	
 
 		// b-tag
-		if ( abs(listflavor[kk])==5 && p4jets[kk].Pt()<=240 ) { number_of_b++; hjets["pt_b_mc"]->Fill( p4jets[kk].Pt(), PUweight );}
-		if ( abs(listflavor[kk])==4 && p4jets[kk].Pt()<=240 ) { number_of_c++; hjets["pt_c_mc"]->Fill( p4jets[kk].Pt(), PUweight );}
-		if ( abs(listflavor[kk])==1 || abs(listflavor[kk])==2 || abs(listflavor[kk])==3 || abs(listflavor[kk])==21 ) { number_of_l++; hjets["pt_l_mc"]->Fill( p4jets[kk].Pt(), PUweight );}
+		if ( abs(listflavor[kk])==5 && p4jets[kk].Pt()<=240 ) { number_of_b++;} // hjets["pt_b_mc"]->Fill( p4jets[kk].Pt(), PUweight );}
+		if ( abs(listflavor[kk])==4 && p4jets[kk].Pt()<=240 ) { number_of_c++;} // hjets["pt_c_mc"]->Fill( p4jets[kk].Pt(), PUweight );}
+		if ( abs(listflavor[kk])==1 || abs(listflavor[kk])==2 || abs(listflavor[kk])==3 || abs(listflavor[kk])==21 ) { number_of_l++;} // hjets["pt_l_mc"]->Fill( p4jets[kk].Pt(), PUweight );}
 		//if ( abs(listflavor[kk])==5 && p4jets[kk].Pt()>240 ) { number_of_b_highpt++; hjets["pt_b_mc"]->Fill( p4jets[kk].Pt(), PUweight );}
 		//if ( abs(listflavor[kk])==4 && p4jets[kk].Pt()>240 ) { number_of_c_highpt++; hjets["pt_c_mc"]->Fill( p4jets[kk].Pt(), PUweight );}
 
 
-		hjets["pt"]->Fill( p4jets[kk].Pt(), PUweight );
+		//hjets["pt"]->Fill( p4jets[kk].Pt(), PUweight );
 		//float b_mc_eff = f2Dttbarbtag->GetBinContent(f2Dttbarbtag->FindBin(p4jets[kk].Pt(),fabs(p4jets[kk].Eta())));
 		//float c_mc_eff = f2Dttbarctag->GetBinContent(f2Dttbarctag->FindBin(p4jets[kk].Pt(),fabs(p4jets[kk].Eta())));
 		//float l_mc_eff = f2Dttbarlighttag->GetBinContent(f2Dttbarlighttag->FindBin(p4jets[kk].Pt(),fabs(p4jets[kk].Eta())));
@@ -1116,12 +1104,12 @@ Bool_t Analyzer::Process(Long64_t entry)
 			}
 		}
 	  
-		if ( isTagb["CSVM"][kk] ) {
+		/*if ( isTagb["CSVM"][kk] ) {
 			hjets["pt_btag"]->Fill( p4jets[kk].Pt(), PUweight );
 			if ( abs(listflavor[kk])==5 ) hjets["pt_btag_b"]->Fill( p4jets[kk].Pt(), PUweight );
 			if ( abs(listflavor[kk])==4 ) hjets["pt_btag_c"]->Fill( p4jets[kk].Pt(), PUweight );
 			if ( abs(listflavor[kk])==1 || abs(listflavor[kk])==2 || abs(listflavor[kk])==3 || abs(listflavor[kk])==21 ) hjets["pt_btag_l"]->Fill( p4jets[kk].Pt(), PUweight );
-		}	
+		}	*/
 	}
 
 	// W+jets h.f. corrections
@@ -1170,12 +1158,12 @@ Bool_t Analyzer::Process(Long64_t entry)
 	//hjets["Nbtags_CSVM"]->Fill( Nbtags_CSVM, PUweight*SF_W ); 
 	//hjets["Nbtags_CSVT"]->Fill( Nbtags_CSVT, PUweight*SF_W ); 
 
+	/*
 	// compute b-tag event weight
 	if ( fIsMC ) {
 		hMET["genMET_2jet"]->Fill( ntuple->gen.MET, PUweight*SF_W );
 		hMET["deltaMET_2jet"]->Fill( p4MET.Pt() - ntuple->gen.MET, PUweight*SF_W );
 	}
-		/*
 		// zeto tag
 		BTagWeight b0(0,0); // number of tags 
 		//BTagWeight::JetInfo bj(0.63,0.91); // mean MC eff and mean SF. For TCHPM=0.91\pm0.09, CSVM=0.96\pm0.096
@@ -1290,6 +1278,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 	//hjets["Nbtags_TCHPM"]->Fill( Nbtags_TCHPM, PUweight*SFb );
 	//hjets["Nbtags_CSVM"]->Fill( Nbtags_CSVM, PUweight*SFb );
 
+	cutmap["5Jet"] += PUweight;
 
 	//   Cuts
 	bool passcut = true;
@@ -1308,9 +1297,9 @@ Bool_t Analyzer::Process(Long64_t entry)
 		hjets["2nd_eta"]->Fill( p4jets[1].Eta(), PUweight );
 		hjets["3rd_pt"]->Fill( p4jets[2].Pt(), PUweight );
 		hjets["4th_pt"]->Fill( p4jets[3].Pt(), PUweight );
-		hjets["5th_pt"]->Fill( p4jets[4].Pt(), PUweight );
-		hjets["6th_pt"]->Fill( p4jets[5].Pt(), PUweight );
-		hjets["7th_pt"]->Fill( p4jets[6].Pt(), PUweight );
+		//hjets["5th_pt"]->Fill( p4jets[4].Pt(), PUweight );
+		//hjets["6th_pt"]->Fill( p4jets[5].Pt(), PUweight );
+		//hjets["7th_pt"]->Fill( p4jets[6].Pt(), PUweight );
 		hjets["Dijet_deltaR"]->Fill( deltaRjj, PUweight );
 		hmuons["N"]->Fill( total_muons, PUweight );
 		hmuons["Nelectrons"]->Fill( nlooseelectrons, PUweight  );
@@ -1331,6 +1320,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 		//prod_bdisc = bdiscriminator[0]*bdiscriminator[1]*bdiscriminator[2]*bdiscriminator[3];
 		//hjets["prod_bdisc"]->Fill( prod_bdisc, PUweight );
 		
+		// Variables in 4Tree
 		MyStoreTree->GetGeneralVariable()->PUWeight = PUweight;
 		MyStoreTree->GetMetVariable()->Ht = Ht;
 		MyStoreTree->GetMetVariable()->Stlep = Stlep;
@@ -1341,8 +1331,11 @@ Bool_t Analyzer::Process(Long64_t entry)
                 MyStoreTree->GetJetVariable()->numBjets_csvt= Nbtags_CSVT;
 		//////////////////////////////////////////////////////////////////////////////////
 
+		cutmap["Ht"] += PUweight;
+
 		if ( Nbtags_CSVM >= 1 ) {
-			hPVs["Nreweight_2jet_1btag"]->Fill( total_pvs, PUweight );
+			cutmap["5Jet1b"] += PUweight;
+			/*hPVs["Nreweight_2jet_1btag"]->Fill( total_pvs, PUweight );
 			hMET["Ht_1btag"]->Fill( Ht, PUweight );
 			hMET["MET_1btag"]->Fill( p4MET.Pt(), PUweight );
 			hMET["Stlep_1btag"]->Fill( Stlep , PUweight );
@@ -1354,9 +1347,6 @@ Bool_t Analyzer::Process(Long64_t entry)
 			hjets["2nd_eta_1btag"]->Fill( p4jets[1].Eta(), PUweight );
 			hjets["3rd_pt_1btag"]->Fill( p4jets[2].Pt(), PUweight );
 			hjets["4th_pt_1btag"]->Fill( p4jets[3].Pt(), PUweight );
-			hjets["5th_pt_1btag"]->Fill( p4jets[4].Pt(), PUweight );
-			hjets["6th_pt_1btag"]->Fill( p4jets[5].Pt(), PUweight );
-			hjets["7th_pt_1btag"]->Fill( p4jets[6].Pt(), PUweight );
 			hjets["Dijet_deltaR_1btag"]->Fill( deltaRjj, PUweight );
 			hmuons["N_1btag"]->Fill( total_muons, PUweight );
 			hmuons["Nelectrons_1btag"]->Fill( nlooseelectrons, PUweight  );
@@ -1370,8 +1360,8 @@ Bool_t Analyzer::Process(Long64_t entry)
 			if ( bdiscriminator[1] >= 0 ) hjets["2nd_bdisc_1btag"]->Fill( bdiscriminator[1], PUweight );
 			if ( bdiscriminator[2] >= 0 ) hjets["3rd_bdisc_1btag"]->Fill( bdiscriminator[2], PUweight );
 			if ( bdiscriminator[3] >= 0 ) hjets["4th_bdisc_1btag"]->Fill( bdiscriminator[3], PUweight );
-			//hjets["prod_bdisc_1btag"]->Fill( prod_bdisc, PUweight );
-			//////////////////////////////////////////////////////////////////////////////////
+			//hjets["prod_bdisc_1btag"]->Fill( prod_bdisc, PUweight ); 
+			////////////////////////////////////////////////////////////////////////////////// */
 		}
 	}
   }
@@ -1452,13 +1442,6 @@ void Analyzer::SlaveTerminate()
 			if ( temp->GetEntries() > 0 )
 			temp->Write();
 		}
-		fFile->cd();
-//		fFile->mkdir("TMVA");
-//		fFile->cd("TMVA");
-//		fBdisc->Write();
-//		fBdisc->Print();
-//		TMVA->Write();
-//
 		fFile->cd();
 
 		fProofFile->Print();
