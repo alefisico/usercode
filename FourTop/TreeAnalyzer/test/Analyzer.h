@@ -8,6 +8,8 @@
 #ifndef Analyzer_h
 #define Analyzer_h
 
+#define STANDALONE
+
 #include <TROOT.h>
 #include <TH1F.h>
 #include <TH2F.h>
@@ -25,10 +27,19 @@ const Int_t kMaxtop = 1;
 #include "Yumiceva/TreeAnalyzer/interface/StoreTreeVariable.h"
 #include "Yumiceva/TreeAnalyzer/interface/METzCalculator.h"
 #include "CondFormats/JetMETObjects/interface/JetCorrectionUncertainty.h"
+#include "PhysicsTools/Utilities/interface/Lumi3DReWeighting.h"
+//#include "weights/myTMVAClassification_BDT_1000.class.C"
+//#include "weights/myTMVAClassification_BDT_1000_JECDOWN.class.C"
+#include "weights/myTMVAClassification_BDT_1000_JECUP.class.C"
+//#include "weights/myTMVAClassification_BDT_500.class.C"
+//#include "weights/myTMVAClassification_BDT_500_JECDOWN.class.C"
+//#include "weights/myTMVAClassification_BDT_500_JECUP.class.C"
 
 #include <map>
 #include <string>
 #include <vector>
+
+#include "LOTable.h"
 
 class Analyzer : public TSelector {
 
@@ -44,6 +55,13 @@ private:
   bool            fdoJECunc;
   bool            fdoJECup;
   bool            fdoMtopCut;
+  bool            fdoJERunc;
+  bool            fdoJERup;
+  bool            fdoJERdown;
+  bool            fpu_up;
+  bool            fpu_down;
+  bool            fBDT;
+
   //HistoManager    *fHist;
   TString         fSample;
   TString         fOutdir;
@@ -60,8 +78,22 @@ private:
   vector< double > fpu_weights_vec;
   METzCalculator fzCalculator;
   JetCorrectionUncertainty *fJECunc;
-  TFile *fweightfile;
-  TH1D  *f3Dweight;
+  //TFile *fweightfile;
+  //TH1D  *f3Dweight;
+  //LOTable bSF_table;
+  LOTable lSF_table;
+  LOTable leff_table;
+  edm::Lumi3DReWeighting LumiWeights_;
+  edm::Lumi3DReWeighting LumiWeightsdown_;
+  edm::Lumi3DReWeighting LumiWeightsup_;
+  //LOTable beff_mc_table;
+  //LOTable ceff_mc_table;
+  //LOTable leff_mc_table;
+  //TFile*   btagefffile;
+  //TH2D*    f2Dttbarbtag;
+  //TH2D*    f2Dttbarctag;
+  //TH2D*    f2Dttbarlighttag;
+  //TH2D*    f2Dwprimebtag;
 
 public :
 
@@ -74,7 +106,7 @@ public :
    ElectronSelector fEleSelector;
    map< string, double > cutmap;
 
-   Analyzer(TTree * /*tree*/ =0):h1test(0),fChain(0),ntuple(),fFile(0),fweightfile(0),fProofFile(0),f3Dweight(0),fMuSelector(),fEleSelector()
+   Analyzer(TTree * /*tree*/ =0):h1test(0),fChain(0),ntuple(),fFile(0),fProofFile(0),fMuSelector(),fEleSelector()
      {
        fpuhistogram = "WHist";
        fChannel = 1; //default mu+jets
@@ -86,7 +118,13 @@ public :
        fdoQCD2SideBand = false;
        fdoJECunc = false;
        fdoJECup = true;
+       fdoJERunc = true;
+       fdoJERup = false; 
+       fdoJERdown = false; 
        fdoMtopCut = true;
+       fpu_up = false;
+       fpu_down = false;
+       fBDT = false;
      }
    virtual ~Analyzer() { }
    virtual Int_t   Version() const { return 2; }

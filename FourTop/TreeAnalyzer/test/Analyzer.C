@@ -25,6 +25,7 @@
 #include "Analyzer.h"
 //#include "BTagWeight.h"
 #include "BTagSFUtil_lite.h"
+#include "CondFormats/JetMETObjects/interface/JetCorrectorParameters.h"
 //#include "Yumiceva/TreeAnalyzer/interface/JetCombinatorics.h"
 
 #include <TStyle.h>
@@ -34,7 +35,16 @@
 #include <vector>
 #include <stdio.h>
 #include <stdlib.h>
-#define NMAX 100
+#include <algorithm>
+//#define NMAX 100
+
+struct sortPt
+{
+  bool operator()(TopJetEvent s1, TopJetEvent s2) const
+  {
+    return s1.pt >= s2.pt;
+  }
+} mysortPt;
 
 void Analyzer::ParseInput()
 {
@@ -53,11 +63,14 @@ void Analyzer::ParseInput()
     }
   if (fMyOpt.Contains("JECUP")) { fdoJECunc = true; fdoJECup = true; }
   if (fMyOpt.Contains("JECDOWN")) { fdoJECunc = true; fdoJECup = false; }
-  if (fMyOpt.Contains("PUUP")) { fpuhistogram = "WHistUp";}
-  if (fMyOpt.Contains("PUDOWN")) { fpuhistogram = "WHistDown";}
+  if (fMyOpt.Contains("JERUP")) { fdoJERup = true; }
+  if (fMyOpt.Contains("JERDOWN")) { fdoJERdown = true; }
+  if (fMyOpt.Contains("PUUP")) { fpu_up = true;}
+  if (fMyOpt.Contains("PUDOWN")) { fpu_down = true;}
   if (fMyOpt.Contains("QCD1")) fdoQCD1SideBand = true;//anti-isolation
   if (fMyOpt.Contains("QCD2")) fdoQCD2SideBand = true;//MET < 20 GeV
   if (fMyOpt.Contains("mtop")) fdoMtopCut = true;
+  if (fMyOpt.Contains("BDT")) fBDT = true;
   if (fMyOpt.Contains("outdir")) {
     TString tmp = fMyOpt;
     tmp = tmp.Remove(0,fMyOpt.Index("outdir")+7);
@@ -73,6 +86,9 @@ void Analyzer::ParseInput()
       if (fdoJECunc && fdoJECup==false) fSample += "_JECDOWN";
       if (fMyOpt.Contains("PUUP")) fSample += "_PUUP";
       if (fMyOpt.Contains("PUDOWN")) fSample += "_PUDOWN";
+      if (fdoJERunc && fdoJERup==true) fSample += "_JERUP";
+      if (fdoJERunc && fdoJERdown==true) fSample += "_JERDOWN";
+      if (fBDT==true) fSample += "_BDT";
 
       Info("Begin","Histogram names will have suffix: %s", fSample.Data());
 
@@ -135,9 +151,9 @@ void Analyzer::SlaveBegin(TTree * tree)
      // Check if an output URL has been given
      TNamed *out = (TNamed *) fInput->FindObject("PROOF_OUTPUTFILE_LOCATION");
      Info("SlaveBegin", "PROOF_OUTPUTFILE_LOCATION: %s", (out ? out->GetTitle() : "undef"));
-     TString tmpfilename = "preresults";
+     TString tmpfilename = "results";
      if ( fSample != "" ) tmpfilename += "_"+fSample+".root";
-     else tmpfilename = "preresults.root";
+     else tmpfilename = "results.root";
      fProofFile = new TProofOutputFile(tmpfilename, (out ? out->GetTitle() : "M"));
      out = (TNamed *) fInput->FindObject("PROOF_OUTPUTFILE");
      if (out) fProofFile->SetOutputFileName(fOutdir + out->GetTitle());
@@ -151,9 +167,9 @@ void Analyzer::SlaveBegin(TTree * tree)
    }
 
    // Get PU weights
-   TString weightfilename = "/uscms/home/yumiceva/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Weight3Dfinebin4p7.root"; //Weight3D.root";
-   fweightfile =  new TFile(weightfilename,"read");
-   f3Dweight = (TH1D*) fweightfile->Get(fpuhistogram);
+   //TString weightfilename = "/uscms/home/yumiceva/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Weight3Dfinebin4p7.root"; //Weight3D.root";
+   //fweightfile =  new TFile(weightfilename,"read");
+   //f3Dweight = (TH1D*) fweightfile->Get(fpuhistogram);
 
    //create histograms
    h1test = new TH1F("h1test","muon p_{T}",100,10.,400);
@@ -247,6 +263,7 @@ void Analyzer::SlaveBegin(TTree * tree)
    hMET["LepWmass_topcut"] = new TH1F("LepWmass_topcut"+hname,"W#rightarrow#mu#nu Mass [GeV/c^{2}]",20, 0, 150);
    hMET["LepWmassNoPt"]=new TH1F("LepWmassNoPt"+hname,"W#rightarrow#mu#nu Mass [GeV/c^{2}]",20, 0, 150);
    hMET["deltaPhi"] = new TH1F("deltaPhi"+hname,"#Delta #phi(#mu,MET)",50, -3.15, 3.15);
+   hMET["bdtresponse"] = new TH1F("bdtresponse"+hname,"BDT response",50, -0.5, 0.3);
 
    hM["WMt"] = new TH1F("Mt"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 500);        // Transverse Mass sqrt(Wpt*Wpt - Wpx*Wpx - Wpy*Wpy)
    hM["WMt_2jet"] = new TH1F("Mt_2jet"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 300);
@@ -345,6 +362,26 @@ void Analyzer::SlaveBegin(TTree * tree)
        temp->SetXTitle( temp->GetTitle() );
      }
 
+   //if (!fBDT){
+   //------- Store information in a Tree
+   MyStoreTree = new StoreTreeVariable();
+
+   if(fChannel == 1){
+      MyStoreTree->SetElectronFalse();
+      //MyStoreTree->SetJetFalse();
+      MyStoreTree->SetVertexFalse();
+      MyStoreTree->SetTriggerFalse();
+      //MyStoreTree->SetMetFalse();
+      MyStoreTree->SetMuonFalse();
+   }
+
+   MyStoreTree->InitialAll();
+   //Get the Store Tree
+   MyStoreTree->GetStoreTree()->SetDirectory(fFile);
+   MyStoreTree->GetStoreTree()->AutoSave();
+   //}
+   //////////////////////////////////////////
+
    // cut flow
    if (fChannel==1) 
      { //muon +jets
@@ -352,14 +389,9 @@ void Analyzer::SlaveBegin(TTree * tree)
        fCutLabels.push_back("OneIsoMu");
        fCutLabels.push_back("LooseMuVeto");
        fCutLabels.push_back("ElectronVeto");
-       //fCutLabels.push_back("MET");
-       //fCutLabels.push_back("1Jet");
-       //fCutLabels.push_back("2Jet");
-       //fCutLabels.push_back("3Jet");
-       //fCutLabels.push_back("4Jet");
-       fCutLabels.push_back("5Jet");
+       fCutLabels.push_back("4Jet");
        fCutLabels.push_back("Ht");
-       fCutLabels.push_back("5Jet1b");
+       fCutLabels.push_back("4Jet1b");
      }
    else
      { //electron+jets
@@ -367,14 +399,9 @@ void Analyzer::SlaveBegin(TTree * tree)
        fCutLabels.push_back("OneIsoMu");
        fCutLabels.push_back("LooseMuVeto");
        fCutLabels.push_back("ElectronVeto");
-       //fCutLabels.push_back("MET");
-       //fCutLabels.push_back("1Jet");
-       //fCutLabels.push_back("2Jet");
-       //fCutLabels.push_back("3Jet");
-       //fCutLabels.push_back("4Jet");
-       fCutLabels.push_back("5Jet");
+       fCutLabels.push_back("4Jet");
        fCutLabels.push_back("Ht");
-       fCutLabels.push_back("5Jet1b");
+       fCutLabels.push_back("4Jet1b");
      }
    hcutflow = new TH1D("cutflow","cut flow", fCutLabels.size(), 0.5, fCutLabels.size() +0.5 );
 
@@ -383,49 +410,16 @@ void Analyzer::SlaveBegin(TTree * tree)
        cutmap[ *ivec ] = 0;
      }
 
-   double pu_weights[35] = {
-     0.0255506,
-     0.251923,
-     0.549605,
-     0.924918,
-     1.25977,
-     1.48142,
-     1.57923,
-     1.57799,
-     1.52152,
-     1.4414,
-     1.35889,
-     1.2841,
-     1.21927,
-     1.16125,
-     1.11244,
-     1.06446,
-     1.01666,
-     0.966989,
-     0.913378,
-     0.85774,
-     0.799258,
-     0.734225,
-     0.670242,
-     0.607641,
-     0.54542,
-     0.484084,
-     0.427491,
-     0.369787,
-     0.321454,
-     0.280706,
-     0.238499,
-     0.198961,
-     0.166742,
-     0.146428,
-     0.224425
-   };
-   
-   fpu_weights_vec.assign( pu_weights, pu_weights + 35 );
+   //fpu_weights_vec.assign( pu_weights, pu_weights + 35 );
 
    // For JEC uncertainties
-   if (fdoJECunc) fJECunc = new JetCorrectionUncertainty("/uscms/home/yumiceva/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/GR_R_42_V19_AK5PF_Uncertainty.txt");
-
+   //if (fdoJECunc) fJECunc = new JetCorrectionUncertainty("/uscms/home/yumiceva/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/GR_R_42_V19_AK5PF_Uncertainty.txt");
+   //JetCorrectorParameters *jcp = new JetCorrectorParameters("/uscms/home/yumiceva/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/JEC11_V10_AK5PF_UncertaintySources.txt", "Total");
+   if (fdoJECunc)
+     {
+       JetCorrectorParameters *jcp = new JetCorrectorParameters("/uscms/home/yumiceva/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/JEC11_V10_AK5PF_UncertaintySources.txt", "Total");
+       fJECunc =   new JetCorrectionUncertainty( *jcp );
+     }
    // LOT for b-tagging SF
    //bSF_table.LoadTable("/uscms/home/yumiceva/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Table_CSVM_beff_SF.txt");
    lSF_table.LoadTable("/uscms/home/yumiceva/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Table_CSVM_lmistag_SF.txt");
@@ -443,25 +437,27 @@ void Analyzer::SlaveBegin(TTree * tree)
    //f2Dwprimectag = (TH2D*) btagefffile->Get("wprime_csv_ctageff");
    //f2Dwprimelighttag = (TH2D*) btagefffile->Get("wprime_csv_lighttageff");
 
-
-   //------- Store information in a Tree
-   MyStoreTree = new StoreTreeVariable();
-
-   if(fChannel == 1){
-      MyStoreTree->SetElectronFalse();
-      //MyStoreTree->SetJetFalse();
-      MyStoreTree->SetVertexFalse();
-      MyStoreTree->SetTriggerFalse();
-      //MyStoreTree->SetMetFalse();
-      MyStoreTree->SetMuonFalse();
-   }
-
-   MyStoreTree->InitialAll();
-   //Get the Store Tree
-   MyStoreTree->GetStoreTree()->SetDirectory(fFile);
-   MyStoreTree->GetStoreTree()->AutoSave();
-   //////////////////////////////////////////
-
+   LumiWeights_ =
+     edm::Lumi3DReWeighting("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/PUMC_dist.root",
+			    "/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/PileUp/PUData_dist.root",
+			    "pileup",
+			    //"pileup","/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Weight_3Dnew.root");
+			    "pileup","/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Weight_3Dnew.root");
+   LumiWeights_.weight3D_init( 1.08 );
+   LumiWeightsup_ =
+     edm::Lumi3DReWeighting("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/PUMC_dist.root",
+			    "/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/PileUp/PUData_dist.root",
+			    "pileup",
+			    //"pileup","/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Weight_3Dup.root");
+			    "pileup","/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Weight_3Dup.root");
+   LumiWeightsup_.weight3D_init( 1.167 );//up
+   LumiWeightsdown_ =
+     edm::Lumi3DReWeighting("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/PUMC_dist.root",
+			    "/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/PileUp/PUData_dist.root",
+			    "pileup",
+			    //"pileup","/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Weight_3Ddown.root");
+			    "pileup","/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Weight_3Ddown.root");
+   LumiWeightsdown_.weight3D_init( 0.994 );//down
 }
 
 Bool_t Analyzer::Process(Long64_t entry)
@@ -486,8 +482,8 @@ Bool_t Analyzer::Process(Long64_t entry)
 
    //TString option = GetOption();
 
-  if ( entry % 100 == 0 )
-  cout<< "process entry " << entry << endl;
+  //if ( entry % 100 == 0 )
+  //cout<< "process entry " << entry << endl;
 
   //TString sEntry = Form("%f", float(entry) );
   //   Info("Process",
@@ -524,6 +520,21 @@ Bool_t Analyzer::Process(Long64_t entry)
   vector< TLorentzVector > p4jets;
   vector< TLorentzVector > p4Othermuon;    // leading muon
 
+   //--------- For MVA analysis
+	const char* inputVars[] = { "Ht", "Stlep", "Stjet", "jet_number", "numBjets_csvl" };
+	std::vector<std::string> inputVarsMVA;
+	for (int i=0; i<5; ++i) inputVarsMVA.push_back( inputVars[i] );
+	ReadBDT mvaReader( inputVarsMVA );  
+	float bdtresponse = 0.;
+   //////////////////////////////////////////////////
+  
+
+  // FILTER OUT DATA events
+  int testrun = ntuple->run; 
+  if ( fSample =="data" && ( testrun == 176765 || testrun == 176771 || testrun == 176795 || testrun == 176796 || testrun == 176545 || testrun == 176547 || testrun == 176928 || testrun == 176982 ) ) return kTRUE;
+  if ( fSample =="dataMissing" && ( testrun != 176765 && testrun != 176771 && testrun != 176795 && testrun != 176796 && testrun != 176545 && testrun != 176547 && testrun != 176928 && testrun != 176982 ) ) return kTRUE;
+
+
   ////////////////////
   // GENERATOR
   ///////////////////
@@ -557,29 +568,26 @@ Bool_t Analyzer::Process(Long64_t entry)
 
   if (fIsMC) {
 
-    Int_t      mc_npvminus1 = TMath::Min(ntuple->gen.Bx_minus1,34);
-    Int_t      mc_npv0   = TMath::Min(ntuple->gen.Bx_0,34);
-    Int_t      mc_npvplus1  = TMath::Min(ntuple->gen.Bx_plus1,34);
+    //Int_t      mc_npvminus1 = TMath::Min(ntuple->gen.Bx_minus1,34);
+    //Int_t      mc_npv0   = TMath::Min(ntuple->gen.Bx_0,34);
+    //Int_t      mc_npvplus1  = TMath::Min(ntuple->gen.Bx_plus1,34);
+    //PUweight = f3Dweight->GetBinContent(mc_npvminus1,mc_npv0,mc_npvplus1);
+    Int_t mc_npvminus1 = ntuple->gen.Bx_minus1;
+    Int_t mc_npv0 = ntuple->gen.Bx_0;
+    Int_t mc_npvplus1 = ntuple->gen.Bx_plus1;
 
-    PUweight = f3Dweight->GetBinContent(mc_npvminus1,mc_npv0,mc_npvplus1);
+    PUweight = LumiWeights_.weight3D(mc_npvminus1,mc_npv0,mc_npvplus1);
+    if ( fpu_down )
+      PUweight = LumiWeightsdown_.weight3D(mc_npvminus1,mc_npv0,mc_npvplus1);
+    if ( fpu_up ) 
+      PUweight = LumiWeightsup_.weight3D(mc_npvminus1,mc_npv0,mc_npvplus1);
 
-    //int iibin = 0;
-    //for ( vector<double>::iterator ivec = fpu_weights_vec.begin(); ivec != fpu_weights_vec.end(); ++ivec )
-    // {
-    //	int mc_npvs = ntuple->gen.Bx_0; // in-time pile up
-    ////int mc_npvs = (int)total_pvs;
-    //if ( mc_npvs >= iibin+1 ) PUweight = *ivec; // use the last weight for last bin
-    //if ( ( iibin <= mc_npvs ) && ( mc_npvs < iibin + 1 ) ) PUweight = *ivec; 
-    //iibin++;
-    //}
   }
 
   // For 4 tops
   if (fIsMC && fSample.Contains("4Top") ) {
 	  PUweight = 1;
   }
-
-  hPVs["Nreweight"]->Fill( total_pvs, PUweight );
 
   /////////////
   // HLT scale factor for MC
@@ -590,6 +598,8 @@ Bool_t Analyzer::Process(Long64_t entry)
   if (fIsMC) SF_iso = 0.996;
   PUweight = PUweight*SF_hlt*SF_iso;  // LETS INCLUDE THE TRIGGER SF INTO THE PU WEIGHTS
   
+  hPVs["Nreweight"]->Fill( total_pvs, PUweight );
+
   //TEMP
   //PUweight = 1.;
 
@@ -799,7 +809,221 @@ Bool_t Analyzer::Process(Long64_t entry)
   //if ( WMt <= 40. ) return kTRUE; 
   //cutmap["MET"] += PUweight;
 
-  if (fVerbose) cout << "pass W MT cut " << endl;
+  /////////////////////////////////
+  // JETS
+  ////////////////////////////////
+  
+  //JetCombinatorics myCombi = JetCombinatoric();
+
+  int njets = 0;
+  //double prod_bdisc =0;
+  MyStoreTree->GetJetVariable()->numjets = 0;
+  MyStoreTree->GetJetVariable()->numBjets_csvl = 0;
+  //MyStoreTree->GetJetVariable()->numBjets_csvm = 0;
+  //MyStoreTree->GetJetVariable()->numBjets_csvt = 0; 
+		
+  map< string, vector<float> > bdisc;
+  map< string, vector<bool> >  isTagb;
+  map< string, vector<bool> >  isTagbUp;
+  map< string, vector<bool> >  isTagbDown;
+  vector<int> listflavor;
+  //vector<float> bdiscriminator;
+
+  Float_t metcorpx = p4MET.Px();
+  Float_t metcorpy = p4MET.Py();
+  Float_t totJERptadd = 0.;
+  Float_t totJERptminus = 0;
+
+  vector< TopJetEvent > tmp_corrjets;
+
+  for ( size_t ijet=0; ijet < total_jets; ++ijet)  {
+
+	TopJetEvent jet = jets[ijet];
+	double SF_JEC = 1.;
+
+	//JER
+	Float_t factor = 1.0;
+	Float_t ptscale = 1.0;
+
+	if (fdoJECunc){
+		/*fJECunc->setJetEta( jet.eta);
+		fJECunc->setJetPt( jet.pt);
+		double jec_unc = fJECunc->getUncertainty(true);
+		if (fVerbose) cout << "JEC uncertainty is " << jec_unc << endl;
+		if (fdoJECup) SF_JEC = 1.+jec_unc;
+		else SF_JEC = 1.-jec_unc; */
+
+		metcorpx = metcorpx + jet.uncorrpx;
+		metcorpy = metcorpy + jet.uncorrpy;
+
+		fJECunc->setJetEta( jet.eta);
+		fJECunc->setJetPt( jet.pt);
+		double jec_unc = 0.;
+		if (fdoJECup)  jec_unc = fJECunc->getUncertainty(true);
+		if (!fdoJECup) jec_unc = fJECunc->getUncertainty(false);
+		if (fVerbose) cout << "JEC uncertainty is " << jec_unc << endl;
+		if (fdoJECup) SF_JEC = 1.+jec_unc;
+		else SF_JEC = 1.-jec_unc;
+
+		metcorpx = metcorpx -  jet.uncorrpx * SF_JEC;
+		metcorpy = metcorpy -  jet.uncorrpy * SF_JEC;
+	}
+    
+	if(fIsMC && fdoJERunc) {
+		if(fdoJERunc && !fdoJERup && !fdoJERdown){
+			if(fabs(jet.eta) < 1.5) factor = 0.1;
+			if(fabs(jet.eta) >= 1.5 && fabs(jet.eta) < 2.0) factor = 0.1;
+			if(fabs(jet.eta) >= 2.0) factor = 0.1;
+		}
+
+		if(fdoJERunc && fdoJERup){
+			if(fabs(jet.eta) < 1.5) factor = 0.2;
+			if(fabs(jet.eta) >= 1.5 && fabs(jet.eta) < 2.0) factor = 0.25;
+			if(fabs(jet.eta) >= 2.0) factor = 0.3;
+		}
+
+		if(fdoJERunc && fdoJERdown){
+			if(fabs(jet.eta) < 1.5) factor = 0.0;
+			if(fabs(jet.eta) >= 1.5 && fabs(jet.eta) < 2.0) factor = -0.05;
+			if(fabs(jet.eta) >= 2.0) factor = -0.1;
+		}
+
+		//if (jet.mc.pt < 15) continue;
+		if (jet.mc.pt >= 15 ) {
+			metcorpx += jet.uncorrpx;
+			metcorpy += jet.uncorrpy;
+			totJERptadd +=  TMath::Sqrt(jet.uncorrpx*jet.uncorrpx + jet.uncorrpy*jet.uncorrpy);
+
+			//if ( ntuple->run == 1 && ntuple->lumi == 4 && ntuple->event == 3611988 ) {
+				//  TString outstring = "Add:";
+				//  outstring += TString(Form("%f", TMath::Sqrt(jet.uncorrpx*jet.uncorrpx + jet.uncorrpy*jet.uncorrpy) ));
+				//  Info("MET", outstring);
+			//}
+
+			Float_t deltapt = (jet.pt - jet.mc.pt) * factor;
+			ptscale = TMath::Max( Float_t (0.) , (jet.pt + deltapt)/jet.pt );
+	  
+			metcorpx -=  jet.uncorrpx * ptscale;
+			metcorpy -=  jet.uncorrpy * ptscale;
+
+			totJERptminus -= ptscale*TMath::Sqrt(jet.uncorrpx*jet.uncorrpx + jet.uncorrpy*jet.uncorrpy);
+
+			//if (ntuple->run == 1 && ntuple->lumi == 4 && ntuple->event == 3611988 ) {
+				//  TString outstring = "Subtract:";
+				//  outstring += TString(Form("%f", ptscale*TMath::Sqrt(jet.uncorrpx*jet.uncorrpx + jet.uncorrpy*jet.uncorrpy)  ));
+				//  Info("MET", outstring);
+			//}
+
+		}
+      
+		if (jet.pt > 30 && fabs(jet.eta)< 2.4 ) {
+			jet.pt = SF_JEC * ptscale * jet.pt;
+			jet.e = SF_JEC * ptscale * jet.e;
+		}
+	}
+
+	if (jet.pt > 30 && fabs(jet.eta)< 2.4 ) tmp_corrjets.push_back( jet );
+
+  } // jets
+
+  ////////// put back corr MET JER
+  //if (ntuple->run == 1 && ntuple->lumi == 4 && ntuple->event == 3611988 ) {
+  //  TString outstring = "MET before ";
+  //  outstring += TString(Form("%f", p4MET.Pt() ));
+  //  Info("MET", outstring);
+  //}
+
+  p4MET.SetPtEtaPhiE( p4MET.Pt() + totJERptadd + totJERptminus, p4MET.Eta(), p4MET.Phi(), p4MET.Pt() + totJERptadd + totJERptminus );
+
+  //if (ntuple->run == 1 && ntuple->lumi == 4 && ntuple->event == 3611988 ) {
+  //  TString outstring ="MET after ";
+  //  outstring += TString(Form("%f", p4MET.Pt() ));
+  //  Info("MET", outstring);
+  //  outstring = "tot add = "+TString(Form("%f", totJERptadd))+ " tot minus = "+TString(Form("%f", totJERptminus));
+  //  Info("MET", outstring );
+  //}
+
+  jets = tmp_corrjets;
+  sort( jets.begin(), jets.end(), mysortPt );
+  
+  for ( size_t ijet=0; ijet < jets.size() ; ++ijet) {
+
+	TopJetEvent jet = jets[ijet];
+
+	bool jetpass = jets.size()>1 && jet.pt > 40. && fabs(jet.eta) < 2.4 && jets[0].pt > 100. && jets[1].pt > 60.;
+	//bool jetpass = jets.size()>1 && jet.pt > 30. && fabs(jet.eta) < 2.4;
+
+	// was 35 for all, leading 120
+	//if ( total_jets>1 && SF_JEC*jet.pt > 30. && fabs(jet.eta) < 2.4 && SF_JEC*jets[0].pt > 100. && SF_JEC*jets[1].pt > 40. ) 
+	if ( jetpass ) {
+		
+		//if (fVerbose) cout << " jet pt " << SF_JEC*jet.pt << endl;
+	
+		//hjets["pt"]->Fill( jet.pt, PUweight );
+		//hjets["eta"]->Fill( jet.eta, PUweight );
+		//hjets["phi"]->Fill( jet.phi, PUweight );
+
+		TLorentzVector tmpjet;
+		tmpjet.SetPtEtaPhiE(jet.pt, jet.eta, jet.phi, jet.e);
+		p4jets.push_back( tmpjet);
+		listflavor.push_back( jet.mc.flavor );
+		//if (jet.btag_CSV > 0) bdiscriminator.push_back( jet.btag_CSV );      // for bdiscriminator
+		//else bdiscriminator.push_back( 0 );
+
+		if (fVerbose) {
+			cout << "done storing njets " << njets << endl;
+			//cout << " bdisc " << jet.btag_TCHP << endl;
+			cout << " bdisc " << jet.btag_CSV << endl;
+		}
+
+		// store discriminators
+		//bdisc["TCHP"].push_back( jet.btag_TCHP );
+		bdisc["CSV"].push_back( jet.btag_CSV );
+		if (fVerbose) cout << "store bdisc" << endl;
+		// TCHPL cut at 1.19
+		// check TCHPM cut at 1.93
+		//if ( jet.btag_TCHP > 1.93 ) isTagb["TCHPM"].push_back(true);
+		//else isTagb["TCHPM"].push_back(false);
+		//if (fVerbose) cout << "done tchpl" << endl;
+		// check SSVHEM cut at 1.74
+		
+		if ( jet.btag_CSV > 0.244) {
+			isTagb["CSVL"].push_back(true);
+			//isTagbUp["CSVL"].push_back(true);
+			//isTagbDown["CSVL"].push_back(true);
+		} else {
+			isTagb["CSVL"].push_back(false);
+			//isTagbUp["CSVL"].push_back(false);
+			//isTagbDown["CSVL"].push_back(false);
+		}
+		// CSVM cut at 0.244 LOOSE 
+		if ( jet.btag_CSV > 0.679) {
+			isTagb["CSVM"].push_back(true);
+			isTagbUp["CSVM"].push_back(true);
+			isTagbDown["CSVM"].push_back(true);
+		} else {
+			isTagb["CSVM"].push_back(false);
+			isTagbUp["CSVM"].push_back(false);
+			isTagbDown["CSVM"].push_back(false);
+		}
+		// CSVM cut at 0.679 MEDIUM
+
+		/*if ( jet.btag_CSV > 0.898) {
+			isTagb["CSVT"].push_back(true);
+			//isTagbUp["CSVT"].push_back(true);
+			//isTagbDown["CSVT"].push_back(true);
+		} else {
+			isTagb["CSVT"].push_back(false);
+			//isTagbUp["CSVT"].push_back(false);
+			//isTagbDown["CSVT"].push_back(false);
+		}
+		// CSVM cut at 0.898 TIGHT */
+		
+		if (fVerbose) cout << "done csv" << endl;
+		
+		njets++;
+	}
+  }
 
   /////////////////////////////////
   // estimate Pz of neutrino
@@ -846,14 +1070,14 @@ Bool_t Analyzer::Process(Long64_t entry)
 	Wm1 = Wtmp.M();
 	Wtmp = p4lepton + p4Nu2tmp;
 	Wm2 = Wtmp.M();
-	if ( fabs( Wm1 - 80.) < fabs( Wm2 - 80.) ) p4Nu = p4Nu1tmp;
+	if ( fabs( Wm1 - 80.4) < fabs( Wm2 - 80.4) ) p4Nu = p4Nu1tmp;
 	else p4Nu = p4Nu2tmp;
 
 	p4OtherNu = p4Nu; // since we chose the real part, the two solutions are the same.
   }
 
 
-  //hMET["PzNu"]->Fill(pzNu, PUweight ); //change this to 2d with two sol and as a function of jets
+  hMET["PzNu"]->Fill(pzNu, PUweight ); //change this to 2d with two sol and as a function of jets
                                                                                                                        
   TLorentzVector p4LepW = p4lepton + p4Nu;
   TLorentzVector p4OtherLepW = p4lepton + p4OtherNu;
@@ -861,109 +1085,6 @@ Bool_t Analyzer::Process(Long64_t entry)
   //hMET["LepWmass"]->Fill(p4LepW.M(), PUweight );
   //if ( fzCalculator.IsComplex() ) hMET["LepWmassComplex"]->Fill( p4LepW.M(), PUweight );
 
-
-  /////////////////////////////////
-  // JETS
-  ////////////////////////////////
-  
-  //JetCombinatorics myCombi = JetCombinatoric();
-
-  int njets = 0;
-  //double prod_bdisc =0;
-  MyStoreTree->GetJetVariable()->numjets = 0;
-  MyStoreTree->GetJetVariable()->numBjets_csvl = 0;
-  MyStoreTree->GetJetVariable()->numBjets_csvm = 0;
-  MyStoreTree->GetJetVariable()->numBjets_csvt = 0; 
-  map< string, vector<float> > bdisc;
-  map< string, vector<bool> >  isTagb;
-  map< string, vector<bool> >  isTagbUp;
-  map< string, vector<bool> >  isTagbDown;
-  vector<int> listflavor;
-  vector<float> bdiscriminator;
-
-
-  for ( size_t ijet=0; ijet < total_jets; ++ijet)  {
-
-	TopJetEvent jet = jets[ijet];
-	double SF_JEC = 1.;
-	if (fdoJECunc){
-		fJECunc->setJetEta( jet.eta);
-		fJECunc->setJetPt( jet.pt);
-		double jec_unc = fJECunc->getUncertainty(true);
-		if (fVerbose) cout << "JEC uncertainty is " << jec_unc << endl;
-		if (fdoJECup) SF_JEC = 1.+jec_unc;
-		else SF_JEC = 1.-jec_unc;
-	}
-
-	if ( SF_JEC*jet.pt > 40. && fabs(jet.eta) < 2.4 && SF_JEC*jets[0].pt > 100. && SF_JEC*jets[1].pt > 60. ) {    //first cut
-		
-		//if (fVerbose) cout << " jet pt " << SF_JEC*jet.pt << endl;
-	
-		//hjets["pt"]->Fill( jet.pt, PUweight );
-		//hjets["eta"]->Fill( jet.eta, PUweight );
-		//hjets["phi"]->Fill( jet.phi, PUweight );
-
-		TLorentzVector tmpjet;
-		tmpjet.SetPtEtaPhiE(SF_JEC*jet.pt, jet.eta, jet.phi, SF_JEC*jet.e);
-		p4jets.push_back( tmpjet);
-		listflavor.push_back( jet.mc.flavor );
-		if (jet.btag_CSV > 0) bdiscriminator.push_back( jet.btag_CSV );      // for bdiscriminator
-		else bdiscriminator.push_back( 0 );
-
-		if (fVerbose) {
-			cout << "done storing njets " << njets << endl;
-			//cout << " bdisc " << jet.btag_TCHP << endl;
-			cout << " bdisc " << jet.btag_CSV << endl;
-		}
-
-		// store discriminators
-		//bdisc["TCHP"].push_back( jet.btag_TCHP );
-		bdisc["CSV"].push_back( jet.btag_CSV );
-		if (fVerbose) cout << "store bdisc" << endl;
-		// TCHPL cut at 1.19
-		// check TCHPM cut at 1.93
-		//if ( jet.btag_TCHP > 1.93 ) isTagb["TCHPM"].push_back(true);
-		//else isTagb["TCHPM"].push_back(false);
-		//if (fVerbose) cout << "done tchpl" << endl;
-		// check SSVHEM cut at 1.74
-		
-		if ( jet.btag_CSV > 0.244) {
-			isTagb["CSVL"].push_back(true);
-			//isTagbUp["CSVL"].push_back(true);
-			//isTagbDown["CSVL"].push_back(true);
-		} else {
-			isTagb["CSVL"].push_back(false);
-			//isTagbUp["CSVL"].push_back(false);
-			//isTagbDown["CSVL"].push_back(false);
-		}
-		// CSVM cut at 0.244 LOOSE 
-		if ( jet.btag_CSV > 0.679) {
-			isTagb["CSVM"].push_back(true);
-			isTagbUp["CSVM"].push_back(true);
-			isTagbDown["CSVM"].push_back(true);
-		} else {
-			isTagb["CSVM"].push_back(false);
-			isTagbUp["CSVM"].push_back(false);
-			isTagbDown["CSVM"].push_back(false);
-		}
-		// CSVM cut at 0.679 MEDIUM
-
-		if ( jet.btag_CSV > 0.898) {
-			isTagb["CSVT"].push_back(true);
-			//isTagbUp["CSVT"].push_back(true);
-			//isTagbDown["CSVT"].push_back(true);
-		} else {
-			isTagb["CSVT"].push_back(false);
-			//isTagbUp["CSVT"].push_back(false);
-			//isTagbDown["CSVT"].push_back(false);
-		}
-		// CSVM cut at 0.898 TIGHT 
-		
-		if (fVerbose) cout << "done csv" << endl;
-		
-		njets++;
-	}
-  }
 
 //  if (njets>0) {
 //	/////////// plots without cuts 
@@ -990,10 +1111,10 @@ Bool_t Analyzer::Process(Long64_t entry)
 
   if (fVerbose) cout << "done jets" << endl;
 
-  if (njets > 0 ) cutmap["1Jet"] += PUweight;
+  /*if (njets > 0 ) cutmap["1Jet"] += PUweight;
   if (njets > 1 ) cutmap["2Jet"] += PUweight;
   if (njets > 2 ) cutmap["3Jet"] += PUweight;
-  if (njets > 3 ) cutmap["4Jet"] += PUweight;
+  if (njets > 3 ) cutmap["4Jet"] += PUweight;*/
 
   if (njets >= 4) {
 
@@ -1104,12 +1225,6 @@ Bool_t Analyzer::Process(Long64_t entry)
 			}
 		}
 	  
-		/*if ( isTagb["CSVM"][kk] ) {
-			hjets["pt_btag"]->Fill( p4jets[kk].Pt(), PUweight );
-			if ( abs(listflavor[kk])==5 ) hjets["pt_btag_b"]->Fill( p4jets[kk].Pt(), PUweight );
-			if ( abs(listflavor[kk])==4 ) hjets["pt_btag_c"]->Fill( p4jets[kk].Pt(), PUweight );
-			if ( abs(listflavor[kk])==1 || abs(listflavor[kk])==2 || abs(listflavor[kk])==3 || abs(listflavor[kk])==21 ) hjets["pt_btag_l"]->Fill( p4jets[kk].Pt(), PUweight );
-		}	*/
 	}
 
 	// W+jets h.f. corrections
@@ -1138,7 +1253,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 	int NbtagsDown_CSVM = 0;
 	//float SFb_0tag = 1.;
 	//float SFb_only1tag = 1.;
-	float SFb_1tag = 1.;
+	//float SFb_1tag = 1.;
 	//float SFb_2tag = 1.;
 	//float SFb_0tag_syst[2] = {1.}; // for systematics
 	//float SFb_1tag_syst[2] = {1.};
@@ -1158,133 +1273,24 @@ Bool_t Analyzer::Process(Long64_t entry)
 	//hjets["Nbtags_CSVM"]->Fill( Nbtags_CSVM, PUweight*SF_W ); 
 	//hjets["Nbtags_CSVT"]->Fill( Nbtags_CSVT, PUweight*SF_W ); 
 
-	/*
-	// compute b-tag event weight
-	if ( fIsMC ) {
-		hMET["genMET_2jet"]->Fill( ntuple->gen.MET, PUweight*SF_W );
-		hMET["deltaMET_2jet"]->Fill( p4MET.Pt() - ntuple->gen.MET, PUweight*SF_W );
-	}
-		// zeto tag
-		BTagWeight b0(0,0); // number of tags 
-		//BTagWeight::JetInfo bj(0.63,0.91); // mean MC eff and mean SF. For TCHPM=0.91\pm0.09, CSVM=0.96\pm0.096
-		//BTagWeight::JetInfo cj(0.15,0.91);
-		BTagWeight::JetInfo bj(0.63,0.96); 
-		BTagWeight::JetInfo cj(0.15,0.96);
-		double light_mceff = 0.017; //CHECK
-		if ( 100 < p4jets[0].Pt() && p4jets[0].Pt() <= 200 ) light_mceff = 0.04;
-		if ( 200 < p4jets[0].Pt() && p4jets[0].Pt() <= 300 ) light_mceff = 0.08;
-		if ( 300 < p4jets[0].Pt() && p4jets[0].Pt() <= 400 ) light_mceff = 0.12;
-		if ( 400 < p4jets[0].Pt() ) light_mceff = 0.14;
-
-		//BTagWeight::JetInfo lj(light_mceff,1.22); //for TCHPM=1.22, CSVM=1.08 \pm 0.13
-		BTagWeight::JetInfo lj(light_mceff,1.08); 
-
-		// b-tag systematic UP 9% for b, 18% for c
-		// for CSVM 5% for b, and 10% for c
-		//BTagWeight::JetInfo bjUP(0.63,0.99);
-		//BTagWeight::JetInfo cjUP(0.15,1.07);
-		BTagWeight::JetInfo bjUP(0.63,1.008); 
-		BTagWeight::JetInfo cjUP(0.15,1.056);
-
-		// b-tag systemacit DOWN 9% for b, 18% for c
-		//BTagWeight::JetInfo bjDOWN(0.63,0.83);
-		//BTagWeight::JetInfo cjDOWN(0.15,0.75);
-		BTagWeight::JetInfo bjDOWN(0.63,0.912);
-		BTagWeight::JetInfo cjDOWN(0.15,0.864);
-
-		// for high pt jets > 240 UP 50% for b and c
-		// for CSVM 
-		//BTagWeight::JetInfo bjUPhighpt(0.63,1.36);
-		//BTagWeight::JetInfo cjUPhighpt(0.15,1.36);
-		BTagWeight::JetInfo bjUPhighpt(0.63,1.104);
-		BTagWeight::JetInfo cjUPhighpt(0.15,1.104);
-		// for high pt jets > 240 DOWN 50% for b and c
-		//BTagWeight::JetInfo bjDOWNhighpt(0.63,0.46);
-		//BTagWeight::JetInfo cjDOWNhighpt(0.15,0.46);
-		BTagWeight::JetInfo bjDOWNhighpt(0.63,0.816);
-		BTagWeight::JetInfo cjDOWNhighpt(0.15,0.816);
-
-		vector<BTagWeight::JetInfo> j;
-		for(int i=0;i<number_of_b;i++)j.push_back(bj);
-		for(int i=0;i<number_of_b_highpt;i++)j.push_back(bj);
-		for(int i=0;i<number_of_c;i++)j.push_back(cj);
-		for(int i=0;i<number_of_c_highpt;i++)j.push_back(cj);
-		for(int i=0;i<number_of_l;i++)j.push_back(lj);
-          
-		// changed to CSVM from TCHPM
-		if (Nbtags_CSVM==0) {
-			SFb_0tag = b0.weight(j,0);
-			hjets["Nbtags_CSVM"]->Fill( Nbtags_CSVM, PUweight*SFb_0tag ); // fill bin 0
-		}
-		
-		// only one tag
-		BTagWeight b11(1,1); // number of tags
-		if (Nbtags_CSVM==1) {
-			SFb_only1tag = b11.weight(j,1);
-			hjets["Nbtags_CSVM"]->Fill( Nbtags_CSVM, PUweight*SFb_only1tag ); // fill bin 1
-		}
-
-		// at least one tag
-		BTagWeight b1(1,Nbtags_CSVM); // number of tags
-		if (Nbtags_CSVM>=1) {
-			SFb_1tag = b1.weight(j,1);
-
-			// UP
-			vector<BTagWeight::JetInfo> jj;
-			for(int i=0;i<number_of_b;i++)jj.push_back(bjUP);
-			for(int i=0;i<number_of_b_highpt;i++)jj.push_back(bjUPhighpt);
-			for(int i=0;i<number_of_c;i++)jj.push_back(cjUP);
-			for(int i=0;i<number_of_c_highpt;i++)jj.push_back(cjUPhighpt);
-			for(int i=0;i<number_of_l;i++)jj.push_back(lj);
-			SFb_1tag_syst[0] = b1.weight(jj,1); 
-
-			// DOWN
-			vector<BTagWeight::JetInfo> jk;
-			for(int i=0;i<number_of_b;i++)jk.push_back(bjDOWN);
-			for(int i=0;i<number_of_b_highpt;i++)jk.push_back(bjDOWNhighpt);
-			for(int i=0;i<number_of_c;i++)jk.push_back(cjDOWN);
-			for(int i=0;i<number_of_c_highpt;i++)jk.push_back(cjDOWNhighpt);
-			for(int i=0;i<number_of_l;i++)jk.push_back(lj);
-			SFb_1tag_syst[1] = b1.weight(jk,1);
-
-		}
-
-		// at least two tags
-		BTagWeight b2(2,Nbtags_CSVM); // number of tags
-		if (Nbtags_CSVM>=2) {
-			SFb_2tag = b2.weight(j,2);
-			hjets["Nbtags_CSVM"]->Fill( Nbtags_CSVM, PUweight*SFb_2tag ); // fill bin >=2
-	    
-			// UP
-			vector<BTagWeight::JetInfo> jj;
-			for(int i=0;i<number_of_b;i++)jj.push_back(bjUP);
-			for(int i=0;i<number_of_b_highpt;i++)jj.push_back(bjUPhighpt);
-			for(int i=0;i<number_of_c;i++)jj.push_back(cjUP);
-			for(int i=0;i<number_of_c_highpt;i++)jj.push_back(cjUPhighpt);
-			for(int i=0;i<number_of_l;i++)jj.push_back(lj);
-			SFb_2tag_syst[0] = b2.weight(jj,2); 
-
-			// DOWN
-			vector<BTagWeight::JetInfo> jk;
-			for(int i=0;i<number_of_b;i++)jk.push_back(bjDOWN);
-			for(int i=0;i<number_of_b_highpt;i++)jk.push_back(bjDOWNhighpt);
-			for(int i=0;i<number_of_c;i++)jk.push_back(cjDOWN);
-			for(int i=0;i<number_of_c_highpt;i++)jk.push_back(cjDOWNhighpt);
-			for(int i=0;i<number_of_l;i++)jk.push_back(lj);
-			SFb_2tag_syst[1] = b2.weight(jk,2);
-		}*/
 	//else hjets["Nbtags_CSVM"]->Fill( Nbtags_CSVM );
 
 	//hjets["Nbtags_TCHPM"]->Fill( Nbtags_TCHPM, PUweight*SFb );
 	//hjets["Nbtags_CSVM"]->Fill( Nbtags_CSVM, PUweight*SFb );
 
-	cutmap["5Jet"] += PUweight;
+	cutmap["4Jet"] += PUweight;
+
+	// for BDT
+	double jet_number = 0.;
+	double numBjets_csvl = -999.;
+	vector<double>mvaInputVal;
 
 	//   Cuts
 	bool passcut = true;
 	if ( Ht <= 300. ) passcut = false;
 
 	if (passcut) {
+	    //if(!fBDT){
 		hPVs["Nreweight_2jet"]->Fill( total_pvs, PUweight );
 		hMET["Ht"]->Fill( Ht, PUweight );
 		hMET["MET"]->Fill( p4MET.Pt(), PUweight );
@@ -1313,11 +1319,11 @@ Bool_t Analyzer::Process(Long64_t entry)
 		hjets["Nbtags_CSVT"]->Fill( Nbtags_CSVT, PUweight ); 
 
 		// plot bdiscriminator
-       		if ( bdiscriminator[0] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_1st = bdiscriminator[0]; hjets["1st_bdisc"]->Fill( bdiscriminator[0], PUweight );}
-		if ( bdiscriminator[1] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_2nd = bdiscriminator[1]; hjets["2nd_bdisc"]->Fill( bdiscriminator[1], PUweight );}
-		if ( bdiscriminator[2] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_3rd = bdiscriminator[2]; hjets["3rd_bdisc"]->Fill( bdiscriminator[2], PUweight );}
-		if ( bdiscriminator[3] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_4th = bdiscriminator[3]; hjets["4th_bdisc"]->Fill( bdiscriminator[3], PUweight );}
-		//prod_bdisc = bdiscriminator[0]*bdiscriminator[1]*bdiscriminator[2]*bdiscriminator[3];
+       		//if ( bdiscriminator[0] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_1st = bdiscriminator[0]; hjets["1st_bdisc"]->Fill( bdiscriminator[0], PUweight );}
+		//if ( bdiscriminator[1] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_2nd = bdiscriminator[1]; hjets["2nd_bdisc"]->Fill( bdiscriminator[1], PUweight );}
+		//if ( bdiscriminator[2] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_3rd = bdiscriminator[2]; hjets["3rd_bdisc"]->Fill( bdiscriminator[2], PUweight );}
+		//if ( bdiscriminator[3] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_4th = bdiscriminator[3]; hjets["4th_bdisc"]->Fill( bdiscriminator[3], PUweight );}
+		//prod_bdisc = bdiscriminator[0]*bdiscriminator[1]*bdiscriminator[2]*bdiscriminator[3]; 
 		//hjets["prod_bdisc"]->Fill( prod_bdisc, PUweight );
 		
 		// Variables in 4Tree
@@ -1327,50 +1333,62 @@ Bool_t Analyzer::Process(Long64_t entry)
 		MyStoreTree->GetMetVariable()->Stjet = Stjet;
                 MyStoreTree->GetJetVariable()->numjets= njets;
                 MyStoreTree->GetJetVariable()->numBjets_csvl= Nbtags_CSVL;
-                MyStoreTree->GetJetVariable()->numBjets_csvm= Nbtags_CSVM;
-                MyStoreTree->GetJetVariable()->numBjets_csvt= Nbtags_CSVT;
+                //MyStoreTree->GetJetVariable()->numBjets_csvm= Nbtags_CSVM;
+                //MyStoreTree->GetJetVariable()->numBjets_csvt= Nbtags_CSVT;
 		//////////////////////////////////////////////////////////////////////////////////
 
 		cutmap["Ht"] += PUweight;
 
 		if ( Nbtags_CSVM >= 1 ) {
-			cutmap["5Jet1b"] += PUweight;
-			/*hPVs["Nreweight_2jet_1btag"]->Fill( total_pvs, PUweight );
-			hMET["Ht_1btag"]->Fill( Ht, PUweight );
-			hMET["MET_1btag"]->Fill( p4MET.Pt(), PUweight );
-			hMET["Stlep_1btag"]->Fill( Stlep , PUweight );
-			hMET["Stjet_1btag"]->Fill( Stjet , PUweight );
-			hjets["Njets_1btag"]->Fill(njets, PUweight*SFb_1tag );
-			hjets["1st_pt_1btag"]->Fill( p4jets[0].Pt(), PUweight );
-			hjets["1st_eta_1btag"]->Fill( p4jets[0].Eta(), PUweight );
-			hjets["2nd_pt_1btag"]->Fill( p4jets[1].Pt(), PUweight );
-			hjets["2nd_eta_1btag"]->Fill( p4jets[1].Eta(), PUweight );
-			hjets["3rd_pt_1btag"]->Fill( p4jets[2].Pt(), PUweight );
-			hjets["4th_pt_1btag"]->Fill( p4jets[3].Pt(), PUweight );
-			hjets["Dijet_deltaR_1btag"]->Fill( deltaRjj, PUweight );
-			hmuons["N_1btag"]->Fill( total_muons, PUweight );
-			hmuons["Nelectrons_1btag"]->Fill( nlooseelectrons, PUweight  );
-			hmuons["pt_1btag"]->Fill( p4lepton.Pt(), PUweight );
-			hmuons["deltaR_1btag"]->Fill( deltaR, PUweight );
-			hM["WMt_2jet_1btag"]->Fill( WMt, PUweight ); 
+			cutmap["4Jet1b"] += PUweight;
+			//hPVs["Nreweight_2jet_1btag"]->Fill( total_pvs, PUweight );
+			//hMET["Ht_1btag"]->Fill( Ht, PUweight );
+			//hMET["MET_1btag"]->Fill( p4MET.Pt(), PUweight );
+			//hMET["Stlep_1btag"]->Fill( Stlep , PUweight );
+			//hMET["Stjet_1btag"]->Fill( Stjet , PUweight );
+			//hjets["Njets_1btag"]->Fill(njets, PUweight*SFb_1tag );
+			//hjets["1st_pt_1btag"]->Fill( p4jets[0].Pt(), PUweight );
+			//hjets["1st_eta_1btag"]->Fill( p4jets[0].Eta(), PUweight );
+			//hjets["2nd_pt_1btag"]->Fill( p4jets[1].Pt(), PUweight );
+			//hjets["2nd_eta_1btag"]->Fill( p4jets[1].Eta(), PUweight );
+			//hjets["3rd_pt_1btag"]->Fill( p4jets[2].Pt(), PUweight );
+			//hjets["4th_pt_1btag"]->Fill( p4jets[3].Pt(), PUweight );
+			//hjets["Dijet_deltaR_1btag"]->Fill( deltaRjj, PUweight );
+			//hmuons["N_1btag"]->Fill( total_muons, PUweight );
+			//hmuons["Nelectrons_1btag"]->Fill( nlooseelectrons, PUweight  );
+			//hmuons["pt_1btag"]->Fill( p4lepton.Pt(), PUweight );
+			//hmuons["deltaR_1btag"]->Fill( deltaR, PUweight );
+			//hM["WMt_2jet_1btag"]->Fill( WMt, PUweight ); 
 
-			// plot bdiscriminator
-	       		//if ( bdiscriminator[0] >= 0 ) hjets["1st_bdisc"]->Fill( bdiscriminator[0], PUweight );
-	       		hjets["1st_bdisc_1btag"]->Fill( bdiscriminator[0], PUweight );
-			if ( bdiscriminator[1] >= 0 ) hjets["2nd_bdisc_1btag"]->Fill( bdiscriminator[1], PUweight );
-			if ( bdiscriminator[2] >= 0 ) hjets["3rd_bdisc_1btag"]->Fill( bdiscriminator[2], PUweight );
-			if ( bdiscriminator[3] >= 0 ) hjets["4th_bdisc_1btag"]->Fill( bdiscriminator[3], PUweight );
-			//hjets["prod_bdisc_1btag"]->Fill( prod_bdisc, PUweight ); 
-			////////////////////////////////////////////////////////////////////////////////// */
+			////////////////////////////////////////////////////////////////////////////////// 
+
 		}
+
+	    //} else {
+	        if (fBDT){
+		mvaInputVal.push_back( Ht ); 
+		mvaInputVal.push_back( Stlep ); 
+		mvaInputVal.push_back( Stjet ); 
+		jet_number = njets;
+		mvaInputVal.push_back( jet_number ); 
+		numBjets_csvl = Nbtags_CSVL;
+		mvaInputVal.push_back( numBjets_csvl ); 
+
+
+		bdtresponse = mvaReader.GetMvaValue( mvaInputVal );
+		hMET["bdtresponse"]->Fill( bdtresponse, PUweight ); 
+		//////////////////////////////////////////////////////////////////////////////////
+	    }
 	}
   }
 
+  //if (!fBDT){
    MyStoreTree->GetGeneralVariable()->Run = ntuple->run;
    MyStoreTree->GetGeneralVariable()->Lumi = ntuple->lumi;
    MyStoreTree->GetGeneralVariable()->Event = ntuple->event;
 
-  MyStoreTree->GetStoreTree()->Fill();
+   MyStoreTree->GetStoreTree()->Fill();
+  //}
   if (fVerbose) cout << "done analysis" << endl;
   return kTRUE;
 }
@@ -1399,6 +1417,7 @@ void Analyzer::SlaveTerminate()
 		fFile->cd();
 		h1test->Write();
 		hcutflow->Write();
+		//if (!fBDT) MyStoreTree->GetStoreTree()->Write();
 		MyStoreTree->GetStoreTree()->Write();
 		//h2_pt_Wprime->Write();
 		fFile->mkdir("muons");
