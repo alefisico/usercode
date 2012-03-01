@@ -1,0 +1,692 @@
+<cuy>
+  <validation type="data" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_data.root" weight="1">
+    <TH1 name="mu_stjet__DATA" source="/MET/Stjet_1btag_data"/>
+  </validation>
+
+  <validation type="4Top500" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top500.root" weight="MCScaleFactors.txt:4Top_500"> 
+    <TH1 name="mu_stjet__fourtop500" source="/MET/Stjet_1btag_4Top500"/>
+  </validation>
+
+  <validation type="4Top700" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top700.root" weight="MCScaleFactors.txt:4Top_700"> 
+    <TH1 name="mu_stjet__fourtop700" source="/MET/Stjet_1btag_4Top700"/>
+  </validation>
+
+  <validation type="4Top900" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top900.root" weight="MCScaleFactors.txt:4Top_900"> 
+    <TH1 name="mu_stjet__fourtop900" source="/MET/Stjet_1btag_4Top900"/>
+  </validation>
+
+  <validation type="4Top1000" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top1000.root" weight="MCScaleFactors.txt:4Top_1000"> 
+    <TH1 name="mu_stjet__fourtop1000" source="/MET/Stjet_1btag_4Top1000"/>
+  </validation>
+
+  <validation type="4Top1100" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top1100.root" weight="MCScaleFactors.txt:4Top_1100"> 
+    <TH1 name="mu_stjet__fourtop1100" source="/MET/Stjet_1btag_4Top1100"/>
+  </validation>
+
+  <validation type="ttbar" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_ttbar.root" weight="MCScaleFactors.txt:ttbar"> 
+    <TH1 name="mu_stjet__ttbar" source="/MET/Stjet_1btag_ttbar"/>
+  </validation>
+
+  <validation type="WJets" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WJets.root" weight="MCScaleFactors.txt:WJets">
+    <TH1 name="mu_stjet__wjets" source="/MET/Stjet_1btag_WJets"/>
+  </validation>
+
+  <validation type="ZJets" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_ZJets.root" weight="MCScaleFactors.txt:ZJets">
+    <TH1 name="mu_stjet__zjets" source="/MET/Stjet_1btag_ZJets"/>
+  </validation>
+
+  <validation type="STtch" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtch.root" weight="MCScaleFactors.txt:tch">
+    <TH1 name="mu_stjet__STtch" source="/MET/Stjet_1btag_STtch"/>
+  </validation>
+
+  <validation type="STtch_bar" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtch_bar.root" weight="MCScaleFactors.txt:tch_bar">
+    <TH1 name="mu_stjet__STtch_bar" source="/MET/Stjet_1btag_STtch_bar"/>
+  </validation>
+
+  <validation type="STtWch" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtWch.root" weight="MCScaleFactors.txt:tWch">
+    <TH1 name="mu_stjet__STtWch" source="/MET/Stjet_1btag_STtWch"/>
+  </validation>
+
+  <validation type="STtWch_bar" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtWch_bar.root" weight="MCScaleFactors.txt:tWch_bar">
+    <TH1 name="mu_stjet__STtWch_bar" source="/MET/Stjet_1btag_STtWch_bar"/>
+  </validation>
+
+  <validation type="STsch" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STsch.root" weight="MCScaleFactors.txt:sch">
+    <TH1 name="mu_stjet__STsch" source="/MET/Stjet_1btag_STsch"/>
+  </validation>
+
+  <validation type="STsch_bar" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STsch_bar.root" weight="MCScaleFactors.txt:sch_bar">
+    <TH1 name="mu_stjet__STsch_bar" source="/MET/Stjet_1btag_STsch_bar"/>
+  </validation>
+
+  <validation type="WW" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WW.root" weight="MCScaleFactors.txt:WW">
+    <TH1 name="mu_stjet__WW" source="/MET/Stjet_1btag_WW"/>
+  </validation>
+
+  <validation type="WZ" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WZ.root" weight="MCScaleFactors.txt:WZ">
+    <TH1 name="mu_stjet__WZ" source="/MET/Stjet_1btag_WZ"/>
+  </validation>
+
+  <validation type="4TopSM" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4TopSM.root" weight="MCScaleFactors.txt:4TopSM"> 
+    <TH1 name="mu_stjet__fourtopsm" source="/MET/Stjet_1btag_4TopSM"/>
+  </validation>
+
+  <additionArray name="singletop" title="singletop">
+    <additionArrayItem array="STtch"/>
+    <additionArrayItem array="STtWch"/>
+    <additionArrayItem array="STsch"/>
+    <additionArrayItem array="STtch_bar"/>
+    <additionArrayItem array="STtWch_bar"/>
+    <additionArrayItem array="STsch_bar"/>
+  </additionArray>
+
+  <additionArray name="dibosons" title="dibosons">
+    <additionArrayItem array="WW"/>
+    <additionArrayItem array="WZ"/>
+  </additionArray>
+
+  <superimpose name="mu_stjet" title="Stjet" YTitle="Events/50 GeV" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Maximum="10e3"  Minimum="0.01" PlotDiff="true" >
+    <superimposeItem name="mu_stjet__DATA" color="top" legend="Data"/>
+    <superimposeItem name="mu_stjet__fourtopsm" color="top" legend="FourTopSM"/>
+    <superimposeItem name="mu_stjet__ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="mu_stjet__wjets" color="top" legend="Wjets"/>
+    <superimposeItem name="mu_stjet__zjets" color="top" legend="Zjets"/>
+    <superimposeItem name="mu_stjet__dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="mu_stjet__singletop" color="top" legend="ST"/>
+    <superimposeItem name="mu_stjet__fourtop500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="mu_stjet__fourtop700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="mu_stjet__fourtop900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="mu_stjet__fourtop1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="mu_stjet__fourtop1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+
+
+  <!-- JECDOWN -->
+  <validation type="4Top500JECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top500_JECDOWN.root" weight="MCScaleFactors.txt:4Top_500"> 
+    <TH1 name="mu_stjet__fourtop500__jes__minus" source="/MET/Stjet_1btag_4Top500_JECDOWN"/>
+  </validation>
+
+  <validation type="4Top700JECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top700_JECDOWN.root" weight="MCScaleFactors.txt:4Top_700"> 
+    <TH1 name="mu_stjet__fourtop700__jes__minus" source="/MET/Stjet_1btag_4Top700_JECDOWN"/>
+  </validation>
+
+  <validation type="4Top900JECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top900_JECDOWN.root" weight="MCScaleFactors.txt:4Top_900"> 
+    <TH1 name="mu_stjet__fourtop900__jes__minus" source="/MET/Stjet_1btag_4Top900_JECDOWN"/>
+  </validation>
+
+  <validation type="4Top1000JECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top1000_JECDOWN.root" weight="MCScaleFactors.txt:4Top_1000"> 
+    <TH1 name="mu_stjet__fourtop1000__jes__minus" source="/MET/Stjet_1btag_4Top1000_JECDOWN"/>
+  </validation>
+
+  <validation type="4Top1100JECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top1100_JECDOWN.root" weight="MCScaleFactors.txt:4Top_1100"> 
+    <TH1 name="mu_stjet__fourtop1100__jes__minus" source="/MET/Stjet_1btag_4Top1100_JECDOWN"/>
+  </validation>
+
+  <validation type="ttbarJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_ttbar_JECDOWN.root" weight="MCScaleFactors.txt:ttbar"> 
+    <TH1 name="mu_stjet__ttbar__jes__minus" source="/MET/Stjet_1btag_ttbar_JECDOWN"/>
+  </validation>
+
+  <validation type="WJetsJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WJets_JECDOWN.root" weight="MCScaleFactors.txt:WJets">
+    <TH1 name="mu_stjet__wjets__jes__minus" source="/MET/Stjet_1btag_WJets_JECDOWN"/>
+  </validation>
+
+  <validation type="ZJetsJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_ZJets_JECDOWN.root" weight="MCScaleFactors.txt:ZJets">
+    <TH1 name="mu_stjet__zjets__jes__minus" source="/MET/Stjet_1btag_ZJets_JECDOWN"/>
+  </validation>
+
+  <validation type="STtchJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtch_JECDOWN.root" weight="MCScaleFactors.txt:tch">
+    <TH1 name="mu_stjet__STtchJECDOWN" source="/MET/Stjet_1btag_STtch_JECDOWN"/>
+  </validation>
+
+  <validation type="STtch_barJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtch_bar_JECDOWN.root" weight="MCScaleFactors.txt:tch_bar">
+    <TH1 name="mu_stjet__STtch_barJECDOWN" source="/MET/Stjet_1btag_STtch_bar_JECDOWN"/>
+  </validation>
+
+  <validation type="STtWchJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtWch_JECDOWN.root" weight="MCScaleFactors.txt:tWch">
+    <TH1 name="mu_stjet__STtWchJECDOWN" source="/MET/Stjet_1btag_STtWch_JECDOWN"/>
+  </validation>
+
+  <validation type="STtWch_barJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtWch_bar_JECDOWN.root" weight="MCScaleFactors.txt:tWch_bar">
+    <TH1 name="mu_stjet__STtWch_barJECDOWN" source="/MET/Stjet_1btag_STtWch_bar_JECDOWN"/>
+  </validation>
+
+  <validation type="STschJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STsch_JECDOWN.root" weight="MCScaleFactors.txt:sch">
+    <TH1 name="mu_stjet__STschJECDOWN" source="/MET/Stjet_1btag_STsch_JECDOWN"/>
+  </validation>
+
+  <validation type="STsch_barJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STsch_bar_JECDOWN.root" weight="MCScaleFactors.txt:sch_bar">
+    <TH1 name="mu_stjet__STsch_barJECDOWN" source="/MET/Stjet_1btag_STsch_bar_JECDOWN"/>
+  </validation>
+
+  <validation type="WWJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WW_JECDOWN.root" weight="MCScaleFactors.txt:WW">
+    <TH1 name="mu_stjet__WWJECDOWN" source="/MET/Stjet_1btag_WW_JECDOWN"/>
+  </validation>
+
+  <validation type="WZJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WZ_JECDOWN.root" weight="MCScaleFactors.txt:WZ">
+    <TH1 name="mu_stjet__WZJECDOWN" source="/MET/Stjet_1btag_WZ_JECDOWN"/>
+  </validation>
+
+  <validation type="4TopSMJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4TopSM_JECDOWN.root" weight="MCScaleFactors.txt:4TopSM"> 
+    <TH1 name="mu_stjet__fourtopsm__jes__minus" source="/MET/Stjet_1btag_4TopSM_JECDOWN"/>
+  </validation>
+
+  <additionArray name="singletop__jes__minus" title="singletop__jes__minus">
+    <additionArrayItem array="STtchJECDOWN"/>
+    <additionArrayItem array="STtWchJECDOWN"/>
+    <additionArrayItem array="STschJECDOWN"/>
+    <additionArrayItem array="STtch_barJECDOWN"/>
+    <additionArrayItem array="STtWch_barJECDOWN"/>
+    <additionArrayItem array="STsch_barJECDOWN"/>
+  </additionArray>
+
+  <additionArray name="dibosons__jes__minus" title="dibosons__jes__minus">
+    <additionArrayItem array="WWJECDOWN"/>    
+    <additionArrayItem array="WZJECDOWN"/>
+  </additionArray>
+
+
+  <superimpose name="mu_stjet___jes__minus" title="Stjet" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" SetLogy="true" Maximum="10e3"  Minimum="0.01" Stack="true" >
+    <superimposeItem name="mu_stjet__fourtopsm__jes__minus" color="top" legend="FourTopSM"/>
+    <superimposeItem name="mu_stjet__ttbar__jes__minus" color="top" legend="TTbar"/>
+    <superimposeItem name="mu_stjet__wjets__jes__minus" color="top" legend="Wjets"/>
+    <superimposeItem name="mu_stjet__zjets__jes__minus" color="top" legend="Zjets"/>
+    <superimposeItem name="mu_stjet__singletop__jes__minus" color="top" legend="ST"/>
+    <superimposeItem name="mu_stjet__dibosons__jes__minus" color="top" legend="Dibosons"/>
+    <superimposeItem name="mu_stjet__fourtop500__jes__minus" color="1" legend="Gh 0.5 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop700__jes__minus" color="1" legend="Gh 0.7 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop900__jes__minus" color="1" legend="Gh 0.9 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop1000__jes__minus" color="1" legend="Gh 1.0 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop1100__jes__minus" color="1" legend="Gh 1.1 TeV" NoStack="true"/>
+  </superimpose>
+
+  <!-- JECUP -->
+  <validation type="4Top500JECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top500_JECUP.root" weight="MCScaleFactors.txt:4Top_500"> 
+    <TH1 name="mu_stjet__fourtop500__jes__plus" source="/MET/Stjet_1btag_4Top500_JECUP"/>
+  </validation>
+
+  <validation type="4Top700JECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top700_JECUP.root" weight="MCScaleFactors.txt:4Top_700"> 
+    <TH1 name="mu_stjet__fourtop700__jes__plus" source="/MET/Stjet_1btag_4Top700_JECUP"/>
+  </validation>
+
+  <validation type="4Top900JECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top900_JECUP.root" weight="MCScaleFactors.txt:4Top_900"> 
+    <TH1 name="mu_stjet__fourtop900__jes__plus" source="/MET/Stjet_1btag_4Top900_JECUP"/>
+  </validation>
+
+  <validation type="4Top1000JECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top1000_JECUP.root" weight="MCScaleFactors.txt:4Top_1000"> 
+    <TH1 name="mu_stjet__fourtop1000__jes__plus" source="/MET/Stjet_1btag_4Top1000_JECUP"/>
+  </validation>
+
+  <validation type="4Top1100JECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top1100_JECUP.root" weight="MCScaleFactors.txt:4Top_1100"> 
+    <TH1 name="mu_stjet__fourtop1100__jes__plus" source="/MET/Stjet_1btag_4Top1100_JECUP"/>
+  </validation>
+
+  <validation type="ttbarJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_ttbar_JECUP.root" weight="MCScaleFactors.txt:ttbar"> 
+    <TH1 name="mu_stjet__ttbar__jes__plus" source="/MET/Stjet_1btag_ttbar_JECUP"/>
+  </validation>
+
+  <validation type="WJetsJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WJets_JECUP.root" weight="MCScaleFactors.txt:WJets">
+    <TH1 name="mu_stjet__wjets__jes__plus" source="/MET/Stjet_1btag_WJets_JECUP"/>
+  </validation>
+
+  <validation type="ZJetsJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_ZJets_JECUP.root" weight="MCScaleFactors.txt:ZJets">
+    <TH1 name="mu_stjet__zjets__jes__plus" source="/MET/Stjet_1btag_ZJets_JECUP"/>
+  </validation>
+
+  <validation type="STtchJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtch_JECUP.root" weight="MCScaleFactors.txt:tch">
+    <TH1 name="mu_stjet__STtchJECUP" source="/MET/Stjet_1btag_STtch_JECUP"/>
+  </validation>
+
+  <validation type="STtch_barJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtch_bar_JECUP.root" weight="MCScaleFactors.txt:tch_bar">
+    <TH1 name="mu_stjet__STtch_barJECUP" source="/MET/Stjet_1btag_STtch_bar_JECUP"/>
+  </validation>
+
+  <validation type="STtWchJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtWch_JECUP.root" weight="MCScaleFactors.txt:tWch">
+    <TH1 name="mu_stjet__STtWchJECUP" source="/MET/Stjet_1btag_STtWch_JECUP"/>
+  </validation>
+
+  <validation type="STtWch_barJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtWch_bar_JECUP.root" weight="MCScaleFactors.txt:tWch_bar">
+    <TH1 name="mu_stjet__STtWch_barJECUP" source="/MET/Stjet_1btag_STtWch_bar_JECUP"/>
+  </validation>
+
+  <validation type="STschJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STsch_JECUP.root" weight="MCScaleFactors.txt:sch">
+    <TH1 name="mu_stjet__STschJECUP" source="/MET/Stjet_1btag_STsch_JECUP"/>
+  </validation>
+
+  <validation type="STsch_barJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STsch_bar_JECUP.root" weight="MCScaleFactors.txt:sch_bar">
+    <TH1 name="mu_stjet__STsch_barJECUP" source="/MET/Stjet_1btag_STsch_bar_JECUP"/>
+  </validation>
+
+  <validation type="WWJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WW_JECUP.root" weight="MCScaleFactors.txt:WW">
+    <TH1 name="mu_stjet__WWJECUP" source="/MET/Stjet_1btag_WW_JECUP"/>
+  </validation>
+
+  <validation type="WZJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WZ_JECUP.root" weight="MCScaleFactors.txt:WZ">
+    <TH1 name="mu_stjet__WZJECUP" source="/MET/Stjet_1btag_WZ_JECUP"/>
+  </validation>
+
+  <validation type="4TopSMJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4TopSM_JECUP.root" weight="MCScaleFactors.txt:4TopSM"> 
+    <TH1 name="mu_stjet__fourtopsm__jes__plus" source="/MET/Stjet_1btag_4TopSM_JECUP"/>
+  </validation>
+
+  <additionArray name="singletop__jes__plus" title="singletop__jes__plus">
+    <additionArrayItem array="STtchJECUP"/>
+    <additionArrayItem array="STtWchJECUP"/>
+    <additionArrayItem array="STschJECUP"/>
+    <additionArrayItem array="STtch_barJECUP"/>
+    <additionArrayItem array="STtWch_barJECUP"/>
+    <additionArrayItem array="STsch_barJECUP"/>
+  </additionArray>
+
+  <additionArray name="dibosons__jes__plus" title="dibosons__jes__plus">
+    <additionArrayItem array="WWJECUP"/>    
+    <additionArrayItem array="WZJECUP"/>
+  </additionArray>
+
+
+  <superimpose name="mu_stjet___jes__plus" title="Stjet" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" SetLogy="true" Maximum="10e3"  Minimum="0.01" Stack="true" >
+    <superimposeItem name="mu_stjet__fourtopsm__jes__plus" color="top" legend="FourTopSM"/>
+    <superimposeItem name="mu_stjet__ttbar__jes__plus" color="top" legend="TTbar"/>
+    <superimposeItem name="mu_stjet__wjets__jes__plus" color="top" legend="Wjets"/>
+    <superimposeItem name="mu_stjet__zjets__jes__plus" color="top" legend="Zjets"/>
+    <superimposeItem name="mu_stjet__singletop__jes__plus" color="top" legend="ST"/>
+    <superimposeItem name="mu_stjet__dibosons__jes__plus" color="top" legend="Dibosons"/>
+    <superimposeItem name="mu_stjet__fourtop500__jes__plus" color="1" legend="Gh 0.5 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop700__jes__plus" color="1" legend="Gh 0.7 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop900__jes__plus" color="1" legend="Gh 0.9 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop1000__jes__plus" color="1" legend="Gh 1.0 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop1100__jes__plus" color="1" legend="Gh 1.1 TeV" NoStack="true"/>
+  </superimpose>
+
+  <!-- JERDOWN -->
+  <validation type="4Top500JERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top500_JERDOWN.root" weight="MCScaleFactors.txt:4Top_500"> 
+    <TH1 name="mu_stjet__fourtop500__jer__minus" source="/MET/Stjet_1btag_4Top500_JERDOWN"/>
+  </validation>
+
+  <validation type="4Top700JERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top700_JERDOWN.root" weight="MCScaleFactors.txt:4Top_700"> 
+    <TH1 name="mu_stjet__fourtop700__jer__minus" source="/MET/Stjet_1btag_4Top700_JERDOWN"/>
+  </validation>
+
+  <validation type="4Top900JERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top900_JERDOWN.root" weight="MCScaleFactors.txt:4Top_900"> 
+    <TH1 name="mu_stjet__fourtop900__jer__minus" source="/MET/Stjet_1btag_4Top900_JERDOWN"/>
+  </validation>
+
+  <validation type="4Top1000JERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top1000_JERDOWN.root" weight="MCScaleFactors.txt:4Top_1000"> 
+    <TH1 name="mu_stjet__fourtop1000__jer__minus" source="/MET/Stjet_1btag_4Top1000_JERDOWN"/>
+  </validation>
+
+  <validation type="4Top1100JERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top1100_JERDOWN.root" weight="MCScaleFactors.txt:4Top_1100"> 
+    <TH1 name="mu_stjet__fourtop1100__jer__minus" source="/MET/Stjet_1btag_4Top1100_JERDOWN"/>
+  </validation>
+
+  <validation type="ttbarJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_ttbar_JERDOWN.root" weight="MCScaleFactors.txt:ttbar"> 
+    <TH1 name="mu_stjet__ttbar__jer__minus" source="/MET/Stjet_1btag_ttbar_JERDOWN"/>
+  </validation>
+
+  <validation type="WJetsJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WJets_JERDOWN.root" weight="MCScaleFactors.txt:WJets">
+    <TH1 name="mu_stjet__wjets__jer__minus" source="/MET/Stjet_1btag_WJets_JERDOWN"/>
+  </validation>
+
+  <validation type="ZJetsJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_ZJets_JERDOWN.root" weight="MCScaleFactors.txt:ZJets">
+    <TH1 name="mu_stjet__zjets__jer__minus" source="/MET/Stjet_1btag_ZJets_JERDOWN"/>
+  </validation>
+
+  <validation type="STtchJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtch_JERDOWN.root" weight="MCScaleFactors.txt:tch">
+    <TH1 name="mu_stjet__STtchJERDOWN" source="/MET/Stjet_1btag_STtch_JERDOWN"/>
+  </validation>
+
+  <validation type="STtch_barJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtch_bar_JERDOWN.root" weight="MCScaleFactors.txt:tch_bar">
+    <TH1 name="mu_stjet__STtch_barJERDOWN" source="/MET/Stjet_1btag_STtch_bar_JERDOWN"/>
+  </validation>
+
+  <validation type="STtWchJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtWch_JERDOWN.root" weight="MCScaleFactors.txt:tWch">
+    <TH1 name="mu_stjet__STtWchJERDOWN" source="/MET/Stjet_1btag_STtWch_JERDOWN"/>
+  </validation>
+
+  <validation type="STtWch_barJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtWch_bar_JERDOWN.root" weight="MCScaleFactors.txt:tWch_bar">
+    <TH1 name="mu_stjet__STtWch_barJERDOWN" source="/MET/Stjet_1btag_STtWch_bar_JERDOWN"/>
+  </validation>
+
+  <validation type="STschJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STsch_JERDOWN.root" weight="MCScaleFactors.txt:sch">
+    <TH1 name="mu_stjet__STschJERDOWN" source="/MET/Stjet_1btag_STsch_JERDOWN"/>
+  </validation>
+
+  <validation type="STsch_barJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STsch_bar_JERDOWN.root" weight="MCScaleFactors.txt:sch_bar">
+    <TH1 name="mu_stjet__STsch_barJERDOWN" source="/MET/Stjet_1btag_STsch_bar_JERDOWN"/>
+  </validation>
+
+  <validation type="WWJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WW_JERDOWN.root" weight="MCScaleFactors.txt:WW">
+    <TH1 name="mu_stjet__WWJERDOWN" source="/MET/Stjet_1btag_WW_JERDOWN"/>
+  </validation>
+
+  <validation type="WZJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WZ_JERDOWN.root" weight="MCScaleFactors.txt:WZ">
+    <TH1 name="mu_stjet__WZJERDOWN" source="/MET/Stjet_1btag_WZ_JERDOWN"/>
+  </validation>
+
+  <validation type="4TopSMJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4TopSM_JERDOWN.root" weight="MCScaleFactors.txt:4TopSM"> 
+    <TH1 name="mu_stjet__fourtopsm__jer__minus" source="/MET/Stjet_1btag_4TopSM_JERDOWN"/>
+  </validation>
+
+  <additionArray name="singletop__jer__minus" title="singletop__jer__minus">
+    <additionArrayItem array="STtchJERDOWN"/>
+    <additionArrayItem array="STtWchJERDOWN"/>
+    <additionArrayItem array="STschJERDOWN"/>
+    <additionArrayItem array="STtch_barJERDOWN"/>
+    <additionArrayItem array="STtWch_barJERDOWN"/>
+    <additionArrayItem array="STsch_barJERDOWN"/>
+  </additionArray>
+
+  <additionArray name="dibosons__jer__minus" title="dibosons__jer__minus">
+    <additionArrayItem array="WWJERDOWN"/>    
+    <additionArrayItem array="WZJERDOWN"/>
+  </additionArray>
+
+
+  <superimpose name="mu_stjet___jer__minus" title="Stjet" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" SetLogy="true" Maximum="10e3"  Minimum="0.01" Stack="true" >
+    <superimposeItem name="mu_stjet__fourtopsm__jer__minus" color="top" legend="FourTopSM"/>
+    <superimposeItem name="mu_stjet__ttbar__jer__minus" color="top" legend="TTbar"/>
+    <superimposeItem name="mu_stjet__wjets__jer__minus" color="top" legend="Wjets"/>
+    <superimposeItem name="mu_stjet__zjets__jer__minus" color="top" legend="Zjets"/>
+    <superimposeItem name="mu_stjet__singletop__jer__minus" color="top" legend="ST"/>
+    <superimposeItem name="mu_stjet__dibosons__jer__minus" color="top" legend="Dibosons"/>
+    <superimposeItem name="mu_stjet__fourtop500__jer__minus" color="1" legend="Gh 0.5 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop700__jer__minus" color="1" legend="Gh 0.7 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop900__jer__minus" color="1" legend="Gh 0.9 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop1000__jer__minus" color="1" legend="Gh 1.0 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop1100__jer__minus" color="1" legend="Gh 1.1 TeV" NoStack="true"/>
+  </superimpose>
+
+  <!-- JERUP -->
+  <validation type="4Top500JERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top500_JERUP.root" weight="MCScaleFactors.txt:4Top_500"> 
+    <TH1 name="mu_stjet__fourtop500__jer__plus" source="/MET/Stjet_1btag_4Top500_JERUP"/>
+  </validation>
+
+  <validation type="4Top700JERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top700_JERUP.root" weight="MCScaleFactors.txt:4Top_700"> 
+    <TH1 name="mu_stjet__fourtop700__jer__plus" source="/MET/Stjet_1btag_4Top700_JERUP"/>
+  </validation>
+
+  <validation type="4Top900JERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top900_JERUP.root" weight="MCScaleFactors.txt:4Top_900"> 
+    <TH1 name="mu_stjet__fourtop900__jer__plus" source="/MET/Stjet_1btag_4Top900_JERUP"/>
+  </validation>
+
+  <validation type="4Top1000JERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top1000_JERUP.root" weight="MCScaleFactors.txt:4Top_1000"> 
+    <TH1 name="mu_stjet__fourtop1000__jer__plus" source="/MET/Stjet_1btag_4Top1000_JERUP"/>
+  </validation>
+
+  <validation type="4Top1100JERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top1100_JERUP.root" weight="MCScaleFactors.txt:4Top_1100"> 
+    <TH1 name="mu_stjet__fourtop1100__jer__plus" source="/MET/Stjet_1btag_4Top1100_JERUP"/>
+  </validation>
+
+  <validation type="ttbarJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_ttbar_JERUP.root" weight="MCScaleFactors.txt:ttbar"> 
+    <TH1 name="mu_stjet__ttbar__jer__plus" source="/MET/Stjet_1btag_ttbar_JERUP"/>
+  </validation>
+
+  <validation type="WJetsJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WJets_JERUP.root" weight="MCScaleFactors.txt:WJets">
+    <TH1 name="mu_stjet__wjets__jer__plus" source="/MET/Stjet_1btag_WJets_JERUP"/>
+  </validation>
+
+  <validation type="ZJetsJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_ZJets_JERUP.root" weight="MCScaleFactors.txt:ZJets">
+    <TH1 name="mu_stjet__zjets__jer__plus" source="/MET/Stjet_1btag_ZJets_JERUP"/>
+  </validation>
+
+  <validation type="STtchJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtch_JERUP.root" weight="MCScaleFactors.txt:tch">
+    <TH1 name="mu_stjet__STtchJERUP" source="/MET/Stjet_1btag_STtch_JERUP"/>
+  </validation>
+
+  <validation type="STtch_barJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtch_bar_JERUP.root" weight="MCScaleFactors.txt:tch_bar">
+    <TH1 name="mu_stjet__STtch_barJERUP" source="/MET/Stjet_1btag_STtch_bar_JERUP"/>
+  </validation>
+
+  <validation type="STtWchJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtWch_JERUP.root" weight="MCScaleFactors.txt:tWch">
+    <TH1 name="mu_stjet__STtWchJERUP" source="/MET/Stjet_1btag_STtWch_JERUP"/>
+  </validation>
+
+  <validation type="STtWch_barJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtWch_bar_JERUP.root" weight="MCScaleFactors.txt:tWch_bar">
+    <TH1 name="mu_stjet__STtWch_barJERUP" source="/MET/Stjet_1btag_STtWch_bar_JERUP"/>
+  </validation>
+
+  <validation type="STschJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STsch_JERUP.root" weight="MCScaleFactors.txt:sch">
+    <TH1 name="mu_stjet__STschJERUP" source="/MET/Stjet_1btag_STsch_JERUP"/>
+  </validation>
+
+  <validation type="STsch_barJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STsch_bar_JERUP.root" weight="MCScaleFactors.txt:sch_bar">
+    <TH1 name="mu_stjet__STsch_barJERUP" source="/MET/Stjet_1btag_STsch_bar_JERUP"/>
+  </validation>
+
+  <validation type="WWJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WW_JERUP.root" weight="MCScaleFactors.txt:WW">
+    <TH1 name="mu_stjet__WWJERUP" source="/MET/Stjet_1btag_WW_JERUP"/>
+  </validation>
+
+  <validation type="WZJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WZ_JERUP.root" weight="MCScaleFactors.txt:WZ">
+    <TH1 name="mu_stjet__WZJERUP" source="/MET/Stjet_1btag_WZ_JERUP"/>
+  </validation>
+
+  <validation type="4TopSMJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4TopSM_JERUP.root" weight="MCScaleFactors.txt:4TopSM"> 
+    <TH1 name="mu_stjet__fourtopsm__jer__plus" source="/MET/Stjet_1btag_4TopSM_JERUP"/>
+  </validation>
+
+  <additionArray name="singletop__jer__plus" title="singletop__jer__plus">
+    <additionArrayItem array="STtchJERUP"/>
+    <additionArrayItem array="STtWchJERUP"/>
+    <additionArrayItem array="STschJERUP"/>
+    <additionArrayItem array="STtch_barJERUP"/>
+    <additionArrayItem array="STtWch_barJERUP"/>
+    <additionArrayItem array="STsch_barJERUP"/>
+  </additionArray>
+
+  <additionArray name="dibosons__jer__plus" title="dibosons__jer__plus">
+    <additionArrayItem array="WWJERUP"/>    
+    <additionArrayItem array="WZJERUP"/>
+  </additionArray>
+
+
+  <superimpose name="mu_stjet___jer__plus" title="Stjet" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" SetLogy="true" Maximum="10e3"  Minimum="0.01" Stack="true" >
+    <superimposeItem name="mu_stjet__fourtopsm__jer__plus" color="top" legend="FourTopSM"/>
+    <superimposeItem name="mu_stjet__ttbar__jer__plus" color="top" legend="TTbar"/>
+    <superimposeItem name="mu_stjet__wjets__jer__plus" color="top" legend="Wjets"/>
+    <superimposeItem name="mu_stjet__zjets__jer__plus" color="top" legend="Zjets"/>
+    <superimposeItem name="mu_stjet__singletop__jer__plus" color="top" legend="ST"/>
+    <superimposeItem name="mu_stjet__dibosons__jer__plus" color="top" legend="Dibosons"/>
+    <superimposeItem name="mu_stjet__fourtop500__jer__plus" color="1" legend="Gh 0.5 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop700__jer__plus" color="1" legend="Gh 0.7 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop900__jer__plus" color="1" legend="Gh 0.9 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop1000__jer__plus" color="1" legend="Gh 1.0 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop1100__jer__plus" color="1" legend="Gh 1.1 TeV" NoStack="true"/>
+  </superimpose>
+
+  <!-- PUDOWN -->
+  <validation type="4Top500PUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top500_PUDOWN.root" weight="MCScaleFactors.txt:4Top_500"> 
+    <TH1 name="mu_stjet__fourtop500__pu__minus" source="/MET/Stjet_1btag_4Top500_PUDOWN"/>
+  </validation>
+
+  <validation type="4Top700PUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top700_PUDOWN.root" weight="MCScaleFactors.txt:4Top_700"> 
+    <TH1 name="mu_stjet__fourtop700__pu__minus" source="/MET/Stjet_1btag_4Top700_PUDOWN"/>
+  </validation>
+
+  <validation type="4Top900PUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top900_PUDOWN.root" weight="MCScaleFactors.txt:4Top_900"> 
+    <TH1 name="mu_stjet__fourtop900__pu__minus" source="/MET/Stjet_1btag_4Top900_PUDOWN"/>
+  </validation>
+
+  <validation type="4Top1000PUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top1000_PUDOWN.root" weight="MCScaleFactors.txt:4Top_1000"> 
+    <TH1 name="mu_stjet__fourtop1000__pu__minus" source="/MET/Stjet_1btag_4Top1000_PUDOWN"/>
+  </validation>
+
+  <validation type="4Top1100PUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top1100_PUDOWN.root" weight="MCScaleFactors.txt:4Top_1100"> 
+    <TH1 name="mu_stjet__fourtop1100__pu__minus" source="/MET/Stjet_1btag_4Top1100_PUDOWN"/>
+  </validation>
+
+  <validation type="ttbarPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_ttbar_PUDOWN.root" weight="MCScaleFactors.txt:ttbar"> 
+    <TH1 name="mu_stjet__ttbar__pu__minus" source="/MET/Stjet_1btag_ttbar_PUDOWN"/>
+  </validation>
+
+  <validation type="WJetsPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WJets_PUDOWN.root" weight="MCScaleFactors.txt:WJets">
+    <TH1 name="mu_stjet__wjets__pu__minus" source="/MET/Stjet_1btag_WJets_PUDOWN"/>
+  </validation>
+
+  <validation type="ZJetsPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_ZJets_PUDOWN.root" weight="MCScaleFactors.txt:ZJets">
+    <TH1 name="mu_stjet__zjets__pu__minus" source="/MET/Stjet_1btag_ZJets_PUDOWN"/>
+  </validation>
+
+  <validation type="STtchPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtch_PUDOWN.root" weight="MCScaleFactors.txt:tch">
+    <TH1 name="mu_stjet__STtchPUDOWN" source="/MET/Stjet_1btag_STtch_PUDOWN"/>
+  </validation>
+
+  <validation type="STtch_barPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtch_bar_PUDOWN.root" weight="MCScaleFactors.txt:tch_bar">
+    <TH1 name="mu_stjet__STtch_barPUDOWN" source="/MET/Stjet_1btag_STtch_bar_PUDOWN"/>
+  </validation>
+
+  <validation type="STtWchPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtWch_PUDOWN.root" weight="MCScaleFactors.txt:tWch">
+    <TH1 name="mu_stjet__STtWchPUDOWN" source="/MET/Stjet_1btag_STtWch_PUDOWN"/>
+  </validation>
+
+  <validation type="STtWch_barPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtWch_bar_PUDOWN.root" weight="MCScaleFactors.txt:tWch_bar">
+    <TH1 name="mu_stjet__STtWch_barPUDOWN" source="/MET/Stjet_1btag_STtWch_bar_PUDOWN"/>
+  </validation>
+
+  <validation type="STschPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STsch_PUDOWN.root" weight="MCScaleFactors.txt:sch">
+    <TH1 name="mu_stjet__STschPUDOWN" source="/MET/Stjet_1btag_STsch_PUDOWN"/>
+  </validation>
+
+  <validation type="STsch_barPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STsch_bar_PUDOWN.root" weight="MCScaleFactors.txt:sch_bar">
+    <TH1 name="mu_stjet__STsch_barPUDOWN" source="/MET/Stjet_1btag_STsch_bar_PUDOWN"/>
+  </validation>
+
+  <validation type="WWPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WW_PUDOWN.root" weight="MCScaleFactors.txt:WW">
+    <TH1 name="mu_stjet__WWPUDOWN" source="/MET/Stjet_1btag_WW_PUDOWN"/>
+  </validation>
+
+  <validation type="WZPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WZ_PUDOWN.root" weight="MCScaleFactors.txt:WZ">
+    <TH1 name="mu_stjet__WZPUDOWN" source="/MET/Stjet_1btag_WZ_PUDOWN"/>
+  </validation>
+
+  <validation type="4TopSMPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4TopSM_PUDOWN.root" weight="MCScaleFactors.txt:4TopSM"> 
+    <TH1 name="mu_stjet__fourtopsm__pu__minus" source="/MET/Stjet_1btag_4TopSM_PUDOWN"/>
+  </validation>
+
+  <additionArray name="singletop__pu__minus" title="singletop__pu__minus">
+    <additionArrayItem array="STtchPUDOWN"/>
+    <additionArrayItem array="STtWchPUDOWN"/>
+    <additionArrayItem array="STschPUDOWN"/>
+    <additionArrayItem array="STtch_barPUDOWN"/>
+    <additionArrayItem array="STtWch_barPUDOWN"/>
+    <additionArrayItem array="STsch_barPUDOWN"/>
+  </additionArray>
+
+  <additionArray name="dibosons__pu__minus" title="dibosons__pu__minus">
+    <additionArrayItem array="WWPUDOWN"/>    
+    <additionArrayItem array="WZPUDOWN"/>
+  </additionArray>
+
+
+  <superimpose name="mu_stjet___pu__minus" title="Stjet" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" SetLogy="true" Maximum="10e3"  Minimum="0.01" Stack="true" >
+    <superimposeItem name="mu_stjet__fourtopsm__pu__minus" color="top" legend="FourTopSM"/>
+    <superimposeItem name="mu_stjet__ttbar__pu__minus" color="top" legend="TTbar"/>
+    <superimposeItem name="mu_stjet__wjets__pu__minus" color="top" legend="Wjets"/>
+    <superimposeItem name="mu_stjet__zjets__pu__minus" color="top" legend="Zjets"/>
+    <superimposeItem name="mu_stjet__singletop__pu__minus" color="top" legend="ST"/>
+    <superimposeItem name="mu_stjet__dibosons__pu__minus" color="top" legend="Dibosons"/>
+    <superimposeItem name="mu_stjet__fourtop500__pu__minus" color="1" legend="Gh 0.5 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop700__pu__minus" color="1" legend="Gh 0.7 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop900__pu__minus" color="1" legend="Gh 0.9 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop1000__pu__minus" color="1" legend="Gh 1.0 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop1100__pu__minus" color="1" legend="Gh 1.1 TeV" NoStack="true"/>
+  </superimpose>
+
+  <!-- PUUP -->
+  <validation type="4Top500PUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top500_PUUP.root" weight="MCScaleFactors.txt:4Top_500"> 
+    <TH1 name="mu_stjet__fourtop500__pu__plus" source="/MET/Stjet_1btag_4Top500_PUUP"/>
+  </validation>
+
+  <validation type="4Top700PUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top700_PUUP.root" weight="MCScaleFactors.txt:4Top_700"> 
+    <TH1 name="mu_stjet__fourtop700__pu__plus" source="/MET/Stjet_1btag_4Top700_PUUP"/>
+  </validation>
+
+  <validation type="4Top900PUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top900_PUUP.root" weight="MCScaleFactors.txt:4Top_900"> 
+    <TH1 name="mu_stjet__fourtop900__pu__plus" source="/MET/Stjet_1btag_4Top900_PUUP"/>
+  </validation>
+
+  <validation type="4Top1000PUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top1000_PUUP.root" weight="MCScaleFactors.txt:4Top_1000"> 
+    <TH1 name="mu_stjet__fourtop1000__pu__plus" source="/MET/Stjet_1btag_4Top1000_PUUP"/>
+  </validation>
+
+  <validation type="4Top1100PUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top1100_PUUP.root" weight="MCScaleFactors.txt:4Top_1100"> 
+    <TH1 name="mu_stjet__fourtop1100__pu__plus" source="/MET/Stjet_1btag_4Top1100_PUUP"/>
+  </validation>
+
+  <validation type="ttbarPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_ttbar_PUUP.root" weight="MCScaleFactors.txt:ttbar"> 
+    <TH1 name="mu_stjet__ttbar__pu__plus" source="/MET/Stjet_1btag_ttbar_PUUP"/>
+  </validation>
+
+  <validation type="WJetsPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WJets_PUUP.root" weight="MCScaleFactors.txt:WJets">
+    <TH1 name="mu_stjet__wjets__pu__plus" source="/MET/Stjet_1btag_WJets_PUUP"/>
+  </validation>
+
+  <validation type="ZJetsPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_ZJets_PUUP.root" weight="MCScaleFactors.txt:ZJets">
+    <TH1 name="mu_stjet__zjets__pu__plus" source="/MET/Stjet_1btag_ZJets_PUUP"/>
+  </validation>
+
+  <validation type="STtchPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtch_PUUP.root" weight="MCScaleFactors.txt:tch">
+    <TH1 name="mu_stjet__STtchPUUP" source="/MET/Stjet_1btag_STtch_PUUP"/>
+  </validation>
+
+  <validation type="STtch_barPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtch_bar_PUUP.root" weight="MCScaleFactors.txt:tch_bar">
+    <TH1 name="mu_stjet__STtch_barPUUP" source="/MET/Stjet_1btag_STtch_bar_PUUP"/>
+  </validation>
+
+  <validation type="STtWchPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtWch_PUUP.root" weight="MCScaleFactors.txt:tWch">
+    <TH1 name="mu_stjet__STtWchPUUP" source="/MET/Stjet_1btag_STtWch_PUUP"/>
+  </validation>
+
+  <validation type="STtWch_barPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtWch_bar_PUUP.root" weight="MCScaleFactors.txt:tWch_bar">
+    <TH1 name="mu_stjet__STtWch_barPUUP" source="/MET/Stjet_1btag_STtWch_bar_PUUP"/>
+  </validation>
+
+  <validation type="STschPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STsch_PUUP.root" weight="MCScaleFactors.txt:sch">
+    <TH1 name="mu_stjet__STschPUUP" source="/MET/Stjet_1btag_STsch_PUUP"/>
+  </validation>
+
+  <validation type="STsch_barPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STsch_bar_PUUP.root" weight="MCScaleFactors.txt:sch_bar">
+    <TH1 name="mu_stjet__STsch_barPUUP" source="/MET/Stjet_1btag_STsch_bar_PUUP"/>
+  </validation>
+
+  <validation type="WWPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WW_PUUP.root" weight="MCScaleFactors.txt:WW">
+    <TH1 name="mu_stjet__WWPUUP" source="/MET/Stjet_1btag_WW_PUUP"/>
+  </validation>
+
+  <validation type="WZPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WZ_PUUP.root" weight="MCScaleFactors.txt:WZ">
+    <TH1 name="mu_stjet__WZPUUP" source="/MET/Stjet_1btag_WZ_PUUP"/>
+  </validation>
+
+  <validation type="4TopSMPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4TopSM_PUUP.root" weight="MCScaleFactors.txt:4TopSM"> 
+    <TH1 name="mu_stjet__fourtopsm__pu__plus" source="/MET/Stjet_1btag_4TopSM_PUUP"/>
+  </validation>
+
+  <additionArray name="singletop__pu__plus" title="singletop__pu__plus">
+    <additionArrayItem array="STtchPUUP"/>
+    <additionArrayItem array="STtWchPUUP"/>
+    <additionArrayItem array="STschPUUP"/>
+    <additionArrayItem array="STtch_barPUUP"/>
+    <additionArrayItem array="STtWch_barPUUP"/>
+    <additionArrayItem array="STsch_barPUUP"/>
+  </additionArray>
+
+  <additionArray name="dibosons__pu__plus" title="dibosons__pu__plus">
+    <additionArrayItem array="WWPUUP"/>    
+    <additionArrayItem array="WZPUUP"/>
+  </additionArray>
+
+
+  <superimpose name="mu_stjet___pu__plus" title="Stjet" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" SetLogy="true" Maximum="10e3"  Minimum="0.01" Stack="true" >
+    <superimposeItem name="mu_stjet__fourtopsm__pu__plus" color="top" legend="FourTopSM"/>
+    <superimposeItem name="mu_stjet__ttbar__pu__plus" color="top" legend="TTbar"/>
+    <superimposeItem name="mu_stjet__wjets__pu__plus" color="top" legend="Wjets"/>
+    <superimposeItem name="mu_stjet__zjets__pu__plus" color="top" legend="Zjets"/>
+    <superimposeItem name="mu_stjet__singletop__pu__plus" color="top" legend="ST"/>
+    <superimposeItem name="mu_stjet__dibosons__pu__plus" color="top" legend="Dibosons"/>
+    <superimposeItem name="mu_stjet__fourtop500__pu__plus" color="1" legend="Gh 0.5 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop700__pu__plus" color="1" legend="Gh 0.7 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop900__pu__plus" color="1" legend="Gh 0.9 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop1000__pu__plus" color="1" legend="Gh 1.0 TeV" NoStack="true"/>
+    <superimposeItem name="mu_stjet__fourtop1100__pu__plus" color="1" legend="Gh 1.1 TeV" NoStack="true"/>
+  </superimpose>
+
+</cuy>
