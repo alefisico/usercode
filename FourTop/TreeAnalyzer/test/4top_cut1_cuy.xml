@@ -1,395 +1,455 @@
 <cuy>
-
-  <validation type="data" file="./results_data.root" weight="1">
+  <validation type="data" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_data.root" weight="1">
+	<!-- muons -->
+    <TH1 name="Nmuons_data" source="/muons/N_muons_data"/>
+    <TH1 name="Nelectrons_data" source="/muons/Nelectrons_data"/>
+    <TH1 name="muons_deltaR_data" source="/muons/deltaR_data"/>
+    <TH1 name="muon_pt_data" source="/muons/muon_pt_data"/>
+	<!-- PVs -->
     <TH1 name="PVs_data" source="/PVs/NPVreweight_2jet_data"/>
-    <TH1 name="reliso_data" source="/muons/muon_reliso_data"/>
-    <TH1 name="Mt_2jet_data" source="/mass/Mt_2jet_data"/>
+	<!-- MET -->
     <TH1 name="Ht_data" source="/MET/Ht_data"/>
+    <TH1 name="MET_data" source="/MET/MET_data"/>
+    <TH1 name="Stjet_data" source="/MET/Stjet_data"/>
+    <TH1 name="Stlep_data" source="/MET/Stlep_data"/>
+	<!-- jets -->
     <TH1 name="Njets_cut1_data" source="/jets/Njets_cut1_data"/>
+    <TH1 name="Nbjets_CSVM_data" source="/jets/Nbjets_CSVM_data"/>
+    <TH1 name="Nbjets_CSVL_data" source="/jets/Nbjets_CSVL_data"/>
     <TH1 name="jet1_pt_data" source="/jets/jet1_pt_data"/>
     <TH1 name="jet1_eta_data" source="/jets/jet1_eta_data"/>
     <TH1 name="jet2_pt_data" source="/jets/jet2_pt_data"/>
     <TH1 name="jet2_eta_data" source="/jets/jet2_eta_data"/>
     <TH1 name="jet3_pt_data" source="/jets/jet3_pt_data"/>
     <TH1 name="jet4_pt_data" source="/jets/jet4_pt_data"/>
-    <TH1 name="jet5_pt_data" source="/jets/jet5_pt_data"/>
-    <TH1 name="jet6_pt_data" source="/jets/jet6_pt_data"/>
-    <TH1 name="jet7_pt_data" source="/jets/jet7_pt_data"/>
-    <TH1 name="Nmuons_data" source="/muons/N_muons_data"/>
-    <TH1 name="Nelectrons_data" source="/muons/Nelectrons_data"/>
-    <TH1 name="MET_data" source="/MET/MET_data"/>
-    <TH1 name="muons_deltaR_data" source="/muons/deltaR_data"/>
-    <TH1 name="Dijet_deltaR_data" source="/jets/Dijet_deltaR_data"/>
-    <TH1 name="Nbjets_CSVM_N2j_data" source="/jets/Nbjets_CSVM_N2j_data"/>
-    <TH1 name="Njets_1tag_data" source="/jets/Njets_1tag_data"/>
-    <TH1 name="Stjet_data" source="/MET/Stjet_data"/>
-    <TH1 name="Stlep_data" source="/MET/Stlep_data"/>
   </validation>
 
-  <validation type="4Top_500" file="./results_4Top_500.root" weight="MCScaleFactors.txt:4Top_500"> 
-    <TH1 name="PVs_4Top_500" source="/PVs/NPVreweight_2jet_4Top_500"/>
-    <TH1 name="reliso_4Top_500" source="/muons/muon_reliso_4Top_500"/>
-    <TH1 name="Mt_2jet_4Top_500" source="/mass/Mt_2jet_4Top_500"/>
-    <TH1 name="Ht_4Top_500" source="/MET/Ht_4Top_500"/>
-    <TH1 name="Njets_cut1_4Top_500" source="/jets/Njets_cut1_4Top_500"/>
-    <TH1 name="jet1_pt_4Top_500" source="/jets/jet1_pt_4Top_500"/>
-    <TH1 name="jet1_eta_4Top_500" source="/jets/jet1_eta_4Top_500"/>
-    <TH1 name="jet2_pt_4Top_500" source="/jets/jet2_pt_4Top_500"/>
-    <TH1 name="jet2_eta_4Top_500" source="/jets/jet2_eta_4Top_500"/>
-    <TH1 name="jet3_pt_4Top_500" source="/jets/jet3_pt_4Top_500"/>
-    <TH1 name="jet4_pt_4Top_500" source="/jets/jet4_pt_4Top_500"/>
-    <TH1 name="jet5_pt_4Top_500" source="/jets/jet5_pt_4Top_500"/>
-    <TH1 name="jet6_pt_4Top_500" source="/jets/jet6_pt_4Top_500"/>
-    <TH1 name="jet7_pt_4Top_500" source="/jets/jet7_pt_4Top_500"/>
-    <TH1 name="Nmuons_4Top_500" source="/muons/N_muons_4Top_500"/>
-    <TH1 name="Nelectrons_4Top_500" source="/muons/Nelectrons_4Top_500"/>
-    <TH1 name="MET_4Top_500" source="/MET/MET_4Top_500"/>
-    <TH1 name="muons_deltaR_4Top_500" source="/muons/deltaR_4Top_500"/>
-    <TH1 name="Dijet_deltaR_4Top_500" source="/jets/Dijet_deltaR_4Top_500"/>
-    <TH1 name="Nbjets_CSVM_N2j_4Top_500" source="/jets/Nbjets_CSVM_N2j_4Top_500"/>
-    <TH1 name="Njets_1tag_4Top_500" source="/jets/Njets_1tag_4Top_500"/>
-    <TH1 name="Stjet_4Top_500" source="/MET/Stjet_4Top_500"/>
-    <TH1 name="Stlep_4Top_500" source="/MET/Stlep_4Top_500"/>
+  <validation type="4Top500" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top500.root" weight="MCScaleFactors.txt:4Top_500"> 
+	<!-- muons -->
+    <TH1 name="Nmuons_4Top500" source="/muons/N_muons_4Top500"/>
+    <TH1 name="Nelectrons_4Top500" source="/muons/Nelectrons_4Top500"/>
+    <TH1 name="muons_deltaR_4Top500" source="/muons/deltaR_4Top500"/>
+    <TH1 name="muon_pt_4Top500" source="/muons/muon_pt_4Top500"/>
+	<!-- PVs -->
+    <TH1 name="PVs_4Top500" source="/PVs/NPVreweight_2jet_4Top500"/>
+	<!-- MET -->
+    <TH1 name="Ht_4Top500" source="/MET/Ht_4Top500"/>
+    <TH1 name="MET_4Top500" source="/MET/MET_4Top500"/>
+    <TH1 name="Stjet_4Top500" source="/MET/Stjet_4Top500"/>
+    <TH1 name="Stlep_4Top500" source="/MET/Stlep_4Top500"/>
+	<!-- jets -->
+    <TH1 name="Njets_cut1_4Top500" source="/jets/Njets_cut1_4Top500"/>
+    <TH1 name="Nbjets_CSVM_4Top500" source="/jets/Nbjets_CSVM_4Top500"/>
+    <TH1 name="Nbjets_CSVL_4Top500" source="/jets/Nbjets_CSVL_4Top500"/>
+    <TH1 name="jet1_pt_4Top500" source="/jets/jet1_pt_4Top500"/>
+    <TH1 name="jet1_eta_4Top500" source="/jets/jet1_eta_4Top500"/>
+    <TH1 name="jet2_pt_4Top500" source="/jets/jet2_pt_4Top500"/>
+    <TH1 name="jet2_eta_4Top500" source="/jets/jet2_eta_4Top500"/>
+    <TH1 name="jet3_pt_4Top500" source="/jets/jet3_pt_4Top500"/>
+    <TH1 name="jet4_pt_4Top500" source="/jets/jet4_pt_4Top500"/>
   </validation>
 
-  <validation type="4Top_1000" file="./results_4Top_1000.root" weight="MCScaleFactors.txt:4Top_1000"> 
-    <TH1 name="PVs_4Top_1000" source="/PVs/NPVreweight_2jet_4Top_1000"/>
-    <TH1 name="reliso_4Top_1000" source="/muons/muon_reliso_4Top_1000"/>
-    <TH1 name="Mt_2jet_4Top_1000" source="/mass/Mt_2jet_4Top_1000"/>
-    <TH1 name="Ht_4Top_1000" source="/MET/Ht_4Top_1000"/>
-    <TH1 name="Njets_cut1_4Top_1000" source="/jets/Njets_cut1_4Top_1000"/>
-    <TH1 name="jet1_pt_4Top_1000" source="/jets/jet1_pt_4Top_1000"/>
-    <TH1 name="jet1_eta_4Top_1000" source="/jets/jet1_eta_4Top_1000"/>
-    <TH1 name="jet2_pt_4Top_1000" source="/jets/jet2_pt_4Top_1000"/>
-    <TH1 name="jet2_eta_4Top_1000" source="/jets/jet2_eta_4Top_1000"/>
-    <TH1 name="jet3_pt_4Top_1000" source="/jets/jet3_pt_4Top_1000"/>
-    <TH1 name="jet4_pt_4Top_1000" source="/jets/jet4_pt_4Top_1000"/>
-    <TH1 name="jet5_pt_4Top_1000" source="/jets/jet5_pt_4Top_1000"/>
-    <TH1 name="jet6_pt_4Top_1000" source="/jets/jet6_pt_4Top_1000"/>
-    <TH1 name="jet7_pt_4Top_1000" source="/jets/jet7_pt_4Top_1000"/>
-    <TH1 name="Nmuons_4Top_1000" source="/muons/N_muons_4Top_1000"/>
-    <TH1 name="Nelectrons_4Top_1000" source="/muons/Nelectrons_4Top_1000"/>
-    <TH1 name="MET_4Top_1000" source="/MET/MET_4Top_1000"/>
-    <TH1 name="muons_deltaR_4Top_1000" source="/muons/deltaR_4Top_1000"/>
-    <TH1 name="Dijet_deltaR_4Top_1000" source="/jets/Dijet_deltaR_4Top_1000"/>
-    <TH1 name="Nbjets_CSVM_N2j_4Top_1000" source="/jets/Nbjets_CSVM_N2j_4Top_1000"/>
-    <TH1 name="Njets_1tag_4Top_1000" source="/jets/Njets_1tag_4Top_1000"/>
-    <TH1 name="Stjet_4Top_1000" source="/MET/Stjet_4Top_1000"/>
-    <TH1 name="Stlep_4Top_1000" source="/MET/Stlep_4Top_1000"/>
+  <validation type="4Top700" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top700.root" weight="MCScaleFactors.txt:4Top_700"> 
+	<!-- muons -->
+    <TH1 name="Nmuons_4Top700" source="/muons/N_muons_4Top700"/>
+    <TH1 name="Nelectrons_4Top700" source="/muons/Nelectrons_4Top700"/>
+    <TH1 name="muons_deltaR_4Top700" source="/muons/deltaR_4Top700"/>
+    <TH1 name="muon_pt_4Top700" source="/muons/muon_pt_4Top700"/>
+	<!-- PVs -->
+    <TH1 name="PVs_4Top700" source="/PVs/NPVreweight_2jet_4Top700"/>
+	<!-- MET -->
+    <TH1 name="Ht_4Top700" source="/MET/Ht_4Top700"/>
+    <TH1 name="MET_4Top700" source="/MET/MET_4Top700"/>
+    <TH1 name="Stjet_4Top700" source="/MET/Stjet_4Top700"/>
+    <TH1 name="Stlep_4Top700" source="/MET/Stlep_4Top700"/>
+	<!-- jets -->
+    <TH1 name="Njets_cut1_4Top700" source="/jets/Njets_cut1_4Top700"/>
+    <TH1 name="Nbjets_CSVM_4Top700" source="/jets/Nbjets_CSVM_4Top700"/>
+    <TH1 name="Nbjets_CSVL_4Top700" source="/jets/Nbjets_CSVL_4Top700"/>
+    <TH1 name="jet1_pt_4Top700" source="/jets/jet1_pt_4Top700"/>
+    <TH1 name="jet1_eta_4Top700" source="/jets/jet1_eta_4Top700"/>
+    <TH1 name="jet2_pt_4Top700" source="/jets/jet2_pt_4Top700"/>
+    <TH1 name="jet2_eta_4Top700" source="/jets/jet2_eta_4Top700"/>
+    <TH1 name="jet3_pt_4Top700" source="/jets/jet3_pt_4Top700"/>
+    <TH1 name="jet4_pt_4Top700" source="/jets/jet4_pt_4Top700"/>
   </validation>
 
-  <validation type="ttbar" file="./results_ttbar.root" weight="MCScaleFactors.txt:ttbar"> 
+  <validation type="4Top900" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top900.root" weight="MCScaleFactors.txt:4Top_900"> 
+ 	<!-- muons -->
+    <TH1 name="Nmuons_4Top900" source="/muons/N_muons_4Top900"/>
+    <TH1 name="Nelectrons_4Top900" source="/muons/Nelectrons_4Top900"/>
+    <TH1 name="muons_deltaR_4Top900" source="/muons/deltaR_4Top900"/>
+    <TH1 name="muon_pt_4Top900" source="/muons/muon_pt_4Top900"/>
+	<!-- PVs -->
+    <TH1 name="PVs_4Top900" source="/PVs/NPVreweight_2jet_4Top900"/>
+	<!-- MET -->
+    <TH1 name="Ht_4Top900" source="/MET/Ht_4Top900"/>
+    <TH1 name="MET_4Top900" source="/MET/MET_4Top900"/>
+    <TH1 name="Stjet_4Top900" source="/MET/Stjet_4Top900"/>
+    <TH1 name="Stlep_4Top900" source="/MET/Stlep_4Top900"/>
+	<!-- jets -->
+    <TH1 name="Njets_cut1_4Top900" source="/jets/Njets_cut1_4Top900"/>
+    <TH1 name="Nbjets_CSVM_4Top900" source="/jets/Nbjets_CSVM_4Top900"/>
+    <TH1 name="Nbjets_CSVL_4Top900" source="/jets/Nbjets_CSVL_4Top900"/>
+    <TH1 name="jet1_pt_4Top900" source="/jets/jet1_pt_4Top900"/>
+    <TH1 name="jet1_eta_4Top900" source="/jets/jet1_eta_4Top900"/>
+    <TH1 name="jet2_pt_4Top900" source="/jets/jet2_pt_4Top900"/>
+    <TH1 name="jet2_eta_4Top900" source="/jets/jet2_eta_4Top900"/>
+    <TH1 name="jet3_pt_4Top900" source="/jets/jet3_pt_4Top900"/>
+    <TH1 name="jet4_pt_4Top900" source="/jets/jet4_pt_4Top900"/>
+  </validation>
+
+  <validation type="4Top1000" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top1000.root" weight="MCScaleFactors.txt:4Top_1000"> 
+ 	<!-- muons -->
+    <TH1 name="Nmuons_4Top1000" source="/muons/N_muons_4Top1000"/>
+    <TH1 name="Nelectrons_4Top1000" source="/muons/Nelectrons_4Top1000"/>
+    <TH1 name="muons_deltaR_4Top1000" source="/muons/deltaR_4Top1000"/>
+    <TH1 name="muon_pt_4Top1000" source="/muons/muon_pt_4Top1000"/>
+	<!-- PVs -->
+    <TH1 name="PVs_4Top1000" source="/PVs/NPVreweight_2jet_4Top1000"/>
+	<!-- MET -->
+    <TH1 name="Ht_4Top1000" source="/MET/Ht_4Top1000"/>
+    <TH1 name="MET_4Top1000" source="/MET/MET_4Top1000"/>
+    <TH1 name="Stjet_4Top1000" source="/MET/Stjet_4Top1000"/>
+    <TH1 name="Stlep_4Top1000" source="/MET/Stlep_4Top1000"/>
+	<!-- jets -->
+    <TH1 name="Njets_cut1_4Top1000" source="/jets/Njets_cut1_4Top1000"/>
+    <TH1 name="Nbjets_CSVM_4Top1000" source="/jets/Nbjets_CSVM_4Top1000"/>
+    <TH1 name="Nbjets_CSVL_4Top1000" source="/jets/Nbjets_CSVL_4Top1000"/>
+    <TH1 name="jet1_pt_4Top1000" source="/jets/jet1_pt_4Top1000"/>
+    <TH1 name="jet1_eta_4Top1000" source="/jets/jet1_eta_4Top1000"/>
+    <TH1 name="jet2_pt_4Top1000" source="/jets/jet2_pt_4Top1000"/>
+    <TH1 name="jet2_eta_4Top1000" source="/jets/jet2_eta_4Top1000"/>
+    <TH1 name="jet3_pt_4Top1000" source="/jets/jet3_pt_4Top1000"/>
+    <TH1 name="jet4_pt_4Top1000" source="/jets/jet4_pt_4Top1000"/>
+  </validation>
+
+  <validation type="4Top1100" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top1100.root" weight="MCScaleFactors.txt:4Top_1100"> 
+ 	<!-- muons -->
+    <TH1 name="Nmuons_4Top1100" source="/muons/N_muons_4Top1100"/>
+    <TH1 name="Nelectrons_4Top1100" source="/muons/Nelectrons_4Top1100"/>
+    <TH1 name="muons_deltaR_4Top1100" source="/muons/deltaR_4Top1100"/>
+    <TH1 name="muon_pt_4Top1100" source="/muons/muon_pt_4Top1100"/>
+	<!-- PVs -->
+    <TH1 name="PVs_4Top1100" source="/PVs/NPVreweight_2jet_4Top1100"/>
+	<!-- MET -->
+    <TH1 name="Ht_4Top1100" source="/MET/Ht_4Top1100"/>
+    <TH1 name="MET_4Top1100" source="/MET/MET_4Top1100"/>
+    <TH1 name="Stjet_4Top1100" source="/MET/Stjet_4Top1100"/>
+    <TH1 name="Stlep_4Top1100" source="/MET/Stlep_4Top1100"/>
+	<!-- jets -->
+    <TH1 name="Njets_cut1_4Top1100" source="/jets/Njets_cut1_4Top1100"/>
+    <TH1 name="Nbjets_CSVM_4Top1100" source="/jets/Nbjets_CSVM_4Top1100"/>
+    <TH1 name="Nbjets_CSVL_4Top1100" source="/jets/Nbjets_CSVL_4Top1100"/>
+    <TH1 name="jet1_pt_4Top1100" source="/jets/jet1_pt_4Top1100"/>
+    <TH1 name="jet1_eta_4Top1100" source="/jets/jet1_eta_4Top1100"/>
+    <TH1 name="jet2_pt_4Top1100" source="/jets/jet2_pt_4Top1100"/>
+    <TH1 name="jet2_eta_4Top1100" source="/jets/jet2_eta_4Top1100"/>
+    <TH1 name="jet3_pt_4Top1100" source="/jets/jet3_pt_4Top1100"/>
+    <TH1 name="jet4_pt_4Top1100" source="/jets/jet4_pt_4Top1100"/>
+  </validation>
+
+  <validation type="ttbar" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_ttbar.root" weight="MCScaleFactors.txt:ttbar"> 
+ 	<!-- muons -->
+    <TH1 name="Nmuons_ttbar" source="/muons/N_muons_ttbar"/>
+    <TH1 name="Nelectrons_ttbar" source="/muons/Nelectrons_ttbar"/>
+    <TH1 name="muons_deltaR_ttbar" source="/muons/deltaR_ttbar"/>
+    <TH1 name="muon_pt_ttbar" source="/muons/muon_pt_ttbar"/>
+	<!-- PVs -->
     <TH1 name="PVs_ttbar" source="/PVs/NPVreweight_2jet_ttbar"/>
-    <TH1 name="reliso_ttbar" source="/muons/muon_reliso_ttbar"/>
-    <TH1 name="Mt_2jet_ttbar" source="/mass/Mt_2jet_ttbar"/>
+	<!-- MET -->
     <TH1 name="Ht_ttbar" source="/MET/Ht_ttbar"/>
+    <TH1 name="MET_ttbar" source="/MET/MET_ttbar"/>
+    <TH1 name="Stjet_ttbar" source="/MET/Stjet_ttbar"/>
+    <TH1 name="Stlep_ttbar" source="/MET/Stlep_ttbar"/>
+	<!-- jets -->
     <TH1 name="Njets_cut1_ttbar" source="/jets/Njets_cut1_ttbar"/>
+    <TH1 name="Nbjets_CSVM_ttbar" source="/jets/Nbjets_CSVM_ttbar"/>
+    <TH1 name="Nbjets_CSVL_ttbar" source="/jets/Nbjets_CSVL_ttbar"/>
     <TH1 name="jet1_pt_ttbar" source="/jets/jet1_pt_ttbar"/>
     <TH1 name="jet1_eta_ttbar" source="/jets/jet1_eta_ttbar"/>
     <TH1 name="jet2_pt_ttbar" source="/jets/jet2_pt_ttbar"/>
     <TH1 name="jet2_eta_ttbar" source="/jets/jet2_eta_ttbar"/>
     <TH1 name="jet3_pt_ttbar" source="/jets/jet3_pt_ttbar"/>
     <TH1 name="jet4_pt_ttbar" source="/jets/jet4_pt_ttbar"/>
-    <TH1 name="jet5_pt_ttbar" source="/jets/jet5_pt_ttbar"/>
-    <TH1 name="jet6_pt_ttbar" source="/jets/jet6_pt_ttbar"/>
-    <TH1 name="jet7_pt_ttbar" source="/jets/jet7_pt_ttbar"/>
-    <TH1 name="Nmuons_ttbar" source="/muons/N_muons_ttbar"/>
-    <TH1 name="Nelectrons_ttbar" source="/muons/Nelectrons_ttbar"/>
-    <TH1 name="MET_ttbar" source="/MET/MET_ttbar"/>
-    <TH1 name="muons_deltaR_ttbar" source="/muons/deltaR_ttbar"/>
-    <TH1 name="Dijet_deltaR_ttbar" source="/jets/Dijet_deltaR_ttbar"/>
-    <TH1 name="Nbjets_CSVM_N2j_ttbar" source="/jets/Nbjets_CSVM_N2j_ttbar"/>
-    <TH1 name="Njets_1tag_ttbar" source="/jets/Njets_1tag_ttbar"/>
-    <TH1 name="Stjet_ttbar" source="/MET/Stjet_ttbar"/>
-    <TH1 name="Stlep_ttbar" source="/MET/Stlep_ttbar"/>
   </validation>
 
 
-  <validation type="WJets" file="./results_WJets.root" weight="MCScaleFactors.txt:WJets">
+  <validation type="WJets" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WJets.root" weight="MCScaleFactors.txt:WJets">
+ 	<!-- muons -->
+    <TH1 name="Nmuons_WJets" source="/muons/N_muons_WJets"/>
+    <TH1 name="Nelectrons_WJets" source="/muons/Nelectrons_WJets"/>
+    <TH1 name="muons_deltaR_WJets" source="/muons/deltaR_WJets"/>
+    <TH1 name="muon_pt_WJets" source="/muons/muon_pt_WJets"/>
+	<!-- PVs -->
     <TH1 name="PVs_WJets" source="/PVs/NPVreweight_2jet_WJets"/>
-    <TH1 name="reliso_WJets" source="/muons/muon_reliso_WJets"/>
-    <TH1 name="Mt_2jet_WJets" source="/mass/Mt_2jet_WJets"/>
+	<!-- MET -->
     <TH1 name="Ht_WJets" source="/MET/Ht_WJets"/>
+    <TH1 name="MET_WJets" source="/MET/MET_WJets"/>
+    <TH1 name="Stjet_WJets" source="/MET/Stjet_WJets"/>
+    <TH1 name="Stlep_WJets" source="/MET/Stlep_WJets"/>
+	<!-- jets -->
     <TH1 name="Njets_cut1_WJets" source="/jets/Njets_cut1_WJets"/>
+    <TH1 name="Nbjets_CSVM_WJets" source="/jets/Nbjets_CSVM_WJets"/>
+    <TH1 name="Nbjets_CSVL_WJets" source="/jets/Nbjets_CSVL_WJets"/>
     <TH1 name="jet1_pt_WJets" source="/jets/jet1_pt_WJets"/>
     <TH1 name="jet1_eta_WJets" source="/jets/jet1_eta_WJets"/>
     <TH1 name="jet2_pt_WJets" source="/jets/jet2_pt_WJets"/>
     <TH1 name="jet2_eta_WJets" source="/jets/jet2_eta_WJets"/>
     <TH1 name="jet3_pt_WJets" source="/jets/jet3_pt_WJets"/>
     <TH1 name="jet4_pt_WJets" source="/jets/jet4_pt_WJets"/>
-    <TH1 name="jet5_pt_WJets" source="/jets/jet5_pt_WJets"/>
-    <TH1 name="jet6_pt_WJets" source="/jets/jet6_pt_WJets"/>
-    <TH1 name="jet7_pt_WJets" source="/jets/jet7_pt_WJets"/>
-    <TH1 name="Nmuons_WJets" source="/muons/N_muons_WJets"/>
-    <TH1 name="Nelectrons_WJets" source="/muons/Nelectrons_WJets"/>
-    <TH1 name="MET_WJets" source="/MET/MET_WJets"/>
-    <TH1 name="muons_deltaR_WJets" source="/muons/deltaR_WJets"/>
-    <TH1 name="Dijet_deltaR_WJets" source="/jets/Dijet_deltaR_WJets"/>
-    <TH1 name="Nbjets_CSVM_N2j_WJets" source="/jets/Nbjets_CSVM_N2j_WJets"/>
-    <TH1 name="Njets_1tag_WJets" source="/jets/Njets_1tag_WJets"/>
-    <TH1 name="Stjet_WJets" source="/MET/Stjet_WJets"/>
-    <TH1 name="Stlep_WJets" source="/MET/Stlep_WJets"/>
   </validation>
 
-  <validation type="ZJets" file="./results_ZJets.root" weight="MCScaleFactors.txt:ZJets">
+  <validation type="ZJets" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_ZJets.root" weight="MCScaleFactors.txt:ZJets">
+ 	<!-- muons -->
+    <TH1 name="Nmuons_ZJets" source="/muons/N_muons_ZJets"/>
+    <TH1 name="Nelectrons_ZJets" source="/muons/Nelectrons_ZJets"/>
+    <TH1 name="muons_deltaR_ZJets" source="/muons/deltaR_ZJets"/>
+    <TH1 name="muon_pt_ZJets" source="/muons/muon_pt_ZJets"/>
+	<!-- PVs -->
     <TH1 name="PVs_ZJets" source="/PVs/NPVreweight_2jet_ZJets"/>
-    <TH1 name="reliso_ZJets" source="/muons/muon_reliso_ZJets"/>
-    <TH1 name="Mt_2jet_ZJets" source="/mass/Mt_2jet_ZJets"/>
+	<!-- MET -->
     <TH1 name="Ht_ZJets" source="/MET/Ht_ZJets"/>
+    <TH1 name="MET_ZJets" source="/MET/MET_ZJets"/>
+    <TH1 name="Stjet_ZJets" source="/MET/Stjet_ZJets"/>
+    <TH1 name="Stlep_ZJets" source="/MET/Stlep_ZJets"/>
+	<!-- jets -->
     <TH1 name="Njets_cut1_ZJets" source="/jets/Njets_cut1_ZJets"/>
+    <TH1 name="Nbjets_CSVM_ZJets" source="/jets/Nbjets_CSVM_ZJets"/>
+    <TH1 name="Nbjets_CSVL_ZJets" source="/jets/Nbjets_CSVL_ZJets"/>
     <TH1 name="jet1_pt_ZJets" source="/jets/jet1_pt_ZJets"/>
     <TH1 name="jet1_eta_ZJets" source="/jets/jet1_eta_ZJets"/>
     <TH1 name="jet2_pt_ZJets" source="/jets/jet2_pt_ZJets"/>
     <TH1 name="jet2_eta_ZJets" source="/jets/jet2_eta_ZJets"/>
     <TH1 name="jet3_pt_ZJets" source="/jets/jet3_pt_ZJets"/>
     <TH1 name="jet4_pt_ZJets" source="/jets/jet4_pt_ZJets"/>
-    <TH1 name="jet5_pt_ZJets" source="/jets/jet5_pt_ZJets"/>
-    <TH1 name="jet6_pt_ZJets" source="/jets/jet6_pt_ZJets"/>
-    <TH1 name="jet7_pt_ZJets" source="/jets/jet7_pt_ZJets"/>
-    <TH1 name="Nmuons_ZJets" source="/muons/N_muons_ZJets"/>
-    <TH1 name="Nelectrons_ZJets" source="/muons/Nelectrons_ZJets"/>
-    <TH1 name="MET_ZJets" source="/MET/MET_ZJets"/>
-    <TH1 name="muons_deltaR_ZJets" source="/muons/deltaR_ZJets"/>
-    <TH1 name="Dijet_deltaR_ZJets" source="/jets/Dijet_deltaR_ZJets"/>
-    <TH1 name="Nbjets_CSVM_N2j_ZJets" source="/jets/Nbjets_CSVM_N2j_ZJets"/>
-    <TH1 name="Njets_1tag_ZJets" source="/jets/Njets_1tag_ZJets"/>
-    <TH1 name="Stjet_ZJets" source="/MET/Stjet_ZJets"/>
-    <TH1 name="Stlep_ZJets" source="/MET/Stlep_ZJets"/>
   </validation>
 
-  <validation type="QCD" file="./results_QCD.root" weight="MCScaleFactors.txt:QCD">
-    <TH1 name="PVs_QCD" source="/PVs/NPVreweight_2jet_QCD"/>
-    <TH1 name="reliso_QCD" source="/muons/muon_reliso_QCD"/>
-    <TH1 name="Mt_2jet_QCD" source="/mass/Mt_2jet_QCD"/>
-    <TH1 name="Ht_QCD" source="/MET/Ht_QCD"/>
-    <TH1 name="Njets_cut1_QCD" source="/jets/Njets_cut1_QCD"/>
-    <TH1 name="jet1_pt_QCD" source="/jets/jet1_pt_QCD"/>
-    <TH1 name="jet1_eta_QCD" source="/jets/jet1_eta_QCD"/>
-    <TH1 name="jet2_pt_QCD" source="/jets/jet2_pt_QCD"/>
-    <TH1 name="jet2_eta_QCD" source="/jets/jet2_eta_QCD"/>
-    <TH1 name="jet3_pt_QCD" source="/jets/jet3_pt_QCD"/>
-    <TH1 name="jet4_pt_QCD" source="/jets/jet4_pt_QCD"/>
-    <TH1 name="jet5_pt_QCD" source="/jets/jet5_pt_QCD"/>
-    <TH1 name="jet6_pt_QCD" source="/jets/jet6_pt_QCD"/>
-    <TH1 name="jet7_pt_QCD" source="/jets/jet7_pt_QCD"/>
-    <TH1 name="Nmuons_QCD" source="/muons/N_muons_QCD"/>
-    <TH1 name="Nelectrons_QCD" source="/muons/Nelectrons_QCD"/>
-    <TH1 name="MET_QCD" source="/MET/MET_QCD"/>
-    <TH1 name="muons_deltaR_QCD" source="/muons/deltaR_QCD"/>
-    <TH1 name="Dijet_deltaR_QCD" source="/jets/Dijet_deltaR_QCD"/>
-    <TH1 name="Nbjets_CSVM_N2j_QCD" source="/jets/Nbjets_CSVM_N2j_QCD"/>
-    <TH1 name="Njets_1tag_QCD" source="/jets/Njets_1tag_QCD"/>
-    <TH1 name="Stjet_QCD" source="/MET/Stjet_QCD"/>
-    <TH1 name="Stlep_QCD" source="/MET/Stlep_QCD"/>
-  </validation>
-
-  <validation type="STtch" file="./results_STtch.root" weight="MCScaleFactors.txt:tch">
+  <validation type="STtch" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtch.root" weight="MCScaleFactors.txt:tch">
+ 	<!-- muons -->
+    <TH1 name="Nmuons_STtch" source="/muons/N_muons_STtch"/>
+    <TH1 name="Nelectrons_STtch" source="/muons/Nelectrons_STtch"/>
+    <TH1 name="muons_deltaR_STtch" source="/muons/deltaR_STtch"/>
+    <TH1 name="muon_pt_STtch" source="/muons/muon_pt_STtch"/>
+	<!-- PVs -->
     <TH1 name="PVs_STtch" source="/PVs/NPVreweight_2jet_STtch"/>
-    <TH1 name="reliso_STtch" source="/muons/muon_reliso_STtch"/>
-    <TH1 name="Mt_2jet_STtch" source="/mass/Mt_2jet_STtch"/>
+	<!-- MET -->
     <TH1 name="Ht_STtch" source="/MET/Ht_STtch"/>
+    <TH1 name="MET_STtch" source="/MET/MET_STtch"/>
+    <TH1 name="Stjet_STtch" source="/MET/Stjet_STtch"/>
+    <TH1 name="Stlep_STtch" source="/MET/Stlep_STtch"/>
+	<!-- jets -->
     <TH1 name="Njets_cut1_STtch" source="/jets/Njets_cut1_STtch"/>
+    <TH1 name="Nbjets_CSVM_STtch" source="/jets/Nbjets_CSVM_STtch"/>
+    <TH1 name="Nbjets_CSVL_STtch" source="/jets/Nbjets_CSVL_STtch"/>
     <TH1 name="jet1_pt_STtch" source="/jets/jet1_pt_STtch"/>
     <TH1 name="jet1_eta_STtch" source="/jets/jet1_eta_STtch"/>
     <TH1 name="jet2_pt_STtch" source="/jets/jet2_pt_STtch"/>
     <TH1 name="jet2_eta_STtch" source="/jets/jet2_eta_STtch"/>
     <TH1 name="jet3_pt_STtch" source="/jets/jet3_pt_STtch"/>
     <TH1 name="jet4_pt_STtch" source="/jets/jet4_pt_STtch"/>
-    <TH1 name="jet5_pt_STtch" source="/jets/jet5_pt_STtch"/>
-    <TH1 name="jet6_pt_STtch" source="/jets/jet6_pt_STtch"/>
-    <TH1 name="jet7_pt_STtch" source="/jets/jet7_pt_STtch"/>
-    <TH1 name="Nmuons_STtch" source="/muons/N_muons_STtch"/>
-    <TH1 name="Nelectrons_STtch" source="/muons/Nelectrons_STtch"/>
-    <TH1 name="MET_STtch" source="/MET/MET_STtch"/>
-    <TH1 name="muons_deltaR_STtch" source="/muons/deltaR_STtch"/>
-    <TH1 name="Dijet_deltaR_STtch" source="/jets/Dijet_deltaR_STtch"/>
-    <TH1 name="Nbjets_CSVM_N2j_STtch" source="/jets/Nbjets_CSVM_N2j_STtch"/>
-    <TH1 name="Njets_1tag_STtch" source="/jets/Njets_1tag_STtch"/>
-    <TH1 name="Stjet_STtch" source="/MET/Stjet_STtch"/>
-    <TH1 name="Stlep_STtch" source="/MET/Stlep_STtch"/>
   </validation>
 
-  <validation type="STtch_bar" file="./results_STtch_bar.root" weight="MCScaleFactors.txt:tch_bar">
+  <validation type="STtch_bar" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtch_bar.root" weight="MCScaleFactors.txt:tch_bar">
+ 	<!-- muons -->
+    <TH1 name="Nmuons_STtch_bar" source="/muons/N_muons_STtch_bar"/>
+    <TH1 name="Nelectrons_STtch_bar" source="/muons/Nelectrons_STtch_bar"/>
+    <TH1 name="muons_deltaR_STtch_bar" source="/muons/deltaR_STtch_bar"/>
+    <TH1 name="muon_pt_STtch_bar" source="/muons/muon_pt_STtch_bar"/>
+	<!-- PVs -->
     <TH1 name="PVs_STtch_bar" source="/PVs/NPVreweight_2jet_STtch_bar"/>
-    <TH1 name="reliso_STtch_bar" source="/muons/muon_reliso_STtch_bar"/>
-    <TH1 name="Mt_2jet_STtch_bar" source="/mass/Mt_2jet_STtch_bar"/>
+	<!-- MET -->
     <TH1 name="Ht_STtch_bar" source="/MET/Ht_STtch_bar"/>
+    <TH1 name="MET_STtch_bar" source="/MET/MET_STtch_bar"/>
+    <TH1 name="Stjet_STtch_bar" source="/MET/Stjet_STtch_bar"/>
+    <TH1 name="Stlep_STtch_bar" source="/MET/Stlep_STtch_bar"/>
+	<!-- jets -->
     <TH1 name="Njets_cut1_STtch_bar" source="/jets/Njets_cut1_STtch_bar"/>
+    <TH1 name="Nbjets_CSVM_STtch_bar" source="/jets/Nbjets_CSVM_STtch_bar"/>
+    <TH1 name="Nbjets_CSVL_STtch_bar" source="/jets/Nbjets_CSVL_STtch_bar"/>
     <TH1 name="jet1_pt_STtch_bar" source="/jets/jet1_pt_STtch_bar"/>
     <TH1 name="jet1_eta_STtch_bar" source="/jets/jet1_eta_STtch_bar"/>
     <TH1 name="jet2_pt_STtch_bar" source="/jets/jet2_pt_STtch_bar"/>
     <TH1 name="jet2_eta_STtch_bar" source="/jets/jet2_eta_STtch_bar"/>
     <TH1 name="jet3_pt_STtch_bar" source="/jets/jet3_pt_STtch_bar"/>
     <TH1 name="jet4_pt_STtch_bar" source="/jets/jet4_pt_STtch_bar"/>
-    <TH1 name="jet5_pt_STtch_bar" source="/jets/jet5_pt_STtch_bar"/>
-    <TH1 name="jet6_pt_STtch_bar" source="/jets/jet6_pt_STtch_bar"/>
-    <TH1 name="jet7_pt_STtch_bar" source="/jets/jet7_pt_STtch_bar"/>
-    <TH1 name="Nmuons_STtch_bar" source="/muons/N_muons_STtch_bar"/>
-    <TH1 name="Nelectrons_STtch_bar" source="/muons/Nelectrons_STtch_bar"/>
-    <TH1 name="MET_STtch_bar" source="/MET/MET_STtch_bar"/>
-    <TH1 name="muons_deltaR_STtch_bar" source="/muons/deltaR_STtch_bar"/>
-    <TH1 name="Dijet_deltaR_STtch_bar" source="/jets/Dijet_deltaR_STtch_bar"/>
-    <TH1 name="Nbjets_CSVM_N2j_STtch_bar" source="/jets/Nbjets_CSVM_N2j_STtch_bar"/>
-    <TH1 name="Njets_1tag_STtch_bar" source="/jets/Njets_1tag_STtch_bar"/>
-    <TH1 name="Stjet_STtch_bar" source="/MET/Stjet_STtch_bar"/>
-    <TH1 name="Stlep_STtch_bar" source="/MET/Stlep_STtch_bar"/>
   </validation>
 
-  <validation type="STtWch" file="./results_STtWch.root" weight="MCScaleFactors.txt:tWch">
+  <validation type="STtWch" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtWch.root" weight="MCScaleFactors.txt:tWch">
+ 	<!-- muons -->
+    <TH1 name="Nmuons_STtWch" source="/muons/N_muons_STtWch"/>
+    <TH1 name="Nelectrons_STtWch" source="/muons/Nelectrons_STtWch"/>
+    <TH1 name="muons_deltaR_STtWch" source="/muons/deltaR_STtWch"/>
+    <TH1 name="muon_pt_STtWch" source="/muons/muon_pt_STtWch"/>
+	<!-- PVs -->
     <TH1 name="PVs_STtWch" source="/PVs/NPVreweight_2jet_STtWch"/>
-    <TH1 name="reliso_STtWch" source="/muons/muon_reliso_STtWch"/>
-    <TH1 name="Mt_2jet_STtWch" source="/mass/Mt_2jet_STtWch"/>
+	<!-- MET -->
     <TH1 name="Ht_STtWch" source="/MET/Ht_STtWch"/>
+    <TH1 name="MET_STtWch" source="/MET/MET_STtWch"/>
+    <TH1 name="Stjet_STtWch" source="/MET/Stjet_STtWch"/>
+    <TH1 name="Stlep_STtWch" source="/MET/Stlep_STtWch"/>
+	<!-- jets -->
     <TH1 name="Njets_cut1_STtWch" source="/jets/Njets_cut1_STtWch"/>
+    <TH1 name="Nbjets_CSVM_STtWch" source="/jets/Nbjets_CSVM_STtWch"/>
+    <TH1 name="Nbjets_CSVL_STtWch" source="/jets/Nbjets_CSVL_STtWch"/>
     <TH1 name="jet1_pt_STtWch" source="/jets/jet1_pt_STtWch"/>
     <TH1 name="jet1_eta_STtWch" source="/jets/jet1_eta_STtWch"/>
     <TH1 name="jet2_pt_STtWch" source="/jets/jet2_pt_STtWch"/>
     <TH1 name="jet2_eta_STtWch" source="/jets/jet2_eta_STtWch"/>
     <TH1 name="jet3_pt_STtWch" source="/jets/jet3_pt_STtWch"/>
     <TH1 name="jet4_pt_STtWch" source="/jets/jet4_pt_STtWch"/>
-    <TH1 name="jet5_pt_STtWch" source="/jets/jet5_pt_STtWch"/>
-    <TH1 name="jet6_pt_STtWch" source="/jets/jet6_pt_STtWch"/>
-    <TH1 name="jet7_pt_STtWch" source="/jets/jet7_pt_STtWch"/>
-    <TH1 name="Nmuons_STtWch" source="/muons/N_muons_STtWch"/>
-    <TH1 name="Nelectrons_STtWch" source="/muons/Nelectrons_STtWch"/>
-    <TH1 name="MET_STtWch" source="/MET/MET_STtWch"/>
-    <TH1 name="muons_deltaR_STtWch" source="/muons/deltaR_STtWch"/>
-    <TH1 name="Dijet_deltaR_STtWch" source="/jets/Dijet_deltaR_STtWch"/>
-    <TH1 name="Nbjets_CSVM_N2j_STtWch" source="/jets/Nbjets_CSVM_N2j_STtWch"/>
-    <TH1 name="Njets_1tag_STtWch" source="/jets/Njets_1tag_STtWch"/>
-    <TH1 name="Stjet_STtWch" source="/MET/Stjet_STtWch"/>
-    <TH1 name="Stlep_STtWch" source="/MET/Stlep_STtWch"/>
   </validation>
 
-  <validation type="STtWch_bar" file="./results_STtWch_bar.root" weight="MCScaleFactors.txt:tWch_bar">
+  <validation type="STtWch_bar" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtWch_bar.root" weight="MCScaleFactors.txt:tWch_bar">
+ 	<!-- muons -->
+    <TH1 name="Nmuons_STtWch_bar" source="/muons/N_muons_STtWch_bar"/>
+    <TH1 name="Nelectrons_STtWch_bar" source="/muons/Nelectrons_STtWch_bar"/>
+    <TH1 name="muons_deltaR_STtWch_bar" source="/muons/deltaR_STtWch_bar"/>
+    <TH1 name="muon_pt_STtWch_bar" source="/muons/muon_pt_STtWch_bar"/>
+	<!-- PVs -->
     <TH1 name="PVs_STtWch_bar" source="/PVs/NPVreweight_2jet_STtWch_bar"/>
-    <TH1 name="reliso_STtWch_bar" source="/muons/muon_reliso_STtWch_bar"/>
-    <TH1 name="Mt_2jet_STtWch_bar" source="/mass/Mt_2jet_STtWch_bar"/>
+	<!-- MET -->
     <TH1 name="Ht_STtWch_bar" source="/MET/Ht_STtWch_bar"/>
+    <TH1 name="MET_STtWch_bar" source="/MET/MET_STtWch_bar"/>
+    <TH1 name="Stjet_STtWch_bar" source="/MET/Stjet_STtWch_bar"/>
+    <TH1 name="Stlep_STtWch_bar" source="/MET/Stlep_STtWch_bar"/>
+	<!-- jets -->
     <TH1 name="Njets_cut1_STtWch_bar" source="/jets/Njets_cut1_STtWch_bar"/>
+    <TH1 name="Nbjets_CSVM_STtWch_bar" source="/jets/Nbjets_CSVM_STtWch_bar"/>
+    <TH1 name="Nbjets_CSVL_STtWch_bar" source="/jets/Nbjets_CSVL_STtWch_bar"/>
     <TH1 name="jet1_pt_STtWch_bar" source="/jets/jet1_pt_STtWch_bar"/>
     <TH1 name="jet1_eta_STtWch_bar" source="/jets/jet1_eta_STtWch_bar"/>
     <TH1 name="jet2_pt_STtWch_bar" source="/jets/jet2_pt_STtWch_bar"/>
     <TH1 name="jet2_eta_STtWch_bar" source="/jets/jet2_eta_STtWch_bar"/>
     <TH1 name="jet3_pt_STtWch_bar" source="/jets/jet3_pt_STtWch_bar"/>
     <TH1 name="jet4_pt_STtWch_bar" source="/jets/jet4_pt_STtWch_bar"/>
-    <TH1 name="jet5_pt_STtWch_bar" source="/jets/jet5_pt_STtWch_bar"/>
-    <TH1 name="jet6_pt_STtWch_bar" source="/jets/jet6_pt_STtWch_bar"/>
-    <TH1 name="jet7_pt_STtWch_bar" source="/jets/jet7_pt_STtWch_bar"/>
-    <TH1 name="Nmuons_STtWch_bar" source="/muons/N_muons_STtWch_bar"/>
-    <TH1 name="Nelectrons_STtWch_bar" source="/muons/Nelectrons_STtWch_bar"/>
-    <TH1 name="MET_STtWch_bar" source="/MET/MET_STtWch_bar"/>
-    <TH1 name="muons_deltaR_STtWch_bar" source="/muons/deltaR_STtWch_bar"/>
-    <TH1 name="Dijet_deltaR_STtWch_bar" source="/jets/Dijet_deltaR_STtWch_bar"/>
-    <TH1 name="Nbjets_CSVM_N2j_STtWch_bar" source="/jets/Nbjets_CSVM_N2j_STtWch_bar"/>
-    <TH1 name="Njets_1tag_STtWch_bar" source="/jets/Njets_1tag_STtWch_bar"/>
-    <TH1 name="Stjet_STtWch_bar" source="/MET/Stjet_STtWch_bar"/>
-    <TH1 name="Stlep_STtWch_bar" source="/MET/Stlep_STtWch_bar"/>
   </validation>
 
-  <validation type="STsch" file="./results_STsch.root" weight="MCScaleFactors.txt:sch">
+  <validation type="STsch" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STsch.root" weight="MCScaleFactors.txt:sch">
+ 	<!-- muons -->
+    <TH1 name="Nmuons_STsch" source="/muons/N_muons_STsch"/>
+    <TH1 name="Nelectrons_STsch" source="/muons/Nelectrons_STsch"/>
+    <TH1 name="muons_deltaR_STsch" source="/muons/deltaR_STsch"/>
+    <TH1 name="muon_pt_STsch" source="/muons/muon_pt_STsch"/>
+	<!-- PVs -->
     <TH1 name="PVs_STsch" source="/PVs/NPVreweight_2jet_STsch"/>
-    <TH1 name="reliso_STsch" source="/muons/muon_reliso_STsch"/>
-    <TH1 name="Mt_2jet_STsch" source="/mass/Mt_2jet_STsch"/>
+	<!-- MET -->
     <TH1 name="Ht_STsch" source="/MET/Ht_STsch"/>
+    <TH1 name="MET_STsch" source="/MET/MET_STsch"/>
+    <TH1 name="Stjet_STsch" source="/MET/Stjet_STsch"/>
+    <TH1 name="Stlep_STsch" source="/MET/Stlep_STsch"/>
+	<!-- jets -->
     <TH1 name="Njets_cut1_STsch" source="/jets/Njets_cut1_STsch"/>
+    <TH1 name="Nbjets_CSVM_STsch" source="/jets/Nbjets_CSVM_STsch"/>
+    <TH1 name="Nbjets_CSVL_STsch" source="/jets/Nbjets_CSVL_STsch"/>
     <TH1 name="jet1_pt_STsch" source="/jets/jet1_pt_STsch"/>
     <TH1 name="jet1_eta_STsch" source="/jets/jet1_eta_STsch"/>
     <TH1 name="jet2_pt_STsch" source="/jets/jet2_pt_STsch"/>
     <TH1 name="jet2_eta_STsch" source="/jets/jet2_eta_STsch"/>
     <TH1 name="jet3_pt_STsch" source="/jets/jet3_pt_STsch"/>
     <TH1 name="jet4_pt_STsch" source="/jets/jet4_pt_STsch"/>
-    <TH1 name="jet5_pt_STsch" source="/jets/jet5_pt_STsch"/>
-    <TH1 name="jet6_pt_STsch" source="/jets/jet6_pt_STsch"/>
-    <TH1 name="jet7_pt_STsch" source="/jets/jet7_pt_STsch"/>
-    <TH1 name="Nmuons_STsch" source="/muons/N_muons_STsch"/>
-    <TH1 name="Nelectrons_STsch" source="/muons/Nelectrons_STsch"/>
-    <TH1 name="MET_STsch" source="/MET/MET_STsch"/>
-    <TH1 name="muons_deltaR_STsch" source="/muons/deltaR_STsch"/>
-    <TH1 name="Dijet_deltaR_STsch" source="/jets/Dijet_deltaR_STsch"/>
-    <TH1 name="Nbjets_CSVM_N2j_STsch" source="/jets/Nbjets_CSVM_N2j_STsch"/>
-    <TH1 name="Njets_1tag_STsch" source="/jets/Njets_1tag_STsch"/>
-    <TH1 name="Stjet_STsch" source="/MET/Stjet_STsch"/>
-    <TH1 name="Stlep_STsch" source="/MET/Stlep_STsch"/>
   </validation>
 
-  <validation type="STsch_bar" file="./results_STsch_bar.root" weight="MCScaleFactors.txt:sch_bar">
+  <validation type="STsch_bar" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STsch_bar.root" weight="MCScaleFactors.txt:sch_bar">
+ 	<!-- muons -->
+    <TH1 name="Nmuons_STsch_bar" source="/muons/N_muons_STsch_bar"/>
+    <TH1 name="Nelectrons_STsch_bar" source="/muons/Nelectrons_STsch_bar"/>
+    <TH1 name="muons_deltaR_STsch_bar" source="/muons/deltaR_STsch_bar"/>
+    <TH1 name="muon_pt_STsch_bar" source="/muons/muon_pt_STsch_bar"/>
+	<!-- PVs -->
     <TH1 name="PVs_STsch_bar" source="/PVs/NPVreweight_2jet_STsch_bar"/>
-    <TH1 name="reliso_STsch_bar" source="/muons/muon_reliso_STsch_bar"/>
-    <TH1 name="Mt_2jet_STsch_bar" source="/mass/Mt_2jet_STsch_bar"/>
+	<!-- MET -->
     <TH1 name="Ht_STsch_bar" source="/MET/Ht_STsch_bar"/>
+    <TH1 name="MET_STsch_bar" source="/MET/MET_STsch_bar"/>
+    <TH1 name="Stjet_STsch_bar" source="/MET/Stjet_STsch_bar"/>
+    <TH1 name="Stlep_STsch_bar" source="/MET/Stlep_STsch_bar"/>
+	<!-- jets -->
     <TH1 name="Njets_cut1_STsch_bar" source="/jets/Njets_cut1_STsch_bar"/>
+    <TH1 name="Nbjets_CSVM_STsch_bar" source="/jets/Nbjets_CSVM_STsch_bar"/>
+    <TH1 name="Nbjets_CSVL_STsch_bar" source="/jets/Nbjets_CSVL_STsch_bar"/>
     <TH1 name="jet1_pt_STsch_bar" source="/jets/jet1_pt_STsch_bar"/>
     <TH1 name="jet1_eta_STsch_bar" source="/jets/jet1_eta_STsch_bar"/>
     <TH1 name="jet2_pt_STsch_bar" source="/jets/jet2_pt_STsch_bar"/>
     <TH1 name="jet2_eta_STsch_bar" source="/jets/jet2_eta_STsch_bar"/>
     <TH1 name="jet3_pt_STsch_bar" source="/jets/jet3_pt_STsch_bar"/>
     <TH1 name="jet4_pt_STsch_bar" source="/jets/jet4_pt_STsch_bar"/>
-    <TH1 name="jet5_pt_STsch_bar" source="/jets/jet5_pt_STsch_bar"/>
-    <TH1 name="jet6_pt_STsch_bar" source="/jets/jet6_pt_STsch_bar"/>
-    <TH1 name="jet7_pt_STsch_bar" source="/jets/jet7_pt_STsch_bar"/>
-    <TH1 name="Nmuons_STsch_bar" source="/muons/N_muons_STsch_bar"/>
-    <TH1 name="Nelectrons_STsch_bar" source="/muons/Nelectrons_STsch_bar"/>
-    <TH1 name="MET_STsch_bar" source="/MET/MET_STsch_bar"/>
-    <TH1 name="muons_deltaR_STsch_bar" source="/muons/deltaR_STsch_bar"/>
-    <TH1 name="Dijet_deltaR_STsch_bar" source="/jets/Dijet_deltaR_STsch_bar"/>
-    <TH1 name="Nbjets_CSVM_N2j_STsch_bar" source="/jets/Nbjets_CSVM_N2j_STsch_bar"/>
-    <TH1 name="Njets_1tag_STsch_bar" source="/jets/Njets_1tag_STsch_bar"/>
-    <TH1 name="Stjet_STsch_bar" source="/MET/Stjet_STsch_bar"/>
-    <TH1 name="Stlep_STsch_bar" source="/MET/Stlep_STsch_bar"/>
   </validation>
 
-  <validation type="WW" file="./results_WW.root" weight="MCScaleFactors.txt:WW">
+  <validation type="WW" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WW.root" weight="MCScaleFactors.txt:WW">
+ 	<!-- muons -->
+    <TH1 name="Nmuons_WW" source="/muons/N_muons_WW"/>
+    <TH1 name="Nelectrons_WW" source="/muons/Nelectrons_WW"/>
+    <TH1 name="muons_deltaR_WW" source="/muons/deltaR_WW"/>
+    <TH1 name="muon_pt_WW" source="/muons/muon_pt_WW"/>
+	<!-- PVs -->
     <TH1 name="PVs_WW" source="/PVs/NPVreweight_2jet_WW"/>
-    <TH1 name="reliso_WW" source="/muons/muon_reliso_WW"/>
-    <TH1 name="Mt_2jet_WW" source="/mass/Mt_2jet_WW"/>
+	<!-- MET -->
     <TH1 name="Ht_WW" source="/MET/Ht_WW"/>
+    <TH1 name="MET_WW" source="/MET/MET_WW"/>
+    <TH1 name="Stjet_WW" source="/MET/Stjet_WW"/>
+    <TH1 name="Stlep_WW" source="/MET/Stlep_WW"/>
+	<!-- jets -->
     <TH1 name="Njets_cut1_WW" source="/jets/Njets_cut1_WW"/>
+    <TH1 name="Nbjets_CSVM_WW" source="/jets/Nbjets_CSVM_WW"/>
+    <TH1 name="Nbjets_CSVL_WW" source="/jets/Nbjets_CSVL_WW"/>
     <TH1 name="jet1_pt_WW" source="/jets/jet1_pt_WW"/>
     <TH1 name="jet1_eta_WW" source="/jets/jet1_eta_WW"/>
     <TH1 name="jet2_pt_WW" source="/jets/jet2_pt_WW"/>
     <TH1 name="jet2_eta_WW" source="/jets/jet2_eta_WW"/>
     <TH1 name="jet3_pt_WW" source="/jets/jet3_pt_WW"/>
     <TH1 name="jet4_pt_WW" source="/jets/jet4_pt_WW"/>
-    <TH1 name="jet5_pt_WW" source="/jets/jet5_pt_WW"/>
-    <TH1 name="jet6_pt_WW" source="/jets/jet6_pt_WW"/>
-    <TH1 name="jet7_pt_WW" source="/jets/jet7_pt_WW"/>
-    <TH1 name="Nmuons_WW" source="/muons/N_muons_WW"/>
-    <TH1 name="Nelectrons_WW" source="/muons/Nelectrons_WW"/>
-    <TH1 name="MET_WW" source="/MET/MET_WW"/>
-    <TH1 name="muons_deltaR_WW" source="/muons/deltaR_WW"/>
-    <TH1 name="Dijet_deltaR_WW" source="/jets/Dijet_deltaR_WW"/>
-    <TH1 name="Nbjets_CSVM_N2j_WW" source="/jets/Nbjets_CSVM_N2j_WW"/>
-    <TH1 name="Njets_1tag_WW" source="/jets/Njets_1tag_WW"/>
-    <TH1 name="Stjet_WW" source="/MET/Stjet_WW"/>
-    <TH1 name="Stlep_WW" source="/MET/Stlep_WW"/>
   </validation>
 
-  <validation type="WZ" file="./results_WZ.root" weight="MCScaleFactors.txt:WZ">
+  <validation type="WZ" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WZ.root" weight="MCScaleFactors.txt:WZ">
+ 	<!-- muons -->
+    <TH1 name="Nmuons_WZ" source="/muons/N_muons_WZ"/>
+    <TH1 name="Nelectrons_WZ" source="/muons/Nelectrons_WZ"/>
+    <TH1 name="muons_deltaR_WZ" source="/muons/deltaR_WZ"/>
+    <TH1 name="muon_pt_WZ" source="/muons/muon_pt_WZ"/>
+	<!-- PVs -->
     <TH1 name="PVs_WZ" source="/PVs/NPVreweight_2jet_WZ"/>
-    <TH1 name="reliso_WZ" source="/muons/muon_reliso_WZ"/>
-    <TH1 name="Mt_2jet_WZ" source="/mass/Mt_2jet_WZ"/>
+	<!-- MET -->
     <TH1 name="Ht_WZ" source="/MET/Ht_WZ"/>
+    <TH1 name="MET_WZ" source="/MET/MET_WZ"/>
+    <TH1 name="Stjet_WZ" source="/MET/Stjet_WZ"/>
+    <TH1 name="Stlep_WZ" source="/MET/Stlep_WZ"/>
+	<!-- jets -->
     <TH1 name="Njets_cut1_WZ" source="/jets/Njets_cut1_WZ"/>
+    <TH1 name="Nbjets_CSVM_WZ" source="/jets/Nbjets_CSVM_WZ"/>
+    <TH1 name="Nbjets_CSVL_WZ" source="/jets/Nbjets_CSVL_WZ"/>
     <TH1 name="jet1_pt_WZ" source="/jets/jet1_pt_WZ"/>
     <TH1 name="jet1_eta_WZ" source="/jets/jet1_eta_WZ"/>
     <TH1 name="jet2_pt_WZ" source="/jets/jet2_pt_WZ"/>
     <TH1 name="jet2_eta_WZ" source="/jets/jet2_eta_WZ"/>
     <TH1 name="jet3_pt_WZ" source="/jets/jet3_pt_WZ"/>
     <TH1 name="jet4_pt_WZ" source="/jets/jet4_pt_WZ"/>
-    <TH1 name="jet5_pt_WZ" source="/jets/jet5_pt_WZ"/>
-    <TH1 name="jet6_pt_WZ" source="/jets/jet6_pt_WZ"/>
-    <TH1 name="jet7_pt_WZ" source="/jets/jet7_pt_WZ"/>
-    <TH1 name="Nmuons_WZ" source="/muons/N_muons_WZ"/>
-    <TH1 name="Nelectrons_WZ" source="/muons/Nelectrons_WZ"/>
-    <TH1 name="MET_WZ" source="/MET/MET_WZ"/>
-    <TH1 name="muons_deltaR_WZ" source="/muons/deltaR_WZ"/>
-    <TH1 name="Dijet_deltaR_WZ" source="/jets/Dijet_deltaR_WZ"/>
-    <TH1 name="Nbjets_CSVM_N2j_WZ" source="/jets/Nbjets_CSVM_N2j_WZ"/>
-    <TH1 name="Njets_1tag_WZ" source="/jets/Njets_1tag_WZ"/>
-    <TH1 name="Stjet_WZ" source="/MET/Stjet_WZ"/>
-    <TH1 name="Stlep_WZ" source="/MET/Stlep_WZ"/>
   </validation>
+
+  <validation type="4TopSM" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4TopSM.root" weight="MCScaleFactors.txt:4TopSM"> 
+	<!-- muons -->
+    <TH1 name="Nmuons_4TopSM" source="/muons/N_muons_4TopSM"/>
+    <TH1 name="Nelectrons_4TopSM" source="/muons/Nelectrons_4TopSM"/>
+    <TH1 name="muons_deltaR_4TopSM" source="/muons/deltaR_4TopSM"/>
+    <TH1 name="muon_pt_4TopSM" source="/muons/muon_pt_4TopSM"/>
+	<!-- PVs -->
+    <TH1 name="PVs_4TopSM" source="/PVs/NPVreweight_2jet_4TopSM"/>
+	<!-- MET -->
+    <TH1 name="Ht_4TopSM" source="/MET/Ht_4TopSM"/>
+    <TH1 name="MET_4TopSM" source="/MET/MET_4TopSM"/>
+    <TH1 name="Stjet_4TopSM" source="/MET/Stjet_4TopSM"/>
+    <TH1 name="Stlep_4TopSM" source="/MET/Stlep_4TopSM"/>
+	<!-- jets -->
+    <TH1 name="Njets_cut1_4TopSM" source="/jets/Njets_cut1_4TopSM"/>
+    <TH1 name="Nbjets_CSVM_4TopSM" source="/jets/Nbjets_CSVM_4TopSM"/>
+    <TH1 name="Nbjets_CSVL_4TopSM" source="/jets/Nbjets_CSVL_4TopSM"/>
+    <TH1 name="jet1_pt_4TopSM" source="/jets/jet1_pt_4TopSM"/>
+    <TH1 name="jet1_eta_4TopSM" source="/jets/jet1_eta_4TopSM"/>
+    <TH1 name="jet2_pt_4TopSM" source="/jets/jet2_pt_4TopSM"/>
+    <TH1 name="jet2_eta_4TopSM" source="/jets/jet2_eta_4TopSM"/>
+    <TH1 name="jet3_pt_4TopSM" source="/jets/jet3_pt_4TopSM"/>
+    <TH1 name="jet4_pt_4TopSM" source="/jets/jet4_pt_4TopSM"/>
+  </validation>
+
 
   <additionArray name="ST" title="ST">
     <additionArrayItem array="STtch"/>
@@ -405,293 +465,279 @@
     <additionArrayItem array="WZ"/>
   </additionArray>
 
-  <superimpose name="PVs" title="PVs" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SubBanner="Njets #geq 3" >
-    <superimposeItem name="PVs_data" color="top" legend="Data"/>
-    <superimposeItem name="PVs_WJets" color="top" legend="Wjets"/>
-    <superimposeItem name="PVs_ZJets" color="top" legend="Zjets"/>
-    <superimposeItem name="PVs_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="PVs_QCD" color="top" legend="QCD"/>
-    <superimposeItem name="PVs_ST" color="top" legend="ST"/>
-    <superimposeItem name="PVs_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="PVs_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true"/> 
-    <superimposeItem name="PVs_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true"/>
-  </superimpose>
-
-  <superimpose name="PVs_log" title="PVs_log" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SubBanner="Njets #geq 3" SetLogy="true"  Minimum="0.001" Maximum="10e5" >
-    <superimposeItem name="PVs_data" color="top" legend="Data"/>
-    <superimposeItem name="PVs_WJets" color="top" legend="Wjets"/>
-    <superimposeItem name="PVs_ZJets" color="top" legend="Zjets"/>
-    <superimposeItem name="PVs_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="PVs_QCD" color="top" legend="QCD"/>
-    <superimposeItem name="PVs_ST" color="top" legend="ST"/>
-    <superimposeItem name="PVs_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="PVs_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true"/> 
-    <superimposeItem name="PVs_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true"/>
-  </superimpose>
-  <!--
-  <superimpose name="reliso" title="reliso" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true">
-    <superimposeItem name="reliso_data" color="top" legend="Data"/>
-    <superimposeItem name="reliso_WJets" color="top" legend="Wjets"/>
-    <superimposeItem name="reliso_ZJets" color="top" legend="Zjets"/>
-    <superimposeItem name="reliso_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="reliso_QCD" color="top" legend="QCD"/>
-    <superimposeItem name="reliso_ST" color="top" legend="ST"/>
-    <superimposeItem name="reliso_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="reliso_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true"/>
-    <superimposeItem name="reliso_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true"/>
-  </superimpose> 
- -->
-
-  <superimpose name="Mt" title="Mt" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3" Minimum="0.001" Maximum="10e5">
-    <superimposeItem name="Mt_2jet_data" color="top" legend="Data"/>
-    <superimposeItem name="Mt_2jet_WJets" color="top" legend="Wjets"/> 
-    <superimposeItem name="Mt_2jet_ZJets" color="top" legend="Zjets"/>
-    <superimposeItem name="Mt_2jet_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="Mt_2jet_QCD" color="top" legend="QCD"/>
-    <superimposeItem name="Mt_2jet_ST" color="top" legend="ST"/>
-    <superimposeItem name="Mt_2jet_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="Mt_2jet_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="Mt_2jet_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
-  </superimpose>
-
-  <superimpose name="Ht" title="Ht" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SubBanner="H_{T} = #sum jet p_{T},  Njets #geq 3" SetLogy="true" Minimum="0.001" Maximum="10e5"> 
-    <superimposeItem name="Ht_data" color="top" legend="Data"/>
-    <superimposeItem name="Ht_WJets" color="top" legend="Wjets"/> 
-    <superimposeItem name="Ht_ZJets" color="top" legend="Zjets"/>
-    <superimposeItem name="Ht_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="Ht_QCD" color="top" legend="QCD"/>
-    <superimposeItem name="Ht_ST" color="top" legend="ST"/>
-    <superimposeItem name="Ht_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="Ht_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="Ht_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
-  </superimpose>
-
-  <superimpose name="Njets_cut1" title="Njets_cut1" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3, H_{T} > 300 GeV" Minimum="0.001" Maximum="10e5">
-    <superimposeItem name="Njets_cut1_data" color="top" legend="Data"/>
-    <superimposeItem name="Njets_cut1_WJets" color="top" legend="Wjets"/>
-    <superimposeItem name="Njets_cut1_ZJets" color="top" legend="Zjets"/>
-    <superimposeItem name="Njets_cut1_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="Njets_cut1_QCD" color="top" legend="QCD"/>
-    <superimposeItem name="Njets_cut1_ST" color="top" legend="ST"/>
-    <superimposeItem name="Njets_cut1_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="Njets_cut1_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="Njets_cut1_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
-  </superimpose>
-
-  <superimpose name="jet1_pt" title="jet1_pt" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3, H_{T} > 300 GeV" Minimum="0.001" Maximum="10e5">
-    <superimposeItem name="jet1_pt_data" color="top" legend="Data"/>
-    <superimposeItem name="jet1_pt_WJets" color="top" legend="Wjets"/>
-    <superimposeItem name="jet1_pt_ZJets" color="top" legend="Zjets"/>
-    <superimposeItem name="jet1_pt_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="jet1_pt_QCD" color="top" legend="QCD"/>
-    <superimposeItem name="jet1_pt_ST" color="top" legend="ST"/>
-    <superimposeItem name="jet1_pt_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="jet1_pt_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="jet1_pt_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
-  </superimpose>
-
-  <superimpose name="jet1_eta" title="jet1_eta" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3, H_{T} > 300 GeV" Minimum="0.001" Maximum="10e5">
-    <superimposeItem name="jet1_eta_data" color="top" legend="Data"/>
-    <superimposeItem name="jet1_eta_WJets" color="top" legend="Wjets"/>
-    <superimposeItem name="jet1_eta_ZJets" color="top" legend="Zjets"/>
-    <superimposeItem name="jet1_eta_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="jet1_eta_QCD" color="top" legend="QCD"/>
-    <superimposeItem name="jet1_eta_ST" color="top" legend="ST"/>
-    <superimposeItem name="jet1_eta_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="jet1_eta_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="jet1_eta_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
-  </superimpose>
-
-  <superimpose name="jet2_pt" title="jet2_pt" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3, H_{T} > 300 GeV" Minimum="0.001" Maximum="10e4">
-    <superimposeItem name="jet2_pt_data" color="top" legend="Data"/>
-    <superimposeItem name="jet2_pt_WJets" color="top" legend="Wjets"/>
-    <superimposeItem name="jet2_pt_ZJets" color="top" legend="Zjets"/>
-    <superimposeItem name="jet2_pt_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="jet2_pt_QCD" color="top" legend="QCD"/>
-    <superimposeItem name="jet2_pt_ST" color="top" legend="ST"/>
-    <superimposeItem name="jet2_pt_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="jet2_pt_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="jet2_pt_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
-  </superimpose>
-
-  <superimpose name="jet2_eta" title="jet2_eta" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3, H_{T} > 300 GeV" Minimum="0.001" Maximum="10e4">
-    <superimposeItem name="jet2_eta_data" color="top" legend="Data"/>
-    <superimposeItem name="jet2_eta_WJets" color="top" legend="Wjets"/>
-    <superimposeItem name="jet2_eta_ZJets" color="top" legend="Zjets"/>
-    <superimposeItem name="jet2_eta_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="jet2_eta_QCD" color="top" legend="QCD"/>
-    <superimposeItem name="jet2_eta_ST" color="top" legend="ST"/>
-    <superimposeItem name="jet2_eta_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="jet2_eta_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="jet2_eta_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
-  </superimpose>
-
-  <superimpose name="jet3_pt" title="jet3_pt" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3, H_{T} > 300 GeV" Minimum="0.001" Maximum="10e4">
-    <superimposeItem name="jet3_pt_data" color="top" legend="Data"/>
-    <superimposeItem name="jet3_pt_WJets" color="top" legend="Wjets"/>
-    <superimposeItem name="jet3_pt_ZJets" color="top" legend="Zjets"/>
-    <superimposeItem name="jet3_pt_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="jet3_pt_QCD" color="top" legend="QCD"/>
-    <superimposeItem name="jet3_pt_ST" color="top" legend="ST"/>
-    <superimposeItem name="jet3_pt_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="jet3_pt_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="jet3_pt_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
-  </superimpose>
-
-  <superimpose name="jet4_pt" title="jet4_pt" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3, H_{T} > 300 GeV" Minimum="0.001" Maximum="10e4">
-    <superimposeItem name="jet4_pt_data" color="top" legend="Data"/>
-    <superimposeItem name="jet4_pt_WJets" color="top" legend="Wjets"/>
-    <superimposeItem name="jet4_pt_ZJets" color="top" legend="Zjets"/>
-    <superimposeItem name="jet4_pt_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="jet4_pt_QCD" color="top" legend="QCD"/>
-    <superimposeItem name="jet4_pt_ST" color="top" legend="ST"/>
-    <superimposeItem name="jet4_pt_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="jet4_pt_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="jet4_pt_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
-  </superimpose>
-
-  <superimpose name="jet5_pt" title="jet5_pt" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3, H_{T} > 300 GeV" Minimum="0.001" Maximum="10e4">
-    <superimposeItem name="jet5_pt_data" color="top" legend="Data"/>
-    <superimposeItem name="jet5_pt_WJets" color="top" legend="Wjets"/>
-    <superimposeItem name="jet5_pt_ZJets" color="top" legend="Zjets"/>
-    <superimposeItem name="jet5_pt_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="jet5_pt_QCD" color="top" legend="QCD"/>
-    <superimposeItem name="jet5_pt_ST" color="top" legend="ST"/>
-    <superimposeItem name="jet5_pt_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="jet5_pt_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="jet5_pt_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
-  </superimpose>
-
-  <superimpose name="jet6_pt" title="jet6_pt" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3, H_{T} > 300 GeV" Minimum="0.001" Maximum="10e4">
-    <superimposeItem name="jet6_pt_data" color="top" legend="Data"/>
-    <superimposeItem name="jet6_pt_WJets" color="top" legend="Wjets"/>
-    <superimposeItem name="jet6_pt_ZJets" color="top" legend="Zjets"/>
-    <superimposeItem name="jet6_pt_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="jet6_pt_QCD" color="top" legend="QCD"/>
-    <superimposeItem name="jet6_pt_ST" color="top" legend="ST"/>
-    <superimposeItem name="jet6_pt_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="jet6_pt_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="jet6_pt_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
-  </superimpose>
-
-  <superimpose name="jet7_pt" title="jet7_pt" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3, H_{T} > 300 GeV" Minimum="0.001" Maximum="10e4">
-    <superimposeItem name="jet7_pt_data" color="top" legend="Data"/>
-    <superimposeItem name="jet7_pt_WJets" color="top" legend="Wjets"/>
-    <superimposeItem name="jet7_pt_ZJets" color="top" legend="Zjets"/>
-    <superimposeItem name="jet7_pt_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="jet7_pt_QCD" color="top" legend="QCD"/>
-    <superimposeItem name="jet7_pt_ST" color="top" legend="ST"/>
-    <superimposeItem name="jet7_pt_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="jet7_pt_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="jet7_pt_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
-  </superimpose>
-
-  <superimpose name="Nmuons" title="Nmuons" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3, H_{T} > 300 GeV"  Minimum="0.001" Maximum="10e6">
+  <!-- MUONS -->
+  <superimpose name="Nmuons" title="Nmuons" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e6" PlotDiff="true">
     <superimposeItem name="Nmuons_data" color="top" legend="Data"/>
+    <superimposeItem name="Nmuons_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="Nmuons_ttbar" color="top" legend="TTbar"/>
     <superimposeItem name="Nmuons_WJets" color="top" legend="Wjets"/>
     <superimposeItem name="Nmuons_ZJets" color="top" legend="Zjets"/>
     <superimposeItem name="Nmuons_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="Nmuons_QCD" color="top" legend="QCD"/>
     <superimposeItem name="Nmuons_ST" color="top" legend="ST"/>
-    <superimposeItem name="Nmuons_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="Nmuons_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="Nmuons_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
+    <superimposeItem name="Nmuons_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="Nmuons_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="Nmuons_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="Nmuons_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="Nmuons_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
   </superimpose>
 
-  <superimpose name="Nelectrons" title="Nelectrons" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3, H_{T} > 300 GeV" Minimum="0.001" Maximum="10e6">
+  <superimpose name="Nelectrons" title="Nelectrons" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e6" PlotDiff="true">
     <superimposeItem name="Nelectrons_data" color="top" legend="Data"/>
+    <superimposeItem name="Nelectrons_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="Nelectrons_ttbar" color="top" legend="TTbar"/>
     <superimposeItem name="Nelectrons_WJets" color="top" legend="Wjets"/>
     <superimposeItem name="Nelectrons_ZJets" color="top" legend="Zjets"/>
     <superimposeItem name="Nelectrons_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="Nelectrons_QCD" color="top" legend="QCD"/>
     <superimposeItem name="Nelectrons_ST" color="top" legend="ST"/>
-    <superimposeItem name="Nelectrons_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="Nelectrons_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="Nelectrons_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
+    <superimposeItem name="Nelectrons_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="Nelectrons_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="Nelectrons_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="Nelectrons_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="Nelectrons_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
   </superimpose>
 
-  <superimpose name="MET" title="MET" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3, H_{T} > 300 GeV" Minimum="0.001" Maximum="10e5">
-    <superimposeItem name="MET_data" color="top" legend="Data"/>
-    <superimposeItem name="MET_WJets" color="top" legend="Wjets"/>
-    <superimposeItem name="MET_ZJets" color="top" legend="Zjets"/>
-    <superimposeItem name="MET_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="MET_QCD" color="top" legend="QCD"/>
-    <superimposeItem name="MET_ST" color="top" legend="ST"/>
-    <superimposeItem name="MET_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="MET_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="MET_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
-  </superimpose>
-
-  <superimpose name="muons_deltaR" title="muons_deltaR" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3, H_{T} > 300 GeV" Minimum="0.001" Maximum="10e4">
+  <superimpose name="muons_deltaR" title="muons_deltaR" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e4" PlotDiff="true">
     <superimposeItem name="muons_deltaR_data" color="top" legend="Data"/>
+    <superimposeItem name="muons_deltaR_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="muons_deltaR_ttbar" color="top" legend="TTbar"/>
     <superimposeItem name="muons_deltaR_WJets" color="top" legend="Wjets"/>
     <superimposeItem name="muons_deltaR_ZJets" color="top" legend="Zjets"/>
     <superimposeItem name="muons_deltaR_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="muons_deltaR_QCD" color="top" legend="QCD"/>
     <superimposeItem name="muons_deltaR_ST" color="top" legend="ST"/>
-    <superimposeItem name="muons_deltaR_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="muons_deltaR_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="muons_deltaR_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
+    <superimposeItem name="muons_deltaR_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="muons_deltaR_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="muons_deltaR_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="muons_deltaR_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="muons_deltaR_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
   </superimpose>
 
-  <superimpose name="Dijet_deltaR" title="Dijet_deltaR" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3, H_{T} > 300 GeV" Minimum="0.001" Maximum="10e4">
-    <superimposeItem name="Dijet_deltaR_data" color="top" legend="Data"/>
-    <superimposeItem name="Dijet_deltaR_WJets" color="top" legend="Wjets"/>
-    <superimposeItem name="Dijet_deltaR_ZJets" color="top" legend="Zjets"/>
-    <superimposeItem name="Dijet_deltaR_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="Dijet_deltaR_QCD" color="top" legend="QCD"/>
-    <superimposeItem name="Dijet_deltaR_ST" color="top" legend="ST"/>
-    <superimposeItem name="Dijet_deltaR_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="Dijet_deltaR_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="Dijet_deltaR_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
+  <superimpose name="muon_pt" title="muon_pt" YTitle="Events/10 GeV" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e4" PlotDiff="true">
+    <superimposeItem name="muon_pt_data" color="top" legend="Data"/>
+    <superimposeItem name="muon_pt_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="muon_pt_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="muon_pt_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="muon_pt_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="muon_pt_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="muon_pt_ST" color="top" legend="ST"/>
+    <superimposeItem name="muon_pt_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="muon_pt_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="muon_pt_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="muon_pt_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="muon_pt_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+  
+  <!-- PVs -->
+  <superimpose name="PVs_log" title="PVs_log" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true"  Minimum="0.01" Maximum="10e5" >
+    <superimposeItem name="PVs_data" color="top" legend="Data"/>
+    <superimposeItem name="PVs_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="PVs_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="PVs_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="PVs_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="PVs_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="PVs_ST" color="top" legend="ST"/>
+    <superimposeItem name="PVs_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true"/> 
+    <superimposeItem name="PVs_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true"/> 
+    <superimposeItem name="PVs_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true"/> 
+    <superimposeItem name="PVs_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true"/>
+    <superimposeItem name="PVs_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true"/>
   </superimpose>
 
-  <superimpose name="Nbjets_CSVM_N2j" title="Nbjets_CSVM_N2j" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3, H_{T} > 300 GeV" Minimum="0.001" Maximum="10e6">
-    <superimposeItem name="Nbjets_CSVM_N2j_data" color="top" legend="Data"/>
-    <superimposeItem name="Nbjets_CSVM_N2j_WJets" color="top" legend="Wjets"/>
-    <superimposeItem name="Nbjets_CSVM_N2j_ZJets" color="top" legend="Zjets"/>
-    <superimposeItem name="Nbjets_CSVM_N2j_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="Nbjets_CSVM_N2j_QCD" color="top" legend="QCD"/>
-    <superimposeItem name="Nbjets_CSVM_N2j_ST" color="top" legend="ST"/>
-    <superimposeItem name="Nbjets_CSVM_N2j_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="Nbjets_CSVM_N2j_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="Nbjets_CSVM_N2j_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
+  <!-- MET -->
+  <superimpose name="Ht" title="Ht" YTitle="Events/50 GeV" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e3" PlotDiff="true"> 
+    <superimposeItem name="Ht_data" color="top" legend="Data"/>
+    <superimposeItem name="Ht_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="Ht_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="Ht_WJets" color="top" legend="Wjets"/> 
+    <superimposeItem name="Ht_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="Ht_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="Ht_ST" color="top" legend="ST"/>
+    <superimposeItem name="Ht_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="Ht_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="Ht_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="Ht_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="Ht_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
   </superimpose>
 
-  <superimpose name="Njets_1tag" title="Njets_1tag" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3, H_{T} > 300 GeV" Minimum="10e-4" Maximum="10e4">
-    <superimposeItem name="Njets_1tag_data" color="top" legend="Data"/>
-    <superimposeItem name="Njets_1tag_WJets" color="top" legend="Wjets"/>
-    <superimposeItem name="Njets_1tag_ZJets" color="top" legend="Zjets"/>
-    <superimposeItem name="Njets_1tag_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="Njets_1tag_QCD" color="top" legend="QCD"/>
-    <superimposeItem name="Njets_1tag_ST" color="top" legend="ST"/>
-    <superimposeItem name="Njets_1tag_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="Njets_1tag_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="Njets_1tag_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
+  <superimpose name="MET" title="MET" YTitle="Events/10 GeV" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e3" PlotDiff="true">
+    <superimposeItem name="MET_data" color="top" legend="Data"/>
+    <superimposeItem name="MET_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="MET_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="MET_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="MET_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="MET_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="MET_ST" color="top" legend="ST"/>
+    <superimposeItem name="MET_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="MET_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="MET_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="MET_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="MET_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
   </superimpose>
 
-  <superimpose name="Stjet" title="Stjet" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3, H_{T} > 300 GeV" Minimum="10e-5" Maximum="10e4">
+  <superimpose name="Stjet" title="Stjet" YTitle="Events/50 GeV" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.001" Maximum="10e3" PlotDiff="true">
     <superimposeItem name="Stjet_data" color="top" legend="Data"/>
+    <superimposeItem name="Stjet_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="Stjet_ttbar" color="top" legend="TTbar"/>
     <superimposeItem name="Stjet_WJets" color="top" legend="Wjets"/>
     <superimposeItem name="Stjet_ZJets" color="top" legend="Zjets"/>
     <superimposeItem name="Stjet_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="Stjet_QCD" color="top" legend="QCD"/>
     <superimposeItem name="Stjet_ST" color="top" legend="ST"/>
-    <superimposeItem name="Stjet_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="Stjet_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="Stjet_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
+    <superimposeItem name="Stjet_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="Stjet_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="Stjet_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="Stjet_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="Stjet_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
   </superimpose>
 
-  <superimpose name="Stlep" title="Stlep" YTitle="Events" Fill="true" Weight="true" Lumi="4668.0" Stack="true" SetLogy="true" SubBanner="Njets #geq 3, H_{T} > 300 GeV" Minimum="10e-5" Maximum="10e4">
+  <superimpose name="Stlep" title="Stlep" YTitle="Events/50 GeV" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.001" Maximum="10e3" PlotDiff="true">
     <superimposeItem name="Stlep_data" color="top" legend="Data"/>
+    <superimposeItem name="Stlep_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="Stlep_ttbar" color="top" legend="TTbar"/>
     <superimposeItem name="Stlep_WJets" color="top" legend="Wjets"/>
     <superimposeItem name="Stlep_ZJets" color="top" legend="Zjets"/>
     <superimposeItem name="Stlep_Dibosons" color="top" legend="Dibosons"/>
-    <superimposeItem name="Stlep_QCD" color="top" legend="QCD"/>
     <superimposeItem name="Stlep_ST" color="top" legend="ST"/>
-    <superimposeItem name="Stlep_ttbar" color="top" legend="TTbar"/>
-    <superimposeItem name="Stlep_4Top_500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="Stlep_4Top_1000" color="1" legend="Gh 1 TeV" NoStack="true" />
+    <superimposeItem name="Stlep_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="Stlep_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="Stlep_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="Stlep_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="Stlep_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
   </superimpose>
+
+  <!-- Jets -->
+  <superimpose name="Njets_cut1" title="Njets_cut1" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e5" PlotDiff="true">
+    <superimposeItem name="Njets_cut1_data" color="top" legend="Data"/>
+    <superimposeItem name="Njets_cut1_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="Njets_cut1_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="Njets_cut1_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="Njets_cut1_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="Njets_cut1_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="Njets_cut1_ST" color="top" legend="ST"/>
+    <superimposeItem name="Njets_cut1_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="Njets_cut1_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="Njets_cut1_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="Njets_cut1_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="Njets_cut1_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+
+  <superimpose name="Nbjets_CSVM" title="Nbjets_CSVM" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e5" PlotDiff="true">
+    <superimposeItem name="Nbjets_CSVM_data" color="top" legend="Data"/>
+    <superimposeItem name="Nbjets_CSVM_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="Nbjets_CSVM_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="Nbjets_CSVM_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="Nbjets_CSVM_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="Nbjets_CSVM_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="Nbjets_CSVM_ST" color="top" legend="ST"/>
+    <superimposeItem name="Nbjets_CSVM_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="Nbjets_CSVM_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="Nbjets_CSVM_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="Nbjets_CSVM_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="Nbjets_CSVM_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+
+  <superimpose name="Nbjets_CSVL" title="Nbjets_CSVL" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e5" PlotDiff="true">
+    <superimposeItem name="Nbjets_CSVL_data" color="top" legend="Data"/>
+    <superimposeItem name="Nbjets_CSVL_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="Nbjets_CSVL_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="Nbjets_CSVL_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="Nbjets_CSVL_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="Nbjets_CSVL_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="Nbjets_CSVL_ST" color="top" legend="ST"/>
+    <superimposeItem name="Nbjets_CSVL_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="Nbjets_CSVL_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="Nbjets_CSVL_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="Nbjets_CSVL_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="Nbjets_CSVL_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+
+  <superimpose name="jet1_pt" title="jet1_pt" YTitle="Events/16 GeV" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e5" PlotDiff="true">
+    <superimposeItem name="jet1_pt_data" color="top" legend="Data"/>
+    <superimposeItem name="jet1_pt_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="jet1_pt_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="jet1_pt_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="jet1_pt_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="jet1_pt_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="jet1_pt_ST" color="top" legend="ST"/>
+    <superimposeItem name="jet1_pt_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="jet1_pt_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="jet1_pt_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="jet1_pt_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="jet1_pt_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+
+  <superimpose name="jet1_eta" title="jet1_eta" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e5" PlotDiff="true">
+    <superimposeItem name="jet1_eta_data" color="top" legend="Data"/>
+    <superimposeItem name="jet1_eta_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="jet1_eta_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="jet1_eta_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="jet1_eta_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="jet1_eta_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="jet1_eta_ST" color="top" legend="ST"/>
+    <superimposeItem name="jet1_eta_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="jet1_eta_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="jet1_eta_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="jet1_eta_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="jet1_eta_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+
+  <superimpose name="jet2_pt" title="jet2_pt" YTitle="Events/16 GeV" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e4" PlotDiff="true">
+    <superimposeItem name="jet2_pt_data" color="top" legend="Data"/>
+    <superimposeItem name="jet2_pt_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="jet2_pt_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="jet2_pt_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="jet2_pt_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="jet2_pt_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="jet2_pt_ST" color="top" legend="ST"/>
+    <superimposeItem name="jet2_pt_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="jet2_pt_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="jet2_pt_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="jet2_pt_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="jet2_pt_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+
+  <superimpose name="jet2_eta" title="jet2_eta" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e4" PlotDiff="true">
+    <superimposeItem name="jet2_eta_data" color="top" legend="Data"/>
+    <superimposeItem name="jet2_eta_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="jet2_eta_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="jet2_eta_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="jet2_eta_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="jet2_eta_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="jet2_eta_ST" color="top" legend="ST"/>
+    <superimposeItem name="jet2_eta_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="jet2_eta_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="jet2_eta_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="jet2_eta_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="jet2_eta_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+
+  <superimpose name="jet3_pt" title="jet3_pt" YTitle="Events/16 GeV" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e4" PlotDiff="true">
+    <superimposeItem name="jet3_pt_data" color="top" legend="Data"/>
+    <superimposeItem name="jet3_pt_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="jet3_pt_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="jet3_pt_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="jet3_pt_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="jet3_pt_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="jet3_pt_ST" color="top" legend="ST"/>
+    <superimposeItem name="jet3_pt_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="jet3_pt_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="jet3_pt_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="jet3_pt_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="jet3_pt_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+
+  <superimpose name="jet4_pt" title="jet4_pt" YTitle="Events/16 GeV" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e4" PlotDiff="true">
+    <superimposeItem name="jet4_pt_data" color="top" legend="Data"/>
+    <superimposeItem name="jet4_pt_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="jet4_pt_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="jet4_pt_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="jet4_pt_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="jet4_pt_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="jet4_pt_ST" color="top" legend="ST"/>
+    <superimposeItem name="jet4_pt_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="jet4_pt_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="jet4_pt_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="jet4_pt_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="jet4_pt_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+
 
 </cuy>
