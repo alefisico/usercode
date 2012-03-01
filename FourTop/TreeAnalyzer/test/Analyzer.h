@@ -28,12 +28,12 @@ const Int_t kMaxtop = 1;
 #include "Yumiceva/TreeAnalyzer/interface/METzCalculator.h"
 #include "CondFormats/JetMETObjects/interface/JetCorrectionUncertainty.h"
 #include "PhysicsTools/Utilities/interface/Lumi3DReWeighting.h"
+//#include "weights/myTMVAClassification_BDT_1100.class.C"
 //#include "weights/myTMVAClassification_BDT_1000.class.C"
-//#include "weights/myTMVAClassification_BDT_1000_JECDOWN.class.C"
-#include "weights/myTMVAClassification_BDT_1000_JECUP.class.C"
-//#include "weights/myTMVAClassification_BDT_500.class.C"
-//#include "weights/myTMVAClassification_BDT_500_JECDOWN.class.C"
-//#include "weights/myTMVAClassification_BDT_500_JECUP.class.C"
+//#include "weights/myTMVAClassification_BDT_900.class.C"
+//#include "weights/myTMVAClassification_BDT_700.class.C"
+#include "weights/myTMVAClassification_BDT_500.class.C"
+
 
 #include <map>
 #include <string>
