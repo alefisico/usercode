@@ -249,21 +249,21 @@ void Analyzer::SlaveBegin(TTree * tree)
    hMET["genMET_2jet"] = new TH1F("genMET_2jet"+hname,"Missing Transverse Energy [GeV]", 50, 0, 300);
    hMET["deltaMET_2jet"] = new TH1F("deltaMET_2jet"+hname,"Missing Transverse Energy [GeV]", 50, -200, 200);
    hMET["phi"] = new TH1F("MET_phi"+hname,"#phi Missing Transverse Energy [GeV]", 20, 0, 3.15);
-   hMET["Ht0"] = new TH1F("Ht0"+hname,"H_{T} [GeV]", 50, 0, 3000);
-   hMET["Ht"] = new TH1F("Ht"+hname,"H_{T} [GeV]", 50, 0, 3000);
-   hMET["Ht_1btag"] = new TH1F("Ht_1btag"+hname,"H_{T} [GeV]", 50, 0, 3000);
+   hMET["Ht0"] = new TH1F("Ht0"+hname,"H_{T} [GeV]", 60, 0, 3000);
+   hMET["Ht"] = new TH1F("Ht"+hname,"H_{T} [GeV]", 60, 0, 3000);
+   hMET["Ht_1btag"] = new TH1F("Ht_1btag"+hname,"H_{T} [GeV]", 60, 0, 3000);
    hMET["Htlep"] = new TH1F("Htlep"+hname,"H_{T,lep} [GeV]", 100, 0, 1000);
-   hMET["Stlep"] = new TH1F("Stlep"+hname,"S_{t}^{lep} [GeV]", 100, 0, 1000);
-   hMET["Stlep_1btag"] = new TH1F("Stlep_1btag"+hname,"S_{t}^{lep} [GeV]", 100, 0, 1000);
-   hMET["Stjet"] = new TH1F("Stjet"+hname,"S_{t}^{jet} [GeV]", 100, 0, 3000);
-   hMET["Stjet_1btag"] = new TH1F("Stjet_1btag"+hname,"S_{t}^{jet} [GeV]", 100, 0, 3000);
+   hMET["Stlep"] = new TH1F("Stlep"+hname,"S_{t}^{lep} [GeV]", 60, 0, 1000);
+   hMET["Stlep_1btag"] = new TH1F("Stlep_1btag"+hname,"S_{t}^{lep} [GeV]", 60, 0, 1000);
+   hMET["Stjet"] = new TH1F("Stjet"+hname,"S_{t}^{jet} [GeV]", 60, 0, 3000);
+   hMET["Stjet_1btag"] = new TH1F("Stjet_1btag"+hname,"S_{t}^{jet} [GeV]", 60, 0, 3000);
    hMET["PzNu"] = new TH1F("PzNu"+hname,"p_{z} #nu [GeV]", 40, -300,300);
    hMET["EtaNu"] = new TH1F("EtaNu"+hname,"#eta",50,-2.2,2.2);
    hMET["LepWmass"] = new TH1F("LepWmass"+hname,"W#rightarrow#mu#nu Mass [GeV/c^{2}]",20, 0, 150);
    hMET["LepWmass_topcut"] = new TH1F("LepWmass_topcut"+hname,"W#rightarrow#mu#nu Mass [GeV/c^{2}]",20, 0, 150);
    hMET["LepWmassNoPt"]=new TH1F("LepWmassNoPt"+hname,"W#rightarrow#mu#nu Mass [GeV/c^{2}]",20, 0, 150);
    hMET["deltaPhi"] = new TH1F("deltaPhi"+hname,"#Delta #phi(#mu,MET)",50, -3.15, 3.15);
-   hMET["bdtresponse"] = new TH1F("bdtresponse"+hname,"BDT response",50, -0.5, 0.3);
+   hMET["bdtresponse"] = new TH1F("bdtresponse"+hname,"BDT response",75, -0.7, 0.3);
 
    hM["WMt"] = new TH1F("Mt"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 500);        // Transverse Mass sqrt(Wpt*Wpt - Wpx*Wpx - Wpy*Wpy)
    hM["WMt_2jet"] = new TH1F("Mt_2jet"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 300);
@@ -362,7 +362,6 @@ void Analyzer::SlaveBegin(TTree * tree)
        temp->SetXTitle( temp->GetTitle() );
      }
 
-   //if (!fBDT){
    //------- Store information in a Tree
    MyStoreTree = new StoreTreeVariable();
 
@@ -377,9 +376,10 @@ void Analyzer::SlaveBegin(TTree * tree)
 
    MyStoreTree->InitialAll();
    //Get the Store Tree
+   if (!fBDT){
    MyStoreTree->GetStoreTree()->SetDirectory(fFile);
    MyStoreTree->GetStoreTree()->AutoSave();
-   //}
+   }
    //////////////////////////////////////////
 
    // cut flow
@@ -392,6 +392,8 @@ void Analyzer::SlaveBegin(TTree * tree)
        fCutLabels.push_back("4Jet");
        fCutLabels.push_back("Ht");
        fCutLabels.push_back("4Jet1b");
+       fCutLabels.push_back("4JetCut");
+       fCutLabels.push_back("Stjet");
      }
    else
      { //electron+jets
@@ -402,6 +404,8 @@ void Analyzer::SlaveBegin(TTree * tree)
        fCutLabels.push_back("4Jet");
        fCutLabels.push_back("Ht");
        fCutLabels.push_back("4Jet1b");
+       fCutLabels.push_back("4JetCut");
+       fCutLabels.push_back("Stjet");
      }
    hcutflow = new TH1D("cutflow","cut flow", fCutLabels.size(), 0.5, fCutLabels.size() +0.5 );
 
@@ -521,9 +525,10 @@ Bool_t Analyzer::Process(Long64_t entry)
   vector< TLorentzVector > p4Othermuon;    // leading muon
 
    //--------- For MVA analysis
-	const char* inputVars[] = { "Ht", "Stlep", "Stjet", "jet_number", "numBjets_csvl" };
+	//const char* inputVars[] = { "Ht", "Stlep", "Stjet", "jet_number", "numBjets_csvl" };
+	const char* inputVars[] = { "bdisc_1st", "bdisc_2nd", "bdisc_3rd", "bdisc_4th", "Ht", "Stlep", "Stjet", "jet_number", "numBjets_csvl", "numBjets_csvm", "numBjets_csvt", "jet1pt", "jet2pt", "jet3pt", "jet4pt" };
 	std::vector<std::string> inputVarsMVA;
-	for (int i=0; i<5; ++i) inputVarsMVA.push_back( inputVars[i] );
+	for (int i=0; i<15; ++i) inputVarsMVA.push_back( inputVars[i] );
 	ReadBDT mvaReader( inputVarsMVA );  
 	float bdtresponse = 0.;
    //////////////////////////////////////////////////
@@ -585,8 +590,8 @@ Bool_t Analyzer::Process(Long64_t entry)
   }
 
   // For 4 tops
-  if (fIsMC && fSample.Contains("4Top") ) {
-	  PUweight = 1;
+  if (fIsMC && fSample.Contains("4Top") && !fSample.Contains("SM") ) {
+	  PUweight = 1.;
   }
 
   /////////////
@@ -817,17 +822,18 @@ Bool_t Analyzer::Process(Long64_t entry)
 
   int njets = 0;
   //double prod_bdisc =0;
+  if (!fBDT) {
   MyStoreTree->GetJetVariable()->numjets = 0;
   MyStoreTree->GetJetVariable()->numBjets_csvl = 0;
-  //MyStoreTree->GetJetVariable()->numBjets_csvm = 0;
-  //MyStoreTree->GetJetVariable()->numBjets_csvt = 0; 
+  MyStoreTree->GetJetVariable()->numBjets_csvm = 0;
+  MyStoreTree->GetJetVariable()->numBjets_csvt = 0; }
 		
   map< string, vector<float> > bdisc;
   map< string, vector<bool> >  isTagb;
   map< string, vector<bool> >  isTagbUp;
   map< string, vector<bool> >  isTagbDown;
   vector<int> listflavor;
-  //vector<float> bdiscriminator;
+  vector<float> bdiscriminator;
 
   Float_t metcorpx = p4MET.Px();
   Float_t metcorpy = p4MET.Py();
@@ -846,12 +852,6 @@ Bool_t Analyzer::Process(Long64_t entry)
 	Float_t ptscale = 1.0;
 
 	if (fdoJECunc){
-		/*fJECunc->setJetEta( jet.eta);
-		fJECunc->setJetPt( jet.pt);
-		double jec_unc = fJECunc->getUncertainty(true);
-		if (fVerbose) cout << "JEC uncertainty is " << jec_unc << endl;
-		if (fdoJECup) SF_JEC = 1.+jec_unc;
-		else SF_JEC = 1.-jec_unc; */
 
 		metcorpx = metcorpx + jet.uncorrpx;
 		metcorpy = metcorpy + jet.uncorrpy;
@@ -967,8 +967,8 @@ Bool_t Analyzer::Process(Long64_t entry)
 		tmpjet.SetPtEtaPhiE(jet.pt, jet.eta, jet.phi, jet.e);
 		p4jets.push_back( tmpjet);
 		listflavor.push_back( jet.mc.flavor );
-		//if (jet.btag_CSV > 0) bdiscriminator.push_back( jet.btag_CSV );      // for bdiscriminator
-		//else bdiscriminator.push_back( 0 );
+		if (jet.btag_CSV > 0) bdiscriminator.push_back( jet.btag_CSV );      // for bdiscriminator
+		else bdiscriminator.push_back( 0 );
 
 		if (fVerbose) {
 			cout << "done storing njets " << njets << endl;
@@ -1008,7 +1008,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 		}
 		// CSVM cut at 0.679 MEDIUM
 
-		/*if ( jet.btag_CSV > 0.898) {
+		if ( jet.btag_CSV > 0.898) {
 			isTagb["CSVT"].push_back(true);
 			//isTagbUp["CSVT"].push_back(true);
 			//isTagbDown["CSVT"].push_back(true);
@@ -1017,7 +1017,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 			//isTagbUp["CSVT"].push_back(false);
 			//isTagbDown["CSVT"].push_back(false);
 		}
-		// CSVM cut at 0.898 TIGHT */
+		// CSVM cut at 0.898 TIGHT 
 		
 		if (fVerbose) cout << "done csv" << endl;
 		
@@ -1283,13 +1283,23 @@ Bool_t Analyzer::Process(Long64_t entry)
 	// for BDT
 	double jet_number = 0.;
 	double numBjets_csvl = -999.;
+	double numBjets_csvm = -999.;
+	double numBjets_csvt = -999.;
+	double bdisc_1st = -999.;
+	double bdisc_2st = -999.;
+	double bdisc_3st = -999.;
+	double bdisc_4st = -999.;
+	double jet1pt = 0.;
+	double jet2pt = 0.;
+	double jet3pt = 0.;
+	double jet4pt = 0.;
 	vector<double>mvaInputVal;
 
 	//   Cuts
-	bool passcut = true;
-	if ( Ht <= 300. ) passcut = false;
+	//bool passcut = true;
+	//if ( Ht <= 300. ) passcut = false;
 
-	if (passcut) {
+	if ( Ht >= 300.0 ) {
 	    //if(!fBDT){
 		hPVs["Nreweight_2jet"]->Fill( total_pvs, PUweight );
 		hMET["Ht"]->Fill( Ht, PUweight );
@@ -1318,41 +1328,51 @@ Bool_t Analyzer::Process(Long64_t entry)
 		hjets["Nbtags_CSVM"]->Fill( Nbtags_CSVM, PUweight ); 
 		hjets["Nbtags_CSVT"]->Fill( Nbtags_CSVT, PUweight ); 
 
+		if (!fBDT) {
+		// Variables in 4Tree
 		// plot bdiscriminator
-       		//if ( bdiscriminator[0] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_1st = bdiscriminator[0]; hjets["1st_bdisc"]->Fill( bdiscriminator[0], PUweight );}
-		//if ( bdiscriminator[1] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_2nd = bdiscriminator[1]; hjets["2nd_bdisc"]->Fill( bdiscriminator[1], PUweight );}
-		//if ( bdiscriminator[2] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_3rd = bdiscriminator[2]; hjets["3rd_bdisc"]->Fill( bdiscriminator[2], PUweight );}
-		//if ( bdiscriminator[3] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_4th = bdiscriminator[3]; hjets["4th_bdisc"]->Fill( bdiscriminator[3], PUweight );}
+       		if ( bdiscriminator[0] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_1st = bdiscriminator[0];}// hjets["1st_bdisc"]->Fill( bdiscriminator[0], PUweight );}
+		if ( bdiscriminator[1] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_2nd = bdiscriminator[1];}// hjets["2nd_bdisc"]->Fill( bdiscriminator[1], PUweight );}
+		if ( bdiscriminator[2] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_3rd = bdiscriminator[2];}// hjets["3rd_bdisc"]->Fill( bdiscriminator[2], PUweight );}
+		if ( bdiscriminator[3] >= 0 ) { MyStoreTree->GetJetVariable()->bdisc_4th = bdiscriminator[3];}// hjets["4th_bdisc"]->Fill( bdiscriminator[3], PUweight );}
 		//prod_bdisc = bdiscriminator[0]*bdiscriminator[1]*bdiscriminator[2]*bdiscriminator[3]; 
 		//hjets["prod_bdisc"]->Fill( prod_bdisc, PUweight );
 		
-		// Variables in 4Tree
 		MyStoreTree->GetGeneralVariable()->PUWeight = PUweight;
 		MyStoreTree->GetMetVariable()->Ht = Ht;
 		MyStoreTree->GetMetVariable()->Stlep = Stlep;
 		MyStoreTree->GetMetVariable()->Stjet = Stjet;
                 MyStoreTree->GetJetVariable()->numjets= njets;
                 MyStoreTree->GetJetVariable()->numBjets_csvl= Nbtags_CSVL;
-                //MyStoreTree->GetJetVariable()->numBjets_csvm= Nbtags_CSVM;
-                //MyStoreTree->GetJetVariable()->numBjets_csvt= Nbtags_CSVT;
+                MyStoreTree->GetJetVariable()->numBjets_csvm= Nbtags_CSVM;
+                MyStoreTree->GetJetVariable()->numBjets_csvt= Nbtags_CSVT;
+                MyStoreTree->GetJetVariable()->jet1pt = p4jets[0].Pt() ;
+                MyStoreTree->GetJetVariable()->jet2pt = p4jets[1].Pt() ;
+                MyStoreTree->GetJetVariable()->jet3pt = p4jets[2].Pt() ;
+                MyStoreTree->GetJetVariable()->jet4pt = p4jets[3].Pt() ;
 		//////////////////////////////////////////////////////////////////////////////////
 
 		cutmap["Ht"] += PUweight;
 
-		if ( Nbtags_CSVM >= 1 ) {
+		//if ( Nbtags_CSVM >= 1 && Ht >= 500 && Stjet >= 500 ) {
+		if ( Nbtags_CSVM >= 1){ 
 			cutmap["4Jet1b"] += PUweight;
-			//hPVs["Nreweight_2jet_1btag"]->Fill( total_pvs, PUweight );
-			//hMET["Ht_1btag"]->Fill( Ht, PUweight );
-			//hMET["MET_1btag"]->Fill( p4MET.Pt(), PUweight );
-			//hMET["Stlep_1btag"]->Fill( Stlep , PUweight );
-			//hMET["Stjet_1btag"]->Fill( Stjet , PUweight );
-			//hjets["Njets_1btag"]->Fill(njets, PUweight*SFb_1tag );
-			//hjets["1st_pt_1btag"]->Fill( p4jets[0].Pt(), PUweight );
-			//hjets["1st_eta_1btag"]->Fill( p4jets[0].Eta(), PUweight );
-			//hjets["2nd_pt_1btag"]->Fill( p4jets[1].Pt(), PUweight );
-			//hjets["2nd_eta_1btag"]->Fill( p4jets[1].Eta(), PUweight );
-			//hjets["3rd_pt_1btag"]->Fill( p4jets[2].Pt(), PUweight );
-			//hjets["4th_pt_1btag"]->Fill( p4jets[3].Pt(), PUweight );
+			if ( p4jets[3].Pt() > 50.){ 
+				cutmap["4JetCut"] += PUweight;
+				if ( Stjet >= 500 ) {
+					cutmap["Stjet"] += PUweight;
+			hPVs["Nreweight_2jet_1btag"]->Fill( total_pvs, PUweight );
+			hMET["Ht_1btag"]->Fill( Ht, PUweight );
+			hMET["MET_1btag"]->Fill( p4MET.Pt(), PUweight );
+			hMET["Stlep_1btag"]->Fill( Stlep , PUweight );
+			hMET["Stjet_1btag"]->Fill( Stjet , PUweight );
+			hjets["Njets_1btag"]->Fill(njets, PUweight );
+			hjets["1st_pt_1btag"]->Fill( p4jets[0].Pt(), PUweight );
+			hjets["1st_eta_1btag"]->Fill( p4jets[0].Eta(), PUweight );
+			hjets["2nd_pt_1btag"]->Fill( p4jets[1].Pt(), PUweight );
+			hjets["2nd_eta_1btag"]->Fill( p4jets[1].Eta(), PUweight );
+			hjets["3rd_pt_1btag"]->Fill( p4jets[2].Pt(), PUweight );
+			hjets["4th_pt_1btag"]->Fill( p4jets[3].Pt(), PUweight );
 			//hjets["Dijet_deltaR_1btag"]->Fill( deltaRjj, PUweight );
 			//hmuons["N_1btag"]->Fill( total_muons, PUweight );
 			//hmuons["Nelectrons_1btag"]->Fill( nlooseelectrons, PUweight  );
@@ -1362,10 +1382,26 @@ Bool_t Analyzer::Process(Long64_t entry)
 
 			////////////////////////////////////////////////////////////////////////////////// 
 
-		}
+				}}}
+		} else {
 
-	    //} else {
-	        if (fBDT){
+	        //if (fBDT){
+		bdisc_1st = bdiscriminator[0];
+		mvaInputVal.push_back( bdisc_1st ); 
+		bdisc_2st = bdiscriminator[1];
+		mvaInputVal.push_back( bdisc_2st ); 
+		bdisc_3st = bdiscriminator[2];
+		mvaInputVal.push_back( bdisc_3st ); 
+		bdisc_4st = bdiscriminator[3];
+		mvaInputVal.push_back( bdisc_4st ); 
+		jet1pt = p4jets[0].Pt();
+		mvaInputVal.push_back( jet1pt ); 
+		jet2pt = p4jets[1].Pt();
+		mvaInputVal.push_back( jet2pt ); 
+		jet3pt = p4jets[2].Pt();
+		mvaInputVal.push_back( jet3pt ); 
+		jet4pt = p4jets[3].Pt();
+		mvaInputVal.push_back( jet4pt ); 
 		mvaInputVal.push_back( Ht ); 
 		mvaInputVal.push_back( Stlep ); 
 		mvaInputVal.push_back( Stjet ); 
@@ -1373,22 +1409,24 @@ Bool_t Analyzer::Process(Long64_t entry)
 		mvaInputVal.push_back( jet_number ); 
 		numBjets_csvl = Nbtags_CSVL;
 		mvaInputVal.push_back( numBjets_csvl ); 
-
+		numBjets_csvm = Nbtags_CSVM;
+		mvaInputVal.push_back( numBjets_csvm ); 
+		numBjets_csvt = Nbtags_CSVT;
+		mvaInputVal.push_back( numBjets_csvt ); 
 
 		bdtresponse = mvaReader.GetMvaValue( mvaInputVal );
 		hMET["bdtresponse"]->Fill( bdtresponse, PUweight ); 
+	        }
 		//////////////////////////////////////////////////////////////////////////////////
-	    }
 	}
   }
 
-  //if (!fBDT){
    MyStoreTree->GetGeneralVariable()->Run = ntuple->run;
    MyStoreTree->GetGeneralVariable()->Lumi = ntuple->lumi;
    MyStoreTree->GetGeneralVariable()->Event = ntuple->event;
 
    MyStoreTree->GetStoreTree()->Fill();
-  //}
+
   if (fVerbose) cout << "done analysis" << endl;
   return kTRUE;
 }
@@ -1417,8 +1455,7 @@ void Analyzer::SlaveTerminate()
 		fFile->cd();
 		h1test->Write();
 		hcutflow->Write();
-		//if (!fBDT) MyStoreTree->GetStoreTree()->Write();
-		MyStoreTree->GetStoreTree()->Write();
+		if (!fBDT) MyStoreTree->GetStoreTree()->Write();
 		//h2_pt_Wprime->Write();
 		fFile->mkdir("muons");
 		fFile->cd("muons");
