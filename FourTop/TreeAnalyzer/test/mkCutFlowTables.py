@@ -10,7 +10,7 @@ IsMC = False
 Lumi = 10.93 # in pb-1
 JetType = "PF" #calo
 showGh = False
-kFactor = 1.2
+kFactor = 1.0
 WprimeType = "RH"
 splitWjets = False
 
@@ -42,26 +42,30 @@ file = {}
 label = {}
 # MC files
 if IsMC:
-    file['ttbar'] = path+'/preresults_ttbar.root'
-    file['QCD']   = path+'/preresults_QCD.root'
+    file['ttbar'] = path+'/results_ttbar.root'
+    file['QCD']   = path+'/results_QCD.root'
     if splitWjets:
-        file['Wbb'] = path+'/preresults_Wbb.root'
-        file['Wcc']= path+'/preresults_Wcc.root'
-        file['Wqq']= path+'/preresults_Wqq.root'
+        file['Wbb'] = path+'/results_Wbb.root'
+        file['Wcc']= path+'/results_Wcc.root'
+        file['Wqq']= path+'/results_Wqq.root'
     else:
-        file['Wjets'] = path+'/preresults_WJets.root'
-    file['Zjets'] = path+'/preresults_ZJets.root'
-    file['tch']   = path+'/preresults_STtch.root'
-    file['tWch']  = path+'/preresults_STtWch.root'
-    file['sch']   = path+'/preresults_STsch.root'
-    file['tch_bar']   = path+'/preresults_STtch_bar.root'
-    file['tWch_bar']  = path+'/preresults_STtWch_bar.root'
-    file['sch_bar']   = path+'/preresults_STsch_bar.root'
-    file['WW']    = path+'/preresults_WW.root'
-    file['WZ']    = path+'/preresults_WZ.root'
+        file['Wjets'] = path+'/results_WJets.root'
+    file['Zjets'] = path+'/results_ZJets.root'
+    file['tch']   = path+'/results_STtch.root'
+    file['tWch']  = path+'/results_STtWch.root'
+    file['sch']   = path+'/results_STsch.root'
+    file['tch_bar']   = path+'/results_STtch_bar.root'
+    file['tWch_bar']  = path+'/results_STtWch_bar.root'
+    file['sch_bar']   = path+'/results_STsch_bar.root'
+    file['WW']    = path+'/results_WW.root'
+    file['WZ']    = path+'/results_WZ.root'
+    file['4TopSM']    = path+'/results_4TopSM.root'
 
-    file['Gh500'] = path+'/preresults_4Top_500.root'
-    file['Gh1000'] = path+'/preresults_4Top_1000.root'
+    file['Gh500'] = path+'/results_4Top500.root'
+    file['Gh700'] = path+'/results_4Top700.root'
+    file['Gh900'] = path+'/results_4Top900.root'
+    file['Gh1000'] = path+'/results_4Top1000.root'
+    file['Gh1100'] = path+'/results_4Top1100.root'
     
     xsec['ttbar'] = 163.0 #157.5
     xsec['QCD']   = 84679.3
@@ -80,8 +84,12 @@ if IsMC:
     xsec['sch_bar']   = 1.44
     xsec['WW']    = 43.0
     xsec['WZ']    = 18.0
-    xsec['Gh500'] = 0.00025442*kFactor
-    xsec['Gh1000'] = 0.0000098699*kFactor
+    xsec['4TopSM'] = 0.0004746
+    xsec['Gh500'] = 0.18182*kFactor
+    xsec['Gh700'] = 0.012131*kFactor
+    xsec['Gh900'] = 0.0011484*kFactor
+    xsec['Gh1000'] = 0.00038029*kFactor
+    xsec['Gh1100'] = 0.00012830*kFactor
     
     Nevents['ttbar'] = 3701947.0
     Nevents['Wjets'] = 77105816.0
@@ -100,9 +108,13 @@ if IsMC:
     Nevents['tch_bar'] = 1944826.0
     Nevents['tWch'] = 814390.0
     Nevents['tWch_bar'] = 809984.0
+    Nevents['4TopSM'] = 3057.0
     
     Nevents['Gh500'] = 3368.0
+    Nevents['Gh700'] = 3757.0
+    Nevents['Gh900'] = 3949.0
     Nevents['Gh1000'] = 3977.0
+    Nevents['Gh1100'] = 4041.0
     
     label['ttbar'] = '$t\\overline{t}$'
     label['QCD'] = 'QCD'
@@ -122,8 +134,13 @@ if IsMC:
     label['WW'] = 'WW'
     label['WZ'] = 'WZ'
 
+    label['4TopSM'] = 'FourTop SM'
+
     label['Gh500'] = "Gh 0.5 TeV"
+    label['Gh700'] = "Gh 0.7 TeV"
+    label['Gh900'] = "Gh 0.9 TeV"
     label['Gh1000'] = "Gh 1.0 TeV"
+    label['Gh1100'] = "Gh 1.1 TeV"
                                     
     label['Total'] = 'Total MC'
 else:
@@ -148,7 +165,7 @@ else:
     #    file['dataPF'] = path+'/cutflow_PF_data.txt'
     #    label['dataPF'] = 'PF Ref. Sel.'
 
-    file['data'] = path+'/preresults_data.root';
+    file['data'] = path+'/results_data.root';
     label['data'] = "Data";
     
     
@@ -166,29 +183,31 @@ cutlabel['ElectronVeto'] = 'Electron veto'
 cutlabel['1Jet'] = 'jets $\geq 1$'
 cutlabel['2Jet'] = 'jets $\geq 2$'
 cutlabel['3Jet'] = 'jets $\geq 3$'
-cutlabel['5Jet'] = 'jets $\geq 4$'
-cutlabel['Ht'] = '$H_t$ > 300'
-cutlabel['5Jet1b'] = 'btags $\geq 1$'
-#cutlabel['2Jet1b'] = 'btags $\geq 1$'
+cutlabel['4Jet'] = 'jets $\geq 4$'
+cutlabel['Ht'] = '$H_t \geq 300$'
+cutlabel['4Jet1b'] = 'btags $\geq 1$'
+cutlabel['4JetCut'] = '$p_t^{jet4} > 40$ '
+cutlabel['Ht2'] = '$H_t \geq 500$'
+cutlabel['Stjet'] = '$S_t^{jet} \geq 500$'
 
-cutlabelvector = [ 'GoodPV', 'OneIsoMu', 'LooseMuVeto', 'ElectronVeto', '5Jet','Ht', '5Jet1b']
-SKIPCUTS = []#'1Jet','3Jet','4Jet']
+cutlabelvector = [ 'GoodPV', 'OneIsoMu', 'LooseMuVeto', 'ElectronVeto', '4Jet','Ht', '4Jet1b', '4JetCut', 'Stjet']
+SKIPCUTS = []#'4JetCut']#'1Jet','3Jet','4Jet']
 
 allmap = {}
 allmaperr = {}
 
 weightmap = {}
 
-tablelist = ['ttbar','Wjets','Zjets','QCD','tch','tch_bar','tWch','tWch_bar','sch','sch_bar','WW','WZ','Total']
+tablelist = ['ttbar','Wjets','Zjets','QCD','tch','tch_bar','tWch','tWch_bar','sch','sch_bar','WW','WZ','4TopSM','Total']
 
 if splitWjets:
-    tablelist = ['ttbar','Wbb','Wcc','Wqq','Zjets','QCD','tch','tch_bar','tWch','tWch_bar','sch','sch_bar','WW','WZ','Total']
+    tablelist = ['ttbar','Wbb','Wcc','Wqq','Zjets','QCD','tch','tch_bar','tWch','tWch_bar','sch','sch_bar','WW','WZ','4TopSM','Total']
     
 if showGh:
-    tablelist = ['Gh500','Gh1000']
+    tablelist = ['Gh500','Gh700','Gh900','Gh1000','Gh1100']
 
 if Lumi<=0:
-    tablelist = ['ttbar','Wjets','Zjets','QCD','tch','tch_bar','tWch','tWch_bar','sch','sch_bar','WW','WZ']
+    tablelist = ['ttbar','Wjets','Zjets','QCD','tch','tch_bar','tWch','tWch_bar','sch','sch_bar','WW','WZ','4TopSM']
 
 if not IsMC:
     tablelist = ['data']
@@ -261,8 +280,8 @@ cutflowerr["Total"] = allmaperr
 
 # write latex
 #sortedcutlist = ['CleanFilters','HLT','GoodPV','OneIsoMu','LooseMuVeto','ElectronVeto','MET','1Jet','2Jet','3Jet','4Jet']
-sortedcutlist = ['GoodPV','OneIsoMu','LooseMuVeto','ElectronVeto']#,'MET','1Jet','2Jet','2Jet1b']
-sortedcutlist2= ['5Jet', 'Ht', '5Jet1b'] #'MET','2Jet0b','2JetOnly1b','2Jet2b','2Jet1b','j1j2pt','toppt','topmass']
+sortedcutlist = ['GoodPV','OneIsoMu','LooseMuVeto','ElectronVeto']
+sortedcutlist2= ['4Jet', 'Ht', '4Jet1b', '4JetCut', 'Stjet'] 
 
 if IsMC:
     cutlabel['CleanFilters'] = 'Processed'
@@ -394,7 +413,6 @@ if len(sortedcutlist2) > 0:
 \end{table}
     ''')
     
-
 print "file "+texname+ " has been written."
 
 if IsMC:
