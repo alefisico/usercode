@@ -1,5 +1,5 @@
-points = [['fourtop500']]
-#points = [['fourtop1000']]
+points = [['fourtop1100'], ['fourtop900'], ['fourtop700'], ['fourtop500']]
+#points = [['fourtop1100']]
     
 # for model building:
 def get_model():
@@ -8,8 +8,8 @@ def get_model():
     # which also includes rate changes according to the alternate shapes.
     # For more info about this model and naming conventuion, see documentation
     # of build_model_from_rootfile.
-    model = build_model_from_rootfile('/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/4top500/templates_500.root')
-    #model = build_model_from_rootfile('/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/4top1000/templates_1000.root')
+    model = build_model_from_rootfile('/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/mu_disc_templates.root')
+    #model = build_model_from_rootfile('/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/mu_stjet_templates.root')
             
     # If the prediction histogram is zero, but data is non-zero, teh negative log-likelihood
     # is infinity which causes problems for some methods. Therefore, we set all histogram
@@ -18,7 +18,7 @@ def get_model():
 
     # define what the signal processes are. All other processes are assumed to make up the 
     # 'background-only' model.
-    model.set_signal_processes('fourtop*')
+    model.set_signal_processes('fourtop*00')
             
     # Add some lognormal rate uncertainties. The first parameter is the name of the
     # uncertainty (which will also be the name of the nuisance parameter), the second
@@ -53,8 +53,8 @@ model_summary(model)
 # process all signals defined as signal processes before; see Section "Common Parameters"
 # on the theta auto intro doxygen page for details)
 #res = ml_fit_coefficients(model, signal_processes = [''], nuisance_constraint="shape:fix")
-#for p in res['']['mu_mass']:
-#    print('%s: %f' % (p, res['']['mu_mass'][p]))
+#for p in res['']['mu_disc*']:
+#    print('%s: %f' % (p, res['']['mu_disc*'][p]))
 plot_exp, plot_obs = bayesian_limits(model, signal_processes = points)
 
 # plot_exp and plot_obs are instances of plotutil.plotdata. they contain x/y values and
@@ -62,8 +62,12 @@ plot_exp, plot_obs = bayesian_limits(model, signal_processes = points)
 # data, pass then to plotutil.plot routine to make pdf plots, ...
 # Here, we will just create text files of the plot data. This is useful if you want
 # to apply your own plotting routines or present the result in a text Table.
-plot_exp.write_txt('bayesian_limits_expected_'+points[0][0]+'.txt')
-plot_obs.write_txt('bayesian_limits_observed_'+points[0][0]+'.txt')
+#plot_exp.write_txt('bayesian_limits_expected_'+points[0][0]+'.txt')
+plot_exp.write_txt('bayesian_limits_expected_fourtop_test.txt')
+#plot_exp.write_txt('bayesian_limits_expected_stjet_fourtop.txt')
+#plot_obs.write_txt('bayesian_limits_observed_'+points[0][0]+'.txt')
+plot_obs.write_txt('bayesian_limits_observed_fourtop_test.txt')
+#plot_obs.write_txt('bayesian_limits_observed_stjet_fourtop.txt')
 
     #plot_exp, plot_obs = cls_limits(model,ts="lhclike", signal_processes = points)
     ##plot_exp, plot_obs = cls_limits(model, signal_processes = points)
@@ -73,8 +77,10 @@ plot_obs.write_txt('bayesian_limits_observed_'+points[0][0]+'.txt')
 # model_summary, bayesian_limits, and cls_limits also write their results to the 'report' object
 # which we can ask to write its results as html page to a certain directory. Use an existing, empty
 # directory and point your web browser to it.
-report.write_html('htmlout_fourtop500')
-#report.write_html('htmlout_fourtop1000')
+#report.write_html('htmlout_'+points[0][0])
+report.write_html('htmlout_fourtopBDT_test')
+#report.write_html('htmlout_fourtop_stjet')
+#report.write_html('htmlout_stjet_'+points[0][0])
 
 # After running theta-auto, you probably want to delete the 'analysis' directory which
 # contains intermediate results. Keeping it avoids re-running theta unnecessarily for unchanged configurations
