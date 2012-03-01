@@ -1,0 +1,455 @@
+<cuy>
+  <validation type="data" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_data.root" weight="1">
+	<!-- PVs -->
+    <TH1 name="PVs_1btag_data" source="/PVs/NPVreweight_2jet_1btag_data"/>
+	<!-- MET -->
+    <TH1 name="Ht_1btag_data" source="/MET/Ht_1btag_data"/>
+    <TH1 name="MET_1btag_data" source="/MET/MET_1btag_data"/>
+    <TH1 name="Stjet_1btag_data" source="/MET/Stjet_1btag_data"/>
+    <TH1 name="Stlep_1btag_data" source="/MET/Stlep_1btag_data"/>
+	<!-- jets -->
+    <TH1 name="Njets_1btag_data" source="/jets/Njets_1tag_data"/>
+    <TH1 name="jet1_pt_data" source="/jets/jet1_pt_data"/>
+    <TH1 name="jet1_eta_data" source="/jets/jet1_eta_data"/>
+    <TH1 name="jet2_pt_data" source="/jets/jet2_pt_data"/>
+    <TH1 name="jet2_eta_data" source="/jets/jet2_eta_data"/>
+  </validation>
+
+  <validation type="4Top500" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top500.root" weight="MCScaleFactors.txt:4Top_500"> 
+	<!-- PVs -->
+    <TH1 name="PVs_1btag_4Top500" source="/PVs/NPVreweight_2jet_1btag_4Top500"/>
+	<!-- MET -->
+    <TH1 name="Ht_1btag_4Top500" source="/MET/Ht_1btag_4Top500"/>
+    <TH1 name="MET_1btag_4Top500" source="/MET/MET_1btag_4Top500"/>
+    <TH1 name="Stjet_1btag_4Top500" source="/MET/Stjet_1btag_4Top500"/>
+    <TH1 name="Stlep_1btag_4Top500" source="/MET/Stlep_1btag_4Top500"/>
+	<!-- jets -->
+    <TH1 name="Njets_1btag_4Top500" source="/jets/Njets_1tag_4Top500"/>
+    <TH1 name="jet1_pt_4Top500" source="/jets/jet1_pt_4Top500"/>
+    <TH1 name="jet1_eta_4Top500" source="/jets/jet1_eta_4Top500"/>
+    <TH1 name="jet2_pt_4Top500" source="/jets/jet2_pt_4Top500"/>
+    <TH1 name="jet2_eta_4Top500" source="/jets/jet2_eta_4Top500"/>
+  </validation>
+
+  <validation type="4Top700" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top700.root" weight="MCScaleFactors.txt:4Top_700"> 
+	<!-- PVs -->
+    <TH1 name="PVs_1btag_4Top700" source="/PVs/NPVreweight_2jet_1btag_4Top700"/>
+	<!-- MET -->
+    <TH1 name="Ht_1btag_4Top700" source="/MET/Ht_1btag_4Top700"/>
+    <TH1 name="MET_1btag_4Top700" source="/MET/MET_1btag_4Top700"/>
+    <TH1 name="Stjet_1btag_4Top700" source="/MET/Stjet_1btag_4Top700"/>
+    <TH1 name="Stlep_1btag_4Top700" source="/MET/Stlep_1btag_4Top700"/>
+	<!-- jets -->
+    <TH1 name="Njets_1btag_4Top700" source="/jets/Njets_1tag_4Top700"/>
+    <TH1 name="jet1_pt_4Top700" source="/jets/jet1_pt_4Top700"/>
+    <TH1 name="jet1_eta_4Top700" source="/jets/jet1_eta_4Top700"/>
+    <TH1 name="jet2_pt_4Top700" source="/jets/jet2_pt_4Top700"/>
+    <TH1 name="jet2_eta_4Top700" source="/jets/jet2_eta_4Top700"/>
+  </validation>
+
+  <validation type="4Top900" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top900.root" weight="MCScaleFactors.txt:4Top_900"> 
+	<!-- PVs -->
+    <TH1 name="PVs_1btag_4Top900" source="/PVs/NPVreweight_2jet_1btag_4Top900"/>
+	<!-- MET -->
+    <TH1 name="Ht_1btag_4Top900" source="/MET/Ht_1btag_4Top900"/>
+    <TH1 name="MET_1btag_4Top900" source="/MET/MET_1btag_4Top900"/>
+    <TH1 name="Stjet_1btag_4Top900" source="/MET/Stjet_1btag_4Top900"/>
+    <TH1 name="Stlep_1btag_4Top900" source="/MET/Stlep_1btag_4Top900"/>
+	<!-- jets -->
+    <TH1 name="Njets_1btag_4Top900" source="/jets/Njets_1tag_4Top900"/>
+    <TH1 name="jet1_pt_4Top900" source="/jets/jet1_pt_4Top900"/>
+    <TH1 name="jet1_eta_4Top900" source="/jets/jet1_eta_4Top900"/>
+    <TH1 name="jet2_pt_4Top900" source="/jets/jet2_pt_4Top900"/>
+    <TH1 name="jet2_eta_4Top900" source="/jets/jet2_eta_4Top900"/>
+  </validation>
+
+  <validation type="4Top1000" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top1000.root" weight="MCScaleFactors.txt:4Top_1000"> 
+	<!-- PVs -->
+    <TH1 name="PVs_1btag_4Top1000" source="/PVs/NPVreweight_2jet_1btag_4Top1000"/>
+	<!-- MET -->
+    <TH1 name="Ht_1btag_4Top1000" source="/MET/Ht_1btag_4Top1000"/>
+    <TH1 name="MET_1btag_4Top1000" source="/MET/MET_1btag_4Top1000"/>
+    <TH1 name="Stjet_1btag_4Top1000" source="/MET/Stjet_1btag_4Top1000"/>
+    <TH1 name="Stlep_1btag_4Top1000" source="/MET/Stlep_1btag_4Top1000"/>
+	<!-- jets -->
+    <TH1 name="Njets_1btag_4Top1000" source="/jets/Njets_1tag_4Top1000"/>
+    <TH1 name="jet1_pt_4Top1000" source="/jets/jet1_pt_4Top1000"/>
+    <TH1 name="jet1_eta_4Top1000" source="/jets/jet1_eta_4Top1000"/>
+    <TH1 name="jet2_pt_4Top1000" source="/jets/jet2_pt_4Top1000"/>
+    <TH1 name="jet2_eta_4Top1000" source="/jets/jet2_eta_4Top1000"/>
+  </validation>
+
+  <validation type="4Top1100" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4Top1100.root" weight="MCScaleFactors.txt:4Top_1100"> 
+	<!-- PVs -->
+    <TH1 name="PVs_1btag_4Top1100" source="/PVs/NPVreweight_2jet_1btag_4Top1100"/>
+	<!-- MET -->
+    <TH1 name="Ht_1btag_4Top1100" source="/MET/Ht_1btag_4Top1100"/>
+    <TH1 name="MET_1btag_4Top1100" source="/MET/MET_1btag_4Top1100"/>
+    <TH1 name="Stjet_1btag_4Top1100" source="/MET/Stjet_1btag_4Top1100"/>
+    <TH1 name="Stlep_1btag_4Top1100" source="/MET/Stlep_1btag_4Top1100"/>
+	<!-- jets -->
+    <TH1 name="Njets_1btag_4Top1100" source="/jets/Njets_1tag_4Top1100"/>
+    <TH1 name="jet1_pt_4Top1100" source="/jets/jet1_pt_4Top1100"/>
+    <TH1 name="jet1_eta_4Top1100" source="/jets/jet1_eta_4Top1100"/>
+    <TH1 name="jet2_pt_4Top1100" source="/jets/jet2_pt_4Top1100"/>
+    <TH1 name="jet2_eta_4Top1100" source="/jets/jet2_eta_4Top1100"/>
+  </validation>
+
+  <validation type="ttbar" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_ttbar.root" weight="MCScaleFactors.txt:ttbar"> 
+	<!-- PVs -->
+    <TH1 name="PVs_1btag_ttbar" source="/PVs/NPVreweight_2jet_1btag_ttbar"/>
+	<!-- MET -->
+    <TH1 name="Ht_1btag_ttbar" source="/MET/Ht_1btag_ttbar"/>
+    <TH1 name="MET_1btag_ttbar" source="/MET/MET_1btag_ttbar"/>
+    <TH1 name="Stjet_1btag_ttbar" source="/MET/Stjet_1btag_ttbar"/>
+    <TH1 name="Stlep_1btag_ttbar" source="/MET/Stlep_1btag_ttbar"/>
+	<!-- jets -->
+    <TH1 name="Njets_1btag_ttbar" source="/jets/Njets_1tag_ttbar"/>
+    <TH1 name="jet1_pt_ttbar" source="/jets/jet1_pt_ttbar"/>
+    <TH1 name="jet1_eta_ttbar" source="/jets/jet1_eta_ttbar"/>
+    <TH1 name="jet2_pt_ttbar" source="/jets/jet2_pt_ttbar"/>
+    <TH1 name="jet2_eta_ttbar" source="/jets/jet2_eta_ttbar"/>
+  </validation>
+
+
+  <validation type="WJets" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WJets.root" weight="MCScaleFactors.txt:WJets">
+	<!-- PVs -->
+    <TH1 name="PVs_1btag_WJets" source="/PVs/NPVreweight_2jet_1btag_WJets"/>
+	<!-- MET -->
+    <TH1 name="Ht_1btag_WJets" source="/MET/Ht_1btag_WJets"/>
+    <TH1 name="MET_1btag_WJets" source="/MET/MET_1btag_WJets"/>
+    <TH1 name="Stjet_1btag_WJets" source="/MET/Stjet_1btag_WJets"/>
+    <TH1 name="Stlep_1btag_WJets" source="/MET/Stlep_1btag_WJets"/>
+	<!-- jets -->
+    <TH1 name="Njets_1btag_WJets" source="/jets/Njets_1tag_WJets"/>
+    <TH1 name="jet1_pt_WJets" source="/jets/jet1_pt_WJets"/>
+    <TH1 name="jet1_eta_WJets" source="/jets/jet1_eta_WJets"/>
+    <TH1 name="jet2_pt_WJets" source="/jets/jet2_pt_WJets"/>
+    <TH1 name="jet2_eta_WJets" source="/jets/jet2_eta_WJets"/>
+  </validation>
+
+  <validation type="ZJets" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_ZJets.root" weight="MCScaleFactors.txt:ZJets">
+	<!-- PVs -->
+    <TH1 name="PVs_1btag_ZJets" source="/PVs/NPVreweight_2jet_1btag_ZJets"/>
+	<!-- MET -->
+    <TH1 name="Ht_1btag_ZJets" source="/MET/Ht_1btag_ZJets"/>
+    <TH1 name="MET_1btag_ZJets" source="/MET/MET_1btag_ZJets"/>
+    <TH1 name="Stjet_1btag_ZJets" source="/MET/Stjet_1btag_ZJets"/>
+    <TH1 name="Stlep_1btag_ZJets" source="/MET/Stlep_1btag_ZJets"/>
+	<!-- jets -->
+    <TH1 name="Njets_1btag_ZJets" source="/jets/Njets_1tag_ZJets"/>
+    <TH1 name="jet1_pt_ZJets" source="/jets/jet1_pt_ZJets"/>
+    <TH1 name="jet1_eta_ZJets" source="/jets/jet1_eta_ZJets"/>
+    <TH1 name="jet2_pt_ZJets" source="/jets/jet2_pt_ZJets"/>
+    <TH1 name="jet2_eta_ZJets" source="/jets/jet2_eta_ZJets"/>
+  </validation>
+
+  <validation type="STtch" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtch.root" weight="MCScaleFactors.txt:tch">
+	<!-- PVs -->
+    <TH1 name="PVs_1btag_STtch" source="/PVs/NPVreweight_2jet_1btag_STtch"/>
+	<!-- MET -->
+    <TH1 name="Ht_1btag_STtch" source="/MET/Ht_1btag_STtch"/>
+    <TH1 name="MET_1btag_STtch" source="/MET/MET_1btag_STtch"/>
+    <TH1 name="Stjet_1btag_STtch" source="/MET/Stjet_1btag_STtch"/>
+    <TH1 name="Stlep_1btag_STtch" source="/MET/Stlep_1btag_STtch"/>
+	<!-- jets -->
+    <TH1 name="Njets_1btag_STtch" source="/jets/Njets_1tag_STtch"/>
+    <TH1 name="jet1_pt_STtch" source="/jets/jet1_pt_STtch"/>
+    <TH1 name="jet1_eta_STtch" source="/jets/jet1_eta_STtch"/>
+    <TH1 name="jet2_pt_STtch" source="/jets/jet2_pt_STtch"/>
+    <TH1 name="jet2_eta_STtch" source="/jets/jet2_eta_STtch"/>
+  </validation>
+
+  <validation type="STtch_bar" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtch_bar.root" weight="MCScaleFactors.txt:tch_bar">
+	<!-- PVs -->
+    <TH1 name="PVs_1btag_STtch_bar" source="/PVs/NPVreweight_2jet_1btag_STtch_bar"/>
+	<!-- MET -->
+    <TH1 name="Ht_1btag_STtch_bar" source="/MET/Ht_1btag_STtch_bar"/>
+    <TH1 name="MET_1btag_STtch_bar" source="/MET/MET_1btag_STtch_bar"/>
+    <TH1 name="Stjet_1btag_STtch_bar" source="/MET/Stjet_1btag_STtch_bar"/>
+    <TH1 name="Stlep_1btag_STtch_bar" source="/MET/Stlep_1btag_STtch_bar"/>
+	<!-- jets -->
+    <TH1 name="Njets_1btag_STtch_bar" source="/jets/Njets_1tag_STtch_bar"/>
+    <TH1 name="jet1_pt_STtch_bar" source="/jets/jet1_pt_STtch_bar"/>
+    <TH1 name="jet1_eta_STtch_bar" source="/jets/jet1_eta_STtch_bar"/>
+    <TH1 name="jet2_pt_STtch_bar" source="/jets/jet2_pt_STtch_bar"/>
+    <TH1 name="jet2_eta_STtch_bar" source="/jets/jet2_eta_STtch_bar"/>
+  </validation>
+
+  <validation type="STtWch" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtWch.root" weight="MCScaleFactors.txt:tWch">
+	<!-- PVs -->
+    <TH1 name="PVs_1btag_STtWch" source="/PVs/NPVreweight_2jet_1btag_STtWch"/>
+	<!-- MET -->
+    <TH1 name="Ht_1btag_STtWch" source="/MET/Ht_1btag_STtWch"/>
+    <TH1 name="MET_1btag_STtWch" source="/MET/MET_1btag_STtWch"/>
+    <TH1 name="Stjet_1btag_STtWch" source="/MET/Stjet_1btag_STtWch"/>
+    <TH1 name="Stlep_1btag_STtWch" source="/MET/Stlep_1btag_STtWch"/>
+	<!-- jets -->
+    <TH1 name="Njets_1btag_STtWch" source="/jets/Njets_1tag_STtWch"/>
+    <TH1 name="jet1_pt_STtWch" source="/jets/jet1_pt_STtWch"/>
+    <TH1 name="jet1_eta_STtWch" source="/jets/jet1_eta_STtWch"/>
+    <TH1 name="jet2_pt_STtWch" source="/jets/jet2_pt_STtWch"/>
+    <TH1 name="jet2_eta_STtWch" source="/jets/jet2_eta_STtWch"/>
+  </validation>
+
+  <validation type="STtWch_bar" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STtWch_bar.root" weight="MCScaleFactors.txt:tWch_bar">
+	<!-- PVs -->
+    <TH1 name="PVs_1btag_STtWch_bar" source="/PVs/NPVreweight_2jet_1btag_STtWch_bar"/>
+	<!-- MET -->
+    <TH1 name="Ht_1btag_STtWch_bar" source="/MET/Ht_1btag_STtWch_bar"/>
+    <TH1 name="MET_1btag_STtWch_bar" source="/MET/MET_1btag_STtWch_bar"/>
+    <TH1 name="Stjet_1btag_STtWch_bar" source="/MET/Stjet_1btag_STtWch_bar"/>
+    <TH1 name="Stlep_1btag_STtWch_bar" source="/MET/Stlep_1btag_STtWch_bar"/>
+	<!-- jets -->
+    <TH1 name="Njets_1btag_STtWch_bar" source="/jets/Njets_1tag_STtWch_bar"/>
+    <TH1 name="jet1_pt_STtWch_bar" source="/jets/jet1_pt_STtWch_bar"/>
+    <TH1 name="jet1_eta_STtWch_bar" source="/jets/jet1_eta_STtWch_bar"/>
+    <TH1 name="jet2_pt_STtWch_bar" source="/jets/jet2_pt_STtWch_bar"/>
+    <TH1 name="jet2_eta_STtWch_bar" source="/jets/jet2_eta_STtWch_bar"/>
+  </validation>
+
+  <validation type="STsch" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STsch.root" weight="MCScaleFactors.txt:sch">
+	<!-- PVs -->
+    <TH1 name="PVs_1btag_STsch" source="/PVs/NPVreweight_2jet_1btag_STsch"/>
+	<!-- MET -->
+    <TH1 name="Ht_1btag_STsch" source="/MET/Ht_1btag_STsch"/>
+    <TH1 name="MET_1btag_STsch" source="/MET/MET_1btag_STsch"/>
+    <TH1 name="Stjet_1btag_STsch" source="/MET/Stjet_1btag_STsch"/>
+    <TH1 name="Stlep_1btag_STsch" source="/MET/Stlep_1btag_STsch"/>
+	<!-- jets -->
+    <TH1 name="Njets_1btag_STsch" source="/jets/Njets_1tag_STsch"/>
+    <TH1 name="jet1_pt_STsch" source="/jets/jet1_pt_STsch"/>
+    <TH1 name="jet1_eta_STsch" source="/jets/jet1_eta_STsch"/>
+    <TH1 name="jet2_pt_STsch" source="/jets/jet2_pt_STsch"/>
+    <TH1 name="jet2_eta_STsch" source="/jets/jet2_eta_STsch"/>
+  </validation>
+
+  <validation type="STsch_bar" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_STsch_bar.root" weight="MCScaleFactors.txt:sch_bar">
+	<!-- PVs -->
+    <TH1 name="PVs_1btag_STsch_bar" source="/PVs/NPVreweight_2jet_1btag_STsch_bar"/>
+	<!-- MET -->
+    <TH1 name="Ht_1btag_STsch_bar" source="/MET/Ht_1btag_STsch_bar"/>
+    <TH1 name="MET_1btag_STsch_bar" source="/MET/MET_1btag_STsch_bar"/>
+    <TH1 name="Stjet_1btag_STsch_bar" source="/MET/Stjet_1btag_STsch_bar"/>
+    <TH1 name="Stlep_1btag_STsch_bar" source="/MET/Stlep_1btag_STsch_bar"/>
+	<!-- jets -->
+    <TH1 name="Njets_1btag_STsch_bar" source="/jets/Njets_1tag_STsch_bar"/>
+    <TH1 name="jet1_pt_STsch_bar" source="/jets/jet1_pt_STsch_bar"/>
+    <TH1 name="jet1_eta_STsch_bar" source="/jets/jet1_eta_STsch_bar"/>
+    <TH1 name="jet2_pt_STsch_bar" source="/jets/jet2_pt_STsch_bar"/>
+    <TH1 name="jet2_eta_STsch_bar" source="/jets/jet2_eta_STsch_bar"/>
+  </validation>
+
+  <validation type="WW" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WW.root" weight="MCScaleFactors.txt:WW">
+	<!-- PVs -->
+    <TH1 name="PVs_1btag_WW" source="/PVs/NPVreweight_2jet_1btag_WW"/>
+	<!-- MET -->
+    <TH1 name="Ht_1btag_WW" source="/MET/Ht_1btag_WW"/>
+    <TH1 name="MET_1btag_WW" source="/MET/MET_1btag_WW"/>
+    <TH1 name="Stjet_1btag_WW" source="/MET/Stjet_1btag_WW"/>
+    <TH1 name="Stlep_1btag_WW" source="/MET/Stlep_1btag_WW"/>
+	<!-- jets -->
+    <TH1 name="Njets_1btag_WW" source="/jets/Njets_1tag_WW"/>
+    <TH1 name="jet1_pt_WW" source="/jets/jet1_pt_WW"/>
+    <TH1 name="jet1_eta_WW" source="/jets/jet1_eta_WW"/>
+    <TH1 name="jet2_pt_WW" source="/jets/jet2_pt_WW"/>
+    <TH1 name="jet2_eta_WW" source="/jets/jet2_eta_WW"/>
+  </validation>
+
+  <validation type="WZ" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_WZ.root" weight="MCScaleFactors.txt:WZ">
+	<!-- PVs -->
+    <TH1 name="PVs_1btag_WZ" source="/PVs/NPVreweight_2jet_1btag_WZ"/>
+	<!-- MET -->
+    <TH1 name="Ht_1btag_WZ" source="/MET/Ht_1btag_WZ"/>
+    <TH1 name="MET_1btag_WZ" source="/MET/MET_1btag_WZ"/>
+    <TH1 name="Stjet_1btag_WZ" source="/MET/Stjet_1btag_WZ"/>
+    <TH1 name="Stlep_1btag_WZ" source="/MET/Stlep_1btag_WZ"/>
+	<!-- jets -->
+    <TH1 name="Njets_1btag_WZ" source="/jets/Njets_1tag_WZ"/>
+    <TH1 name="jet1_pt_WZ" source="/jets/jet1_pt_WZ"/>
+    <TH1 name="jet1_eta_WZ" source="/jets/jet1_eta_WZ"/>
+    <TH1 name="jet2_pt_WZ" source="/jets/jet2_pt_WZ"/>
+    <TH1 name="jet2_eta_WZ" source="/jets/jet2_eta_WZ"/>
+  </validation>
+
+  <validation type="4TopSM" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results09/results_4TopSM.root" weight="MCScaleFactors.txt:4TopSM"> 
+	<!-- PVs -->
+    <TH1 name="PVs_1btag_4TopSM" source="/PVs/NPVreweight_2jet_1btag_4TopSM"/>
+	<!-- MET -->
+    <TH1 name="Ht_1btag_4TopSM" source="/MET/Ht_1btag_4TopSM"/>
+    <TH1 name="MET_1btag_4TopSM" source="/MET/MET_1btag_4TopSM"/>
+    <TH1 name="Stjet_1btag_4TopSM" source="/MET/Stjet_1btag_4TopSM"/>
+    <TH1 name="Stlep_1btag_4TopSM" source="/MET/Stlep_1btag_4TopSM"/>
+	<!-- jets -->
+    <TH1 name="Njets_1btag_4TopSM" source="/jets/Njets_1tag_4TopSM"/>
+    <TH1 name="jet1_pt_4TopSM" source="/jets/jet1_pt_4TopSM"/>
+    <TH1 name="jet1_eta_4TopSM" source="/jets/jet1_eta_4TopSM"/>
+    <TH1 name="jet2_pt_4TopSM" source="/jets/jet2_pt_4TopSM"/>
+    <TH1 name="jet2_eta_4TopSM" source="/jets/jet2_eta_4TopSM"/>
+  </validation>
+
+  <additionArray name="ST" title="ST">
+    <additionArrayItem array="STtch"/>
+    <additionArrayItem array="STtWch"/>
+    <additionArrayItem array="STsch"/>
+    <additionArrayItem array="STtch_bar"/>
+    <additionArrayItem array="STtWch_bar"/>
+    <additionArrayItem array="STsch_bar"/>
+  </additionArray>
+
+  <additionArray name="Dibosons" title="Dibosons">
+    <additionArrayItem array="WW"/>
+    <additionArrayItem array="WZ"/>
+  </additionArray>
+
+  <!-- PVs -->
+  <superimpose name="PVs_1btag_log" title="PVs_1btag_log" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true"  Minimum="0.01" Maximum="10e5" SubBanner="p_T^{4jet} #geq 50, Stjet > 500 GeV" >
+    <superimposeItem name="PVs_1btag_data" color="top" legend="Data"/>
+    <superimposeItem name="PVs_1btag_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="PVs_1btag_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="PVs_1btag_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="PVs_1btag_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="PVs_1btag_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="PVs_1btag_ST" color="top" legend="ST"/>
+    <superimposeItem name="PVs_1btag_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true"/> 
+    <superimposeItem name="PVs_1btag_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true"/> 
+    <superimposeItem name="PVs_1btag_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true"/> 
+    <superimposeItem name="PVs_1btag_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true"/>
+    <superimposeItem name="PVs_1btag_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true"/>
+  </superimpose>
+
+  <!-- MET -->
+  <superimpose name="Ht_1btag" title="Ht_1btag" YTitle="Events/50 GeV" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e3" PlotDiff="true" SubBanner="p_T^{4jet} #geq 50, Stjet > 500 GeV" > 
+    <superimposeItem name="Ht_1btag_data" color="top" legend="Data"/>
+    <superimposeItem name="Ht_1btag_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="Ht_1btag_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="Ht_1btag_WJets" color="top" legend="Wjets"/> 
+    <superimposeItem name="Ht_1btag_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="Ht_1btag_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="Ht_1btag_ST" color="top" legend="ST"/>
+    <superimposeItem name="Ht_1btag_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="Ht_1btag_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="Ht_1btag_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="Ht_1btag_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="Ht_1btag_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+
+  <superimpose name="MET_1btag" title="MET_1btag" YTitle="Events/10 GeV" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e3" PlotDiff="true" SubBanner="p_T^{4jet} #geq 50, Stjet > 500 GeV" >
+    <superimposeItem name="MET_1btag_data" color="top" legend="Data"/>
+    <superimposeItem name="MET_1btag_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="MET_1btag_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="MET_1btag_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="MET_1btag_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="MET_1btag_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="MET_1btag_ST" color="top" legend="ST"/>
+    <superimposeItem name="MET_1btag_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="MET_1btag_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="MET_1btag_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="MET_1btag_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="MET_1btag_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+
+  <superimpose name="Stjet_1btag" title="Stjet_1tag" YTitle="Events/50 GeV" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.001" Maximum="10e3" PlotDiff="true" SubBanner="p_T^{4jet} #geq 50, Stjet > 500 GeV" >
+    <superimposeItem name="Stjet_1btag_data" color="top" legend="Data"/>
+    <superimposeItem name="Stjet_1btag_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="Stjet_1btag_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="Stjet_1btag_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="Stjet_1btag_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="Stjet_1btag_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="Stjet_1btag_ST" color="top" legend="ST"/>
+    <superimposeItem name="Stjet_1btag_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="Stjet_1btag_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="Stjet_1btag_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="Stjet_1btag_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="Stjet_1btag_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+
+  <superimpose name="Stlep_1btag" title="Stlep_1btag" YTitle="Events/50 GeV" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.001" Maximum="10e3" PlotDiff="true" SubBanner="p_T^{4jet} #geq 50, Stjet > 500 GeV" >
+    <superimposeItem name="Stlep_1btag_data" color="top" legend="Data"/>
+    <superimposeItem name="Stlep_1btag_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="Stlep_1btag_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="Stlep_1btag_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="Stlep_1btag_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="Stlep_1btag_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="Stlep_1btag_ST" color="top" legend="ST"/>
+    <superimposeItem name="Stlep_1btag_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="Stlep_1btag_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="Stlep_1btag_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="Stlep_1btag_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="Stlep_1btag_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+
+  <!-- Jets -->
+  <superimpose name="Njets_1btag" title="Njets_1btag" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e5" PlotDiff="true" SubBanner="p_T^{4jet} #geq 50, Stjet > 500 GeV" >
+    <superimposeItem name="Njets_1btag_data" color="top" legend="Data"/>
+    <superimposeItem name="Njets_1btag_4TopSM" color="top" legend="FourTopSM"/>
+    <superimposeItem name="Njets_1btag_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="Njets_1btag_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="Njets_1btag_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="Njets_1btag_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="Njets_1btag_ST" color="top" legend="ST"/>
+    <superimposeItem name="Njets_1btag_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="Njets_1btag_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="Njets_1btag_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="Njets_1btag_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="Njets_1btag_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+
+  <!--
+  <superimpose name="jet1_pt_1btag" title="jet1_pt_1btag" YTitle="Events/16 GeV" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e5" PlotDiff="true" SubBanner="p_T^{4jet} #geq 50, Stjet > 500 GeV" >
+    <superimposeItem name="jet1_pt_1btag_data" color="top" legend="Data"/>
+    <superimposeItem name="jet1_pt_1btag_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="jet1_pt_1btag_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="jet1_pt_1btag_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="jet1_pt_1btag_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="jet1_pt_1btag_ST" color="top" legend="ST"/>
+    <superimposeItem name="jet1_pt_1btag_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="jet1_pt_1btag_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="jet1_pt_1btag_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="jet1_pt_1btag_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="jet1_pt_1btag_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+
+  <superimpose name="jet1_eta_1btag" title="jet1_eta_1btag" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e5" PlotDiff="true" SubBanner="p_T^{4jet} #geq 50, Stjet > 500 GeV" >
+    <superimposeItem name="jet1_eta_1btag_data" color="top" legend="Data"/>
+    <superimposeItem name="jet1_eta_1btag_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="jet1_eta_1btag_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="jet1_eta_1btag_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="jet1_eta_1btag_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="jet1_eta_1btag_ST" color="top" legend="ST"/>
+    <superimposeItem name="jet1_eta_1btag_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="jet1_eta_1btag_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="jet1_eta_1btag_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="jet1_eta_1btag_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="jet1_eta_1btag_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+
+  <superimpose name="jet2_pt_1btag" title="jet2_pt_1btag" YTitle="Events/16 GeV" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e4" PlotDiff="true" SubBanner="p_T^{4jet} #geq 50, Stjet > 500 GeV" >
+    <superimposeItem name="jet2_pt_1btag_data" color="top" legend="Data"/>
+    <superimposeItem name="jet2_pt_1btag_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="jet2_pt_1btag_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="jet2_pt_1btag_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="jet2_pt_1btag_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="jet2_pt_1btag_ST" color="top" legend="ST"/>
+    <superimposeItem name="jet2_pt_1btag_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="jet2_pt_1btag_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="jet2_pt_1btag_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="jet2_pt_1btag_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="jet2_pt_1btag_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+
+  <superimpose name="jet2_eta_1btag" title="jet2_eta_1btag" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Minimum="0.01" Maximum="10e4" PlotDiff="true" SubBanner="p_T^{4jet} #geq 50, Stjet > 500 GeV" >
+    <superimposeItem name="jet2_eta_1btag_data" color="top" legend="Data"/>
+    <superimposeItem name="jet2_eta_1btag_ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="jet2_eta_1btag_WJets" color="top" legend="Wjets"/>
+    <superimposeItem name="jet2_eta_1btag_ZJets" color="top" legend="Zjets"/>
+    <superimposeItem name="jet2_eta_1btag_Dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="jet2_eta_1btag_ST" color="top" legend="ST"/>
+    <superimposeItem name="jet2_eta_1btag_4Top500" color="1" legend="Gh 0.5 TeV" NoStack="true" />
+    <superimposeItem name="jet2_eta_1btag_4Top700" color="1" legend="Gh 0.7 TeV" NoStack="true" />
+    <superimposeItem name="jet2_eta_1btag_4Top900" color="1" legend="Gh 0.9 TeV" NoStack="true" />
+    <superimposeItem name="jet2_eta_1btag_4Top1000" color="1" legend="Gh 1.0 TeV" NoStack="true" />
+    <superimposeItem name="jet2_eta_1btag_4Top1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+  -->
+</cuy>
