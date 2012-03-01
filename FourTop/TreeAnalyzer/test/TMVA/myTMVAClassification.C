@@ -164,12 +164,11 @@ void myTMVAClassification( TString myMethodList = "" )
    // --- Here the preparation phase begins
 
    // Create a new root output file.
+   TString outfileName( "TMVA_1100.root" );
    //TString outfileName( "TMVA_1000.root" );
-   //TString outfileName( "TMVA_1000_JECUP.root" );
-   //TString outfileName( "TMVA_1000_JECDOWN.root" );
+   //TString outfileName( "TMVA_900.root" );
+   //TString outfileName( "TMVA_700.root" );
    //TString outfileName( "TMVA_500.root" );
-   //TString outfileName( "TMVA_500_JECUP.root" );
-   TString outfileName( "TMVA_500_JECDOWN.root" );
    TFile* outputFile = TFile::Open( outfileName, "RECREATE" );
 
    // Create the factory object. Later you can choose the methods
@@ -183,7 +182,8 @@ void myTMVAClassification( TString myMethodList = "" )
    // All TMVA output can be suppressed by removing the "!" (not) in 
    // front of the "Silent" argument in the option string
    TMVA::Factory *factory = new TMVA::Factory( "myTMVAClassification", outputFile, 
-                                               "!V:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D" );
+                                               //"!V:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification" );
+                                               "!V:!Silent:Color:DrawProgressBar:Transformations=I;G" ); //,D" );
 
    // If you wish to modify default settings 
    // (please check "src/Config.h" to see all available global options)
@@ -195,17 +195,21 @@ void myTMVAClassification( TString myMethodList = "" )
    // [all types of expressions that can also be parsed by TTree::Draw( "expression" )]
 
    // B discriminant
-   //factory->AddVariable("bdisc_1st", 'F');
-   //factory->AddVariable("bdisc_2nd", 'F');
-   //factory->AddVariable("bdisc_3rd", 'F');
-   //factory->AddVariable("bdisc_4th", 'F');
+   factory->AddVariable("bdisc_1st", 'F');
+   factory->AddVariable("bdisc_2nd", 'F');
+   factory->AddVariable("bdisc_3rd", 'F');
+   factory->AddVariable("bdisc_4th", 'F');
    factory->AddVariable("Ht", 'F');
    factory->AddVariable("Stlep", 'F');
    factory->AddVariable("Stjet", 'F');
    factory->AddVariable("jet_number", 'I');
    factory->AddVariable("numBjets_csvl", 'I');
-   //factory->AddVariable("numBjets_csvm", 'I');
-   //factory->AddVariable("numBjets_csvt", 'I');
+   factory->AddVariable("numBjets_csvm", 'I');
+   factory->AddVariable("numBjets_csvt", 'I');
+   factory->AddVariable("jet1pt", 'F');
+   factory->AddVariable("jet2pt", 'F');
+   factory->AddVariable("jet3pt", 'F');
+   factory->AddVariable("jet4pt", 'F');
 
    // You can add so-called "Spectator variables", which are not used in the MVA training, 
    // but will appear in the final "TestTree" produced by TMVA. This TestTree will contain the 
@@ -217,47 +221,59 @@ void myTMVAClassification( TString myMethodList = "" )
    // read training and test data
    //
    //
-   /*/ Nominal Run
-    //TFile *input1 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_4Top1000.root" );
-    TFile *input1 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_4Top500.root" );
-    TFile *input8 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_QCD.root" );
-    TFile *input4 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_WJets.root" );
-    TFile *input5 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_ZJets.root" );
-    TFile *input6 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_WW.root" );
-    TFile *input7 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_WZ.root" );
-    TFile *input3 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_ttbar.root" );
+   // Nominal Run
+    TFile *input1 = TFile::Open( "../results_4Top1100.root" );
+    //TFile *input1 = TFile::Open( "../results_4Top1000.root" );
+    //TFile *input1 = TFile::Open( "../results_4Top900.root" );
+    //TFile *input1 = TFile::Open( "../results_4Top700.root" );
+    //TFile *input1 = TFile::Open( "../results_4Top500.root" );
+    TFile *input2 = TFile::Open( "../results_ttbar.root" );
+    TFile *input3 = TFile::Open( "../results_WJets.root" );
+    TFile *input4 = TFile::Open( "../results_ZJets.root" );
+    TFile *input5 = TFile::Open( "../results_STtWch.root" );
+    TFile *input6 = TFile::Open( "../results_STtWch_bar.root" );
+    TFile *input7 = TFile::Open( "../results_STtch.root" );
+    TFile *input8 = TFile::Open( "../results_STtch_bar.root" );
+    TFile *input9 = TFile::Open( "../results_STsch.root" );
+    TFile *input10 = TFile::Open( "../results_STsch_bar.root" );
+    TFile *input11 = TFile::Open( "../results_WW.root" );
+    TFile *input12 = TFile::Open( "../results_WZ.root" );
+    TFile *input13 = TFile::Open( "../results_4TopSM.root" );
  
    std::cout << "--- myTMVAClassification : Using input file: " << input1->GetName() << std::endl;
-   
+   /*/
+    //TFile *input1 = TFile::Open( "/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results08/results_4Top1100.root" );
+    //TFile *input1 = TFile::Open( "/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results08/results_4Top1000.root" );
+    //TFile *input1 = TFile::Open( "/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results08/results_4Top900.root" );
+    //TFile *input1 = TFile::Open( "/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results08/results_4Top700.root" );
+    TFile *input1 = TFile::Open( "/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results08/results_4Top500.root" );
+    TFile *input2 = TFile::Open( "/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results08/results_ttbar.root" );
+    TFile *input3 = TFile::Open( "/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results08/results_WJets.root" );
+    TFile *input4 = TFile::Open( "/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results08/results_ZJets.root" );
+    TFile *input5 = TFile::Open( "/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results08/results_STtWch.root" );
+    TFile *input6 = TFile::Open( "/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results08/results_STtWch_bar.root" );
+    TFile *input7 = TFile::Open( "/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results08/results_STtch.root" );
+    TFile *input8 = TFile::Open( "/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results08/results_STtch_bar.root" );
+    TFile *input9 = TFile::Open( "/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results08/results_STsch.root" );
+    TFile *input10 = TFile::Open( "/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results08/results_STsch_bar.root" );
+    TFile *input11 = TFile::Open( "/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results08/results_WW.root" );
+    TFile *input12 = TFile::Open( "/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results08/results_WZ.root" ); 
+ 
+   std::cout << "--- myTMVAClassification : Using input file: " << input1->GetName() << std::endl;
+   */
    TTree *signal     = (TTree*)input1->Get("4Tree");
+   TTree *background2 = (TTree*)input2->Get("4Tree");
    TTree *background3 = (TTree*)input3->Get("4Tree");
    TTree *background4 = (TTree*)input4->Get("4Tree");
    TTree *background5 = (TTree*)input5->Get("4Tree");
    TTree *background6 = (TTree*)input6->Get("4Tree");
    TTree *background7 = (TTree*)input7->Get("4Tree");
    TTree *background8 = (TTree*)input8->Get("4Tree");
-   */
-
-   /*/ For UP Run
-    TFile *input1 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_4Top1000_JECUP.root" );
-    //TFile *input1 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_4Top500_JECUP.root" );
-    TFile *input3 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_ttbar_JECUP.root" );
- 
-   std::cout << "--- myTMVAClassification : Using input file: " << input1->GetName() << std::endl;
-   
-   TTree *signal     = (TTree*)input1->Get("4Tree");
-   TTree *background3 = (TTree*)input3->Get("4Tree");
-*/
-
-   // For DOWN Run
-    //TFile *input1 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_4Top1000_JECDOWN.root" );
-    TFile *input1 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_4Top500_JECDOWN.root" );
-    TFile *input3 = TFile::Open( "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/results_ttbar_JECDOWN.root" );
- 
-   std::cout << "--- myTMVAClassification : Using input file: " << input1->GetName() << std::endl;
-   
-   TTree *signal     = (TTree*)input1->Get("4Tree");
-   TTree *background3 = (TTree*)input3->Get("4Tree");
+   TTree *background9 = (TTree*)input9->Get("4Tree");
+   TTree *background10 = (TTree*)input10->Get("4Tree");
+   TTree *background11 = (TTree*)input11->Get("4Tree");
+   TTree *background12 = (TTree*)input12->Get("4Tree"); 
+   TTree *background13 = (TTree*)input13->Get("4Tree"); 
    
 
       // global event weights per tree (see below for setting event-wise weights)
@@ -269,12 +285,18 @@ void myTMVAClassification( TString myMethodList = "" )
       // the following method is the prefered one:
       // you can add an arbitrary number of signal or background trees
       factory->AddSignalTree    ( signal,     signalWeight     );
+      factory->AddBackgroundTree( background2, backgroundWeight );
       factory->AddBackgroundTree( background3, backgroundWeight );
-      /*factory->AddBackgroundTree( background4, backgroundWeight );
+      factory->AddBackgroundTree( background4, backgroundWeight );
       factory->AddBackgroundTree( background5, backgroundWeight );
       factory->AddBackgroundTree( background6, backgroundWeight );
       factory->AddBackgroundTree( background7, backgroundWeight );
-      factory->AddBackgroundTree( background8, backgroundWeight ); */
+      factory->AddBackgroundTree( background8, backgroundWeight );
+      factory->AddBackgroundTree( background9, backgroundWeight );
+      factory->AddBackgroundTree( background10, backgroundWeight ); 
+      factory->AddBackgroundTree( background11, backgroundWeight ); 
+      factory->AddBackgroundTree( background12, backgroundWeight );  
+      factory->AddBackgroundTree( background13, backgroundWeight );  
 
       // To give different trees for training and testing, do as follows:
       //    factory->AddSignalTree( signalTrainingTree, signalTrainWeight, "Training" );
@@ -316,7 +338,7 @@ void myTMVAClassification( TString myMethodList = "" )
    // expression need to exist in the original TTree)
    //    for signal    : factory->SetSignalWeightExpression("weight1*weight2");
    //    for background: factory->SetBackgroundWeightExpression("weight1*weight2");
-   factory->SetBackgroundWeightExpression("PUWeight");
+   for background: factory->SetBackgroundWeightExpression("PUWeight");
 
    // Apply additional cuts on the signal and background samples (can be different)
  //   TCut mycuts = "abs(eta)>1.5"; // for example: TCut mycuts = "abs(var1)<0.5 && abs(var2-0.5)<1";
