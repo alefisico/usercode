@@ -1,0 +1,525 @@
+<cuy>
+  <validation type="data" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_data_BDT_1100.root" weight="1">
+    <TH1 name="mu_disc1100__DATA" source="/MET/bdtresponse_data_BDT"/>
+  </validation>
+
+  <validation type="4Top1100" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_4Top1100_BDT_1100.root" weight="MCScaleFactors.txt:4Top_1100"> 
+    <TH1 name="mu_disc1100__fourtop1100" source="/MET/bdtresponse_4Top1100_BDT"/>
+  </validation>
+
+  <validation type="ttbar" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_ttbar_BDT_1100.root" weight="MCScaleFactors.txt:ttbar"> 
+    <TH1 name="mu_disc1100__ttbar" source="/MET/bdtresponse_ttbar_BDT"/>
+  </validation>
+
+  <validation type="WJets" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WJets_BDT_1100.root" weight="MCScaleFactors.txt:WJets">
+    <TH1 name="mu_disc1100__wjets" source="/MET/bdtresponse_WJets_BDT"/>
+  </validation>
+
+  <validation type="ZJets" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_ZJets_BDT_1100.root" weight="MCScaleFactors.txt:ZJets">
+    <TH1 name="mu_disc1100__zjets" source="/MET/bdtresponse_ZJets_BDT"/>
+  </validation>
+
+  <validation type="STtch" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtch_BDT_1100.root" weight="MCScaleFactors.txt:tch">
+    <TH1 name="mu_disc1100__STtch" source="/MET/bdtresponse_STtch_BDT"/>
+  </validation>
+
+  <validation type="STtch_bar" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtch_bar_BDT_1100.root" weight="MCScaleFactors.txt:tch_bar">
+    <TH1 name="mu_disc1100__STtch_bar" source="/MET/bdtresponse_STtch_bar_BDT"/>
+  </validation>
+
+  <validation type="STtWch" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtWch_BDT_1100.root" weight="MCScaleFactors.txt:tWch">
+    <TH1 name="mu_disc1100__STtWch" source="/MET/bdtresponse_STtWch_BDT"/>
+  </validation>
+
+  <validation type="STtWch_bar" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtWch_bar_BDT_1100.root" weight="MCScaleFactors.txt:tWch_bar">
+    <TH1 name="mu_disc1100__STtWch_bar" source="/MET/bdtresponse_STtWch_bar_BDT"/>
+  </validation>
+
+  <validation type="STsch" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STsch_BDT_1100.root" weight="MCScaleFactors.txt:sch">
+    <TH1 name="mu_disc1100__STsch" source="/MET/bdtresponse_STsch_BDT"/>
+  </validation>
+
+  <validation type="STsch_bar" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STsch_bar_BDT_1100.root" weight="MCScaleFactors.txt:sch_bar">
+    <TH1 name="mu_disc1100__STsch_bar" source="/MET/bdtresponse_STsch_bar_BDT"/>
+  </validation>
+
+  <validation type="WW" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WW_BDT_1100.root" weight="MCScaleFactors.txt:WW">
+    <TH1 name="mu_disc1100__WW" source="/MET/bdtresponse_WW_BDT"/>
+  </validation>
+
+  <validation type="WZ" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WZ_BDT_1100.root" weight="MCScaleFactors.txt:WZ">
+    <TH1 name="mu_disc1100__WZ" source="/MET/bdtresponse_WZ_BDT"/>
+  </validation>
+
+  <additionArray name="singletop" title="singletop">
+    <additionArrayItem array="STtch"/>
+    <additionArrayItem array="STtWch"/>
+    <additionArrayItem array="STsch"/>
+    <additionArrayItem array="STtch_bar"/>
+    <additionArrayItem array="STtWch_bar"/>
+    <additionArrayItem array="STsch_bar"/>
+  </additionArray>
+
+  <additionArray name="dibosons" title="dibosons">
+    <additionArrayItem array="WW"/>
+    <additionArrayItem array="WZ"/>
+  </additionArray>
+
+
+  <superimpose name="mu_disc1100__1100" title="BDT_response" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" Stack="true" SetLogy="true" Maximum="10e4"  Minimum="10e-3" PlotDiff="true" >
+    <superimposeItem name="mu_disc1100__DATA" color="top" legend="Data"/>
+    <superimposeItem name="mu_disc1100__ttbar" color="top" legend="TTbar"/>
+    <superimposeItem name="mu_disc1100__wjets" color="top" legend="Wjets"/>
+    <superimposeItem name="mu_disc1100__zjets" color="top" legend="Zjets"/>
+    <superimposeItem name="mu_disc1100__dibosons" color="top" legend="Dibosons"/>
+    <superimposeItem name="mu_disc1100__singletop" color="top" legend="ST"/>
+    <superimposeItem name="mu_disc1100__fourtop1100" color="1" legend="Gh 1.1 TeV" NoStack="true" />
+  </superimpose>
+
+  <!-- JERDOWN -->
+  <!--
+  <validation type="4Top1100JERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_4Top1100_JERDOWN_BDT_1100.root" weight="MCScaleFactors.txt:4Top_1100"> 
+    <TH1 name="mu_disc1100__fourtop1100__jer__minus" source="/MET/bdtresponse_4Top1100_JERDOWN_BDT"/>
+  </validation>
+
+  <validation type="ttbarJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_ttbar_JERDOWN_BDT_1100.root" weight="MCScaleFactors.txt:ttbar"> 
+    <TH1 name="mu_disc1100__ttbar__jer__minus" source="/MET/bdtresponse_ttbar_JERDOWN_BDT"/>
+  </validation>
+
+  <validation type="WJetsJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WJets_JERDOWN_BDT_1100.root" weight="MCScaleFactors.txt:WJets">
+    <TH1 name="mu_disc1100__wjets__jer__minus" source="/MET/bdtresponse_WJets_JERDOWN_BDT"/>
+  </validation>
+
+  <validation type="ZJetsJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_ZJets_JERDOWN_BDT_1100.root" weight="MCScaleFactors.txt:ZJets">
+    <TH1 name="mu_disc1100__zjets__jer__minus" source="/MET/bdtresponse_ZJets_JERDOWN_BDT"/>
+  </validation>
+
+  <validation type="STtchJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtch_JERDOWN_BDT_1100.root" weight="MCScaleFactors.txt:tch">
+    <TH1 name="mu_disc1100__STtchJERDOWN" source="/MET/bdtresponse_STtch_JERDOWN_BDT"/>
+  </validation>
+
+  <validation type="STtch_barJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtch_bar_JERDOWN_BDT_1100.root" weight="MCScaleFactors.txt:tch_bar">
+    <TH1 name="mu_disc1100__STtch_barJERDOWN" source="/MET/bdtresponse_STtch_bar_JERDOWN_BDT"/>
+  </validation>
+
+  <validation type="STtWchJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtWch_JERDOWN_BDT_1100.root" weight="MCScaleFactors.txt:tWch">
+    <TH1 name="mu_disc1100__STtWchJERDOWN" source="/MET/bdtresponse_STtWch_JERDOWN_BDT"/>
+  </validation>
+
+  <validation type="STtWch_barJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtWch_bar_JERDOWN_BDT_1100.root" weight="MCScaleFactors.txt:tWch_bar">
+    <TH1 name="mu_disc1100__STtWch_barJERDOWN" source="/MET/bdtresponse_STtWch_bar_JERDOWN_BDT"/>
+  </validation>
+
+  <validation type="STschJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STsch_JERDOWN_BDT_1100.root" weight="MCScaleFactors.txt:sch">
+    <TH1 name="mu_disc1100__STschJERDOWN" source="/MET/bdtresponse_STsch_JERDOWN_BDT"/>
+  </validation>
+
+  <validation type="STsch_barJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STsch_bar_JERDOWN_BDT_1100.root" weight="MCScaleFactors.txt:sch_bar">
+    <TH1 name="mu_disc1100__STsch_barJERDOWN" source="/MET/bdtresponse_STsch_bar_JERDOWN_BDT"/>
+  </validation>
+
+  <validation type="WWJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WW_JERDOWN_BDT_1100.root" weight="MCScaleFactors.txt:WW">
+    <TH1 name="mu_disc1100__WWJERDOWN" source="/MET/bdtresponse_WW_JERDOWN_BDT"/>
+  </validation>
+
+  <validation type="WZJERDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WZ_JERDOWN_BDT_1100.root" weight="MCScaleFactors.txt:WZ">
+    <TH1 name="mu_disc1100__WZJERDOWN" source="/MET/bdtresponse_WZ_JERDOWN_BDT"/>
+  </validation>
+
+  <additionArray name="singletop__jer__minus" title="singletop__jer__minus">
+    <additionArrayItem array="STtchJERDOWN"/>
+    <additionArrayItem array="STtWchJERDOWN"/>
+    <additionArrayItem array="STschJERDOWN"/>
+    <additionArrayItem array="STtch_barJERDOWN"/>
+    <additionArrayItem array="STtWch_barJERDOWN"/>
+    <additionArrayItem array="STsch_barJERDOWN"/>
+  </additionArray>
+
+  <additionArray name="dibosons__jer__minus" title="dibosons__jer__minus">
+    <additionArrayItem array="WWJERDOWN"/>    
+    <additionArrayItem array="WZJERDOWN"/>
+  </additionArray>
+
+
+  <superimpose name="mu_disc1100__1100__jer__minus" title="BDT_response" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" SetLogy="true" Maximum="10e4"  Minimum="10e-3" Stack="true" >
+    <superimposeItem name="mu_disc1100__ttbar__jer__minus" color="top" legend="TTbar"/>
+    <superimposeItem name="mu_disc1100__wjets__jer__minus" color="top" legend="Wjets"/>
+    <superimposeItem name="mu_disc1100__zjets__jer__minus" color="top" legend="Zjets"/>
+    <superimposeItem name="mu_disc1100__dibosons__jer__minus" color="top" legend="Dibosons"/>
+    <superimposeItem name="mu_disc1100__singletop__jer__minus" color="top" legend="ST"/>
+    <superimposeItem name="mu_disc1100__fourtop1100__jer__minus" color="1" legend="Gh 1.1 TeV" NoStack="true"/>
+  </superimpose>
+  -->
+
+  <!-- JERUP -->
+  <!--
+  <validation type="4Top1100JERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_4Top1100_JERUP_BDT_1100.root" weight="MCScaleFactors.txt:4Top_1100"> 
+    <TH1 name="mu_disc1100__fourtop1100__jer__plus" source="/MET/bdtresponse_4Top1100_JERUP_BDT"/>
+  </validation>
+
+  <validation type="ttbarJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_ttbar_JERUP_BDT_1100.root" weight="MCScaleFactors.txt:ttbar"> 
+    <TH1 name="mu_disc1100__ttbar__jer__plus" source="/MET/bdtresponse_ttbar_JERUP_BDT"/>
+  </validation>
+
+  <validation type="WJetsJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WJets_JERUP_BDT_1100.root" weight="MCScaleFactors.txt:WJets">
+    <TH1 name="mu_disc1100__wjets__jer__plus" source="/MET/bdtresponse_WJets_JERUP_BDT"/>
+  </validation>
+
+  <validation type="ZJetsJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_ZJets_JERUP_BDT_1100.root" weight="MCScaleFactors.txt:ZJets">
+    <TH1 name="mu_disc1100__zjets__jer__plus" source="/MET/bdtresponse_ZJets_JERUP_BDT"/>
+  </validation>
+
+  <validation type="STtchJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtch_JERUP_BDT_1100.root" weight="MCScaleFactors.txt:tch">
+    <TH1 name="mu_disc1100__STtchJERUP" source="/MET/bdtresponse_STtch_JERUP_BDT"/>
+  </validation>
+
+  <validation type="STtch_barJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtch_bar_JERUP_BDT_1100.root" weight="MCScaleFactors.txt:tch_bar">
+    <TH1 name="mu_disc1100__STtch_barJERUP" source="/MET/bdtresponse_STtch_bar_JERUP_BDT"/>
+  </validation>
+
+  <validation type="STtWchJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtWch_JERUP_BDT_1100.root" weight="MCScaleFactors.txt:tWch">
+    <TH1 name="mu_disc1100__STtWchJERUP" source="/MET/bdtresponse_STtWch_JERUP_BDT"/>
+  </validation>
+
+  <validation type="STtWch_barJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtWch_bar_JERUP_BDT_1100.root" weight="MCScaleFactors.txt:tWch_bar">
+    <TH1 name="mu_disc1100__STtWch_barJERUP" source="/MET/bdtresponse_STtWch_bar_JERUP_BDT"/>
+  </validation>
+
+  <validation type="STschJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STsch_JERUP_BDT_1100.root" weight="MCScaleFactors.txt:sch">
+    <TH1 name="mu_disc1100__STschJERUP" source="/MET/bdtresponse_STsch_JERUP_BDT"/>
+  </validation>
+
+  <validation type="STsch_barJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STsch_bar_JERUP_BDT_1100.root" weight="MCScaleFactors.txt:sch_bar">
+    <TH1 name="mu_disc1100__STsch_barJERUP" source="/MET/bdtresponse_STsch_bar_JERUP_BDT"/>
+  </validation>
+
+  <validation type="WWJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WW_JERUP_BDT_1100.root" weight="MCScaleFactors.txt:WW">
+    <TH1 name="mu_disc1100__WWJERUP" source="/MET/bdtresponse_WW_JERUP_BDT"/>
+  </validation>
+
+  <validation type="WZJERUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WZ_JERUP_BDT_1100.root" weight="MCScaleFactors.txt:WZ">
+    <TH1 name="mu_disc1100__WZJERUP" source="/MET/bdtresponse_WZ_JERUP_BDT"/>
+  </validation>
+
+  <additionArray name="singletop__jer__plus" title="singletop__jer__plus">
+    <additionArrayItem array="STtchJERUP"/>
+    <additionArrayItem array="STtWchJERUP"/>
+    <additionArrayItem array="STschJERUP"/>
+    <additionArrayItem array="STtch_barJERUP"/>
+    <additionArrayItem array="STtWch_barJERUP"/>
+    <additionArrayItem array="STsch_barJERUP"/>
+  </additionArray>
+
+  <additionArray name="dibosons__jer__plus" title="dibosons__jer__plus">
+    <additionArrayItem array="WWJERUP"/>    
+    <additionArrayItem array="WZJERUP"/>
+  </additionArray>
+
+
+  <superimpose name="mu_disc1100__1100__jer__plus" title="BDT_response" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" SetLogy="true" Maximum="10e4"  Minimum="10e-3" Stack="true" >
+    <superimposeItem name="mu_disc1100__ttbar__jer__plus" color="top" legend="TTbar"/>
+    <superimposeItem name="mu_disc1100__wjets__jer__plus" color="top" legend="Wjets"/>
+    <superimposeItem name="mu_disc1100__zjets__jer__plus" color="top" legend="Zjets"/>
+    <superimposeItem name="mu_disc1100__dibosons__jer__plus" color="top" legend="Dibosons"/>
+    <superimposeItem name="mu_disc1100__singletop__jer__plus" color="top" legend="ST"/>
+    <superimposeItem name="mu_disc1100__fourtop1100__jer__plus" color="1" legend="Gh 1.1 TeV" NoStack="true"/>
+  </superimpose>
+  -->
+
+  <!-- JECDOWN -->
+  <validation type="4Top1100JECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_4Top1100_JECDOWN_BDT_1100.root" weight="MCScaleFactors.txt:4Top_1100"> 
+    <TH1 name="mu_disc1100__fourtop1100__jes__minus" source="/MET/bdtresponse_4Top1100_JECDOWN_BDT"/>
+  </validation>
+
+  <validation type="ttbarJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_ttbar_JECDOWN_BDT_1100.root" weight="MCScaleFactors.txt:ttbar"> 
+    <TH1 name="mu_disc1100__ttbar__jes__minus" source="/MET/bdtresponse_ttbar_JECDOWN_BDT"/>
+  </validation>
+
+  <validation type="WJetsJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WJets_JECDOWN_BDT_1100.root" weight="MCScaleFactors.txt:WJets">
+    <TH1 name="mu_disc1100__wjets__jes__minus" source="/MET/bdtresponse_WJets_JECDOWN_BDT"/>
+  </validation>
+
+  <validation type="ZJetsJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_ZJets_JECDOWN_BDT_1100.root" weight="MCScaleFactors.txt:ZJets">
+    <TH1 name="mu_disc1100__zjets__jes__minus" source="/MET/bdtresponse_ZJets_JECDOWN_BDT"/>
+  </validation>
+
+  <validation type="STtchJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtch_JECDOWN_BDT_1100.root" weight="MCScaleFactors.txt:tch">
+    <TH1 name="mu_disc1100__STtchJECDOWN" source="/MET/bdtresponse_STtch_JECDOWN_BDT"/>
+  </validation>
+
+  <validation type="STtch_barJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtch_bar_JECDOWN_BDT_1100.root" weight="MCScaleFactors.txt:tch_bar">
+    <TH1 name="mu_disc1100__STtch_barJECDOWN" source="/MET/bdtresponse_STtch_bar_JECDOWN_BDT"/>
+  </validation>
+
+  <validation type="STtWchJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtWch_JECDOWN_BDT_1100.root" weight="MCScaleFactors.txt:tWch">
+    <TH1 name="mu_disc1100__STtWchJECDOWN" source="/MET/bdtresponse_STtWch_JECDOWN_BDT"/>
+  </validation>
+
+  <validation type="STtWch_barJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtWch_bar_JECDOWN_BDT_1100.root" weight="MCScaleFactors.txt:tWch_bar">
+    <TH1 name="mu_disc1100__STtWch_barJECDOWN" source="/MET/bdtresponse_STtWch_bar_JECDOWN_BDT"/>
+  </validation>
+
+  <validation type="STschJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STsch_JECDOWN_BDT_1100.root" weight="MCScaleFactors.txt:sch">
+    <TH1 name="mu_disc1100__STschJECDOWN" source="/MET/bdtresponse_STsch_JECDOWN_BDT"/>
+  </validation>
+
+  <validation type="STsch_barJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STsch_bar_JECDOWN_BDT_1100.root" weight="MCScaleFactors.txt:sch_bar">
+    <TH1 name="mu_disc1100__STsch_barJECDOWN" source="/MET/bdtresponse_STsch_bar_JECDOWN_BDT"/>
+  </validation>
+
+  <validation type="WWJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WW_JECDOWN_BDT_1100.root" weight="MCScaleFactors.txt:WW">
+    <TH1 name="mu_disc1100__WWJECDOWN" source="/MET/bdtresponse_WW_JECDOWN_BDT"/>
+  </validation>
+
+  <validation type="WZJECDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WZ_JECDOWN_BDT_1100.root" weight="MCScaleFactors.txt:WZ">
+    <TH1 name="mu_disc1100__WZJECDOWN" source="/MET/bdtresponse_WZ_JECDOWN_BDT"/>
+  </validation>
+
+  <additionArray name="singletop__jes__minus" title="singletop__jes__minus">
+    <additionArrayItem array="STtchJECDOWN"/>
+    <additionArrayItem array="STtWchJECDOWN"/>
+    <additionArrayItem array="STschJECDOWN"/>
+    <additionArrayItem array="STtch_barJECDOWN"/>
+    <additionArrayItem array="STtWch_barJECDOWN"/>
+    <additionArrayItem array="STsch_barJECDOWN"/>
+  </additionArray>
+
+  <additionArray name="dibosons__jes__minus" title="dibosons__jes__minus">
+    <additionArrayItem array="WWJECDOWN"/>    
+    <additionArrayItem array="WZJECDOWN"/>
+  </additionArray>
+
+
+  <superimpose name="mu_disc1100__1100__jes__minus" title="BDT_response" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" SetLogy="true" Maximum="10e4"  Minimum="10e-3" Stack="true" >
+    <superimposeItem name="mu_disc1100__ttbar__jes__minus" color="top" legend="TTbar"/>
+    <superimposeItem name="mu_disc1100__wjets__jes__minus" color="top" legend="Wjets"/>
+    <superimposeItem name="mu_disc1100__zjets__jes__minus" color="top" legend="Zjets"/>
+    <superimposeItem name="mu_disc1100__dibosons__jes__minus" color="top" legend="Dibosons"/>
+    <superimposeItem name="mu_disc1100__singletop__jes__minus" color="top" legend="ST"/>
+    <superimposeItem name="mu_disc1100__fourtop1100__jes__minus" color="1" legend="Gh 1.1 TeV" NoStack="true"/>
+  </superimpose>
+
+  <!-- JECUP -->
+  <validation type="4Top1100JECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_4Top1100_JECUP_BDT_1100.root" weight="MCScaleFactors.txt:4Top_1100"> 
+    <TH1 name="mu_disc1100__fourtop1100__jes__plus" source="/MET/bdtresponse_4Top1100_JECUP_BDT"/>
+  </validation>
+
+  <validation type="ttbarJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_ttbar_JECUP_BDT_1100.root" weight="MCScaleFactors.txt:ttbar"> 
+    <TH1 name="mu_disc1100__ttbar__jes__plus" source="/MET/bdtresponse_ttbar_JECUP_BDT"/>
+  </validation>
+
+  <validation type="WJetsJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WJets_JECUP_BDT_1100.root" weight="MCScaleFactors.txt:WJets">
+    <TH1 name="mu_disc1100__wjets__jes__plus" source="/MET/bdtresponse_WJets_JECUP_BDT"/>
+  </validation>
+
+  <validation type="ZJetsJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_ZJets_JECUP_BDT_1100.root" weight="MCScaleFactors.txt:ZJets">
+    <TH1 name="mu_disc1100__zjets__jes__plus" source="/MET/bdtresponse_ZJets_JECUP_BDT"/>
+  </validation>
+
+  <validation type="STtchJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtch_JECUP_BDT_1100.root" weight="MCScaleFactors.txt:tch">
+    <TH1 name="mu_disc1100__STtchJECUP" source="/MET/bdtresponse_STtch_JECUP_BDT"/>
+  </validation>
+
+  <validation type="STtch_barJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtch_bar_JECUP_BDT_1100.root" weight="MCScaleFactors.txt:tch_bar">
+    <TH1 name="mu_disc1100__STtch_barJECUP" source="/MET/bdtresponse_STtch_bar_JECUP_BDT"/>
+  </validation>
+
+  <validation type="STtWchJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtWch_JECUP_BDT_1100.root" weight="MCScaleFactors.txt:tWch">
+    <TH1 name="mu_disc1100__STtWchJECUP" source="/MET/bdtresponse_STtWch_JECUP_BDT"/>
+  </validation>
+
+  <validation type="STtWch_barJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtWch_bar_JECUP_BDT_1100.root" weight="MCScaleFactors.txt:tWch_bar">
+    <TH1 name="mu_disc1100__STtWch_barJECUP" source="/MET/bdtresponse_STtWch_bar_JECUP_BDT"/>
+  </validation>
+
+  <validation type="STschJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STsch_JECUP_BDT_1100.root" weight="MCScaleFactors.txt:sch">
+    <TH1 name="mu_disc1100__STschJECUP" source="/MET/bdtresponse_STsch_JECUP_BDT"/>
+  </validation>
+
+  <validation type="STsch_barJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STsch_bar_JECUP_BDT_1100.root" weight="MCScaleFactors.txt:sch_bar">
+    <TH1 name="mu_disc1100__STsch_barJECUP" source="/MET/bdtresponse_STsch_bar_JECUP_BDT"/>
+  </validation>
+
+  <validation type="WWJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WW_JECUP_BDT_1100.root" weight="MCScaleFactors.txt:WW">
+    <TH1 name="mu_disc1100__WWJECUP" source="/MET/bdtresponse_WW_JECUP_BDT"/>
+  </validation>
+
+  <validation type="WZJECUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WZ_JECUP_BDT_1100.root" weight="MCScaleFactors.txt:WZ">
+    <TH1 name="mu_disc1100__WZJECUP" source="/MET/bdtresponse_WZ_JECUP_BDT"/>
+  </validation>
+
+  <additionArray name="singletop__jes__plus" title="singletop__jes__plus">
+    <additionArrayItem array="STtchJECUP"/>
+    <additionArrayItem array="STtWchJECUP"/>
+    <additionArrayItem array="STschJECUP"/>
+    <additionArrayItem array="STtch_barJECUP"/>
+    <additionArrayItem array="STtWch_barJECUP"/>
+    <additionArrayItem array="STsch_barJECUP"/>
+  </additionArray>
+
+  <additionArray name="dibosons__jes__plus" title="dibosons__jes__plus">
+    <additionArrayItem array="WWJECUP"/>    
+    <additionArrayItem array="WZJECUP"/>
+  </additionArray>
+
+
+  <superimpose name="mu_disc1100__1100__jes__plus" title="BDT_response" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" SetLogy="true" Maximum="10e4"  Minimum="10e-3" Stack="true" >
+    <superimposeItem name="mu_disc1100__ttbar__jes__plus" color="top" legend="TTbar"/>
+    <superimposeItem name="mu_disc1100__wjets__jes__plus" color="top" legend="Wjets"/>
+    <superimposeItem name="mu_disc1100__zjets__jes__plus" color="top" legend="Zjets"/>
+    <superimposeItem name="mu_disc1100__dibosons__jes__plus" color="top" legend="Dibosons"/>
+    <superimposeItem name="mu_disc1100__singletop__jes__plus" color="top" legend="ST"/>
+    <superimposeItem name="mu_disc1100__fourtop1100__jes__plus" color="1" legend="Gh 1.1 TeV" NoStack="true"/>
+  </superimpose>
+
+  <!-- PUDOWN -->
+  <!--
+  <validation type="4Top1100PUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_4Top1100_PUDOWN_BDT_1100.root" weight="MCScaleFactors.txt:4Top_1100"> 
+    <TH1 name="mu_disc1100__fourtop1100__pu__minus" source="/MET/bdtresponse_4Top1100_PUDOWN_BDT"/>
+  </validation>
+
+  <validation type="ttbarPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_ttbar_PUDOWN_BDT_1100.root" weight="MCScaleFactors.txt:ttbar"> 
+    <TH1 name="mu_disc1100__ttbar__pu__minus" source="/MET/bdtresponse_ttbar_PUDOWN_BDT"/>
+  </validation>
+
+  <validation type="WJetsPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WJets_PUDOWN_BDT_1100.root" weight="MCScaleFactors.txt:WJets">
+    <TH1 name="mu_disc1100__wjets__pu__minus" source="/MET/bdtresponse_WJets_PUDOWN_BDT"/>
+  </validation>
+
+  <validation type="ZJetsPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_ZJets_PUDOWN_BDT_1100.root" weight="MCScaleFactors.txt:ZJets">
+    <TH1 name="mu_disc1100__zjets__pu__minus" source="/MET/bdtresponse_ZJets_PUDOWN_BDT"/>
+  </validation>
+
+  <validation type="STtchPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtch_PUDOWN_BDT_1100.root" weight="MCScaleFactors.txt:tch">
+    <TH1 name="mu_disc1100__STtchPUDOWN" source="/MET/bdtresponse_STtch_PUDOWN_BDT"/>
+  </validation>
+
+  <validation type="STtch_barPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtch_bar_PUDOWN_BDT_1100.root" weight="MCScaleFactors.txt:tch_bar">
+    <TH1 name="mu_disc1100__STtch_barPUDOWN" source="/MET/bdtresponse_STtch_bar_PUDOWN_BDT"/>
+  </validation>
+
+  <validation type="STtWchPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtWch_PUDOWN_BDT_1100.root" weight="MCScaleFactors.txt:tWch">
+    <TH1 name="mu_disc1100__STtWchPUDOWN" source="/MET/bdtresponse_STtWch_PUDOWN_BDT"/>
+  </validation>
+
+  <validation type="STtWch_barPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtWch_bar_PUDOWN_BDT_1100.root" weight="MCScaleFactors.txt:tWch_bar">
+    <TH1 name="mu_disc1100__STtWch_barPUDOWN" source="/MET/bdtresponse_STtWch_bar_PUDOWN_BDT"/>
+  </validation>
+
+  <validation type="STschPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STsch_PUDOWN_BDT_1100.root" weight="MCScaleFactors.txt:sch">
+    <TH1 name="mu_disc1100__STschPUDOWN" source="/MET/bdtresponse_STsch_PUDOWN_BDT"/>
+  </validation>
+
+  <validation type="STsch_barPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STsch_bar_PUDOWN_BDT_1100.root" weight="MCScaleFactors.txt:sch_bar">
+    <TH1 name="mu_disc1100__STsch_barPUDOWN" source="/MET/bdtresponse_STsch_bar_PUDOWN_BDT"/>
+  </validation>
+
+  <validation type="WWPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WW_PUDOWN_BDT_1100.root" weight="MCScaleFactors.txt:WW">
+    <TH1 name="mu_disc1100__WWPUDOWN" source="/MET/bdtresponse_WW_PUDOWN_BDT"/>
+  </validation>
+
+  <validation type="WZPUDOWN" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WZ_PUDOWN_BDT_1100.root" weight="MCScaleFactors.txt:WZ">
+    <TH1 name="mu_disc1100__WZPUDOWN" source="/MET/bdtresponse_WZ_PUDOWN_BDT"/>
+  </validation>
+
+  <additionArray name="singletop__pu__minus" title="singletop__pu__minus">
+    <additionArrayItem array="STtchPUDOWN"/>
+    <additionArrayItem array="STtWchPUDOWN"/>
+    <additionArrayItem array="STschPUDOWN"/>
+    <additionArrayItem array="STtch_barPUDOWN"/>
+    <additionArrayItem array="STtWch_barPUDOWN"/>
+    <additionArrayItem array="STsch_barPUDOWN"/>
+  </additionArray>
+
+  <additionArray name="dibosons__pu__minus" title="dibosons__pu__minus">
+    <additionArrayItem array="WWPUDOWN"/>    
+    <additionArrayItem array="WZPUDOWN"/>
+  </additionArray>
+
+
+  <superimpose name="mu_disc1100__1100__pu__minus" title="BDT_response" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" SetLogy="true" Maximum="10e4"  Minimum="10e-3" Stack="true" >
+    <superimposeItem name="mu_disc1100__ttbar__pu__minus" color="top" legend="TTbar"/>
+    <superimposeItem name="mu_disc1100__wjets__pu__minus" color="top" legend="Wjets"/>
+    <superimposeItem name="mu_disc1100__zjets__pu__minus" color="top" legend="Zjets"/>
+    <superimposeItem name="mu_disc1100__dibosons__pu__minus" color="top" legend="Dibosons"/>
+    <superimposeItem name="mu_disc1100__singletop__pu__minus" color="top" legend="ST"/>
+    <superimposeItem name="mu_disc1100__fourtop1100__pu__minus" color="1" legend="Gh 1.1 TeV" NoStack="true"/>
+  </superimpose>
+  -->
+
+  <!-- PUUP -->
+  <!--
+  <validation type="4Top1100PUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_4Top1100_PUUP_BDT_1100.root" weight="MCScaleFactors.txt:4Top_1100"> 
+    <TH1 name="mu_disc1100__fourtop1100__pu__plus" source="/MET/bdtresponse_4Top1100_PUUP_BDT"/>
+  </validation>
+
+  <validation type="ttbarPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_ttbar_PUUP_BDT_1100.root" weight="MCScaleFactors.txt:ttbar"> 
+    <TH1 name="mu_disc1100__ttbar__pu__plus" source="/MET/bdtresponse_ttbar_PUUP_BDT"/>
+  </validation>
+
+  <validation type="WJetsPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WJets_PUUP_BDT_1100.root" weight="MCScaleFactors.txt:WJets">
+    <TH1 name="mu_disc1100__wjets__pu__plus" source="/MET/bdtresponse_WJets_PUUP_BDT"/>
+  </validation>
+
+  <validation type="ZJetsPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_ZJets_PUUP_BDT_1100.root" weight="MCScaleFactors.txt:ZJets">
+    <TH1 name="mu_disc1100__zjets__pu__plus" source="/MET/bdtresponse_ZJets_PUUP_BDT"/>
+  </validation>
+
+  <validation type="STtchPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtch_PUUP_BDT_1100.root" weight="MCScaleFactors.txt:tch">
+    <TH1 name="mu_disc1100__STtchPUUP" source="/MET/bdtresponse_STtch_PUUP_BDT"/>
+  </validation>
+
+  <validation type="STtch_barPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtch_bar_PUUP_BDT_1100.root" weight="MCScaleFactors.txt:tch_bar">
+    <TH1 name="mu_disc1100__STtch_barPUUP" source="/MET/bdtresponse_STtch_bar_PUUP_BDT"/>
+  </validation>
+
+  <validation type="STtWchPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtWch_PUUP_BDT_1100.root" weight="MCScaleFactors.txt:tWch">
+    <TH1 name="mu_disc1100__STtWchPUUP" source="/MET/bdtresponse_STtWch_PUUP_BDT"/>
+  </validation>
+
+  <validation type="STtWch_barPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STtWch_bar_PUUP_BDT_1100.root" weight="MCScaleFactors.txt:tWch_bar">
+    <TH1 name="mu_disc1100__STtWch_barPUUP" source="/MET/bdtresponse_STtWch_bar_PUUP_BDT"/>
+  </validation>
+
+  <validation type="STschPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STsch_PUUP_BDT_1100.root" weight="MCScaleFactors.txt:sch">
+    <TH1 name="mu_disc1100__STschPUUP" source="/MET/bdtresponse_STsch_PUUP_BDT"/>
+  </validation>
+
+  <validation type="STsch_barPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_STsch_bar_PUUP_BDT_1100.root" weight="MCScaleFactors.txt:sch_bar">
+    <TH1 name="mu_disc1100__STsch_barPUUP" source="/MET/bdtresponse_STsch_bar_PUUP_BDT"/>
+  </validation>
+
+  <validation type="WWPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WW_PUUP_BDT_1100.root" weight="MCScaleFactors.txt:WW">
+    <TH1 name="mu_disc1100__WWPUUP" source="/MET/bdtresponse_WW_PUUP_BDT"/>
+  </validation>
+
+  <validation type="WZPUUP" file="/eos/uscms/store/user/algomez/FourTop/resultsTreeAnalyzer/results10/results_WZ_PUUP_BDT_1100.root" weight="MCScaleFactors.txt:WZ">
+    <TH1 name="mu_disc1100__WZPUUP" source="/MET/bdtresponse_WZ_PUUP_BDT"/>
+  </validation>
+
+  <additionArray name="singletop__pu__plus" title="singletop__pu__plus">
+    <additionArrayItem array="STtchPUUP"/>
+    <additionArrayItem array="STtWchPUUP"/>
+    <additionArrayItem array="STschPUUP"/>
+    <additionArrayItem array="STtch_barPUUP"/>
+    <additionArrayItem array="STtWch_barPUUP"/>
+    <additionArrayItem array="STsch_barPUUP"/>
+  </additionArray>
+
+  <additionArray name="dibosons__pu__plus" title="dibosons__pu__plus">
+    <additionArrayItem array="WWPUUP"/>    
+    <additionArrayItem array="WZPUUP"/>
+  </additionArray>
+
+
+  <superimpose name="mu_disc1100__1100__pu__plus" title="BDT_response" YTitle="Events" Fill="true" Weight="true" Lumi="4678.0" SetLogy="true" Maximum="10e4"  Minimum="10e-3" Stack="true" >
+    <superimposeItem name="mu_disc1100__ttbar__pu__plus" color="top" legend="TTbar"/>
+    <superimposeItem name="mu_disc1100__wjets__pu__plus" color="top" legend="Wjets"/>
+    <superimposeItem name="mu_disc1100__zjets__pu__plus" color="top" legend="Zjets"/>
+    <superimposeItem name="mu_disc1100__dibosons__pu__plus" color="top" legend="Dibosons"/>
+    <superimposeItem name="mu_disc1100__singletop__pu__plus" color="top" legend="ST"/>
+    <superimposeItem name="mu_disc1100__fourtop1100__pu__plus" color="1" legend="Gh 1.1 TeV" NoStack="true"/>
+  </superimpose>
+  -->
+
+</cuy>
