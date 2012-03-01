@@ -82,12 +82,16 @@ class StoreTreeVariable {
 
          Int_t numjets;
          //Jet Kinematic
-         /*Double_t jetpt[NMAX];
-         Double_t jeteta[NMAX];
+         Double_t jet1pt;
+         Double_t jet2pt;
+         Double_t jet3pt;
+         Double_t jet4pt;
+         /*Double_t jeteta[NMAX];
          Double_t jetphi[NMAX];
-         Double_t jete[NMAX];
+         Double_t jete[NMAX];*/
 
          //mc
+	 /*
          Int_t jetparton[NMAX];
 
          //b tag
@@ -108,7 +112,7 @@ class StoreTreeVariable {
 	 Double_t bdisc_1st;
 	 Double_t bdisc_2nd;
 	 Double_t bdisc_3rd;
-	 Double_t bdisc_4th;
+	 Double_t bdisc_4th; 
 
       };
 
@@ -296,9 +300,12 @@ void StoreTreeVariable::InitialJet(){
       cout<<"We are initial Jet Branch"<<endl;
 
       Top->Branch("jet_number",&VStoreJet.numjets,"numjets/I");
-      /*
-      Top->Branch("jet_pt",VStoreJet.jetpt,"jetpt[numjets]/D");
-      Top->Branch("jet_eta",VStoreJet.jeteta,"jeteta[numjets]/D");
+      
+      Top->Branch("jet1_pt",&VStoreJet.jet1pt,"jet1pt/D");
+      Top->Branch("jet2_pt",&VStoreJet.jet2pt,"jet2pt/D");
+      Top->Branch("jet3_pt",&VStoreJet.jet3pt,"jet3pt/D");
+      Top->Branch("jet4_pt",&VStoreJet.jet4pt,"jet4pt/D");
+      /*Top->Branch("jet_eta",VStoreJet.jeteta,"jeteta[numjets]/D");
       Top->Branch("jet_phi",VStoreJet.jetphi,"jetphi[numjets]/D");
       Top->Branch("jet_energy",VStoreJet.jete,"jete[numjets]/D");
       Top->Branch("jet_partonflavor",VStoreJet.jetparton,"jetparton[numjets]/I");
@@ -317,7 +324,7 @@ void StoreTreeVariable::InitialJet(){
       Top->Branch("bdisc_1st",&VStoreJet.bdisc_1st,"bdisc_1st/D");
       Top->Branch("bdisc_2nd",&VStoreJet.bdisc_2nd,"bdisc_2nd/D");
       Top->Branch("bdisc_3rd",&VStoreJet.bdisc_3rd,"bdisc_3rd/D");
-      Top->Branch("bdisc_4th",&VStoreJet.bdisc_4th,"bdisc_4th/D");
+      Top->Branch("bdisc_4th",&VStoreJet.bdisc_4th,"bdisc_4th/D"); 
 
       //Jet track size
       //Top->Branch("jet_tracksize",VStoreJet.jettracksize,"jettracksize[numjets]/I");
@@ -354,7 +361,7 @@ void StoreTreeVariable::InitialMet(){
       Top->Branch("csvbtagjetnum_down",&VStoreMet.csvbtagjetnum_down,"csvbtagjetnum_down/I");
       Top->Branch("flavorhistory",&VStoreMet.flavorhistory,"flavorhistory/I");
     */
-      Top->Branch("ht",&VStoreMet.Ht,"Ht/D");
+      Top->Branch("Ht",&VStoreMet.Ht,"Ht/D");
       Top->Branch("Stlep",&VStoreMet.Stlep,"Stlep/D");
       Top->Branch("Stjet",&VStoreMet.Stjet,"Stjet/D");
   }
