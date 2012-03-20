@@ -86,6 +86,7 @@ class StoreTreeVariable {
          Double_t jet2pt;
          Double_t jet3pt;
          Double_t jet4pt;
+         Double_t deltaRdijet;
          /*Double_t jeteta[NMAX];
          Double_t jetphi[NMAX];
          Double_t jete[NMAX];*/
@@ -104,16 +105,17 @@ class StoreTreeVariable {
 	 Int_t numBjets_csvm;
 	 Int_t numBjets_csvt;
 
+         Double_t jet1CSVLpt;
+         Double_t jet2CSVLpt;
+         Double_t jet3CSVLpt;
+         Double_t jet4CSVLpt;
+         Double_t jet1CSVMpt;
+         Double_t jet2CSVMpt;
+         Double_t jet3CSVMpt;
+         Double_t jet4CSVMpt;
          //Jet Track number
          //Int_t   jettracksize[NMAX];
 	 
-
-	 // B discriminator
-	 Double_t bdisc_1st;
-	 Double_t bdisc_2nd;
-	 Double_t bdisc_3rd;
-	 Double_t bdisc_4th; 
-
       };
 
 
@@ -133,9 +135,9 @@ class StoreTreeVariable {
 
       struct MetVariables{
 
-	      /*
-         Double_t met;
-         Double_t metphi;
+	 Double_t MET;
+         /*
+	Double_t metphi;
          Double_t mht;
          Double_t neupt;
          Double_t rho;
@@ -162,6 +164,12 @@ class StoreTreeVariable {
          Double_t Ht;
          Double_t Stlep;
          Double_t Stjet;
+         Double_t DeltaPhiWW;
+         Double_t DeltaRWW;
+         Double_t DeltaPhiMETWlep;
+         Double_t DeltaPhiMETlep;
+         Double_t DeltaPhiNulep;
+         Double_t LepWPt;
       };
 
       struct GeneralVariables {
@@ -305,6 +313,7 @@ void StoreTreeVariable::InitialJet(){
       Top->Branch("jet2_pt",&VStoreJet.jet2pt,"jet2pt/D");
       Top->Branch("jet3_pt",&VStoreJet.jet3pt,"jet3pt/D");
       Top->Branch("jet4_pt",&VStoreJet.jet4pt,"jet4pt/D");
+      Top->Branch("deltaRdijet",&VStoreJet.deltaRdijet,"deltaRdijet/D");
       /*Top->Branch("jet_eta",VStoreJet.jeteta,"jeteta[numjets]/D");
       Top->Branch("jet_phi",VStoreJet.jetphi,"jetphi[numjets]/D");
       Top->Branch("jet_energy",VStoreJet.jete,"jete[numjets]/D");
@@ -320,12 +329,14 @@ void StoreTreeVariable::InitialJet(){
       Top->Branch("numBjets_csvm",&VStoreJet.numBjets_csvm,"numBjets_csvm/I");
       Top->Branch("numBjets_csvt",&VStoreJet.numBjets_csvt,"numBjets_csvt/I");
 
-      //b discriminant
-      Top->Branch("bdisc_1st",&VStoreJet.bdisc_1st,"bdisc_1st/D");
-      Top->Branch("bdisc_2nd",&VStoreJet.bdisc_2nd,"bdisc_2nd/D");
-      Top->Branch("bdisc_3rd",&VStoreJet.bdisc_3rd,"bdisc_3rd/D");
-      Top->Branch("bdisc_4th",&VStoreJet.bdisc_4th,"bdisc_4th/D"); 
-
+      Top->Branch("jet1CSVLpt",&VStoreJet.jet1CSVLpt,"jet1CSVLpt/D");
+      Top->Branch("jet2CSVLpt",&VStoreJet.jet2CSVLpt,"jet2CSVLpt/D");
+      Top->Branch("jet3CSVLpt",&VStoreJet.jet3CSVLpt,"jet3CSVLpt/D");
+      Top->Branch("jet4CSVLpt",&VStoreJet.jet4CSVLpt,"jet4CSVLpt/D");
+      Top->Branch("jet1CSVMpt",&VStoreJet.jet1CSVMpt,"jet1CSVMpt/D");
+      Top->Branch("jet2CSVMpt",&VStoreJet.jet2CSVMpt,"jet2CSVMpt/D");
+      Top->Branch("jet3CSVMpt",&VStoreJet.jet3CSVMpt,"jet3CSVMpt/D");
+      Top->Branch("jet4CSVMpt",&VStoreJet.jet4CSVMpt,"jet4CSVMpt/D");
       //Jet track size
       //Top->Branch("jet_tracksize",VStoreJet.jettracksize,"jettracksize[numjets]/I");
  }
@@ -336,9 +347,9 @@ void StoreTreeVariable::InitialMet(){
 
   if(StoreMet){
       cout<<"We are inital Met Branch"<<endl;
-    /* 
-      Top->Branch("MET_energy",&VStoreMet.met,"met/D");
-      Top->Branch("MET_phi",&VStoreMet.metphi,"metphi/D");
+     
+      Top->Branch("MET",&VStoreMet.MET,"MET/D");
+      /*Top->Branch("MET_phi",&VStoreMet.metphi,"metphi/D");
       Top->Branch("MHT_energy",&VStoreMet.mht,"mht/D");
       Top->Branch("Neutrinuo_pt",&VStoreMet.neupt,"neupt/D");
       Top->Branch("pileup_rho",&VStoreMet.rho,"rho/D");
@@ -364,6 +375,12 @@ void StoreTreeVariable::InitialMet(){
       Top->Branch("Ht",&VStoreMet.Ht,"Ht/D");
       Top->Branch("Stlep",&VStoreMet.Stlep,"Stlep/D");
       Top->Branch("Stjet",&VStoreMet.Stjet,"Stjet/D");
+      Top->Branch("DeltaPhiWW",&VStoreMet.DeltaPhiWW,"DeltaPhiWW/D");
+      Top->Branch("DeltaRWW",&VStoreMet.DeltaRWW,"DeltaRWW/D");
+      Top->Branch("DeltaPhiMETWlep",&VStoreMet.DeltaPhiMETWlep,"DeltaPhiMETWlep/D");
+      Top->Branch("DeltaPhiMETlep",&VStoreMet.DeltaPhiMETlep,"DeltaPhiMETlep/D");
+      Top->Branch("DeltaPhiNulep",&VStoreMet.DeltaPhiNulep,"DeltaPhiNulep/D");
+      Top->Branch("LepWPt",&VStoreMet.LepWPt,"LepWPt/D");
   }
 }
 
