@@ -1,0 +1,9 @@
+root -l loadLibraries.C -b runAnalysis.C\(\"4Top\",\"all\"\) -q
+root -l loadLibraries.C -b runAnalysis.C\(\"MC\",\"all\"\) -q
+root -l loadLibraries.C -b runAnalysis.C\(\"data\",\"all\"\) -q
+root -l loadLibraries.C -b runAnalysis.C\(\"4Top\",\"sys\",\"JEC\"\) -q
+root -l loadLibraries.C -b runAnalysis.C\(\"4Top\",\"sys\",\"JER\"\) -q
+root -l loadLibraries.C -b runAnalysis.C\(\"4Top\",\"sys\",\"PU\"\) -q
+root -l loadLibraries.C -b runAnalysis.C\(\"MC\",\"sys\",\"JEC\"\) -q
+root -l loadLibraries.C -b runAnalysis.C\(\"MC\",\"sys\",\"JER\"\) -q
+root -l loadLibraries.C -b runAnalysis.C\(\"MC\",\"sys\",\"PU\"\) -q
