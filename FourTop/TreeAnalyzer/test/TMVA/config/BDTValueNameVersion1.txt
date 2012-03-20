@@ -1,0 +1,21 @@
+#Mass_Name_Tag_Do_not_Modify_this_Line
+1100
+900
+500
+#Directory_Name_Tag_Do_not_Modify_this_Line
+/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results17/BDTTrainv1/
+#Vairable_Name_Tag_Do_not_Modify_this_Line
+Ht F
+Stlep F 
+Stjet F
+jet_number I
+numBjets_csvl I
+#Spectator_Name_Tag_Do_not_Modify_this_Line
+run I
+lumi I
+event I
+#Weight_Name_Tag_Do_not_Modify_this_Line
+PUWeight
+#Cut_Name_Tag_Do_not_Modify_this_Line
+jet_number>=6&&Ht>300
+#Tag_Do_not_Modify_this_Line
