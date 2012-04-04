@@ -1,0 +1,149 @@
+###Variable Source Nbin Max Min SetLogy
+##############CUT0
+###MUONS
+#N_muons_cut0 muons 1 0 0 false 
+#Nelectrons_cut0 muons 1 0 0 false
+#muon_eta_cut0 muons 0.1 0 0 false
+#muon_phi_cut0 muons 0.1 0 0 false
+#muon_reliso muons 0.01 0 0 false
+#deltaR_cut0 muons 0.01 0 0 false
+#muon_pt_cut0 muons 10GeV 0 0 false
+#Niso muons 1 0 0 false
+#Ngood muons 1 0 0 false
+#charge_tiso muons 1 0 0 false
+###PVs
+#NPVreweight_cut0 PVs 1 10e5 0 false
+###MET
+#MET_cut0 MET 10GeV 0 0 false
+#MET_phi_cut0 MET 0.1 0 0 false
+#Ht_cut0 MET 20GeV 0 0 false
+#Stlep_cut0 MET 10GeV 0 0 false
+#Stjet_cut0 MET 20GeV 0 0 false
+#PzNu MET 10GeV 0 0 false
+###MASS
+#Mt_cut0 mass 10GeV 0 0 false
+#dileadjet_cut0 mass 10GeV 0 0 false
+#dijet_cut0 mass 10GeV 0 0 false
+#trijet_cut0 mass 10GeV 0 0 false
+#trijet_pt_cut0 mass 10GeV 0 0 false
+##JETS
+#jet_pt jets 12GeV 0 0 false
+#jet1_pt_cut0 jets 10GeV 0 0 false
+#jet2_pt_cut0 jets 10GeV 0 0 false
+#jet3_pt_cut0 jets 10GeV 0 0 false
+#jet4_pt_cut0 jets 10GeV 0 0 false
+#jet5_pt_cut0 jets 10GeV 0 0 false
+#jet6_pt_cut0 jets 10GeV 0 0 false
+#jet7_pt_cut0 jets 10GeV 0 0 false
+#jet_eta jets 0.1 0 0 false
+#jet1_eta_cut0 jets 0.1 0 0 false
+#jet2_eta_cut0 jets 0.1 0 0 false
+#jet_phi jets 0.1 0 0 false
+#Njets_cut0 jets 1 0 0 false
+#Nbjets_TCHPM_cut0 jets 1 0 0 false
+#Nbjets_CSVL_cut0 jets 1 0 0 false
+#Nbjets_CSVM_cut0 jets 1 0 0 false
+#Nbjets_CSVT_cut0 jets 1 0 0 false
+#Dijet_deltaPhi_cut0 jets 0.1 0 0 false
+##############CUT1
+###MUONS
+#N_muons muons 1 0 0 false
+#Nelectrons muons 1 0 0 false
+#muon_eta muons 0.1 0 0 false
+#muon_phi muons 0.1 0 0 false
+#deltaR muons 0.01 0 0 false
+#muon_pt muons 10GeV 0 0 false
+###PVs
+#NPVreweight PVs 1 10e5 0 false
+###MET
+#MET MET 10GeV 0 0 false
+#MET_phi MET 0.1 0 0 false
+#Ht MET 20GeV 0 0 false
+#Stlep MET 10GeV 0 0 false
+Stjet MET 20GeV 10e4 10e-4 true 
+#LepWmass MET 10GeV 0 0 false
+#LepWPt MET 10GeV 0 0 false
+#deltaPhiWW MET 0.1 0 0 false
+#deltaRWW MET 0.01 0 0 false
+#deltaPhiMETWlep MET 0.1 0 0 false
+#deltaPhiMETlep MET 0.1 0 0 false
+#deltaPhiNulep MET 0.1 0 0 false
+###MASS
+#Mt mass 10GeV 0 0 false
+#dileadjet mass 10GeV 0 0 false
+#dijet mass 10GeV 0 0 false
+#trijet mass 10GeV 0 0 false
+#trijet_pt mass 10GeV 0 0 false
+##JETS
+#jet1_pt jets 10GeV 0 0 false
+#jet2_pt jets 10GeV 0 0 false
+#jet3_pt jets 10GeV 0 0 false
+#jet4_pt jets 10GeV 0 0 false
+#jet5_pt jets 10GeV 0 0 false
+#jet6_pt jets 10GeV 0 0 false
+#jet7_pt jets 10GeV 0 0 false
+#jet1_eta jets 0.1 0 0 false
+#jet2_eta jets jets 0.1 0 0 false
+#Njets jets 1 0 0 false
+#Nbjets_TCHPM jets 1 0 0 false
+#Nbjets_CSVL jets 1 0 0 false
+#Nbjets_CSVM jets 1 0 0 false
+#Nbjets_CSVT jets 1 0 0 false
+#Dijet_deltaPhi jets 0.1 0 0 false
+#Dijet_deltaminR jets 0.01 0 0 false
+#Dijet_deltaR jets 0.01 0 0 false
+#deltaRmu2j jets 0.01 0 0 false
+#deltaPhimu2j jets 0.1 0 0 false
+###############CUT2
+###MUONS
+#N_muons_1btag muons 1 0 0 false
+#Nelectrons_1btag muons 1 0 0 false
+#deltaR_1btag muons 0.01 0 0 false
+#muon_pt_1btag muons 10GeV 0 0 false
+###PVs
+#NPVreweight_1btag PVs 1 10e5 0 false
+###MET
+#MET_1btag MET 10GeV 0 0 false
+#Ht_1btag MET 20GeV 0 0 false
+#Stlep_1btag MET 10GeV 0 0 false
+#Stjet_1btag MET 0 0 false
+#LepWmass_1btag MET 10GeV 0 0 false
+#LepWPt_1btag MET 10GeV 0 0 false
+#deltaPhiWW_1btag MET 0.1 0 0 false
+#deltaRWW_1btag MET 0.01 0 0 false
+#deltaPhiMETWlep_1btag MET 0.1 0 0 false
+#deltaPhiMETlep_1btag MET 0.1 0 0 false
+#deltaPhiNulep_1btag MET 0.1 0 0 false
+###MASS
+#Mt_1btag mass 10GeV 0 0 false
+#dileadjet_1btag mass 10GeV 0 0 false
+#dijet_1btag mass 10GeV 0 0 false
+#trijet_1btag mass 10GeV 0 0 false
+#trijet_pt_1btag mass 10GeV 0 0 false
+##JETS
+#jet1_pt_1btag jets 10GeV 0 0 false
+#jet2_pt_1btag jets 10GeV 0 0 false
+#jet3_pt_1btag jets 10GeV 0 0 false
+#jet4_pt_1btag jets 10GeV 0 0 false
+#jet5_pt_1btag jets 10GeV 0 0 false
+#jet6_pt_1btag jets 10GeV 0 0 false
+#jet7_pt_1btag jets 10GeV 0 0 false
+#jet1_eta_1btag jets 0.1 0 0 false
+#jet2_eta_1btag jets 0.1 0 0 false
+#Njets_1btag jets 1 0 0 false
+#Dijet_deltaR_1btag jets 0.01 0 0 false
+#j4b0 jets 40GeV 0 0 false
+#j5b0 jets 40GeV 0 0 false
+#j6b0 jets 40GeV 0 0 false
+#j4b1 jets 40GeV 0 0 false
+#j5b1 jets 40GeV 0 0 false
+#j6b1 jets 40GeV 0 0 false
+#j4b2 jets 40GeV 0 0 false
+#j5b2 jets 40GeV 0 0 false
+#j6b2 jets 40GeV 0 0 false
+#Stjet41 jets 10GeV 0 0 false
+#Stjet51 jets 10GeV 0 0 false
+#Stjet61 jets 10GeV 0 0 false
+#Stjet42 jets 40GeV 0 0 false
+#Stjet52 jets 40GeV 0 0 false
+#Stjet62 jets 40GeV 0 0 false
