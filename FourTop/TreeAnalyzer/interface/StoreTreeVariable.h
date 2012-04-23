@@ -26,28 +26,14 @@ class StoreTreeVariable {
       //typedef struct MuonVariables{
       typedef struct {
 
-         //Muon ID Variables
-         Int_t nummuons;
-         Double_t relisolation[NMAX];
-         Double_t d0[NMAX];
-         Int_t hits[NMAX];
-         Int_t trackhits[NMAX];
-         Double_t normalchi2[NMAX];
-         Int_t stations[NMAX];
-         Int_t pixelhits[NMAX];
-         Double_t muonvzwithPV[NMAX];
-         Int_t tightmuon[NMAX];
-         Int_t nloosemuon;
-         Int_t ntightmuon;
-
          //Muon Kinematic
-         Double_t pt[NMAX];
-         Double_t eta[NMAX];
-         Double_t phi[NMAX];
+         Double_t Muonpt;
+         Double_t Muoneta;
+         Double_t Muonphi;
          Double_t e[NMAX];
 
          //Muon Jet deltaR
-         Double_t deltaR[NMAX];
+         Double_t MuondeltaR;
 
       } MuonVariables;
      
@@ -86,7 +72,13 @@ class StoreTreeVariable {
          Double_t jet2pt;
          Double_t jet3pt;
          Double_t jet4pt;
+         Double_t deltaRmindijet;
          Double_t deltaRdijet;
+	 Double_t deltaRmu2jet;
+	 Double_t deltaRmu3jet;
+         Double_t deltaPhidijet;
+         Double_t deltaPhimu2jet;
+         Double_t deltaPhimu3jet;
          /*Double_t jeteta[NMAX];
          Double_t jetphi[NMAX];
          Double_t jete[NMAX];*/
@@ -136,8 +128,8 @@ class StoreTreeVariable {
       struct MetVariables{
 
 	 Double_t MET;
+	Double_t METphi;
          /*
-	Double_t metphi;
          Double_t mht;
          Double_t neupt;
          Double_t rho;
@@ -164,12 +156,17 @@ class StoreTreeVariable {
          Double_t Ht;
          Double_t Stlep;
          Double_t Stjet;
+	 Double_t diWdeltaphi;
+	 Double_t diWdeltaR;
          Double_t DeltaPhiWW;
          Double_t DeltaRWW;
          Double_t DeltaPhiMETWlep;
          Double_t DeltaPhiMETlep;
          Double_t DeltaPhiNulep;
          Double_t LepWPt;
+	 Double_t topmass;
+	 Double_t toppt;
+
       };
 
       struct GeneralVariables {
@@ -249,7 +246,7 @@ void StoreTreeVariable::InitialMuon(){
     if(StoreMuon){
        cout<<"We are initial the Muon Branch"<<endl;
 
-       Top->Branch("muon_number",&VStoreMuon.nummuons,"nummuons/I");
+       /*Top->Branch("muon_number",&VStoreMuon.nummuons,"nummuons/I");
        Top->Branch("muon_isolation",VStoreMuon.relisolation,"reisolation[nummuons]/D");
        Top->Branch("muon_d0",VStoreMuon.d0,"d0[nummuons]/D");
        Top->Branch("muon_muonhist",VStoreMuon.hits,"hits[nummuons]/I");
@@ -262,13 +259,12 @@ void StoreTreeVariable::InitialMuon(){
        Top->Branch("muon_nloosemuon",&VStoreMuon.nloosemuon,"nloosemuon/I");
        Top->Branch("muon_ntightmuon",&VStoreMuon.ntightmuon,"ntightmuon/I");
        Top->Branch("muon_jet_deltaR",VStoreMuon.deltaR,"deltaR[nummuons]/D");
-
+*/
        //kinematic
-       Top->Branch("muon_pt",VStoreMuon.pt,"pt[nummuons]/D");
-       //Top->Branch("muon_pt",muonpt,"pt[nummuons]/D");
-       Top->Branch("muon_eta",VStoreMuon.eta,"eta[nummuons]/D");
-       Top->Branch("muon_phi",VStoreMuon.phi,"phi[nummuons]/D");
-       Top->Branch("muon_energy",VStoreMuon.e,"e[nummuons]/D");
+       Top->Branch("Muonpt",&VStoreMuon.Muonpt,"Muonpt/D");
+       Top->Branch("Muoneta",&VStoreMuon.Muoneta,"Muoneta/D");
+       Top->Branch("Muonphi",&VStoreMuon.Muonphi,"Muonphi/D");
+       Top->Branch("MuondeltaR",&VStoreMuon.MuondeltaR,"MuondeltaR/D");
 
     }
 
@@ -314,6 +310,13 @@ void StoreTreeVariable::InitialJet(){
       Top->Branch("jet3_pt",&VStoreJet.jet3pt,"jet3pt/D");
       Top->Branch("jet4_pt",&VStoreJet.jet4pt,"jet4pt/D");
       Top->Branch("deltaRdijet",&VStoreJet.deltaRdijet,"deltaRdijet/D");
+      Top->Branch("deltaRmindijet",&VStoreJet.deltaRmindijet,"deltaRmindijet/D");
+      Top->Branch("deltaRmu2jet",&VStoreJet.deltaRmu2jet,"deltaRmu2jet/D");
+      Top->Branch("deltaRmu3jet",&VStoreJet.deltaRmu3jet,"deltaRmu3jet/D");
+      Top->Branch("deltaPhidijet",&VStoreJet.deltaPhidijet,"deltaPhidijet/D");
+      Top->Branch("deltaPhimu2jet",&VStoreJet.deltaPhimu2jet,"deltaPhimu2jet/D");
+      Top->Branch("deltaPhimu3jet",&VStoreJet.deltaPhimu3jet,"deltaPhimu3jet/D");
+
       /*Top->Branch("jet_eta",VStoreJet.jeteta,"jeteta[numjets]/D");
       Top->Branch("jet_phi",VStoreJet.jetphi,"jetphi[numjets]/D");
       Top->Branch("jet_energy",VStoreJet.jete,"jete[numjets]/D");
@@ -375,12 +378,14 @@ void StoreTreeVariable::InitialMet(){
       Top->Branch("Ht",&VStoreMet.Ht,"Ht/D");
       Top->Branch("Stlep",&VStoreMet.Stlep,"Stlep/D");
       Top->Branch("Stjet",&VStoreMet.Stjet,"Stjet/D");
-      Top->Branch("DeltaPhiWW",&VStoreMet.DeltaPhiWW,"DeltaPhiWW/D");
-      Top->Branch("DeltaRWW",&VStoreMet.DeltaRWW,"DeltaRWW/D");
+      Top->Branch("diWdeltaphi",&VStoreMet.diWdeltaphi,"diWdeltaphi/D");
+      Top->Branch("diWdeltaR",&VStoreMet.diWdeltaR,"diWdeltaR/D");
       Top->Branch("DeltaPhiMETWlep",&VStoreMet.DeltaPhiMETWlep,"DeltaPhiMETWlep/D");
       Top->Branch("DeltaPhiMETlep",&VStoreMet.DeltaPhiMETlep,"DeltaPhiMETlep/D");
       Top->Branch("DeltaPhiNulep",&VStoreMet.DeltaPhiNulep,"DeltaPhiNulep/D");
       Top->Branch("LepWPt",&VStoreMet.LepWPt,"LepWPt/D");
+      Top->Branch("topmass",&VStoreMet.topmass,"topmass/D");
+      Top->Branch("toppt",&VStoreMet.toppt,"toppt/D");
   }
 }
 

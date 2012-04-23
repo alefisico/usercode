@@ -708,6 +708,10 @@ if __name__ == '__main__':
             if listcolor[icolor] == "top" and listlegend[icolor]=="TTbar":
                 tmplistcolor.append( style.TtbarColor)
                 tmplistlegend.append(style.TtbarText)
+                #tmplistlegend.append("t#bar{t} Madgraph")
+            if listcolor[icolor] == "top" and listlegend[icolor]=="TTbarOther":
+                tmplistcolor.append( style.TtbarOtherColor)
+                tmplistlegend.append("t#bar{t} Powheg")
             if listcolor[icolor] == "top" and listlegend[icolor]=="Wjets":
                 tmplistcolor.append( style.WJetsColor)
                 tmplistlegend.append(style.WJetsText)
@@ -727,9 +731,9 @@ if __name__ == '__main__':
                 tmplistcolor.append( style.DibosonsColor )
                 tmplistlegend.append(style.DibosonsText)
                 #print "dibosons color ="+str(style.DibosonsColor)
-            if listcolor[icolor] == "top" and listlegend[icolor]=="FourTopSM":
-                tmplistcolor.append( style.FourTopSMColor)
-                tmplistlegend.append(style.FourTopSMText)
+            #if listcolor[icolor] == "top" and listlegend[icolor]=="FourTopSM":
+            #    tmplistcolor.append( style.FourTopSMColor)
+            #    tmplistlegend.append(style.FourTopSMText)
             if listcolor[icolor] != "top":
                 tmplistcolor.append( int(listcolor[icolor]) ) 
                 tmplistlegend.append( listlegend[icolor])
@@ -760,7 +764,7 @@ if __name__ == '__main__':
 	#create canvas
 	cv[thesuper[ikey].name] = TCanvas(thesuper[ikey].name,thesuper[ikey].title,700,700)
 	#legend
-	aleg = TLegend(0.75,0.55,0.93,0.93)
+	aleg = TLegend(0.65,0.55,0.93,0.93)
 	SetOwnership( aleg, 0 ) 
 	aleg.SetMargin(0.12)
         aleg.SetTextSize(0.035)
@@ -978,6 +982,7 @@ if __name__ == '__main__':
 			    if thesuper[ikey].XTitle != None:
 				newth.SetXTitle("")
                             if listlegend[ii]=="Data": datahist[thesuper[ikey].name] = newth
+                            elif listlegend[ii]=="t#bar{t} Powheg": datahist[thesuper[ikey].name] = newth
                             elif thesuper[ikey].NoStack[ii] != None:
                                 #print "HEEEEEEEEEEEERE: "
                                 #print thesuper[ikey].NoStack[ii]
@@ -990,6 +995,7 @@ if __name__ == '__main__':
 			else:
 			    #newth.Fit("landau")
                             if listlegend[ii]=="Data": datahist[thesuper[ikey].name] = newth
+                            elif listlegend[ii]=="t#bar{t} Powheg": datahist[thesuper[ikey].name] = newth
 			    astack.Add(newth)
 			    
 			astack.SetTitle(thesuper[ikey].title)
@@ -1061,6 +1067,7 @@ if __name__ == '__main__':
             for iitmp in tmpNoStackhist[thesuper[ikey].name]:
                 #tmpNoStackhist[thesuper[ikey].name].Draw("HIST same")
                 iitmp.SetLineStyle(jjtmp+1)
+		iitmp.SetLineWidth(2)
                 iitmp.Draw("HIST same")
                 jjtmp+=1
         gPad.RedrawAxis()
@@ -1077,7 +1084,7 @@ if __name__ == '__main__':
             errorgraph[thesuper[ikey].name].SetFillStyle(3354)
             errorgraph[thesuper[ikey].name].Draw("E2 same")
             
-            aleg.AddEntry(errorgraph[thesuper[ikey].name],"QCD uncert.","F")
+            aleg.AddEntry(errorgraph[thesuper[ikey].name],"MC uncert.","F")
 	#astack.GetHistogram().GetXaxis().SetTickLength(0)
          
         #astack.GetHistogram().GetXaxis().SetLabelOffset(999)
@@ -1104,7 +1111,7 @@ if __name__ == '__main__':
             #gPad.SetLogy()
 	if thesuper[ikey].SetGrid == "true":
             if makeDiffPlot:
-                pad1.SetGrid()
+                pad1.SetGridy()
             else:
                 cv[thesuper[ikey].name].SetGrid()
 	
@@ -1124,7 +1131,8 @@ if __name__ == '__main__':
             if thesuper[ikey].SubBanner != None:
                 newBanner = '#splitline{'+Banner+'}{'+thesuper[ikey].SubBanner+'}'
                 if verbose: print "add sub banner"
-	    tex[thesuper[ikey].name] = TLatex(0.28,0.85,newBanner)
+	    tex[thesuper[ikey].name] = TLatex(0.20,0.88,newBanner)
+	    #tex[thesuper[ikey].name] = TLatex(0.65,0.88,newBanner)   ##Powheg
 	    tex[thesuper[ikey].name].SetNDC()
 	    tex[thesuper[ikey].name].SetTextSize(0.035)
 	    tex[thesuper[ikey].name].Draw()
@@ -1143,7 +1151,10 @@ if __name__ == '__main__':
                     ratiohist[thesuper[ikey].name+"_diff"].Divide(datahist[thesuper[ikey].name], atemphist )
                 else:
                     # get KS value
-                    if doKS: KSvalue = datahist[thesuper[ikey].name].KolmogorovTest(astack.GetStack().Last() )
+                    if doKS:
+			    #KSvalue = datahist[thesuper[ikey].name].KolmogorovTest(astack.GetStack().Last(),'X' )
+			    KSvalue = datahist[thesuper[ikey].name].KolmogorovTest(astack.GetStack().Last())
+			    print thesuper[ikey].name, ' & ',  KSvalue, '\\\\'
                     tmpsubst = datahist[thesuper[ikey].name].Clone()
                     tmpsubst.Add(astack.GetStack().Last(),-1.)
                     ratiohist[thesuper[ikey].name+"_diff"].Divide(tmpsubst, astack.GetStack().Last() ) 
@@ -1162,17 +1173,19 @@ if __name__ == '__main__':
                     #print " S/sqrt(S+B) = "+str(S/math.sqrt(S+B))
                 #cv[thesuper[ikey].name].Clear()
                 pad2.cd()
-                ratiohist[thesuper[ikey].name+"_diff"].SetYTitle("#frac{(Data - MC)}{MC}")
+               	#ratiohist[thesuper[ikey].name+"_diff"].SetYTitle("#frac{Powheg}{Madgraph}")
+		ratiohist[thesuper[ikey].name+"_diff"].SetYTitle("#frac{(Data - MC)}{MC}")
                 ratiohist[thesuper[ikey].name+"_diff"].SetTitleSize(0.09,"Y")
-                ratiohist[thesuper[ikey].name+"_diff"].SetTitleOffset(0.7,"Y")
-                ratiohist[thesuper[ikey].name+"_diff"].Draw()
+       	        ratiohist[thesuper[ikey].name+"_diff"].SetTitleOffset(0.7,"Y")
+               	ratiohist[thesuper[ikey].name+"_diff"].Draw()
                 ratiohist[thesuper[ikey].name+"_diff"].SetMaximum(2.)
-                ratiohist[thesuper[ikey].name+"_diff"].SetMinimum(-2.)
-                if doKS:
-                    texKS = TLatex(0.25,0.82,"KS="+str(round(KSvalue,2)))
-                    texKS.SetNDC()
-                    texKS.SetTextSize(0.1)
-                    texKS.Draw()
+       	        ratiohist[thesuper[ikey].name+"_diff"].SetMinimum(-2.)
+       	        #ratiohist[thesuper[ikey].name+"_diff"].SetMinimum(0.)
+                #if doKS:
+                #    texKS = TLatex(0.25,0.82,"KS="+str(round(KSvalue,2)))
+                #    texKS.SetNDC()
+                #    texKS.SetTextSize(0.1)
+                #    texKS.Draw()
                                                         
                 pad2.SetGrid()
                 pad2.Update()

@@ -58,8 +58,11 @@ private:
   bool            fdoJERunc;
   bool            fdoJERup;
   bool            fdoJERdown;
+  bool            fdodiLepton;
   bool            fpu_up;
   bool            fpu_down;
+  bool            fbtag_up;
+  bool            fbtag_down;
 
   //HistoManager    *fHist;
   TString         fSample;
@@ -149,12 +152,15 @@ public :
        fdoQCD2SideBand = false;
        fdoJECunc = false;
        fdoJECup = true;
-       fdoJERunc = true;
+       fdoJERunc = true;//false;
        fdoJERup = false; 
        fdoJERdown = false; 
+       fdodiLepton = false; 
        fdoMtopCut = true;
        fpu_up = false;
        fpu_down = false;
+       fbtag_up = false;
+       fbtag_down = false;
      }
    virtual ~Analyzer() { }
    virtual Int_t   Version() const { return 2; }

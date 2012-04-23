@@ -1,0 +1,18 @@
+###Variable Source Nbin Max Min SetLogy
+##############CUT1
+###MET
+Stlep MET 0 0 0 false
+Stjet MET 0 0 0 false 
+diWdeltaphi MET 0.1 0 0 false
+diWdeltaR MET 0.2 0 0 false
+###MASS
+trijet_pt mass 0 0 0 false
+##JETS
+jet1_pt jets 10GeV 0 0 false
+jet2_pt jets 10GeV 0 0 false
+jet3_pt jets 10GeV 0 0 false
+Dijet_deltaminR jets 0.01 0 0 false
+Dijet_deltaPhi jets 0.2 0 0 false
+Dijet_deltaR jets 0.2 0 0 false
+deltaRmu2j jets 0.2 0 0 false
+deltaPhimu2j jets 0.2 0 0 false

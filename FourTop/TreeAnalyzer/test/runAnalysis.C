@@ -12,85 +12,112 @@ void runAnalysis(TString sample="all", TString proc="all", TString sys="all", TS
   p->Archive(" ",desdir);
 
   //p->AddInput(new TNamed("PROOF_OUTPUTFILE_LOCATION", "LOCAL"));
- 
-  if (sample=="4Top"||sample=="4Top1100"||sample=="all")
+
+  
+  if (sample=="ttttSM"||sample=="all")
     {
-      TDSet *mc_4Top_1100 = new TDSet("top","*","/PATNtupleMaker");
-      mc_4Top_1100->Add("/eos/uscms/store/user/algomez/FourTop/Ntuples/4Top_1100_Tuple-PATskim.root");
+      TDSet *mc_4Top_SM = new TDSet("top","*","/PATNtupleMaker");
+      mc_4Top_SM->Add("/eos/uscms/store/user/algomez/FourTop/Ntuples/ttttSM-Tuple-PATskim.root");
 	if (proc =="all" ) {
-		mc_4Top_1100->Process("Analyzer.C+","sample=4Top1100");
+		mc_4Top_SM->Process("Analyzer.C+","sample=ttttSM");
 	}
 	if ( proc =="sys" ) {
-	   if (updown == "both" || updown == "up") mc_4Top_1100->Process("Analyzer.C+", sys+"UP sample=4Top1100");
-	   if (updown == "both" || updown == "down") mc_4Top_1100->Process("Analyzer.C+", sys+"DOWN sample=4Top1100");
+	   if (updown == "both" || updown == "up") mc_4Top_SM->Process("Analyzer.C+", sys+"UP sample=ttttSM");
+	   if (updown == "both" || updown == "down") mc_4Top_SM->Process("Analyzer.C+", sys+"DOWN sample=ttttSM");
 	}
-      }
+      } 
     
-  if (sample=="4Top"||sample=="4Top900"||sample=="all")
+  if (sample=="tttt"||sample=="tttt400"||sample=="all")
     {
-      TDSet *mc_4Top_900 = new TDSet("top","*","/PATNtupleMaker");
-      mc_4Top_900->Add("/eos/uscms/store/user/algomez/FourTop/Ntuples/4Top_900_Tuple-PATskim.root");
+      TDSet *mc_tttt_Gh400 = new TDSet("top","*","/PATNtupleMaker");
+      //mc_tttt_Gh400->Add("/uscms/home/weizou/nobackup/BACKDIR/CRAB/V9_14Ntuple/MC/Muon/HeavyGluon/HeavyGluon400_20k/UFO-Tuple-PATskim.root");
+      mc_tttt_Gh400->Add("/eos/uscms/store/user/algomez/FourTop/Ntuples/tttt_Gh400-Tuple-PATskim.root");
 	if (proc =="all" ) {
-		mc_4Top_900->Process("Analyzer.C+","sample=4Top900");
+		mc_tttt_Gh400->Process("Analyzer.C+","sample=tttt_Gh400");
 	}
 	if ( proc =="sys" ) {
-	   if (updown == "both" || updown == "up") mc_4Top_900->Process("Analyzer.C+", sys+"UP sample=4Top900");
-	   if (updown == "both" || updown == "down") mc_4Top_900->Process("Analyzer.C+", sys+"DOWN sample=4Top900");
-	}
-      }
-    
-  if (sample=="4Top"||sample=="4Top700"||sample=="all")
-    {
-      TDSet *mc_4Top_700 = new TDSet("top","*","/PATNtupleMaker");
-      mc_4Top_700->Add("/eos/uscms/store/user/algomez/FourTop/Ntuples/4Top_700_TUple-PATskim.root");
-	if (proc =="all" ) {
-		mc_4Top_700->Process("Analyzer.C+","sample=4Top700");
-	}
-	if ( proc =="sys" ) {
-	   if (updown == "both" || updown == "up") mc_4Top_700->Process("Analyzer.C+", sys+"UP sample=4Top700");
-	   if (updown == "both" || updown == "down") mc_4Top_700->Process("Analyzer.C+", sys+"DOWN sample=4Top700");
+	   if (updown == "both" || updown == "up") mc_tttt_Gh400->Process("Analyzer.C+", sys+"UP sample=tttt_Gh400");
+	   if (updown == "both" || updown == "down") mc_tttt_Gh400->Process("Analyzer.C+", sys+"DOWN sample=tttt_Gh400");
 	}
       }
 
-  if (sample=="4Top"||sample=="4Top500"||sample=="all")
+  if (sample=="tttt"||sample=="tttt500"||sample=="all")
     {
-      TDSet *mc_4Top_500 = new TDSet("top","*","/PATNtupleMaker");
-      mc_4Top_500->Add("/eos/uscms/store/user/algomez/FourTop/Ntuples/4Top_500_Tuple-PATskim.root");
+      TDSet *mc_tttt_Gh500 = new TDSet("top","*","/PATNtupleMaker");
+      mc_tttt_Gh500->Add("/eos/uscms/store/user/algomez/FourTop/Ntuples/tttt_Gh500-Tuple-PATskim.root");
 	if (proc =="all" ) {
-		mc_4Top_500->Process("Analyzer.C+","sample=4Top500");
+		mc_tttt_Gh500->Process("Analyzer.C+","sample=tttt_Gh500");
 	}
 	if ( proc =="sys" ) {
-	   if (updown == "both" || updown == "up") mc_4Top_500->Process("Analyzer.C+", sys+"UP sample=4Top500");
-	   if (updown == "both" || updown == "down") mc_4Top_500->Process("Analyzer.C+", sys+"DOWN sample=4Top500");
+	   if (updown == "both" || updown == "up") mc_tttt_Gh500->Process("Analyzer.C+", sys+"UP sample=tttt_Gh500");
+	   if (updown == "both" || updown == "down") mc_tttt_Gh500->Process("Analyzer.C+", sys+"DOWN sample=tttt_Gh500");
 	}
       }
-    
-  if (sample=="4Top"||sample=="4TopSM"||sample=="all")
+
+  if (sample=="tttt"||sample=="tttt600"||sample=="all")
     {
-      TDSet *mc_4Top_SM = new TDSet("top","*","/PATNtupleMaker");
-      mc_4Top_SM->Add("/eos/uscms/store/user/algomez/FourTop/Ntuples/4TopSM-Tuple-PATskim.root");
+      TDSet *mc_tttt_Gh600 = new TDSet("top","*","/PATNtupleMaker");
+      mc_tttt_Gh600->Add("/eos/uscms/store/user/algomez/FourTop/Ntuples/tttt_Gh600-Tuple-PATskim.root");
 	if (proc =="all" ) {
-		mc_4Top_SM->Process("Analyzer.C+","sample=4TopSM");
+		mc_tttt_Gh600->Process("Analyzer.C+","sample=tttt_Gh600");
 	}
 	if ( proc =="sys" ) {
-	   if (updown == "both" || updown == "up") mc_4Top_SM->Process("Analyzer.C+", sys+"UP sample=4TopSM");
-	   if (updown == "both" || updown == "down") mc_4Top_SM->Process("Analyzer.C+", sys+"DOWN sample=4TopSM");
+	   if (updown == "both" || updown == "up") mc_tttt_Gh600->Process("Analyzer.C+", sys+"UP sample=tttt_Gh600");
+	   if (updown == "both" || updown == "down") mc_tttt_Gh600->Process("Analyzer.C+", sys+"DOWN sample=tttt_Gh600");
 	}
       }
-    
-  if (sample=="4Top"||sample=="4TopUED6"||sample=="all")
+
+  if (sample=="tttt"||sample=="tttt700"||sample=="all")
     {
-      TDSet *mc_4Top_UED6 = new TDSet("top","*","/PATNtupleMaker");
-      mc_4Top_UED6->Add("/eos/uscms/store/user/algomez/FourTop/Ntuples/4TopUED6-Tuple-PATskim.root");
+      TDSet *mc_tttt_Gh700 = new TDSet("top","*","/PATNtupleMaker");
+      mc_tttt_Gh700->Add("/eos/uscms/store/user/algomez/FourTop/Ntuples/tttt_Gh700-Tuple-PATskim.root");
 	if (proc =="all" ) {
-		mc_4Top_UED6->Process("Analyzer.C+","sample=4TopUED6");
+		mc_tttt_Gh700->Process("Analyzer.C+","sample=tttt_Gh700");
 	}
 	if ( proc =="sys" ) {
-	   if (updown == "both" || updown == "up") mc_4Top_UED6->Process("Analyzer.C+", sys+"UP sample=4TopUED6");
-	   if (updown == "both" || updown == "down") mc_4Top_UED6->Process("Analyzer.C+", sys+"DOWN sample=4TopUED6");
+	   if (updown == "both" || updown == "up") mc_tttt_Gh700->Process("Analyzer.C+", sys+"UP sample=tttt_Gh700");
+	   if (updown == "both" || updown == "down") mc_tttt_Gh700->Process("Analyzer.C+", sys+"DOWN sample=tttt_Gh700");
 	}
       }
-    
+
+  if (sample=="tttt"||sample=="tttt800"||sample=="all")
+    {
+      TDSet *mc_tttt_Gh800 = new TDSet("top","*","/PATNtupleMaker");
+      mc_tttt_Gh800->Add("/eos/uscms/store/user/algomez/FourTop/Ntuples/tttt_Gh800-Tuple-PATskim.root");
+	if (proc =="all" ) {
+		mc_tttt_Gh800->Process("Analyzer.C+","sample=tttt_Gh800");
+	}
+	if ( proc =="sys" ) {
+	   if (updown == "both" || updown == "up") mc_tttt_Gh800->Process("Analyzer.C+", sys+"UP sample=tttt_Gh800");
+	   if (updown == "both" || updown == "down") mc_tttt_Gh800->Process("Analyzer.C+", sys+"DOWN sample=tttt_Gh800");
+	}
+      }
+
+  if (sample=="tttt"||sample=="tttt1000"||sample=="all")
+    {
+      TDSet *mc_tttt_Gh1000 = new TDSet("top","*","/PATNtupleMaker");
+      mc_tttt_Gh1000->Add("/eos/uscms/store/user/algomez/FourTop/Ntuples/tttt_Gh1000-Tuple-PATskim.root");
+	if (proc =="all" ) {
+		mc_tttt_Gh1000->Process("Analyzer.C+","sample=tttt_Gh1000");
+	}
+	if ( proc =="sys" ) {
+	   if (updown == "both" || updown == "up") mc_tttt_Gh1000->Process("Analyzer.C+", sys+"UP sample=tttt_Gh1000");
+	   if (updown == "both" || updown == "down") mc_tttt_Gh1000->Process("Analyzer.C+", sys+"DOWN sample=tttt_Gh1000");
+	}
+      }
+
+  /*if (sample=="tttt"||sample=="tttt1200"||sample=="all")
+    {
+      TDSet *mc_tttt_Gh1200 = new TDSet("top","*","/PATNtupleMaker");
+      mc_tttt_Gh1200->Add("/eos/uscms/store/user/algomez/FourTop/Ntuples/tttt_Gh1200-Tuple-PATskim.root");
+	if (proc =="all" ) {
+		mc_tttt_Gh1200->Process("Analyzer.C+","sample=tttt_Gh1200");
+	}
+	if ( proc =="sys" ) {
+	   if (updown == "both" || updown == "up") mc_tttt_Gh1200->Process("Analyzer.C+", sys+"UP sample=tttt_Gh1200");
+	   if (updown == "both" || updown == "down") mc_tttt_Gh1200->Process("Analyzer.C+", sys+"DOWN sample=tttt_Gh1200");
+	}
+      }*/
 
   if (sample=="MC"||sample=="ttbar"||sample=="all")
     {
@@ -105,7 +132,46 @@ void runAnalysis(TString sample="all", TString proc="all", TString sys="all", TS
 	}
       }
 
-  if (sample=="MC"||sample=="WJets"||sample=="all")
+  if (sample=="MC"||sample=="ttbar_POWHEG"||sample=="all")
+    {
+      TDSet *mc_ttbar = new TDSet("top","*","/PATNtupleMaker");
+      mc_ttbar->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/MC/v9_14/TT_Powheg_Mu.root");
+	mc_ttbar->Process("Analyzer.C+","sample=ttbar_powheg");
+
+    }
+
+  if (sample=="ttbarM"||sample=="MC")
+    {
+      TDSet *mc_ttbarm = new TDSet("top","*","/PATNtupleMaker");
+      mc_ttbarm->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/MC/v9_14/TTbar_matchup_Mu.root");
+      if (proc =="all" ) {mc_ttbarm->Process("Analyzer.C+","sample=ttbarMatchup");}
+    }
+
+
+  if (sample=="ttbarM"||sample=="MC")
+    {
+      TDSet *mc_ttbarm = new TDSet("top","*","/PATNtupleMaker");
+      mc_ttbarm->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/MC/v9_14/TTbar_matchdown_Mu.root");
+      if (proc =="all" ) {mc_ttbarm->Process("Analyzer.C+","sample=ttbarMatchdown");}
+    }
+
+
+  if (sample=="ttbarQ"||sample=="MC")
+    {
+      TDSet *mc_ttbarm = new TDSet("top","*","/PATNtupleMaker");
+      mc_ttbarm->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/MC/v9_14/TTbar_scaleup_Mu.root");
+      if (proc =="all" ) {mc_ttbarm->Process("Analyzer.C+","sample=ttbarScaleup");}
+    }
+
+
+  if (sample=="ttbarQ"||sample=="MC")
+    {
+      TDSet *mc_ttbarm = new TDSet("top","*","/PATNtupleMaker");
+      mc_ttbarm->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/MC/v9_14/TTbar_scaledown_Mu.root");
+      if (proc =="all" ) {mc_ttbarm->Process("Analyzer.C+","sample=ttbarScaledown");}
+    }
+
+  if (sample=="WJets"||sample=="all")
     {
       TDSet *mc_WJets = new TDSet("top","*","/PATNtupleMaker");
       mc_WJets->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/MC/v9_14/WJets_Mu.root");
@@ -116,7 +182,46 @@ void runAnalysis(TString sample="all", TString proc="all", TString sys="all", TS
 	   if (updown == "both" || updown == "up") mc_WJets->Process("Analyzer.C+", sys+"UP sample=WJets");
 	   if (updown == "both" || updown == "down") mc_WJets->Process("Analyzer.C+", sys+"DOWN sample=WJets");
 	}
-      }
+      } 
+
+  if (sample=="MC"||sample=="Wbb"||sample=="all")
+    {
+      TDSet *mc_Wbb = new TDSet("top","*","/PATNtupleMaker");
+      mc_Wbb->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/MC/v9_14/WJets_Mu.root");
+	if (proc =="all" ) {
+		mc_Wbb->Process("Analyzer.C+","sample=Wbb");
+	}
+	if ( proc =="sys" ) {
+	   if (updown == "both" || updown == "up") mc_Wbb->Process("Analyzer.C+", sys+"UP sample=Wbb");
+	   if (updown == "both" || updown == "down") mc_Wbb->Process("Analyzer.C+", sys+"DOWN sample=Wbb");
+	}
+    }
+
+  if (sample=="MC"||sample=="Wcc"||sample=="all")
+    {
+      TDSet *mc_Wcc = new TDSet("top","*","/PATNtupleMaker");
+      mc_Wcc->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/MC/v9_14/WJets_Mu.root");
+	if (proc =="all" ) {
+		mc_Wcc->Process("Analyzer.C+","sample=Wcc");
+	}
+	if ( proc =="sys" ) {
+	   if (updown == "both" || updown == "up") mc_Wcc->Process("Analyzer.C+", sys+"UP sample=Wcc");
+	   if (updown == "both" || updown == "down") mc_Wcc->Process("Analyzer.C+", sys+"DOWN sample=Wcc");
+	}
+    }
+
+  if (sample=="MC"||sample=="Wqq"||sample=="all")
+    {
+      TDSet *mc_Wqq = new TDSet("top","*","/PATNtupleMaker");
+      mc_Wqq->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/MC/v9_14/WJets_Mu.root");
+	if (proc =="all" ) {
+		mc_Wqq->Process("Analyzer.C+","sample=Wqq");
+	}
+	if ( proc =="sys" ) {
+	   if (updown == "both" || updown == "up") mc_Wqq->Process("Analyzer.C+", sys+"UP sample=Wqq");
+	   if (updown == "both" || updown == "down") mc_Wqq->Process("Analyzer.C+", sys+"DOWN sample=Wqq");
+	}
+    }
 
   if (sample=="MC"||sample=="QCD"||sample=="all")
     {
@@ -254,11 +359,11 @@ void runAnalysis(TString sample="all", TString proc="all", TString sys="all", TS
       data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_12/SingleMu_May10ReReco_Mu.root");
       data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_12/SingleMu_PromptReco-v4_Run_165088_166967_Mu.root");
       data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_12/SingleMu_PromptReco-v4_Run_167039_167913_Mu.root");
-      //data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_12/SingleMu_Aug05ReReco_Mu.root");
-      //data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_12/SingleMu_PromptReco-v6_Run_172620_173198_Mu.root");
-      //data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_12/SingleMu_PromptReco-v6_Run_173236_173692_Mu.root");
-      //data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_12/SingleMu_Run2011B-PromptReco-v1_175860_178380_Mu.root");
-      //data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_12/SingleMu_Run2011B-PromptReco-v1_178420_180252_Mu.root");
+	      //data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_12/SingleMu_Aug05ReReco_Mu.root");
+	      //data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_12/SingleMu_PromptReco-v6_Run_172620_173198_Mu.root");
+	      //data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_12/SingleMu_PromptReco-v6_Run_173236_173692_Mu.root");
+	      //data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_12/SingleMu_Run2011B-PromptReco-v1_175860_178380_Mu.root");
+	      //data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_12/SingleMu_Run2011B-PromptReco-v1_178420_180252_Mu.root");
       data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_12/SingleMu_Aug05ReReco_Mu.root");
       data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_12/SingleMu_PromptReco-v6_Run_172620_173198_Mu.root");
       data->Add("/uscms_data/d3/ttmuj/Documents/NtupleMaker/Data/2011Muon/42x_v9_12/SingleMu_PromptReco-v6_Run_173236_173692_Mu.root");
@@ -311,3 +416,44 @@ void runAnalysis(TString sample="all", TString proc="all", TString sys="all", TS
       dataQCD2->Process("Analyzer.C+","QCD2 sample=data");
     }
 }
+ /* 
+  if (sample=="4Top"||sample=="4Top1100"||sample=="all")
+    {
+      TDSet *mc_4Top_1100 = new TDSet("top","*","/PATNtupleMaker");
+      mc_4Top_1100->Add("/eos/uscms/store/user/algomez/FourTop/Ntuples/4Top_1100_Tuple-PATskim.root");
+	if (proc =="all" ) {
+		mc_4Top_1100->Process("Analyzer.C+","sample=4Top1100");
+	}
+	if ( proc =="sys" ) {
+	   if (updown == "both" || updown == "up") mc_4Top_1100->Process("Analyzer.C+", sys+"UP sample=4Top1100");
+	   if (updown == "both" || updown == "down") mc_4Top_1100->Process("Analyzer.C+", sys+"DOWN sample=4Top1100");
+	}
+      }
+    
+  if (sample=="4Top"||sample=="4Top900"||sample=="all")
+    {
+      TDSet *mc_4Top_900 = new TDSet("top","*","/PATNtupleMaker");
+      mc_4Top_900->Add("/eos/uscms/store/user/algomez/FourTop/Ntuples/4Top_900_Tuple-PATskim.root");
+	if (proc =="all" ) {
+		mc_4Top_900->Process("Analyzer.C+","sample=4Top900");
+	}
+	if ( proc =="sys" ) {
+	   if (updown == "both" || updown == "up") mc_4Top_900->Process("Analyzer.C+", sys+"UP sample=4Top900");
+	   if (updown == "both" || updown == "down") mc_4Top_900->Process("Analyzer.C+", sys+"DOWN sample=4Top900");
+	}
+      }
+    
+    
+  if (sample=="4Top"||sample=="4TopUED6"||sample=="all")
+    {
+      TDSet *mc_4Top_UED6 = new TDSet("top","*","/PATNtupleMaker");
+      mc_4Top_UED6->Add("/eos/uscms/store/user/algomez/FourTop/Ntuples/4TopUED6-Tuple-PATskim.root");
+	if (proc =="all" ) {
+		mc_4Top_UED6->Process("Analyzer.C+","sample=4TopUED6");
+	}
+	if ( proc =="sys" ) {
+	   if (updown == "both" || updown == "up") mc_4Top_UED6->Process("Analyzer.C+", sys+"UP sample=4TopUED6");
+	   if (updown == "both" || updown == "down") mc_4Top_UED6->Process("Analyzer.C+", sys+"DOWN sample=4TopUED6");
+	}
+      }*/
+    

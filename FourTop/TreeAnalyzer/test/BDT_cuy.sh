@@ -1,10 +1,9 @@
 #!/bin/bash 
-sample=(500 900 1100)
-num=(0.5 0.9 1.1)
-version='v1'
-results='results18'
-#OUTDIR='~/public_html/plots/BDTv22/'
-OUTDIR='~/public_html/plots/tmp/'
+#sample=(500 900 1100)
+sample=(400 600 800 1000 1200)
+num=(0.4 0.6 0.8 1.0 1.2)
+version='v4'
+results='resultsFinal'
 
 sample_elements=${#sample[@]}
 num_elements=${#num[@]}
@@ -16,16 +15,28 @@ do
     <TH1 name=\"mu_disc${sample[${i}]}__DATA\" source=\"results_data\"/>
   </validation>
 
-  <validation type=\"4Top${sample[${i}]}\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_4Top${sample[${i}]}_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:4Top${sample[${i}]}\"> 
-    <TH1 name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}\" source=\"results_4Top${sample[${i}]}\"/>
+  <validation type=\"tttt_Gh${sample[${i}]}\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_tttt_Gh${sample[${i}]}_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:tttt_Gh${sample[${i}]}\"> 
+    <TH1 name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}\" source=\"results_tttt_Gh${sample[${i}]}\"/>
   </validation>
 
   <validation type=\"ttbar\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ttbar_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ttbar\"> 
     <TH1 name=\"mu_disc${sample[${i}]}__ttbar\" source=\"results_ttbar\"/>
   </validation>
 
-  <validation type=\"WJets\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_WJets_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:WJets\">
+  <!--<validation type=\"WJets\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_WJets_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:WJets\">
     <TH1 name=\"mu_disc${sample[${i}]}__wjets\" source=\"results_WJets\"/>
+  </validation>-->
+
+  <validation type=\"Wbb\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wbb_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wbb\">
+    <TH1 name=\"mu_disc${sample[${i}]}__Wbb\" source=\"results_Wbb\"/>
+  </validation>
+
+  <validation type=\"Wcc\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wcc_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wcc\">
+    <TH1 name=\"mu_disc${sample[${i}]}__Wcc\" source=\"results_Wcc\"/>
+  </validation>
+
+  <validation type=\"Wqq\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wqq_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wqq\">
+    <TH1 name=\"mu_disc${sample[${i}]}__Wqq\" source=\"results_Wqq\"/>
   </validation>
 
   <validation type=\"ZJets\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ZJets_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ZJets\">
@@ -64,10 +75,6 @@ do
     <TH1 name=\"mu_disc${sample[${i}]}__WZ\" source=\"results_WZ\"/>
   </validation>
 
-  <validation type=\"4Top${sample[${i}]}\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_4Top${sample[${i}]}_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:4Top${sample[${i}]}\">
-    <TH1 name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}\" source=\"results_4Top${sample[${i}]}\"/>
-  </validation>
-
   <additionArray name=\"singletop\" title=\"singletop\">
     <additionArrayItem array=\"STtch\"/>
     <additionArrayItem array=\"STtWch\"/>
@@ -82,8 +89,13 @@ do
     <additionArrayItem array=\"WZ\"/>
   </additionArray>
 
+  <additionArray name=\"wjets\" title=\"wjets\">
+    <additionArrayItem array=\"Wbb\" weight=\"1.21\"/>
+    <additionArrayItem array=\"Wcc\" weight=\"1.66\"/>
+    <additionArrayItem array=\"Wqq\" weight=\"0.58\"/> 
+  </additionArray>
 
-  <superimpose name=\"mu_disc${sample[${i}]}\" title=\"BDT_response\" YTitle=\"Events\" Fill=\"true\" Weight=\"true\" Lumi=\"4678.0\" Stack=\"true\" SetLogy=\"true\" Maximum=\"10e4\"  Minimum=\"10e-3\" PlotDiff=\"true\" >
+  <superimpose name=\"mu_disc${sample[${i}]}\" title=\"BDT_response\" Fill=\"true\" Weight=\"true\" Lumi=\"5000.0\" Stack=\"true\"  >
     <superimposeItem name=\"mu_disc${sample[${i}]}__DATA\" color=\"top\" legend=\"Data\"/>
     <superimposeItem name=\"mu_disc${sample[${i}]}__ttbar\" color=\"top\" legend=\"TTbar\"/>
     <superimposeItem name=\"mu_disc${sample[${i}]}__wjets\" color=\"top\" legend=\"Wjets\"/>
@@ -94,16 +106,24 @@ do
   </superimpose>
 
   <!-- JERDOWN -->
-  <validation type=\"4Top${sample[${i}]}JERDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_4Top${sample[${i}]}_JERDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:4Top${sample[${i}]}\"> 
-    <TH1 name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}__jer__minus\" source=\"results_4Top${sample[${i}]}_JERDOWN\"/>
+  <validation type=\"tttt_Gh${sample[${i}]}JERDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_tttt_Gh${sample[${i}]}_JERDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:tttt_Gh${sample[${i}]}\"> 
+    <TH1 name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}__jer__minus\" source=\"results_tttt_Gh${sample[${i}]}_JERDOWN\"/>
   </validation>
 
   <validation type=\"ttbarJERDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ttbar_JERDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ttbar\"> 
     <TH1 name=\"mu_disc${sample[${i}]}__ttbar__jer__minus\" source=\"results_ttbar_JERDOWN\"/>
   </validation>
 
-  <validation type=\"WJetsJERDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_WJets_JERDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:WJets\">
-    <TH1 name=\"mu_disc${sample[${i}]}__wjets__jer__minus\" source=\"results_WJets_JERDOWN\"/>
+  <validation type=\"WbbJERDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wbb_JERDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wbb\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WbbJERDOWN\" source=\"results_Wbb_JERDOWN\"/>
+  </validation>
+
+  <validation type=\"WccJERDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wcc_JERDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wcc\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WccJERDOWN\" source=\"results_Wcc_JERDOWN\"/>
+  </validation>
+
+  <validation type=\"WqqJERDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wqq_JERDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wqq\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WqqJERDOWN\" source=\"results_Wqq_JERDOWN\"/>
   </validation>
 
   <validation type=\"ZJetsJERDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ZJets_JERDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ZJets\">
@@ -156,8 +176,13 @@ do
     <additionArrayItem array=\"WZJERDOWN\"/>
   </additionArray>
 
+  <additionArray name=\"wjets__jer__minus\" title=\"wjets__jer__minus\">
+    <additionArrayItem array=\"WbbJERDOWN\" weight=\"1.21\"/>
+    <additionArrayItem array=\"WccJERDOWN\" weight=\"1.66\"/>
+    <additionArrayItem array=\"WqqJERDOWN\" weight=\"0.58\"/> 
+  </additionArray>
 
-  <superimpose name=\"mu_disc${sample[${i}]}__jer__minus\" title=\"BDT_response\" YTitle=\"Events\" Fill=\"true\" Weight=\"true\" Lumi=\"4678.0\" SetLogy=\"true\" Maximum=\"10e4\"  Minimum=\"10e-3\" Stack=\"true\" >
+  <superimpose name=\"mu_disc${sample[${i}]}__jer__minus\" title=\"BDT_response\" Fill=\"true\" Weight=\"true\" Lumi=\"5000.0\" Stack=\"true\" >
     <superimposeItem name=\"mu_disc${sample[${i}]}__ttbar__jer__minus\" color=\"top\" legend=\"TTbar\"/>
     <superimposeItem name=\"mu_disc${sample[${i}]}__wjets__jer__minus\" color=\"top\" legend=\"Wjets\"/>
     <superimposeItem name=\"mu_disc${sample[${i}]}__zjets__jer__minus\" color=\"top\" legend=\"Zjets\"/>
@@ -167,16 +192,24 @@ do
   </superimpose>
 
   <!-- JERUP -->
-  <validation type=\"4Top${sample[${i}]}JERUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_4Top${sample[${i}]}_JERUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:4Top${sample[${i}]}\"> 
-    <TH1 name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}__jer__plus\" source=\"results_4Top${sample[${i}]}_JERUP\"/>
+  <validation type=\"tttt_Gh${sample[${i}]}JERUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_tttt_Gh${sample[${i}]}_JERUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:tttt_Gh${sample[${i}]}\"> 
+    <TH1 name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}__jer__plus\" source=\"results_tttt_Gh${sample[${i}]}_JERUP\"/>
   </validation>
 
   <validation type=\"ttbarJERUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ttbar_JERUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ttbar\"> 
     <TH1 name=\"mu_disc${sample[${i}]}__ttbar__jer__plus\" source=\"results_ttbar_JERUP\"/>
   </validation>
 
-  <validation type=\"WJetsJERUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_WJets_JERUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:WJets\">
-    <TH1 name=\"mu_disc${sample[${i}]}__wjets__jer__plus\" source=\"results_WJets_JERUP\"/>
+  <validation type=\"WbbJERUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wbb_JERUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wbb\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WbbJERUP\" source=\"results_Wbb_JERUP\"/>
+  </validation>
+
+  <validation type=\"WccJERUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wcc_JERUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wcc\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WccJERUP\" source=\"results_Wcc_JERUP\"/>
+  </validation>
+
+  <validation type=\"WqqJERUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wqq_JERUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wqq\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WqqJERUP\" source=\"results_Wqq_JERUP\"/>
   </validation>
 
   <validation type=\"ZJetsJERUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ZJets_JERUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ZJets\">
@@ -229,8 +262,13 @@ do
     <additionArrayItem array=\"WZJERUP\"/>
   </additionArray>
 
+  <additionArray name=\"wjets__jer__plus\" title=\"wjets__jer__plus\">
+    <additionArrayItem array=\"WbbJERUP\" weight=\"1.21\"/>
+    <additionArrayItem array=\"WccJERUP\" weight=\"1.66\"/>
+    <additionArrayItem array=\"WqqJERUP\" weight=\"0.58\"/> 
+  </additionArray>
 
-  <superimpose name=\"mu_disc${sample[${i}]}__jer__plus\" title=\"BDT_response\" YTitle=\"Events\" Fill=\"true\" Weight=\"true\" Lumi=\"4678.0\" SetLogy=\"true\" Maximum=\"10e4\"  Minimum=\"10e-3\" Stack=\"true\" >
+  <superimpose name=\"mu_disc${sample[${i}]}__jer__plus\" title=\"BDT_response\" Fill=\"true\" Weight=\"true\" Lumi=\"5000.0\" Stack=\"true\" >
     <superimposeItem name=\"mu_disc${sample[${i}]}__ttbar__jer__plus\" color=\"top\" legend=\"TTbar\"/>
     <superimposeItem name=\"mu_disc${sample[${i}]}__wjets__jer__plus\" color=\"top\" legend=\"Wjets\"/>
     <superimposeItem name=\"mu_disc${sample[${i}]}__zjets__jer__plus\" color=\"top\" legend=\"Zjets\"/>
@@ -240,16 +278,24 @@ do
   </superimpose>
 
   <!-- JECDOWN -->
-  <validation type=\"4Top${sample[${i}]}JECDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_4Top${sample[${i}]}_JECDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:4Top${sample[${i}]}\"> 
-    <TH1 name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}__jes__minus\" source=\"results_4Top${sample[${i}]}_JECDOWN\"/>
+  <validation type=\"tttt_Gh${sample[${i}]}JECDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_tttt_Gh${sample[${i}]}_JECDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:tttt_Gh${sample[${i}]}\"> 
+    <TH1 name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}__jes__minus\" source=\"results_tttt_Gh${sample[${i}]}_JECDOWN\"/>
   </validation>
 
   <validation type=\"ttbarJECDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ttbar_JECDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ttbar\"> 
     <TH1 name=\"mu_disc${sample[${i}]}__ttbar__jes__minus\" source=\"results_ttbar_JECDOWN\"/>
   </validation>
 
-  <validation type=\"WJetsJECDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_WJets_JECDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:WJets\">
-    <TH1 name=\"mu_disc${sample[${i}]}__wjets__jes__minus\" source=\"results_WJets_JECDOWN\"/>
+  <validation type=\"WbbJECDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wbb_JECDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wbb\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WbbJECDOWN\" source=\"results_Wbb_JECDOWN\"/>
+  </validation>
+
+  <validation type=\"WccJECDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wcc_JECDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wcc\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WccJECDOWN\" source=\"results_Wcc_JECDOWN\"/>
+  </validation>
+
+  <validation type=\"WqqJECDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wqq_JECDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wqq\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WqqJECDOWN\" source=\"results_Wqq_JECDOWN\"/>
   </validation>
 
   <validation type=\"ZJetsJECDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ZJets_JECDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ZJets\">
@@ -302,8 +348,13 @@ do
     <additionArrayItem array=\"WZJECDOWN\"/>
   </additionArray>
 
+  <additionArray name=\"wjets__jes__minus\" title=\"wjets__jes__minus\">
+    <additionArrayItem array=\"WbbJECDOWN\" weight=\"1.21\"/>
+    <additionArrayItem array=\"WccJECDOWN\" weight=\"1.66\"/>
+    <additionArrayItem array=\"WqqJECDOWN\" weight=\"0.58\"/> 
+  </additionArray>
 
-  <superimpose name=\"mu_disc${sample[${i}]}__jes__minus\" title=\"BDT_response\" YTitle=\"Events\" Fill=\"true\" Weight=\"true\" Lumi=\"4678.0\" SetLogy=\"true\" Maximum=\"10e4\"  Minimum=\"10e-3\" Stack=\"true\" >
+  <superimpose name=\"mu_disc${sample[${i}]}__jes__minus\" title=\"BDT_response\" Fill=\"true\" Weight=\"true\" Lumi=\"5000.0\" Stack=\"true\" >
     <superimposeItem name=\"mu_disc${sample[${i}]}__ttbar__jes__minus\" color=\"top\" legend=\"TTbar\"/>
     <superimposeItem name=\"mu_disc${sample[${i}]}__wjets__jes__minus\" color=\"top\" legend=\"Wjets\"/>
     <superimposeItem name=\"mu_disc${sample[${i}]}__zjets__jes__minus\" color=\"top\" legend=\"Zjets\"/>
@@ -313,16 +364,24 @@ do
   </superimpose>
 
   <!-- JECUP -->
-  <validation type=\"4Top${sample[${i}]}JECUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_4Top${sample[${i}]}_JECUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:4Top${sample[${i}]}\"> 
-    <TH1 name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}__jes__plus\" source=\"results_4Top${sample[${i}]}_JECUP\"/>
+  <validation type=\"tttt_Gh${sample[${i}]}JECUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_tttt_Gh${sample[${i}]}_JECUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:tttt_Gh${sample[${i}]}\"> 
+    <TH1 name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}__jes__plus\" source=\"results_tttt_Gh${sample[${i}]}_JECUP\"/>
   </validation>
 
   <validation type=\"ttbarJECUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ttbar_JECUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ttbar\"> 
     <TH1 name=\"mu_disc${sample[${i}]}__ttbar__jes__plus\" source=\"results_ttbar_JECUP\"/>
   </validation>
 
-  <validation type=\"WJetsJECUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_WJets_JECUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:WJets\">
-    <TH1 name=\"mu_disc${sample[${i}]}__wjets__jes__plus\" source=\"results_WJets_JECUP\"/>
+  <validation type=\"WbbJECUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wbb_JECUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wbb\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WbbJECUP\" source=\"results_Wbb_JECUP\"/>
+  </validation>
+
+  <validation type=\"WccJECUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wcc_JECUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wcc\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WccJECUP\" source=\"results_Wcc_JECUP\"/>
+  </validation>
+
+  <validation type=\"WqqJECUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wqq_JECUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wqq\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WqqJECUP\" source=\"results_Wqq_JECUP\"/>
   </validation>
 
   <validation type=\"ZJetsJECUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ZJets_JECUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ZJets\">
@@ -375,8 +434,13 @@ do
     <additionArrayItem array=\"WZJECUP\"/>
   </additionArray>
 
+  <additionArray name=\"wjets__jes__plus\" title=\"wjets__jes__plus\">
+    <additionArrayItem array=\"WbbJECUP\" weight=\"1.21\"/>
+    <additionArrayItem array=\"WccJECUP\" weight=\"1.66\"/>
+    <additionArrayItem array=\"WqqJECUP\" weight=\"0.58\"/> 
+  </additionArray>
 
-  <superimpose name=\"mu_disc${sample[${i}]}__jes__plus\" title=\"BDT_response\" YTitle=\"Events\" Fill=\"true\" Weight=\"true\" Lumi=\"4678.0\" SetLogy=\"true\" Maximum=\"10e4\"  Minimum=\"10e-3\" Stack=\"true\" >
+  <superimpose name=\"mu_disc${sample[${i}]}__jes__plus\" title=\"BDT_response\" Fill=\"true\" Weight=\"true\" Lumi=\"5000.0\" Stack=\"true\" >
     <superimposeItem name=\"mu_disc${sample[${i}]}__ttbar__jes__plus\" color=\"top\" legend=\"TTbar\"/>
     <superimposeItem name=\"mu_disc${sample[${i}]}__wjets__jes__plus\" color=\"top\" legend=\"Wjets\"/>
     <superimposeItem name=\"mu_disc${sample[${i}]}__zjets__jes__plus\" color=\"top\" legend=\"Zjets\"/>
@@ -386,16 +450,24 @@ do
   </superimpose>
 
   <!-- PUDOWN -->
-  <validation type=\"4Top${sample[${i}]}PUDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_4Top${sample[${i}]}_PUDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:4Top${sample[${i}]}\"> 
-    <TH1 name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}__pu__minus\" source=\"results_4Top${sample[${i}]}_PUDOWN\"/>
+  <validation type=\"tttt_Gh${sample[${i}]}PUDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_tttt_Gh${sample[${i}]}_PUDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:tttt_Gh${sample[${i}]}\"> 
+    <TH1 name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}__pu__minus\" source=\"results_tttt_Gh${sample[${i}]}_PUDOWN\"/>
   </validation>
 
   <validation type=\"ttbarPUDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ttbar_PUDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ttbar\"> 
     <TH1 name=\"mu_disc${sample[${i}]}__ttbar__pu__minus\" source=\"results_ttbar_PUDOWN\"/>
   </validation>
 
-  <validation type=\"WJetsPUDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_WJets_PUDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:WJets\">
-    <TH1 name=\"mu_disc${sample[${i}]}__wjets__pu__minus\" source=\"results_WJets_PUDOWN\"/>
+  <validation type=\"WbbPUDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wbb_PUDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wbb\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WbbPUDOWN\" source=\"results_Wbb_PUDOWN\"/>
+  </validation>
+
+  <validation type=\"WccPUDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wcc_PUDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wcc\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WccPUDOWN\" source=\"results_Wcc_PUDOWN\"/>
+  </validation>
+
+  <validation type=\"WqqPUDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wqq_PUDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wqq\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WqqPUDOWN\" source=\"results_Wqq_PUDOWN\"/>
   </validation>
 
   <validation type=\"ZJetsPUDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ZJets_PUDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ZJets\">
@@ -448,8 +520,13 @@ do
     <additionArrayItem array=\"WZPUDOWN\"/>
   </additionArray>
 
+  <additionArray name=\"wjets__pu__minus\" title=\"wjets__pu__minus\">
+    <additionArrayItem array=\"WbbPUDOWN\" weight=\"1.21\"/>
+    <additionArrayItem array=\"WccPUDOWN\" weight=\"1.66\"/>
+    <additionArrayItem array=\"WqqPUDOWN\" weight=\"0.58\"/> 
+  </additionArray>
 
-  <superimpose name=\"mu_disc${sample[${i}]}__pu__minus\" title=\"BDT_response\" YTitle=\"Events\" Fill=\"true\" Weight=\"true\" Lumi=\"4678.0\" SetLogy=\"true\" Maximum=\"10e4\"  Minimum=\"10e-3\" Stack=\"true\" >
+  <superimpose name=\"mu_disc${sample[${i}]}__pu__minus\" title=\"BDT_response\" Fill=\"true\" Weight=\"true\" Lumi=\"5000.0\" Stack=\"true\" >
     <superimposeItem name=\"mu_disc${sample[${i}]}__ttbar__pu__minus\" color=\"top\" legend=\"TTbar\"/>
     <superimposeItem name=\"mu_disc${sample[${i}]}__wjets__pu__minus\" color=\"top\" legend=\"Wjets\"/>
     <superimposeItem name=\"mu_disc${sample[${i}]}__zjets__pu__minus\" color=\"top\" legend=\"Zjets\"/>
@@ -459,16 +536,24 @@ do
   </superimpose>
 
   <!-- PUUP -->
-  <validation type=\"4Top${sample[${i}]}PUUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_4Top${sample[${i}]}_PUUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:4Top${sample[${i}]}\"> 
-    <TH1 name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}__pu__plus\" source=\"results_4Top${sample[${i}]}_PUUP\"/>
+  <validation type=\"tttt_Gh${sample[${i}]}PUUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_tttt_Gh${sample[${i}]}_PUUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:tttt_Gh${sample[${i}]}\"> 
+    <TH1 name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}__pu__plus\" source=\"results_tttt_Gh${sample[${i}]}_PUUP\"/>
   </validation>
 
   <validation type=\"ttbarPUUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ttbar_PUUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ttbar\"> 
     <TH1 name=\"mu_disc${sample[${i}]}__ttbar__pu__plus\" source=\"results_ttbar_PUUP\"/>
   </validation>
 
-  <validation type=\"WJetsPUUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_WJets_PUUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:WJets\">
-    <TH1 name=\"mu_disc${sample[${i}]}__wjets__pu__plus\" source=\"results_WJets_PUUP\"/>
+  <validation type=\"WbbPUUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wbb_PUUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wbb\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WbbPUUP\" source=\"results_Wbb_PUUP\"/>
+  </validation>
+
+  <validation type=\"WccPUUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wcc_PUUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wcc\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WccPUUP\" source=\"results_Wcc_PUUP\"/>
+  </validation>
+
+  <validation type=\"WqqPUUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wqq_PUUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wqq\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WqqPUUP\" source=\"results_Wqq_PUUP\"/>
   </validation>
 
   <validation type=\"ZJetsPUUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ZJets_PUUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ZJets\">
@@ -521,8 +606,13 @@ do
     <additionArrayItem array=\"WZPUUP\"/>
   </additionArray>
 
+  <additionArray name=\"wjets__pu__plus\" title=\"wjets__pu__plus\">
+    <additionArrayItem array=\"WbbPUUP\" weight=\"1.21\"/>
+    <additionArrayItem array=\"WccPUUP\" weight=\"1.66\"/>
+    <additionArrayItem array=\"WqqPUUP\" weight=\"0.58\"/> 
+  </additionArray>
 
-  <superimpose name=\"mu_disc${sample[${i}]}__pu__plus\" title=\"BDT_response\" YTitle=\"Events\" Fill=\"true\" Weight=\"true\" Lumi=\"4678.0\" SetLogy=\"true\" Maximum=\"10e4\"  Minimum=\"10e-3\" Stack=\"true\" >
+  <superimpose name=\"mu_disc${sample[${i}]}__pu__plus\" title=\"BDT_response\" Fill=\"true\" Weight=\"true\" Lumi=\"5000.0\" Stack=\"true\" >
     <superimposeItem name=\"mu_disc${sample[${i}]}__ttbar__pu__plus\" color=\"top\" legend=\"TTbar\"/>
     <superimposeItem name=\"mu_disc${sample[${i}]}__wjets__pu__plus\" color=\"top\" legend=\"Wjets\"/>
     <superimposeItem name=\"mu_disc${sample[${i}]}__zjets__pu__plus\" color=\"top\" legend=\"Zjets\"/>
@@ -531,10 +621,208 @@ do
     <superimposeItem name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}__pu__plus\" color=\"1\" legend=\"t#bar{t}t#bar{t} Gh ${num[${i}]} TeV\" NoStack=\"true\"/>
   </superimpose>
 
+  <!-- ttbar Match and Scale -->
+  <validation type=\"ttbarmatchup\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ttbarMatchup_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ttbarmatchup\"> 
+    <TH1 name=\"mu_disc${sample[${i}]}__ttbar__match__plus\" source=\"results_ttbarMatchup\"/>
+  </validation>
+
+  <validation type=\"ttbarmatchdown\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ttbarMatchdown_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ttbarmatchdown\"> 
+    <TH1 name=\"mu_disc${sample[${i}]}__ttbar__match__minus\" source=\"results_ttbarMatchdown\"/>
+  </validation>
+
+  <validation type=\"ttbarscaleup\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ttbarScaleup_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ttbarscaleup\"> 
+    <TH1 name=\"mu_disc${sample[${i}]}__ttbar__scale__plus\" source=\"results_ttbarScaleup\"/>
+  </validation>
+
+  <validation type=\"ttbarscaledown\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ttbarScaledown_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ttbarscaledown\"> 
+    <TH1 name=\"mu_disc${sample[${i}]}__ttbar__scale__minus\" source=\"results_ttbarScaledown\"/>
+  </validation>
+
+  <superimpose name=\"mu_disc${sample[${i}]}__ttbarsyst\" title=\"BDT_response_ttbarsyst\" Fill=\"true\" Weight=\"true\" Lumi=\"5000.0\" Stack=\"true\" >
+    <superimposeItem name=\"mu_disc${sample[${i}]}__ttbar__match__plus\" color=\"1\" legend=\"TTbar\"/>
+    <superimposeItem name=\"mu_disc${sample[${i}]}__ttbar__match__minus\" color=\"1\" legend=\"TTbar\"/>
+    <superimposeItem name=\"mu_disc${sample[${i}]}__ttbar__scale__plus\" color=\"1\" legend=\"TTbar\"/>
+    <superimposeItem name=\"mu_disc${sample[${i}]}__ttbar__scale__minus\" color=\"1\" legend=\"TTbar\"/>
+  </superimpose>
+
+
+  <!-- BTAGDOWN -->
+  <validation type=\"tttt_Gh${sample[${i}]}BTAGDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_tttt_Gh${sample[${i}]}_BTAGDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:tttt_Gh${sample[${i}]}\"> 
+    <TH1 name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}__btag__minus\" source=\"results_tttt_Gh${sample[${i}]}_BTAGDOWN\"/>
+  </validation>
+
+  <validation type=\"ttbarBTAGDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ttbar_BTAGDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ttbar\"> 
+    <TH1 name=\"mu_disc${sample[${i}]}__ttbar__btag__minus\" source=\"results_ttbar_BTAGDOWN\"/>
+  </validation>
+
+  <validation type=\"WbbBTAGDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wbb_BTAGDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wbb\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WbbBTAGDOWN\" source=\"results_Wbb_BTAGDOWN\"/>
+  </validation>
+
+  <validation type=\"WccBTAGDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wcc_BTAGDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wcc\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WccBTAGDOWN\" source=\"results_Wcc_BTAGDOWN\"/>
+  </validation>
+
+  <validation type=\"WqqBTAGDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wqq_BTAGDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wqq\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WqqBTAGDOWN\" source=\"results_Wqq_BTAGDOWN\"/>
+  </validation>
+
+  <validation type=\"ZJetsBTAGDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ZJets_BTAGDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ZJets\">
+    <TH1 name=\"mu_disc${sample[${i}]}__zjets__btag__minus\" source=\"results_ZJets_BTAGDOWN\"/>
+  </validation>
+
+  <validation type=\"STtchBTAGDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_STtch_BTAGDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:tch\">
+    <TH1 name=\"mu_disc${sample[${i}]}__STtchBTAGDOWN\" source=\"results_STtch_BTAGDOWN\"/>
+  </validation>
+
+  <validation type=\"STtch_barBTAGDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_STtch_bar_BTAGDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:tch_bar\">
+    <TH1 name=\"mu_disc${sample[${i}]}__STtch_barBTAGDOWN\" source=\"results_STtch_bar_BTAGDOWN\"/>
+  </validation>
+
+  <validation type=\"STtWchBTAGDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_STtWch_BTAGDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:tWch\">
+    <TH1 name=\"mu_disc${sample[${i}]}__STtWchBTAGDOWN\" source=\"results_STtWch_BTAGDOWN\"/>
+  </validation>
+
+  <validation type=\"STtWch_barBTAGDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_STtWch_bar_BTAGDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:tWch_bar\">
+    <TH1 name=\"mu_disc${sample[${i}]}__STtWch_barBTAGDOWN\" source=\"results_STtWch_bar_BTAGDOWN\"/>
+  </validation>
+
+  <validation type=\"STschBTAGDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_STsch_BTAGDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:sch\">
+    <TH1 name=\"mu_disc${sample[${i}]}__STschBTAGDOWN\" source=\"results_STsch_BTAGDOWN\"/>
+  </validation>
+
+  <validation type=\"STsch_barBTAGDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_STsch_bar_BTAGDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:sch_bar\">
+    <TH1 name=\"mu_disc${sample[${i}]}__STsch_barBTAGDOWN\" source=\"results_STsch_bar_BTAGDOWN\"/>
+  </validation>
+
+  <validation type=\"WWBTAGDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_WW_BTAGDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:WW\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WWBTAGDOWN\" source=\"results_WW_BTAGDOWN\"/>
+  </validation>
+
+  <validation type=\"WZBTAGDOWN\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_WZ_BTAGDOWN_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:WZ\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WZBTAGDOWN\" source=\"results_WZ_BTAGDOWN\"/>
+  </validation>
+
+  <additionArray name=\"singletop__btag__minus\" title=\"singletop__btag__minus\">
+    <additionArrayItem array=\"STtchBTAGDOWN\"/>
+    <additionArrayItem array=\"STtWchBTAGDOWN\"/>
+    <additionArrayItem array=\"STschBTAGDOWN\"/>
+    <additionArrayItem array=\"STtch_barBTAGDOWN\"/>
+    <additionArrayItem array=\"STtWch_barBTAGDOWN\"/>
+    <additionArrayItem array=\"STsch_barBTAGDOWN\"/>
+  </additionArray>
+
+  <additionArray name=\"dibosons__btag__minus\" title=\"dibosons__btag__minus\">
+    <additionArrayItem array=\"WWBTAGDOWN\"/>    
+    <additionArrayItem array=\"WZBTAGDOWN\"/>
+  </additionArray>
+
+  <additionArray name=\"wjets__btag__minus\" title=\"wjets__btag__minus\">
+    <additionArrayItem array=\"WbbBTAGDOWN\" weight=\"1.21\"/>
+    <additionArrayItem array=\"WccBTAGDOWN\" weight=\"1.66\"/>
+    <additionArrayItem array=\"WqqBTAGDOWN\" weight=\"0.58\"/> 
+  </additionArray>
+
+  <superimpose name=\"mu_disc${sample[${i}]}__btag__minus\" title=\"BDT_response\" Fill=\"true\" Weight=\"true\" Lumi=\"5000.0\" Stack=\"true\" >
+    <superimposeItem name=\"mu_disc${sample[${i}]}__ttbar__btag__minus\" color=\"top\" legend=\"TTbar\"/>
+    <superimposeItem name=\"mu_disc${sample[${i}]}__wjets__btag__minus\" color=\"top\" legend=\"Wjets\"/>
+    <superimposeItem name=\"mu_disc${sample[${i}]}__zjets__btag__minus\" color=\"top\" legend=\"Zjets\"/>
+    <superimposeItem name=\"mu_disc${sample[${i}]}__dibosons__btag__minus\" color=\"top\" legend=\"Dibosons\"/>
+    <superimposeItem name=\"mu_disc${sample[${i}]}__singletop__btag__minus\" color=\"top\" legend=\"ST\"/>
+    <superimposeItem name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}__btag__minus\" color=\"1\" legend=\"t#bar{t}t#bar{t} Gh ${num[${i}]} TeV\" NoStack=\"true\"/>
+  </superimpose>
+
+  <!-- BTAGUP -->
+  <validation type=\"tttt_Gh${sample[${i}]}BTAGUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_tttt_Gh${sample[${i}]}_BTAGUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:tttt_Gh${sample[${i}]}\"> 
+    <TH1 name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}__btag__plus\" source=\"results_tttt_Gh${sample[${i}]}_BTAGUP\"/>
+  </validation>
+
+  <validation type=\"ttbarBTAGUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ttbar_BTAGUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ttbar\"> 
+    <TH1 name=\"mu_disc${sample[${i}]}__ttbar__btag__plus\" source=\"results_ttbar_BTAGUP\"/>
+  </validation>
+
+  <validation type=\"WbbBTAGUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wbb_BTAGUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wbb\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WbbBTAGUP\" source=\"results_Wbb_BTAGUP\"/>
+  </validation>
+
+  <validation type=\"WccBTAGUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wcc_BTAGUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wcc\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WccBTAGUP\" source=\"results_Wcc_BTAGUP\"/>
+  </validation>
+
+  <validation type=\"WqqBTAGUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_Wqq_BTAGUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:Wqq\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WqqBTAGUP\" source=\"results_Wqq_BTAGUP\"/>
+  </validation>
+
+  <validation type=\"ZJetsBTAGUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_ZJets_BTAGUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:ZJets\">
+    <TH1 name=\"mu_disc${sample[${i}]}__zjets__btag__plus\" source=\"results_ZJets_BTAGUP\"/>
+  </validation>
+
+  <validation type=\"STtchBTAGUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_STtch_BTAGUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:tch\">
+    <TH1 name=\"mu_disc${sample[${i}]}__STtchBTAGUP\" source=\"results_STtch_BTAGUP\"/>
+  </validation>
+
+  <validation type=\"STtch_barBTAGUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_STtch_bar_BTAGUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:tch_bar\">
+    <TH1 name=\"mu_disc${sample[${i}]}__STtch_barBTAGUP\" source=\"results_STtch_bar_BTAGUP\"/>
+  </validation>
+
+  <validation type=\"STtWchBTAGUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_STtWch_BTAGUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:tWch\">
+    <TH1 name=\"mu_disc${sample[${i}]}__STtWchBTAGUP\" source=\"results_STtWch_BTAGUP\"/>
+  </validation>
+
+  <validation type=\"STtWch_barBTAGUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_STtWch_bar_BTAGUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:tWch_bar\">
+    <TH1 name=\"mu_disc${sample[${i}]}__STtWch_barBTAGUP\" source=\"results_STtWch_bar_BTAGUP\"/>
+  </validation>
+
+  <validation type=\"STschBTAGUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_STsch_BTAGUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:sch\">
+    <TH1 name=\"mu_disc${sample[${i}]}__STschBTAGUP\" source=\"results_STsch_BTAGUP\"/>
+  </validation>
+
+  <validation type=\"STsch_barBTAGUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_STsch_bar_BTAGUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:sch_bar\">
+    <TH1 name=\"mu_disc${sample[${i}]}__STsch_barBTAGUP\" source=\"results_STsch_bar_BTAGUP\"/>
+  </validation>
+
+  <validation type=\"WWBTAGUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_WW_BTAGUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:WW\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WWBTAGUP\" source=\"results_WW_BTAGUP\"/>
+  </validation>
+
+  <validation type=\"WZBTAGUP\" file=\"/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/${sample[${i}]}/results_WZ_BTAGUP_BDT_ClassApplication.root\" weight=\"MCScaleFactors.txt:WZ\">
+    <TH1 name=\"mu_disc${sample[${i}]}__WZBTAGUP\" source=\"results_WZ_BTAGUP\"/>
+  </validation>
+
+  <additionArray name=\"singletop__btag__plus\" title=\"singletop__btag__plus\">
+    <additionArrayItem array=\"STtchBTAGUP\"/>
+    <additionArrayItem array=\"STtWchBTAGUP\"/>
+    <additionArrayItem array=\"STschBTAGUP\"/>
+    <additionArrayItem array=\"STtch_barBTAGUP\"/>
+    <additionArrayItem array=\"STtWch_barBTAGUP\"/>
+    <additionArrayItem array=\"STsch_barBTAGUP\"/>
+  </additionArray>
+
+  <additionArray name=\"dibosons__btag__plus\" title=\"dibosons__btag__plus\">
+    <additionArrayItem array=\"WWBTAGUP\"/>    
+    <additionArrayItem array=\"WZBTAGUP\"/>
+  </additionArray>
+
+  <additionArray name=\"wjets__btag__plus\" title=\"wjets__btag__plus\">
+    <additionArrayItem array=\"WbbBTAGUP\" weight=\"1.21\"/>
+    <additionArrayItem array=\"WccBTAGUP\" weight=\"1.66\"/>
+    <additionArrayItem array=\"WqqBTAGUP\" weight=\"0.58\"/> 
+  </additionArray>
+
+  <superimpose name=\"mu_disc${sample[${i}]}__btag__plus\" title=\"BDT_response\" Fill=\"true\" Weight=\"true\" Lumi=\"5000.0\" Stack=\"true\" >
+    <superimposeItem name=\"mu_disc${sample[${i}]}__ttbar__btag__plus\" color=\"top\" legend=\"TTbar\"/>
+    <superimposeItem name=\"mu_disc${sample[${i}]}__wjets__btag__plus\" color=\"top\" legend=\"Wjets\"/>
+    <superimposeItem name=\"mu_disc${sample[${i}]}__zjets__btag__plus\" color=\"top\" legend=\"Zjets\"/>
+    <superimposeItem name=\"mu_disc${sample[${i}]}__dibosons__btag__plus\" color=\"top\" legend=\"Dibosons\"/>
+    <superimposeItem name=\"mu_disc${sample[${i}]}__singletop__btag__plus\" color=\"top\" legend=\"ST\"/>
+    <superimposeItem name=\"mu_disc${sample[${i}]}__fourtop${sample[${i}]}__btag__plus\" color=\"1\" legend=\"t#bar{t}t#bar{t} Gh ${num[${i}]} TeV\" NoStack=\"true\"/>
+  </superimpose>
+
 </cuy>" >> $OUTFILE
 
-../../cuy/scripts/cuy.py -x $OUTFILE  -f "#splitline{CMS Preliminary - 4.7 fb^{-1} at #sqrt{s}=7TeV}{#mu+jets, Njets #geq 4}" -o $OUTDIR -p "png" -O mu_disc${sample[${i}]}_templates.root -b -q
+../../cuy/scripts/cuy.py -x $OUTFILE  -O mu_disc${sample[${i}]}_templates.root -b -q
 rm $OUTFILE
 done
 
 hadd mu_disc_templates.root mu_disc*
+mv mu_disc* /uscms/home/algomez/nobackup/files/fourtop/resultsTreeAnalyzer/resultsFinal/BDTResponse${version}/
