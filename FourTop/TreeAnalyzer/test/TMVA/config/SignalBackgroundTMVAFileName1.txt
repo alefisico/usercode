@@ -1,4 +1,7 @@
 #Signal_Name_Tag_Do_not_Modify_this_Line
+tttt_Gh1000
+tttt_Gh900
+tttt_Gh800
 tttt_Gh700
 tttt_Gh600
 tttt_Gh500
@@ -6,17 +9,6 @@ tttt_Gh400
 #Back_Name_Tag_Do_not_Modify_this_Line
 ttbar
 #BackClassification_Name_Tag_Do_not_Modify_this_Line
-ttbar
-STsch
-STsch_bar
-STtWch
-STtWch_bar
-STtch
-STtch_bar
-Wbb
-Wcc
-Wqq
 WW
 WZ
-ZJets
 #_Tag_Do_not_Modify_this_Line

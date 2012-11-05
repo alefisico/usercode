@@ -1,13 +1,10 @@
 #Mass_Name_Tag_Do_not_Modify_this_Line
-1000
-900
-800
 700
 600
 500
 400
 #Directory_Name_Tag_Do_not_Modify_this_Line
-/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets2/BDTTrainv2/
+/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/LikelihoodTrainv1/
 #Vairable_Name_Tag_Do_not_Modify_this_Line
 Stjet F
 jet2_pt F
@@ -38,5 +35,5 @@ event I
 #Weight_Name_Tag_Do_not_Modify_this_Line
 PUWeight
 #Cut_Name_Tag_Do_not_Modify_this_Line
-jet_number>=4&&Ht>300&&numBjets_csvl>1
+jet_number>=4&&Ht>300&&numBjets_csvl>3
 #Tag_Do_not_Modify_this_Line

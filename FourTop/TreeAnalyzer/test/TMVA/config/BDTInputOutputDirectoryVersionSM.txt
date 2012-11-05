@@ -1,0 +1,17 @@
+#Train_Input_Direc_Tag_Do_not_Modify_this_Line
+/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/
+#Train_Output_Direc_Tag_Do_not_Modify_this_Line
+/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/BDTTrainUED6/
+#Train_Variable_Txt_File_Tag_Do_not_Modify_this_Line
+/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/TMVA/config/BDTValueNameVersionSM.txt
+#Train_Method_Tag_Do_not_Modify_this_Line
+BDT
+#Train_Input_FileName_Txt_Tag_Do_not_Modify_this_Line
+/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/TMVA/config/SignalBackgroundTMVAFileNameSM.txt
+#Train_Tree_Name_Tag_Do_not_Modify_this_Line
+4Tree
+#Application_Input_Direc_Tag_Do_not_Modify_this_Line
+/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/
+#Application_Output_Direc_Tag_Do_not_Modify_this_Line
+/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/BDTResponseUED6/
+#Tag_Do_not_Modify_this_Line

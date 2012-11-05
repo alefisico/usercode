@@ -30,12 +30,6 @@
 
 #include "TMVA/Tools.h"
 
-#if not defined(__CINT__) || defined(__MAKECINT__)
-#include "TMVA/Tools.h"
-#include "TMVA/Reader.h"
-#include "TMVA/MethodCuts.h"
-#endif
-
 #include <vector>
 #include "LOString.h"
 #include "LOFileName.h"
@@ -61,11 +55,8 @@ class ReadBDTG;
 class ReadBDTB;
 
 //void ClassApplication( TString myMethodList = "Fisher", TString inputfilename, TString outputfilename, TString treename, TString masspoint, LOString BDTTrainName) 
-void ClassApplication( TString myMethodList = "MLP",TString inputfilename, TString outputdir, TString outputfilename, TString masspoint, TString treename,TString bdttraindirectory, vector<string> variablename, vector<string> variabletype, vector<string> weightname, string cutname, string cuttype, string FillTMVA) 
+void ClassApplication( TString myMethodList = "BDT",TString inputfilename, TString outputdir, TString outputfilename, TString masspoint, TString treename,TString bdttraindirectory, vector<string> variablename, vector<string> variabletype, vector<string> weightname) 
 {
-#ifdef __CINT__
-   gROOT->ProcessLine( ".O0" ); // turn off optimization in CINT
-#endif
    cout << endl;
    cout << "==> start ClassApplication" << endl;
    const int Nmvas = 16;
@@ -376,7 +367,7 @@ void ClassApplication( TString myMethodList = "MLP",TString inputfilename, TStri
    cout << "==> ClassApplication is done!" << endl << endl;
 } 
 
-void ClassApplication_Version1(string topsettingfile, string systematicname = "", string FillTMVA = "False"){
+void ClassApplication_Version2(string topsettingfile){
 
    LOTopSetting tmpsetting;
    //tmpsetting.LoadFile("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/TMVASetUp/BDTInputOutputDirectoryVersion1.txt");
@@ -399,20 +390,11 @@ void ClassApplication_Version1(string topsettingfile, string systematicname = ""
    vector<string> variablename = BDTTrainName.GetVariableName();
    vector<string> variabletype = BDTTrainName.GetVariableType();
    vector<string> weightname = BDTTrainName.GetWeightName();
-   string cutname = BDTTrainName.GetCutName();
-   string cuttype = BDTTrainName.GetCutType();
-   TString ttmpcuttype = cuttype;
-   TString ttmpcutname = cutname;
    string bdttraindirectory = BDTTrainName.GetTrainDirectorty();
-   gSystem->Exec(TString::Format("mkdir -p %s",outputdir.c_str()));
+   gSystem->Exec(TString::Format("mkdir %s",outputdir.c_str()));
 
    for(Int_t masspoint = 0; masspoint < BDTTrainName.GetMassPointName().size(); masspoint++)
    {   
-      cout<<"Check 1"<< endl;
-      TString tsystematicname = systematicname;
-      systematicname = tsystematicname;
-      string tmpoutputdir = outputdir + BDTTrainName.GetMassPointName()[masspoint];
-      gSystem->Exec(TString::Format("mkdir -p %s",tmpoutputdir.c_str()));
       //We should Make each Directory for each Mass point ClassApplication
       string tmpoutputname = BDTTrainName.GetMassPointName()[masspoint];
       string tmpoutputdir = outputdir + tmpoutputname;
@@ -421,14 +403,14 @@ void ClassApplication_Version1(string topsettingfile, string systematicname = ""
 
       // adding all backgrounds, with systematics, and signal for Classification
       vector<string> tmpback = backgroundfilename;
-      string tmpbackjesup = "results_tttt_Gh"+tmpoutputname+"_JECUP.root";
-      string tmpbackjesdown = "results_tttt_Gh"+tmpoutputname+"_JECDOWN.root";
-      string tmpbackjerup = "results_tttt_Gh"+tmpoutputname+"_JERUP.root";
-      string tmpbackjerdown = "results_tttt_Gh"+tmpoutputname+"_JERDOWN.root";
-      string tmpbackpuup = "results_tttt_Gh"+tmpoutputname+"_PUUP.root";
-      string tmpbackpudown = "results_tttt_Gh"+tmpoutputname+"_PUDOWN.root";
-      string tmpbackbtagup = "results_tttt_Gh"+tmpoutputname+"_BTAGUP.root";
-      string tmpbackbtagdown = "results_tttt_Gh"+tmpoutputname+"_BTAGDOWN.root";
+      string tmpbackjesup = "results_tttt_"+tmpoutputname+"_JECUP.root";
+      string tmpbackjesdown = "results_tttt_"+tmpoutputname+"_JECDOWN.root";
+      string tmpbackjerup = "results_tttt_"+tmpoutputname+"_JERUP.root";
+      string tmpbackjerdown = "results_tttt_"+tmpoutputname+"_JERDOWN.root";
+      string tmpbackpuup = "results_tttt_"+tmpoutputname+"_PUUP.root";
+      string tmpbackpudown = "results_tttt_"+tmpoutputname+"_PUDOWN.root";
+      string tmpbackbtagup = "results_tttt_"+tmpoutputname+"_BTAGUP.root";
+      string tmpbackbtagdown = "results_tttt_"+tmpoutputname+"_BTAGDOWN.root";
       string tmpbackdata = "results_data.root";
       string tmpbackttbarMatchdown = "results_ttbarMatchdown.root";
       string tmpbackttbarMatchup = "results_ttbarMatchup.root";
@@ -451,17 +433,9 @@ void ClassApplication_Version1(string topsettingfile, string systematicname = ""
 
       for(Int_t ii = 0; ii < tmpback.size(); ii++)
       {
-         //string cutname = BDTTrainName.GetCutName();
-         //TString ttmpcuttype = cuttype;
-         //cout<<"Cut Type: "<< ttmpcuttype << endl;
-         string tmpcuttype = ttmpcuttype;
-         string tmpcutname = ttmpcutname;
-         cout<<"Cut Type: "<< tmpcuttype << endl;
-         cout<<"Cut Name: "<< tmpcutname << endl;
-         string outputname = tmpback[ii];
-         outputname = TrailStripString(outputname,".root");
-
-         ClassApplication(trainmethod, inputdir + tmpback[ii], tmpoutputdir+ "/" , outputname  + systematicname + "_" + trainmethod + "_ClassApplication.root", BDTTrainName.GetMassPointName()[masspoint], treename,bdttraindirectory,variablename, variabletype, weightname, tmpcutname, tmpcuttype,FillTMVA);
+         string outputname = TrailStripString(tmpback[ii],".root");
+         gROOT->Reset();
+         ClassApplication(trainmethod, inputdir + tmpback[ii], tmpoutputdir+ "/" , outputname + "_" + trainmethod + "_ClassApplication.root", BDTTrainName.GetMassPointName()[masspoint], treename,bdttraindirectory,variablename, variabletype, weightname);
 
       }
    }

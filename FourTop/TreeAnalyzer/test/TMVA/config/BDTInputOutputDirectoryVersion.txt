@@ -1,0 +1,17 @@
+#Train_Input_Direc_Tag_Do_not_Modify_this_Line
+/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/
+#Train_Output_Direc_Tag_Do_not_Modify_this_Line
+/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/LikelihoodTrainv1/
+#Train_Variable_Txt_File_Tag_Do_not_Modify_this_Line
+/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/TMVA/config/BDTValueNameVersion.txt
+#Train_Method_Tag_Do_not_Modify_this_Line
+Likelihood
+#Train_Input_FileName_Txt_Tag_Do_not_Modify_this_Line
+/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/TMVA/config/SignalBackgroundTMVAFileName.txt
+#Train_Tree_Name_Tag_Do_not_Modify_this_Line
+4Tree
+#Application_Input_Direc_Tag_Do_not_Modify_this_Line
+/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/
+#Application_Output_Direc_Tag_Do_not_Modify_this_Line
+/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/LikelihoodResponsev1/
+#Tag_Do_not_Modify_this_Line

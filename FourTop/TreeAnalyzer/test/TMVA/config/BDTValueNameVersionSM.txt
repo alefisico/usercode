@@ -1,13 +1,7 @@
 #Mass_Name_Tag_Do_not_Modify_this_Line
-1000
-900
-800
-700
-600
-500
-400
+UED6
 #Directory_Name_Tag_Do_not_Modify_this_Line
-/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets2/BDTTrainv2/
+/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/BDTTrainUED6/
 #Vairable_Name_Tag_Do_not_Modify_this_Line
 Stjet F
 jet2_pt F
@@ -17,6 +11,7 @@ jet1_eta F
 jet2_eta F
 jet3_eta F
 jet4_eta F
+Htoppt F
 deltaRmindijet F
 diWdeltaR F
 deltaRdijet F
@@ -26,7 +21,6 @@ Muoneta F
 MuondeltaR F
 MET F
 Htopmass F
-Htoppt F
 Leptopmass F
 Leptoppt F
 jet_number I
@@ -38,5 +32,5 @@ event I
 #Weight_Name_Tag_Do_not_Modify_this_Line
 PUWeight
 #Cut_Name_Tag_Do_not_Modify_this_Line
-jet_number>=4&&Ht>300&&numBjets_csvl>1
+jet_number>=4&&Ht>300&&numBjets_csvl>2
 #Tag_Do_not_Modify_this_Line

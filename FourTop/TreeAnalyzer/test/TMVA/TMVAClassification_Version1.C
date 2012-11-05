@@ -49,7 +49,7 @@
 
 #include "TMVAGui.C"
 #include "mvas_v1.C"
-#include "correlations.C"
+#include "correlations1.C"
 
 
 #include "LOString.h"
@@ -143,8 +143,8 @@ void myTMVAClassification( TString myMethodList = "", TString signalfilename, ve
    // ---
    // --- Boosted Decision Trees
    Use["BDT"]             = 1; // uses Adaptive Boost
-   Use["BDTG"]            = 0; // uses Gradient Boost
-   Use["BDTB"]            = 0; // uses Bagging
+   Use["BDTG"]            = 1; // uses Gradient Boost
+   Use["BDTB"]            = 1; // uses Bagging
    Use["BDTD"]            = 0; // decorrelation + Adaptive Boost
    Use["BDTF"]            = 0; // allow usage of fisher discriminant for node splitting 
    // 
@@ -468,10 +468,11 @@ void myTMVAClassification( TString myMethodList = "", TString signalfilename, ve
 
    // TMVA ANN: MLP (recommended ANN) -- all ANNs in TMVA are Multilayer Perceptrons
    if (Use["MLP"])
-      factory->BookMethod( TMVA::Types::kMLP, "MLP", "H:!V:NeuronType=tanh:VarTransform=N:NCycles=500:HiddenLayers=N+5:TestRate=10:EpochMonitoring" );
+      //factory->BookMethod( TMVA::Types::kMLP, "MLP", "H:V:NeuronType=tanh:VarTransform=N:NCycles=500:HiddenLayers=N+5:TestRate=10:EpochMonitoring" );    // HiddenLayers=N+5 default
+      factory->BookMethod( TMVA::Types::kMLP, "MLP", "H:V:NeuronType=tanh:VarTransform=N:NCycles=2000:HiddenLayers=N+1:TestRate=10:EpochMonitoring" ); 
 
    if (Use["MLPBFGS"])
-      factory->BookMethod( TMVA::Types::kMLP, "MLPBFGS", "H:!V:NeuronType=tanh:VarTransform=N:NCycles=500:HiddenLayers=N+5:TestRate=10:TrainingMethod=BFGS:!EpochMonitoring" );
+      factory->BookMethod( TMVA::Types::kMLP, "MLPBFGS", "H:V:NeuronType=tanh:VarTransform=N:NCycles=500:HiddenLayers=N+5:TestRate=10:TrainingMethod=BFGS:!EpochMonitoring" );
 
 
    // CF(Clermont-Ferrand)ANN
@@ -493,8 +494,13 @@ void myTMVAClassification( TString myMethodList = "", TString signalfilename, ve
 
    if (Use["BDT"])  // Adaptive Boost
       factory->BookMethod( TMVA::Types::kBDT, "BDT", 
-            "!H:!V:NTrees=1000:BoostType=AdaBoost:SeparationType=GiniIndex:nCuts=20:PruneMethod=ExpectedError:PruneStrength=5" );
-            //"!H:!V:NTrees=400:nEventsMin=400:MaxDepth=3:BoostType=AdaBoost:SeparationType=GiniIndex:nCuts=20:PruneMethod=NoPruning" );
+	//"H:V:NTrees=200:BoostType=AdaBoost:SeparationType=CrossEntropy:PruneStrength=10:nCuts=20:PruneMethod=ExpectedError");
+	"H:V:NTrees=200:BoostType=AdaBoost:SeparationType=CrossEntropy:PruneStrength=10:nCuts=20");
+//	"H:V:PruneStrength=10:NTrees=200:nEventsMin=100:nCuts=20:SeparationType=CrossEntropy:AdaBoostBeta=0.2");  //// BEST TRY!!!!
+//	"H:V:PruneStrength=10:NTrees=200:nEventsMin=100:nCuts=20:SeparationType=CrossEntropy");  //// Wei setup 
+	//"H:V:AdaBoostBeta=0.2:nCuts=50:PruneMethod=NoPruning:NTrees=400:SeparationType=CrossEntropy");  //// second try
+        //"H:V:NTrees=850:nEventsMin=150:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.5:SeparationType=GiniIndex:nCuts=20:PruneMethod=NoPruning" );  //// from TMVAClassificacion.C
+        //"!H:!V:NTrees=400:nEventsMin=400:MaxDepth=3:BoostType=AdaBoost:SeparationType=GiniIndex:nCuts=20:PruneMethod=NoPruning"); //default
 
    if (Use["BDTB"]) // Bagging
       factory->BookMethod( TMVA::Types::kBDT, "BDTB", 
@@ -552,7 +558,7 @@ void myTMVAClassification( TString myMethodList = "", TString signalfilename, ve
    delete factory;
 
   mvas(outfileName,3,bdttraindir);
-  correlations(outfileName,bdttraindir);
+  correlations1(outfileName,bdttraindir);
    // Launch the GUI for the root macros
    //if (!gROOT->IsBatch()) TMVAGui( outfileName );
 }
