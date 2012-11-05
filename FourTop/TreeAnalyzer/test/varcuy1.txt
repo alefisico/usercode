@@ -1,4 +1,50 @@
 ###Variable Source Nbin Max Min SetLogy
+######################################################## Cross Checks
+#lepW_mass mass 0 10e4 0 false
+#Leptop mass 0 10e3 10e-1 true
+#chi2 mass 0 6000 0 false
+#hadW_mass mass 0 100 0 false
+#hadW_pt mass 0 2000 0 false
+#Htop_mass mass 0 3000 0 false
+#Htop_pt mass 0 3000 0 false
+#Stjet MET 0 10e3 0 false 
+#jet1_pt jets 0 10e3 0 false
+#jet2_pt jets 0 10e3 10e-2 true
+#jet3_pt jets 0 10e3 10e-2 true
+#mindeltaRjj jets 0.20 5000 0 false
+#deltaRjj jets 0.20 2000 0 false
+#deltaPhijj jets 0.20 1000 0 false
+#diWdeltaR mass 0.20 2000 0 false
+#diWdeltaphi mass 0.20 1000 0 false
+#deltaRmu2j jets 0.20 1000 0 false
+#deltaPhimu2j jets 0.40 1000 0 false
+#muon_pt muons 0 2000 0 false
+#muon_eta muons 0 10e4 10e-1 true
+#muon_phi muons 0 1000 0 false
+deltaR muons 0 1000 0 false
+#MET MET 0 2000 0 false
+#jet4_pt jets 0 10e3 10e-2 true
+#jet1_eta jets 0.1 1000 0 false
+#jet2_eta jets 0.1 1000 0 false
+#jet3_eta jets 0.1 10e4 10e-1 true 
+#jet4_eta jets 0.1 10e4 10e-1 true 
+#Njets jets 1 10e4 10e-3 true
+#Nbjets_CSVM jets 1 10e4 10e-3 true
+#lepW_pt mass 0 10e2 10e-1 true
+#Leptop_pt mass 0 10e3 10e-1 true
+#Njetsj4b0 jets 1 10e4 10e-3 true
+#Njetsj4b1 jets 1 10e4 10e-3 true
+#Njetsj4b2 jets 1 10e4 10e-3 true
+#Njetsj4b3 jets 1 10e4 10e-3 true
+#Stjetj4b0 jets 0 20e3 10e-2 true
+#Stjetj5b0 jets 0 20e2 10e-2 true
+#Stjetj6b0 jets 0 20e3 10e-2 true
+#Stjetj7b0 jets 0 10e1 10e-3 true
+#Njetsj4b1 jets 1 10e4 10e-1 true
+#Stjetj4b1 jets 0 20e3 10e-2 true
+#Stjetj5b1 jets 0 20e3 10e-2 true
+#Stjetj6b1 jets 0 20e3 10e-2 true
+#Stjetj7b1 jets 0 20e3 10e-2 true
 ###### 1 MUON
 #### 0 btags
 # jets 4
@@ -30,19 +76,19 @@
 #Htm1j5b0 jets 20GeV 0 0 false
 #Njetsm1j5b0 jets 10 0 false
 ### jets 6
-Stjetm1j6b0 jets 20GeV 0 0 false
-DeltaPhiWWm1j6b0 jets 0.1 0 0 false
-DeltaRdijetm1j6b0 jets 0.01 0 0 false
-DeltaPhiMETWlepm1j6b0 jets 0.1 0 0 false
-trijetmassm1j6b0 jets 10GeV 0 0 false
-trijetptm1j6b0 jets 10GeV 0 0 false
-deltaRmindijetm1j6b0 jets 0.01 0 0 false
-deltaRmu2jetm1j6b0 jets 0.01 0 0 false
-deltaPhidijetm1j6b0 jets 0.1 0 0 false
-deltaPhimu2jetm1j6b0 jets 0.1 0 0 false
-Stlepm1j6b0 jets 10GeV 0 0 false
-Htm1j6b0 jets 20GeV 0 0 false
-Njetsm1j6b0 jets 10 0 false
+#Stjetm1j6b0 jets 20GeV 0 0 false
+#DeltaPhiWWm1j6b0 jets 0.1 0 0 false
+#DeltaRdijetm1j6b0 jets 0.01 0 0 false
+#DeltaPhiMETWlepm1j6b0 jets 0.1 0 0 false
+#trijetmassm1j6b0 jets 10GeV 0 0 false
+#trijetptm1j6b0 jets 10GeV 0 0 false
+#deltaRmindijetm1j6b0 jets 0.01 0 0 false
+#deltaRmu2jetm1j6b0 jets 0.01 0 0 false
+#deltaPhidijetm1j6b0 jets 0.1 0 0 false
+#deltaPhimu2jetm1j6b0 jets 0.1 0 0 false
+#Stlepm1j6b0 jets 10GeV 0 0 false
+#Htm1j6b0 jets 20GeV 0 0 false
+#Njetsm1j6b0 jets 10 0 false
 #### 1 btags
 ### jets 4
 #Stjetm1j4b1 jets 20GeV 0 0 false

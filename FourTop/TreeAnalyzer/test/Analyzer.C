@@ -155,7 +155,8 @@ void Analyzer::SlaveBegin(TTree * tree)
       TNamed *out = (TNamed *) fInput->FindObject("PROOF_OUTPUTFILE_LOCATION");
       Info("SlaveBegin", "PROOF_OUTPUTFILE_LOCATION: %s", (out ? out->GetTitle() : "undef"));
       //TString dir = "file:/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/resultsFinal/";
-      TString dir = "file:/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/";
+      TString dir = "file:/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/";
+      //TString dir = "file:/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/";
       Info("SlaveBegin","We will store the sample under the directory: %s", dir.Data());
       TString tmpfilename = "results";
       if ( fSample != "" ) tmpfilename += "_"+fSample+".root";
@@ -184,18 +185,18 @@ void Analyzer::SlaveBegin(TTree * tree)
    hmuons["N0"] = new TH1F("N_muons_cut0"+hname,"Number of Muons",6, -0.5, 5.5);
    hmuons["N"] = new TH1F("N_muons"+hname,"Number of Muons",6, -0.5, 5.5);
    hmuons["Nelectrons_cut0"] = new TH1F("Nelectrons_cut0"+hname,"Number of Loose Electrons", 6, -0.5, 5.5);
-   hmuons["eta_cut0"] = new TH1F("muon_eta_cut0"+hname,"#eta^{#mu}", 42, -2.1, 2.1);
-   hmuons["eta"] = new TH1F("muon_eta"+hname,"#eta^{#mu}", 42, -2.1, 2.1);
-   hmuons["phi_cut0"] = new TH1F("muon_phi_cut0"+hname,"#phi^{#mu}", 32, -3.15, 3.15);
-   hmuons["phi"] = new TH1F("muon_phi"+hname,"#phi^{#mu}", 32, -3.15, 3.15);
+   hmuons["eta_cut0"] = new TH1F("muon_eta_cut0"+hname,"#eta^{#mu}", 10, -2.5, 2.5);
+   hmuons["eta"] = new TH1F("muon_eta"+hname,"#eta^{#mu}", 25, -2.5, 2.5);
+   hmuons["phi_cut0"] = new TH1F("muon_phi_cut0"+hname,"#phi^{#mu}", 35, -3.5, 3.5);
+   hmuons["phi"] = new TH1F("muon_phi"+hname,"#phi^{#mu}", 35, -3.5, 3.5);
    hmuons["reliso"] = new TH1F("muon_reliso"+hname,"Relative Isolation", 20, 0, 0.2);
-   hmuons["deltaR_cut0"] = new TH1F("deltaR_cut0"+hname,"#DeltaR(#mu,jet)",20, 0, 4);
-   hmuons["deltaR"] = new TH1F("deltaR"+hname,"#DeltaR(#mu,jet)", 20, 0, 4);
+   hmuons["deltaR_cut0"] = new TH1F("deltaR_cut0"+hname,"#DeltaR(#mu,jet)",10, 0, 4);
+   hmuons["deltaR"] = new TH1F("deltaR"+hname,"min #DeltaR(#mu,j)", 20, 0, 4);
    hmuons["deltaR_cut2"] = new TH1F("deltaR_cut2"+hname,"#DeltaR(#mu,jet)", 20, 0, 4);
    hmuons["d0_cut1"] = new TH1F("d0_cut1"+hname,"#mu Impact Parameter [cm]",22,-0.1,0.1);
-   hmuons["pt_cut0"] = new TH1F("muon_pt_cut0"+hname,"p_{T}^{#mu} [GeV/c]", 50, 0, 500);
-   hmuons["pt"] = new TH1F("muon_pt"+hname,"p_{T}^{#mu} [GeV/c]", 50, 0, 500);
-   hmuons["pt_cut2"] = new TH1F("muon_pt_cut2"+hname,"p_{T}^{#mu} [GeV/c]", 50, 0, 500);
+   hmuons["pt_cut0"] = new TH1F("muon_pt_cut0"+hname,"p_{T}^{#mu} [GeV/c]", 15, 0, 500);
+   hmuons["pt"] = new TH1F("muon_pt"+hname,"p_{T}^{#mu} [GeV/c]", 25, 0, 500);
+   hmuons["pt_cut2"] = new TH1F("muon_pt_cut2"+hname,"p_{T}^{#mu} [GeV/c]", 25, 0, 500);
    //hmuons["dz"] = new TH1F("dz"+hname,"|z(#mu) - z_{PV}| [cm]", 25, 0, 1.);
    hmuons["Niso"] = new TH1F("Niso"+hname,"Number of Primary Vertices", 25, -0.5, 24.5);
    hmuons["Ngood"] = new TH1F("Ngood"+hname,"Number of Primary Vertices",25, -0.5,24.5);
@@ -215,20 +216,20 @@ void Analyzer::SlaveBegin(TTree * tree)
    hPVs["Nreweight"] = new TH1F("NPVreweight"+hname,"Number of PVs",25, -0.5, 24.5);
    hPVs["Nreweight_cut2"] = new TH1F("NPVreweight_cut2"+hname,"Number of PVs",25, -0.5, 24.5);
       
-   hMET["MET_cut0"] = new TH1F("MET_cut0"+hname,"Missing Transverse Energy [GeV]", 50, 0, 500);
-   hMET["MET"] = new TH1F("MET"+hname,"Missing Transverse Energy [GeV]", 50, 0, 500);
-   hMET["MET_cut2"] = new TH1F("MET_cut2"+hname,"Missing Transverse Energy [GeV]", 50, 0, 500);
+   hMET["MET_cut0"] = new TH1F("MET_cut0"+hname,"Missing Transverse Energy [GeV]", 10, 0, 500);
+   hMET["MET"] = new TH1F("MET"+hname,"Missing Transverse Energy [GeV]", 25, 0, 500);
+   hMET["MET_cut2"] = new TH1F("MET_cut2"+hname,"Missing Transverse Energy [GeV]", 25, 0, 500);
    hMET["phi_cut0"] = new TH1F("MET_phi_cut0"+hname,"#phi Missing Transverse Energy [GeV]", 32, -3.15, 3.15);
    hMET["phi"] = new TH1F("MET_phi"+hname,"#phi Missing Transverse Energy [GeV]", 32, -3.15, 3.15);
    hMET["Ht_cut0"] = new TH1F("Ht_cut0"+hname,"H_{T} [GeV]", 125, 0, 2500);
    hMET["Ht"] = new TH1F("Ht"+hname,"H_{T} [GeV]", 125, 0, 2500);
    hMET["Ht_cut2"] = new TH1F("Ht_cut2"+hname,"H_{T} [GeV]", 125, 0, 2500);
-   hMET["Stlep_cut0"] = new TH1F("Stlep_cut0"+hname,"S_{T}^{lep} [Gev/c]", 50, 0, 1000);
-   hMET["Stlep"] = new TH1F("Stlep"+hname,"S_{T}^{lep} [Gev/c]", 50, 0, 1000);
-   hMET["Stlep_cut2"] = new TH1F("Stlep_cut2"+hname,"S_{T}^{lep} [Gev/c]", 50, 0, 1000);
-   hMET["Stjet_cut0"] = new TH1F("Stjet_cut0"+hname,"S_{T}^{jet} [Gev/c]", 100, 0, 3000);
-   hMET["Stjet"] = new TH1F("Stjet"+hname,"S_{T}^{jet} [Gev/c]", 100, 0, 3000);
-   hMET["Stjet_cut2"] = new TH1F("Stjet_cut2"+hname,"S_{T}^{jet} [Gev/c]", 100, 0, 3000);
+   hMET["Stlep_cut0"] = new TH1F("Stlep_cut0"+hname,"S_{T}^{lep} [GeV/c]", 50, 0, 1000);
+   hMET["Stlep"] = new TH1F("Stlep"+hname,"S_{T}^{lep} [GeV/c]", 50, 0, 1000);
+   hMET["Stlep_cut2"] = new TH1F("Stlep_cut2"+hname,"S_{T}^{lep} [GeV/c]", 50, 0, 1000);
+   hMET["Stjet_cut0"] = new TH1F("Stjet_cut0"+hname,"S_{T}^{jet} [GeV/c]", 20, 0, 3000);
+   hMET["Stjet"] = new TH1F("Stjet"+hname,"S_{T}^{jet} [GeV/c]",  50, 0, 3000);
+   hMET["Stjet_cut2"] = new TH1F("Stjet_cut2"+hname,"S_{T}^{jet} [GeV/c]",  50, 0, 3000);
    hMET["PzNu"] = new TH1F("PzNu"+hname,"p_{z} #nu [GeV]", 60, -300,300);
    //hMET["EtaNu"] = new TH1F("EtaNu"+hname,"#eta",44,-2.2,2.2);
    hMET["deltaPhiMETWlep"] = new TH1F("deltaPhiMETWlep"+hname,"#Delta #phi(Missing Transverse Energy,W(#mu,#nu))",32, -3.15, 3.15);
@@ -241,27 +242,46 @@ void Analyzer::SlaveBegin(TTree * tree)
    hM["WMt"] = new TH1F("Mt"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 500);        // Transverse Mass sqrt(Wpt*Wpt - Wpx*Wpx - Wpy*Wpy)
    hM["WMt_cut0"] = new TH1F("Mt_cut0"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 500);
    hM["WMt_cut2"] = new TH1F("Mt_cut2"+hname,"M_{T}(W) [GeV/c^{2}]", 50, 0, 500);
-   hM["dileadjet_cut0"] = new TH1F("dileadjet_cut0"+hname,"leading (jj) mass [GeV/c^{2}]", 100, 0, 1000);
+   hM["dileadjet_cut0"] = new TH1F("dileadjet_cut0"+hname,"leading (jj) mass [GeV/c^{2}]", 50, 0, 1000);
    hM["dileadjet"] = new TH1F("dileadjet"+hname,"leading (jj) mass [GeV/c^{2}]", 30, 0, 600);
    hM["dileadjet_cut2"] = new TH1F("dileadjet_cut2"+hname,"leading (jj) mass [GeV/c^{2}]", 25, 0, 500);
-   hM["hadW_mass_cut0"] = new TH1F("hadW_mass_cut0"+hname,"Hadronic W mass [GeV/c^{2}]", 24, 10, 500);
-   hM["hadW_mass"] = new TH1F("hadW_mass"+hname,"Hadronic W mass [GeV/c^{2}]", 49, 10, 500);
-   hM["hadW_mass_cut2"] = new TH1F("hadW_mass_cut2"+hname,"Hadronic W mass [GeV/c^{2}]", 49, 10, 500);
-   hM["top_mass_cut0"] = new TH1F("top_mass_cut0"+hname,"Hadronic Top mass [GeV/c^{2}]", 25, 0, 500);
-   hM["top_mass"] = new TH1F("top_mass"+hname,"Hadronic Top mass [GeV/c^{2}]", 25, 0, 500);
-   hM["top_mass_cut2"] = new TH1F("top_mass_cut2"+hname,"Hadronic Top mass [GeV/c^{2}]", 25, 0, 500);
-   hM["top_pt"] = new TH1F("top_pt"+hname,"Hadronic Top p_{T} [GeV/c]", 50, 0, 1000);
-   hM["top_pt_cut0"] = new TH1F("top_pt_cut0"+hname,"Hadronic Top p_{T} [GeV/c]", 50, 0, 1000);
-   hM["top_pt_cut2"] = new TH1F("top_pt_cut2"+hname,"Hadronic Top p_{T} [GeV/c]", 50, 0, 500);
+   hM["hadW_mass_cut0"] = new TH1F("hadW_mass_cut0"+hname,"Hadronic W mass [GeV/c^{2}]", 20, 0, 300);
+   hM["hadW_mass"] = new TH1F("hadW_mass"+hname,"Hadronic W mass [GeV/c^{2}]", 30, 0, 300);
+   hM["hadW_mass_cut2"] = new TH1F("hadW_mass_cut2"+hname,"Hadronic W mass [GeV/c^{2}]", 30, 0, 300);
+   hM["hadW_pt_cut0"] = new TH1F("hadW_pt_cut0"+hname,"Hadronic W p_{T} [GeV/c^{2}]", 20, 10, 500);
+   hM["hadW_pt"] = new TH1F("hadW_pt"+hname,"Hadronic W p_{T} [GeV/c^{2}]", 49, 10, 500);
+   hM["hadW_pt_cut2"] = new TH1F("hadW_pt_cut2"+hname,"Hadronic W p_{T} [GeV/c^{2}]", 49, 10, 500);
+   hM["secondhadW_mass_cut0"] = new TH1F("secondhadW_mass_cut0"+hname,"2nd Hadronic W mass [GeV/c^{2}]", 24, 10, 500);
+   hM["secondhadW_mass"] = new TH1F("secondhadW_mass"+hname,"2nd Hadronic W mass [GeV/c^{2}]", 49, 10, 500);
+   hM["secondhadW_mass_cut2"] = new TH1F("secondhadW_mass_cut2"+hname,"2nd Hadronic W mass [GeV/c^{2}]", 49, 10, 500);
+   hM["secondhadW_pt_cut0"] = new TH1F("secondhadW_pt_cut0"+hname,"2nd Hadronic W p_{T} [GeV/c^{2}]", 24, 10, 500);
+   hM["secondhadW_pt"] = new TH1F("secondhadW_pt"+hname,"2nd Hadronic W p_{T} [GeV/c^{2}]", 49, 10, 500);
+   hM["secondhadW_pt_cut2"] = new TH1F("secondhadW_pt_cut2"+hname,"2nd Hadronic W p_{T} [GeV/c^{2}]", 49, 10, 500);
+   hM["Htop_mass_cut0"] = new TH1F("Htop_mass_cut0"+hname,"Hadronic Top mass [GeV/c^{2}]", 10, 0, 600);
+   hM["Htop_mass"] = new TH1F("Htop_mass"+hname,"Hadronic Top mass [GeV/c^{2}]", 30, 0, 600);
+   hM["Htop_mass_cut2"] = new TH1F("Htop_mass_cut2"+hname,"Hadronic Top mass [GeV/c^{2}]", 30, 0, 600);
+   hM["Htop_pt"] = new TH1F("Htop_pt"+hname,"Hadronic Top p_{T} [GeV/c]", 20, 0, 1000);
+   hM["Htop_pt_cut0"] = new TH1F("Htop_pt_cut0"+hname,"Hadronic Top p_{T} [GeV/c]", 20, 0, 1000);
+   hM["Htop_pt_cut2"] = new TH1F("Htop_pt_cut2"+hname,"Hadronic Top p_{T} [GeV/c]", 50, 0, 500);
+   hM["secondHtop_mass_cut0"] = new TH1F("secondHtop_mass_cut0"+hname,"2nd Hadronic Top mass [GeV/c^{2}]", 25, 0, 500);
+   hM["secondHtop_mass"] = new TH1F("secondHtop_mass"+hname,"2nd Hadronic Top mass [GeV/c^{2}]", 25, 0, 500);
+   hM["secondHtop_mass_cut2"] = new TH1F("secondHtop_mass_cut2"+hname,"2nd Hadronic Top mass [GeV/c^{2}]", 25, 0, 500);
+   hM["secondHtop_pt"] = new TH1F("secondHtop_pt"+hname,"2nd Hadronic Top p_{T} [GeV/c]", 50, 0, 1000);
+   hM["secondHtop_pt_cut0"] = new TH1F("secondHtop_pt_cut0"+hname,"2nd Hadronic Top p_{T} [GeV/c]", 50, 0, 1000);
+   hM["secondHtop_pt_cut2"] = new TH1F("secondHtop_pt_cut2"+hname,"2nd Hadronic Top p_{T} [GeV/c]", 50, 0, 500);
+   hM["Leptop_mass_cut0"] = new TH1F("Leptop_cut0"+hname,"Leptonic Top mass [GeV/c^{2}]", 20, 0, 500);
    hM["Leptop_mass"] = new TH1F("Leptop"+hname,"Leptonic Top mass [GeV/c^{2}]", 25, 0, 500);
-   hM["Leptop_pt"] = new TH1F("Leptop_pt"+hname,"Leptonic Top p_{T} [GeV/c]", 25, 0, 500);
+   hM["Leptop_pt_cut0"] = new TH1F("Leptop_pt_cut0"+hname,"Leptonic Top p_{T} [GeV/c]", 10, 0, 1000);
+   hM["Leptop_pt"] = new TH1F("Leptop_pt"+hname,"Leptonic Top p_{T} [GeV/c]", 50, 0, 1000);
+   hM["lepW_mass_cut0"] = new TH1F("lepW_mass_cut0"+hname,"W#rightarrow#mu#nu Mass [GeV/c^{2}]",15, 50, 200);
    hM["lepW_mass"] = new TH1F("lepW_mass"+hname,"W#rightarrow#mu#nu Mass [GeV/c^{2}]",15, 50, 200);
    hM["lepW_mass_cut2"] = new TH1F("lepW_mass_cut2"+hname,"W#rightarrow#mu#nu Mass [GeV/c^{2}]",15, 50, 200);
    hM["lepW_pt"]=new TH1F("lepW_pt"+hname,"W#rightarrow#mu#nu p_{t} [GeV/c^{2}]",100, 0, 1000);
    hM["lepW_pt_cut2"]=new TH1F("lepW_pt_cut2"+hname,"W#rightarrow#mu#nu p_{t} [GeV/c^{2}]",100, 0, 1000);
-   hM["diWdeltaphi"] = new TH1F("diWdeltaphi"+hname,"#Delta #phi(W(j,j), W(#mu,#nu))",34, -3.40, 3.40);
+   hM["diWdeltaphi"] = new TH1F("diWdeltaphi"+hname,"#Delta #phi(W(j,j), W(#mu,#nu))",35, -3.50, 3.50);
+   hM["diWdeltaR_cut0"] = new TH1F("diWdeltaR_cut0"+hname,"#Delta R (W(j,j), W(#mu,#nu))",30, 0, 6.);
    hM["diWdeltaR"] = new TH1F("diWdeltaR"+hname,"#Delta R (W(j,j), W(#mu,#nu))",30, 0, 6.);
-   hM["chi2"] = new TH1F("chi2"+hname,"#chi^{2}", 50, 0, 500);
+   hM["chi2"] = new TH1F("chi2"+hname,"#chi^{2}", 25, 0, 500);
 
    hjets["pt"] = new TH1F("jet_pt"+hname,"jet p_{T} [GeV/c]", 60, 30, 800);
    //hjets["pt_b_mc"] = new TH1F("jet_pt_b_mc"+hname,"jet p_{T} [GeV/c]", 60, 30, 800);
@@ -271,18 +291,18 @@ void Analyzer::SlaveBegin(TTree * tree)
    //hjets["pt_btag_b"] = new TH1F("jet_pt_btag_b"+hname,"jet p_{T} [GeV/c]", 60, 30, 800);
    //hjets["pt_btag_c"] = new TH1F("jet_pt_btag_c"+hname,"jet p_{T} [GeV/c]", 60, 30, 800);
    //hjets["pt_btag_l"] = new TH1F("jet_pt_btag_l"+hname,"jet p_{T} [GeV/c]", 60, 30, 800);
-   hjets["1st_pt_cut0"] = new TH1F("jet1_pt_cut0"+hname,"1st Jet p_{T} [GeV/c]",120, 0, 1200);
-   hjets["1st_pt"] = new TH1F("jet1_pt"+hname,"1st Jet p_{T} [GeV/c]", 120, 0, 1200);
-   hjets["1st_pt_cut2"] = new TH1F("jet1_pt_cut2"+hname,"1st Jet p_{T} [GeV/c]",120, 0, 1200);
-   hjets["2nd_pt_cut0"] = new TH1F("jet2_pt_cut0"+hname,"2nd Jet p_{T} [GeV/c]", 80, 0, 800);
-   hjets["2nd_pt"] = new TH1F("jet2_pt"+hname,"2nd Jet p_{T} [GeV/c]", 80, 0, 800);
-   hjets["2nd_pt_cut2"] = new TH1F("jet2_pt_cut2"+hname,"2nd Jet p_{T} [GeV/c]", 80, 0, 800);
-   hjets["3rd_pt_cut0"] = new TH1F("jet3_pt_cut0"+hname,"3rd Jet p_{T} [GeV/c]", 50, 0, 500);
-   hjets["3rd_pt"] = new TH1F("jet3_pt"+hname,"3rd Jet p_{T} [GeV/c]", 50, 0, 500);
-   hjets["3rd_pt_cut2"] = new TH1F("jet3_pt_cut2"+hname,"3rd Jet p_{T} [GeV/c]", 50, 0, 500);
-   hjets["4th_pt_cut0"] = new TH1F("jet4_pt_cut0"+hname,"4th Jet p_{T} [GeV/c]", 35, 0, 350);
-   hjets["4th_pt"] = new TH1F("jet4_pt"+hname,"4th Jet p_{T} [GeV/c]", 35, 0, 350);
-   hjets["4th_pt_cut2"] = new TH1F("jet4_pt_cut2"+hname,"4th Jet p_{T} [GeV/c]", 35, 0, 350);
+   hjets["1st_pt_cut0"] = new TH1F("jet1_pt_cut0"+hname,"1st Jet p_{T} [GeV/c]", 15, 0, 1200);
+   hjets["1st_pt"] = new TH1F("jet1_pt"+hname,"1st Jet p_{T} [GeV/c]", 60, 0, 1200);
+   hjets["1st_pt_cut2"] = new TH1F("jet1_pt_cut2"+hname,"1st Jet p_{T} [GeV/c]",60, 0, 1200);
+   hjets["2nd_pt_cut0"] = new TH1F("jet2_pt_cut0"+hname,"2nd Jet p_{T} [GeV/c]", 10, 0, 800);
+   hjets["2nd_pt"] = new TH1F("jet2_pt"+hname,"2nd Jet p_{T} [GeV/c]", 40, 0, 800);
+   hjets["2nd_pt_cut2"] = new TH1F("jet2_pt_cut2"+hname,"2nd Jet p_{T} [GeV/c]", 40, 0, 800);
+   hjets["3rd_pt_cut0"] = new TH1F("jet3_pt_cut0"+hname,"3rd Jet p_{T} [GeV/c]", 10, 0, 500);
+   hjets["3rd_pt"] = new TH1F("jet3_pt"+hname,"3rd Jet p_{T} [GeV/c]", 25, 0, 500);
+   hjets["3rd_pt_cut2"] = new TH1F("jet3_pt_cut2"+hname,"3rd Jet p_{T} [GeV/c]", 25, 0, 500);
+   hjets["4th_pt_cut0"] = new TH1F("jet4_pt_cut0"+hname,"4th Jet p_{T} [GeV/c]", 10, 0, 400);
+   hjets["4th_pt"] = new TH1F("jet4_pt"+hname,"4th Jet p_{T} [GeV/c]", 20, 0, 400);
+   hjets["4th_pt_cut2"] = new TH1F("jet4_pt_cut2"+hname,"4th Jet p_{T} [GeV/c]", 20, 0, 400);
    hjets["5th_pt_cut0"] = new TH1F("jet5_pt_cut0"+hname,"5th Jet p_{T} [GeV/c]", 29, 10, 300);
    hjets["5th_pt"] = new TH1F("jet5_pt"+hname,"5th Jet p_{T} [GeV/c]", 29, 10, 300);
    hjets["5th_pt_cut2"] = new TH1F("jet5_pt_cut2"+hname,"5th Jet p_{T} [GeV/c]", 29, 10, 300);
@@ -292,33 +312,37 @@ void Analyzer::SlaveBegin(TTree * tree)
    hjets["7th_pt_cut0"] = new TH1F("jet7_pt_cut0"+hname,"7th Jet p_{T} [GeV/c]", 29, 10, 300);
    hjets["7th_pt"] = new TH1F("jet7_pt"+hname,"7th Jet p_{T} [GeV/c]", 29, 10, 300); 
    hjets["7th_pt_cut2"] = new TH1F("jet7_pt_cut2"+hname,"7th Jet p_{T} [GeV/c]", 29, 10, 300); 
-   hjets["eta"] = new TH1F("jet_eta"+hname,"jet #eta",48, -2.4, 2.4);
-   hjets["1st_eta_cut0"] = new TH1F("jet1_eta_cut0"+hname,"1st Jet #eta",48, -2.4, 2.4);
-   hjets["1st_eta"] = new TH1F("jet1_eta"+hname,"1st Jet #eta",48, -2.4, 2.4);
-   hjets["1st_eta_cut2"] = new TH1F("jet1_eta_cut2"+hname,"1st Jet #eta",48, -2.4, 2.4);
-   hjets["2nd_eta_cut0"] = new TH1F("jet2_eta_cut0"+hname,"2nd Jet #eta",48, -2.4, 2.4);
-   hjets["2nd_eta"] = new TH1F("jet2_eta"+hname,"2nd Jet #eta",48, -2.4, 2.4);
-   hjets["2nd_eta_cut2"] = new TH1F("jet2_eta_cut2"+hname,"2nd Jet #eta",48, -2.4, 2.4);
-   hjets["3rd_eta"] = new TH1F("jet3_eta"+hname,"3rd Jet #eta",48, -2.4, 2.4);
-   hjets["4th_eta"] = new TH1F("jet4_eta"+hname,"4th Jet #eta",48, -2.4, 2.4);
-   hjets["phi"] = new TH1F("jet_phi"+hname,"jet #phi",32, -3.15, 3.15);
+   hjets["eta"] = new TH1F("jet_eta"+hname,"jet #eta",24, -2.4, 2.4);
+   hjets["1st_eta_cut0"] = new TH1F("jet1_eta_cut0"+hname,"1st Jet #eta",12, -2.4, 2.4);
+   hjets["1st_eta"] = new TH1F("jet1_eta"+hname,"1st Jet #eta",24, -2.4, 2.4);
+   hjets["1st_eta_cut2"] = new TH1F("jet1_eta_cut2"+hname,"1st Jet #eta",24, -2.4, 2.4);
+   hjets["2nd_eta_cut0"] = new TH1F("jet2_eta_cut0"+hname,"2nd Jet #eta",12, -2.4, 2.4);
+   hjets["2nd_eta"] = new TH1F("jet2_eta"+hname,"2nd Jet #eta",24, -2.4, 2.4);
+   hjets["2nd_eta_cut2"] = new TH1F("jet2_eta_cut2"+hname,"2nd Jet #eta",24, -2.4, 2.4);
+   hjets["3rd_eta_cut0"] = new TH1F("jet3_eta_cut0"+hname,"3rd Jet #eta",12, -2.4, 2.4);
+   hjets["3rd_eta"] = new TH1F("jet3_eta"+hname,"3rd Jet #eta",24, -2.4, 2.4);
+   hjets["4th_eta_cut0"] = new TH1F("jet4_eta_cut0"+hname,"4th Jet #eta",12, -2.4, 2.4);
+   hjets["4th_eta"] = new TH1F("jet4_eta"+hname,"4th Jet #eta",24, -2.4, 2.4);
+   hjets["phi"] = new TH1F("jet_phi"+hname,"jet #phi",35, -3.5, 3.5);
    hjets["Njets_cut0"] = new TH1F("Njets_cut0"+hname,"Jet Multiplicity",12, 0.5,12.5);
    hjets["Njets"] = new TH1F("Njets"+hname,"jet multiplicity",12,0.5,12.5);
    hjets["Njets_cut2"] = new TH1F("Njets_cut2"+hname,"jet multiplicity",12, 0.5,12.5);
    hjets["Nbtags_TCHPM_cut0"] = new TH1F("Nbjets_TCHPM_cut0"+hname,"Tagged b-jets",8,-0.5,7.5);
    hjets["Nbtags_TCHPM"] = new TH1F("Nbjets_TCHPM"+hname,"Tagged b-jets",8,-0.5,7.5);
    hjets["Nbtags_CSVL_cut0"] = new TH1F("Nbjets_CSVL_cut0"+hname,"Tagged b-jets",8,-0.5,7.5);
-   hjets["Nbtags_CSVL"] = new TH1F("Nbjets_CSVL"+hname,"CSV Loose Tagged b-jets",8,-0.5,7.5);
+   hjets["Nbtags_CSVL"] = new TH1F("Nbjets_CSVL"+hname,"CSV Loose Tagged b-jets",6,1.5,7.5);
    hjets["Nbtags_CSVM_cut0"] = new TH1F("Nbjets_CSVM_cut0"+hname,"Tagged b-jets",8, -0.5, 7.5);
    hjets["Nbtags_CSVM"] = new TH1F("Nbjets_CSVM"+hname,"Tagged b-jets",8,-0.5,7.5);
    hjets["Nbtags_CSVT_cut0"] = new TH1F("Nbjets_CSVT_cut0"+hname,"Tagged b-jets",8,-0.5,7.5);
    hjets["Nbtags_CSVT"] = new TH1F("Nbjets_CSVT"+hname,"Tagged b-jets",8,-0.5,7.5);
    hjets["deltaPhijj_cut0"] = new TH1F("deltaPhijj_cut0"+hname,"#Delta #phi(j1,j2)",34,-3.40,3.40);
    hjets["deltaPhijj"] = new TH1F("deltaPhijj"+hname,"#Delta #phi(j1,j2)",34, -3.40, 3.40);
-   hjets["deltaRjj_cut0"] = new TH1F("deltaRjj_cut0"+hname,"#DeltaR(j1,j2)",20,0.,4.);
+   hjets["deltaRjj_cut0"] = new TH1F("deltaRjj_cut0"+hname,"#DeltaR(j1,j2)",10,0.,4.);
+   hjets["mindeltaRjj_cut0"] = new TH1F("mindeltaRjj_cut0"+hname,"min #DeltaR(j,j)",15,0.,3.);
    hjets["mindeltaRjj"] = new TH1F("mindeltaRjj"+hname,"min #DeltaR(j,j)",15,0.,3.);
    hjets["deltaRjj"] = new TH1F("deltaRjj"+hname,"#DeltaR(j1,j2)",30,0.,6.);
    hjets["deltaRjj_cut2"] = new TH1F("deltaRjj_cut2"+hname,"#DeltaR(j1,j2)",30,0.,6.);
+   hjets["deltaRmu2j_cut0"] = new TH1F("deltaRmu2j_cut0"+hname,"#DeltaR(#mu,j2)",30,0.,6.);
    hjets["deltaRmu2j"] = new TH1F("deltaRmu2j"+hname,"#DeltaR(#mu,j2)",30,0.,6.);
    hjets["deltaRmu3j"] = new TH1F("deltaRmu3j"+hname,"#DeltaR(#mu,j2)",30,0.,6.);
    hjets["deltaPhimu2j"] = new TH1F("deltaPhimu2j"+hname,"#Delta #phi(#mu,j2)",17, -3.40, 3.40);
@@ -339,7 +363,7 @@ void Analyzer::SlaveBegin(TTree * tree)
    //
    //
    //////////////////////////////////// Additional Plots
-   //
+   /* /
    hjets["Stjetm1j4b0"] = new TH1F("Stjetm1j4b0"+hname,"S_{T}^{jet} (1 #mu & 4 jets & 0 btag)",70, 200, 3000 ); 
    hjets["DeltaRdijetm1j4b0"] = new TH1F("DeltaRdijetm1j4b0"+hname,"#DeltaR(j,j) (1 #mu & 4 jets & 0 btag)",40,0.,4.); 
    hjets["DeltaPhiMETWlepm1j4b0"] = new TH1F("DeltaPhiMETWlepm1j4b0"+hname,"#Delta #phi(MET,W(#mu,#nu)) (1 #mu & 4 jets & 0 btag)",32, -3.15, 3.15 ); 
@@ -562,15 +586,28 @@ void Analyzer::SlaveBegin(TTree * tree)
    hjets["deltaPhimu2jetm2j6b2"] = new TH1F("deltaPhimu2jetm2j6b2"+hname,"#Delta #phi(#mu,2nd j) (2 #mu &  #geq 6 jets & #geq 2 btag)", 32, -3.15, 3.15); 
    hjets["Stlepm2j6b2"] = new TH1F("Stlepm2j6b2"+hname,"S_{t}^{lep} (2 #mu &  #geq 6 jets & #geq 2 btag)",  100, 0, 1000); 
    hjets["Htm2j6b2"] = new TH1F("Htm2j6b2"+hname,"H_{T} (2 #mu &  #geq 6 jets & #geq 2 btag)",  125, 0, 2500); 
-   hjets["Njetsm2j6b2"] = new TH1F("Njetsm2j6b2"+hname,"Njets (2 #mu &  #geq 6 jets & #geq 2 btag)", 12,0.5,12.5); 
+   hjets["Njetsm2j6b2"] = new TH1F("Njetsm2j6b2"+hname,"Njets (2 #mu &  #geq 6 jets & #geq 2 btag)", 12,0.5,12.5); */
 
-   hjets["Stjet41"] = new TH1F("Stjet41"+hname,"#geq 4 jets, Stjet < 1000", 60, 400, 1000 ); 
-   hjets["Stjet51"] = new TH1F("Stjet51"+hname,"#geq 5 jets, Stjet < 1000", 60, 400, 1000 ); 
-   hjets["Stjet61"] = new TH1F("Stjet61"+hname,"#geq 6 jets, Stjet < 1000", 60, 400, 1000 ); 
-   hjets["Stjet42"] = new TH1F("Stjet42"+hname,"#geq 4 jets, Stjet > 1000", 50, 1000, 3000 ); 
-   hjets["Stjet52"] = new TH1F("Stjet52"+hname,"#geq 5 jets, Stjet > 1000", 50, 1000, 3000 ); 
-   hjets["Stjet62"] = new TH1F("Stjet62"+hname,"#geq 6 jets, Stjet > 1000", 50, 1000, 3000 ); 
+   hjets["Njetsj4b0"] = new TH1F("Njetsj4b0"+hname,"Njets (#geq 4 jets & 0 btag)", 12,0.5,12.5);
+   hjets["Stjetj4b0"] = new TH1F("Stjetj4b0"+hname,"S_{t}^{jet} (#geq 4 jets & 0 btag)", 100, 0, 3000 ); 
+   hjets["Stjetj5b0"] = new TH1F("Stjetj5b0"+hname,"S_{t}^{jet} (5 jets & 0 btag)", 100, 0, 3000 );
+   hjets["Stjetj6b0"] = new TH1F("Stjetj6b0"+hname,"S_{t}^{jet} (6 jets & 0 btag)", 100, 0, 3000 );
+   hjets["Stjetj7b0"] = new TH1F("Stjetj7b0"+hname,"S_{t}^{jet} (#geq 7 jets & 0 btag)", 100, 0, 3000 );
+   hjets["Njetsj4b1"] = new TH1F("Njetsj4b1"+hname,"Njets (#geq 4 jets & #geq 1 btag)", 12,0.5,12.5);
+   hjets["Stjetj4b1"] = new TH1F("Stjetj4b1"+hname,"S_{t}^{jet} (#geq 4 jets & #geq 1 btag)", 100, 0, 3000 ); 
+   hjets["Stjetj5b1"] = new TH1F("Stjetj5b1"+hname,"S_{t}^{jet} (5 jets & #geq 1 btag)", 100, 0, 3000 );
+   hjets["Stjetj6b1"] = new TH1F("Stjetj6b1"+hname,"S_{t}^{jet} (6 jets & #geq 1 btag)", 100, 0, 3000 );
+   hjets["Stjetj7b1"] = new TH1F("Stjetj7b1"+hname,"S_{t}^{jet} (#geq 7 jets & #geq 1 btag)", 100, 0, 3000 );
+   hjets["Njetsj4b2"] = new TH1F("Njetsj4b2"+hname,"Njets (#geq 4 jets & #geq 2 btag)", 12,0.5,12.5);
+   hjets["Njetsj4b3"] = new TH1F("Njetsj4b3"+hname,"Njets (#geq 4 jets & #geq 3 btag)", 12,0.5,12.5);
+   hjets["Njetsj4b4"] = new TH1F("Njetsj4b4"+hname,"Njets (#geq 4 jets & #geq 4 btag)", 12,0.5,12.5);
 
+   hjets["Njets_7jets"] = new TH1F("Njets_7jets"+hname,"Jet Multiplicity",12, 0.5,12.5);
+   hjets["Njets_8jets"] = new TH1F("Njets_8jets"+hname,"Jet Multiplicity",12, 0.5,12.5);
+   hjets["Njets_9jets"] = new TH1F("Njets_9jets"+hname,"Jet Multiplicity",12, 0.5,12.5);
+   hjets["Nbtags_CSVL_7jets"] = new TH1F("Nbjets_CSVL_7jets"+hname,"Tagged b-jets",8,-0.5,7.5);
+   hjets["Nbtags_CSVL_8jets"] = new TH1F("Nbjets_CSVL_8jets"+hname,"Tagged b-jets",8,-0.5,7.5);
+   hjets["Nbtags_CSVL_9jets"] = new TH1F("Nbjets_CSVL_9jets"+hname,"Tagged b-jets",8,-0.5,7.5);
 
    map<string,TH1* > allhistos = hmuons;
    allhistos.insert( helectrons.begin(), helectrons.end() );
@@ -589,10 +626,10 @@ void Analyzer::SlaveBegin(TTree * tree)
    MyStoreTree = new StoreTreeVariable();
 
    if(fChannel == 1){
-      MyStoreTree->SetElectronFalse();
+      	MyStoreTree->SetElectronFalse();
       //MyStoreTree->SetJetFalse();
-      MyStoreTree->SetVertexFalse();
-      MyStoreTree->SetTriggerFalse();
+      	MyStoreTree->SetVertexFalse();
+      	MyStoreTree->SetTriggerFalse();
       //MyStoreTree->SetMetFalse();
       //MyStoreTree->SetMuonFalse();
    }
@@ -618,6 +655,9 @@ void Analyzer::SlaveBegin(TTree * tree)
        fCutLabels.push_back("4Jet1b");
        fCutLabels.push_back("4JetCut");
        fCutLabels.push_back("Stjet");
+       fCutLabels.push_back("7Jet");
+       fCutLabels.push_back("8Jet");
+       fCutLabels.push_back("9Jet");
      }
    else
      { //electron+jets
@@ -631,61 +671,107 @@ void Analyzer::SlaveBegin(TTree * tree)
 
 
    if(fIsMC){
-      LumiWeights_ = edm::Lumi3DReWeighting("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/PUMC_dist.root",
-		      "/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/NewPileUp/MyCert_160404_180252_pileupTruth_finebin.root",
+	   //if (!fSample.Contains("SM") && !fSample.Contains("ttbar")){
+	   //if (!fSample.Contains("UED6")){
+	   if (!fSample.Contains("TTbar")){
+      LumiWeights_ = edm::Lumi3DReWeighting("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/PUMC_dist.root",
+		      "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/MyCert_160404_180252_pileupTruth_finebin.root",
 		      "pileup", 
 		      "pileup",
-		      "/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Weight_3Dnew.root");
+		      "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Weight_3Dnew.root");
       LumiWeights_.weight3D_init( 1.08 );
-      LumiWeightsup_ = edm::Lumi3DReWeighting("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/PUMC_dist.root", 
-		      "/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/NewPileUp/MyCert_160404_180252_pileupTruth_finebin.root",
+      LumiWeightsup_ = edm::Lumi3DReWeighting("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/PUMC_dist.root", 
+		      "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/MyCert_160404_180252_pileupTruth_finebin.root",
 		      "pileup",
 		      "pileup",
-		      "/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Weight_3Dup.root");
+		      "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Weight_3Dup.root");
       LumiWeightsup_.weight3D_init( 1.167 );//up
-      LumiWeightsdown_ = edm::Lumi3DReWeighting("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/PUMC_dist.root", 
-		      "/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/NewPileUp/MyCert_160404_180252_pileupTruth_finebin.root",
+      LumiWeightsdown_ = edm::Lumi3DReWeighting("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/PUMC_dist.root", 
+		      "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/MyCert_160404_180252_pileupTruth_finebin.root",
 		      "pileup", 
 		      "pileup",
-		      "/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Weight_3Ddown.root");
+		      "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Weight_3Ddown.root");
       LumiWeightsdown_.weight3D_init( 0.994 );//down
-   }
+   	
+	   }
+	   else {
 
-   //btag efficiency file and 2D histogram
-   TString btagefffilename = "/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/BtagEff.root";
-   btagefffile = new TFile(btagefffilename,"read");
-   //ttbar
-   f2Dttbarbtag = (TH2D*) btagefffile->Get("ttbar_csv_btageff");
-   f2Dttbarctag = (TH2D*) btagefffile->Get("ttbar_csv_ctageff");
-   f2Dttbarlighttag = (TH2D*) btagefffile->Get("ttbar_csv_lighttageff");
+      LumiWeights_ = edm::Lumi3DReWeighting("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Fall11_PUMC_dist.root",
+		      "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/MyCert_160404_180252_pileupTruth_finebin.root",
+		      "pileup", 
+		      "pileup",
+		      "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Weight_3Dnew.root");
+      LumiWeights_.weight3D_init( 1.08 );
+      LumiWeightsup_ = edm::Lumi3DReWeighting("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Fall11_PUMC_dist.root", 
+		      "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/MyCert_160404_180252_pileupTruth_finebin.root",
+		      "pileup",
+		      "pileup",
+		      "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Weight_3Dup.root");
+      LumiWeightsup_.weight3D_init( 1.167 );//up
+      LumiWeightsdown_ = edm::Lumi3DReWeighting("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Fall11_PUMC_dist.root", 
+		      "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/MyCert_160404_180252_pileupTruth_finebin.root",
+		      "pileup", 
+		      "pileup",
+		      "/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Weight_3Ddown.root");
+      LumiWeightsdown_.weight3D_init( 0.994 );//down
+  } }
 
    // For JEC uncertainties
-   JetCorrectorParameters *jcp = new JetCorrectorParameters("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/JEC11_V10_AK5PF_UncertaintySources.txt","Total");
+   JetCorrectorParameters *jcp = new JetCorrectorParameters("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/JEC11_V10_AK5PF_UncertaintySources.txt","Total");
    if (fdoJECunc) fJECunc = new JetCorrectionUncertainty( *jcp );
 
    //Medium
-   bSF_table.LoadTable("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Table_CSVM_beff_SF.txt");
-   bSF_table_error.LoadTable("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Table_CSVM_beff_SF_Error.txt");
-   lSF_table.LoadTable("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Table_CSVM_lmistag_SF.txt");
-   lSF_table_error_down.LoadTable("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Table_CSVM_lmistag_SF_Error_Down.txt");
-   lSF_table_error_up.LoadTable("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Table_CSVM_lmistag_SF_Error_Up.txt");
-   leff_table.LoadTable("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Table_CSVM_lmistag_Eff.txt");
+   bSF_table.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVM_beff_SF.txt");
+   bSF_table_error.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVM_beff_SF_Error.txt");
+   lSF_table.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVM_lmistag_SF.txt");
+   lSF_table_error_down.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVM_lmistag_SF_Error_Down.txt");
+   lSF_table_error_up.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVM_lmistag_SF_Error_Up.txt");
+   leff_table.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVM_lmistag_Eff.txt");
 
    //Loose
-   bSF_table_loose.LoadTable("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Table_CSVL_beff_SF.txt");
-   bSF_table_error_loose.LoadTable("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Table_CSVL_beff_SF_Error.txt");
-   lSF_table_loose.LoadTable("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Table_CSVL_lmistag_SF.txt");
-   lSF_table_error_down_loose.LoadTable("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Table_CSVL_lmistag_SF_Error_Down.txt");
-   lSF_table_error_up_loose.LoadTable("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Table_CSVL_lmistag_SF_Error_Up.txt");
-   leff_table_loose.LoadTable("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Table_CSVL_lmistag_Eff.txt");
-   
+   bSF_table_loose.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVL_beff_SF.txt");
+   bSF_table_error_loose.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVL_beff_SF_Error.txt");
+   lSF_table_loose.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVL_lmistag_SF.txt");
+   lSF_table_error_down_loose.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVL_lmistag_SF_Error_Down.txt");
+   lSF_table_error_up_loose.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVL_lmistag_SF_Error_Up.txt");
+   leff_table_loose.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVL_lmistag_Eff.txt");
+
    //Tight
-   bSF_table_tight.LoadTable("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Table_CSVT_beff_SF.txt");
-   bSF_table_error_tight.LoadTable("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Table_CSVT_beff_SF_Error.txt");
-   lSF_table_tight.LoadTable("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Table_CSVT_lmistag_SF.txt");
-   lSF_table_error_down_tight.LoadTable("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Table_CSVT_lmistag_SF_Error_Down.txt");
-   lSF_table_error_up_tight.LoadTable("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Table_CSVT_lmistag_SF_Error_Up.txt");
-   leff_table_tight.LoadTable("/uscms/home/weizou/work/NtupleMaker/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test_4top/Table_CSVT_lmistag_Eff.txt");
+   bSF_table_tight.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVT_beff_SF.txt");
+   bSF_table_error_tight.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVT_beff_SF_Error.txt");
+   lSF_table_tight.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVT_lmistag_SF.txt");
+   lSF_table_error_down_tight.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVT_lmistag_SF_Error_Down.txt");
+   lSF_table_error_up_tight.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVT_lmistag_SF_Error_Up.txt");
+   leff_table_tight.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVT_lmistag_Eff.txt");
+   
+   
+   //#########################Btag Fast Sim Btag Correction Factor
+   //Medium
+   bCF_table.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVM_b_fastsim_CF.txt");
+   bCF_table_error.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVM_b_fastsim_CF_error.txt");
+   cCF_table.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVM_c_fastsim_CF.txt");
+   lCF_table_error.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVM_light_fastsim_CF_error.txt");
+   leff_CF_table.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVM_light_fastsim_CF.txt");
+   cCF_table_error.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVM_c_fastsim_CF_error.txt");
+
+   //Loose
+   /*
+   bCF_table_loose.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/.txt");
+   bCF_table_error_loose.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/.txt");
+   cCF_table_loose.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/.txt");
+   cCF_table_error_loose.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/.txt");
+   leff_CF_table_loose.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/.txt");
+   lCF_table_error_loose.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/.txt");
+   */
+
+   //Tight
+   bCF_table_tight.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVT_b_fastsim_CF.txt");
+   bCF_table_error_tight.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVT_b_fastsim_CF_error.txt");
+   cCF_table_tight.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVT_c_fastsim_CF.txt");
+   cCF_table_error_tight.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVT_c_fastsim_CF_error.txt");
+   leff_CF_table_tight.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVT_light_fastsim_CF.txt");
+   lCF_table_error_tight.LoadTable("/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/Tables/Table_CSVT_light_fastsim_CF_error.txt");
+
 }
 
 Bool_t Analyzer::Process(Long64_t entry)
@@ -755,6 +841,13 @@ Bool_t Analyzer::Process(Long64_t entry)
   if ( fSample =="data" && ( testrun == 176765 || testrun == 176771 || testrun == 176795 || testrun == 176796 || testrun == 176545 || testrun == 176547 || testrun == 176928 || testrun == 176982 ) ) return kTRUE;
   if ( fSample =="dataMissing" && ( testrun != 176765 && testrun != 176771 && testrun != 176795 && testrun != 176796 && testrun != 176545 && testrun != 176547 && testrun != 176928 && testrun != 176982 ) ) return kTRUE;
 
+     /*/--------- For MVA cuts
+     const char* inputVars[] = { "Stjet", "jet2_pt", "jet3_pt", "jet4_pt", "jet1_eta", "jet2_eta", "jet3_eta", "jet4_eta", "deltaRmindijet", "diWdeltaR", "deltaRdijet", "deltaRmu2jet", "Muonpt", "Muoneta", "MuondeltaR", "MET", "Htopmass", "Htoppt", "Leptopmass", "Leptoppt", "jet_number", "numBjets_csvl" };
+     std::vector<std::string> inputVarsMVA;
+     for (int i=0; i<22; ++i) inputVarsMVA.push_back( inputVars[i] );
+     ReadBDT mvaReader( inputVarsMVA );  
+     double bdtresponse = -10.;
+     ///////////////////////////////////////////////// */
 
   ////////////////////
   // GENERATOR
@@ -770,34 +863,12 @@ Bool_t Analyzer::Process(Long64_t entry)
 	  p4genNu.SetPtEtaPhiE(ntuple->gen.nu_pt,ntuple->gen.nu_eta,ntuple->gen.nu_phi,ntuple->gen.nu_e);
 	  p4genb.SetPtEtaPhiE(ntuple->gen.bLep_pt,ntuple->gen.bLep_eta,ntuple->gen.bLep_phi,ntuple->gen.bLep_e);
 	  
-	  hjets["gen_deltaR_mub"]->Fill( p4genLepton.DeltaR( p4genb ) ); 
+	  //hjets["gen_deltaR_mub"]->Fill( p4genLepton.DeltaR( p4genb ) ); 
 	}
     }
 
    //////////Seperate the Wbb, Wcc and Wlight///////////////////////////
    //before the selection, We should seperate the samples
-   //if(fSample.Contains("WJets"))
-      if(fSample.Contains("Wbb") && !fSample.Contains("Wbbpartonflavor") )
-      {
-         int FH = ntuple->flavorHistory;
-         if(FH != 1 && FH!= 2 && FH != 5 && FH != 7 && FH != 9)
-            return kTRUE;
-      }
-
-      if(fSample.Contains("Wcc") && !fSample.Contains("Wccpartonflavor") )
-      {
-         int FH = ntuple->flavorHistory;
-         if(FH != 3 && FH != 4 && FH !=6 && FH !=8 && FH != 10)
-            return kTRUE;
-      }
-
-      if(fSample.Contains("Wlight") && !fSample.Contains("Wlightpartonflavor") )
-      {
-         int FH = ntuple->flavorHistory;
-         //if(FH != 11) //Wlight = Wjet - Wcc - Wbb
-         if(FH == 1 || FH == 2 || FH == 5 || FH == 7 || FH == 9 || FH == 3 || FH == 4 || FH ==6 || FH ==8 || FH == 10)
-            return kTRUE;
-      }
 
       int numberb = 0;
       int numberc = 0;
@@ -814,19 +885,19 @@ Bool_t Analyzer::Process(Long64_t entry)
       }
 
       //begin this we are using the jet parton flovar to determine the Wbb Wcc and Wlight
-      if(fSample.Contains("Wlightpartonflavor"))
+      if(fSample.Contains("Wqq"))
       {
          if((numberb > 0 || numberc > 0))
             return kTRUE;
       }
 
-      if(fSample.Contains("Wccpartonflavor"))
+      if(fSample.Contains("Wcc"))
       {
          if(numberc == 0 || numberb > 0 )
             return kTRUE;
       }
 
-      if(fSample.Contains("Wbbpartonflavor"))
+      if(fSample.Contains("Wbb"))
       {
          if(numberb == 0)
             return kTRUE;
@@ -855,10 +926,10 @@ Bool_t Analyzer::Process(Long64_t entry)
       Int_t mc_npv0      = ntuple->gen.Bx_0;
       Int_t mc_npvplus1  = ntuple->gen.Bx_plus1;
 
-      PUweight = LumiWeights_.weight3D(mc_npvminus1,mc_npv0,mc_npvplus1);
+      //PUweight = LumiWeights_.weight3D(mc_npvminus1,mc_npv0,mc_npvplus1);
       if (fpu_down) PUweight = LumiWeightsdown_.weight3D(mc_npvminus1,mc_npv0,mc_npvplus1);
       if (fpu_up) PUweight = LumiWeightsup_.weight3D(mc_npvminus1,mc_npv0,mc_npvplus1);
-      //PUweight = 1.0;//This is just for test_4top
+      //PUweight = 1.0;//This is just for test/Tables
    }
 
    if(fIsMC && fSample.Contains("tttt")){
@@ -870,7 +941,7 @@ Bool_t Analyzer::Process(Long64_t entry)
       PUweight = LumiWeights_.weight3D(mc_npvminus1,mc_npv0,mc_npvplus1);
       if (fpu_down) PUweight = LumiWeightsdown_.weight3D(mc_npvminus1,mc_npv0,mc_npvplus1);
       if (fpu_up) PUweight = LumiWeightsup_.weight3D(mc_npvminus1,mc_npv0,mc_npvplus1);
-      //PUweight = 1.0;//This is just for test_4top
+      //PUweight = 1.0;//This is just for test/Tables
    }
 
   /////////////
@@ -1405,7 +1476,13 @@ Bool_t Analyzer::Process(Long64_t entry)
 	
   double dileadjet_mass = 0;
   double hadW_mass = 0;
+  double hadW_pt = 0;
   double Htop_mass = 0;
+  double Htop_pt = 0;
+  //double secondHtop_mass = 0;
+  //double secondHtop_pt = 0;
+  //double secondhadW_mass = 0;
+  //double secondhadW_pt = 0;
   double Leptop_mass = 0;
   double Leptop_pt = 0;
   double diWdeltaphi =0;
@@ -1413,18 +1490,19 @@ Bool_t Analyzer::Process(Long64_t entry)
   double DeltaPhiMETWlep = 0;
   double DeltaPhiMETlep = 0;
   double DeltaPhiNulep = 0;
-  double sigma2 = 10.5*10.5;
-  double sigma2top = 19.2 * 19.2;
+  double sigma2 = 103.6; //10.5*10.5;
+  double Whad = 82.7;
+  double sigma2top = 302.4; //19.2 * 19.2;
+  double Thad = 171.6;
+  double lepsigma2 = 295.4; // 24.2*24.2;
+  double TLep = 169.7;
+  double bestchi2 = 999999999.;
   double tmpchi2 = 999999999.;
+  double tmpfirstchi2 = 999999999.;
+  double tmpsecondwchi2 = 999999999.;
   double lepW_pt = 0;
   double lepW_mass = 0;
-  TLorentzVector p4dileadjet, p4HadW, p4HadTop;
-
-  if ( njets < 4 ) return kTRUE; 
-  if ( njets > 3) {
-
-  cutmap["4Jet"] += PUweight;
-
+  TLorentzVector p4dileadjet, p4HadW, p4HadTop, p4secondHadW, p4secondHadTop, p4LepW, p4Leptop;
 
   	//////////////////////////////////
 	//    Btagging
@@ -1459,368 +1537,491 @@ Bool_t Analyzer::Process(Long64_t entry)
 	Int_t number_of_b_all = 0;
 	Int_t number_of_c_all = 0;
 
-	for ( size_t mm=0; mm< isTagb["TCHPM"].size(); ++mm ) {
-		if(isTagb["CSVM"][mm]) {
-			myNbtags_CSVM = myNbtags_CSVM + 1; //We need to store the btag jey number before applying the scale factor modified
-		}
-	}
-
-	if(fIsMC){
-		//use the new Btag method
-		for(size_t kk = 0; kk < p4jets.size(); ++kk){
-
-
-			//The official Twiki of Btag Efficiency and Scale factor: https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagPOG
-			//For the CSV Btag efficiency: x is the CSV btag discriminator
-			//effb = -1.73338329789*x*x*x*x +  1.26161794785*x*x*x +  0.784721653518*x*x +  -1.03328577451*x +  1.04305075822
-			//effc = -1.5734604211*x*x*x*x +  1.52798999269*x*x*x +  0.866697059943*x*x +  -1.66657942274*x +  0.780639301724
-			//Tight Tagger has been Commented
-	
-			//For the Medium
-			float b_data_eff = 0.730;
-			float c_data_eff = 0.192;
-
-			//For the Loose
-			float b_data_eff_loose = 0.850;
-			float c_data_eff_loose = 0.442;
-
-			//For the tight
-			float b_data_eff_tight = 0.534;
-			float c_data_eff_tight = 0.0663;
-            
-			//Medium
-			float b_SF = bSF_table.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta())); 
-			float b_SF_error = bSF_table_error.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-			float l_SF = lSF_table.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-			float l_SF_up = lSF_table_error_up.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-			float l_SF_down = lSF_table_error_down.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-			float l_data_eff = leff_table.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-
-			//Loose
-			float b_SF_loose = bSF_table_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta())); 
-			float b_SF_loose_error = bSF_table_error_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-			float l_SF_loose = lSF_table_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-			float l_SF_up_loose = lSF_table_error_up_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-			float l_SF_down_loose = lSF_table_error_down_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-			float l_data_eff_loose = leff_table_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-
-			//Tight
-			float b_SF_tight = bSF_table_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta())); 
-			float b_SF_tight_error = bSF_table_error_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-			float l_SF_tight = lSF_table_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-			float l_SF_up_tight = lSF_table_error_up_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-			float l_SF_down_tight = lSF_table_error_down_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-			float l_data_eff_tight = leff_table_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-
-			Double_t ptmax = 670.;
-			Double_t times = 2.0;
-
-			if(p4jets[kk].Pt() > ptmax){
-				   //btag scale factor error > Ptmax, two times uncerntainty, This has been considered into the Txt Files
-				   //b_SF_error = times * b_SF_error;
-				   //b_SF_loose_error = times * b_SF_loose_error;
-				   //b_SF_tight_error = times * b_SF_tight_error;
-
-				//mistag scale factor error
-				l_SF_up = l_SF + times * (l_SF_up - l_SF);
-				l_SF_down = l_SF - times * (l_SF - l_SF_down);
-
-				//Loose
-				l_SF_up_loose = l_SF_loose + times * (l_SF_up_loose - l_SF_loose);
-				l_SF_down_loose = l_SF_loose - times * (l_SF_loose - l_SF_down_loose);
-
-				//Tight
-				l_SF_up_tight = l_SF_tight + times * (l_SF_up_tight - l_SF_tight);
-				l_SF_down_tight = l_SF_tight - times * (l_SF_tight - l_SF_down_tight);
-			}
-
-		
-			/*
-			//From the twiki: https://twiki.cern.ch/twiki/pub/CMS/BtagPOG/SFb-mujet_payload.txt 
-
-			float b_SF = bSF_table_medium.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSVMedium"); 
-			float b_SF_error = bSF_table_medium.GetError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-
-			float b_SF_loose = bSF_table_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSVLoose"); 
-			float b_SF_loose_error = bSF_table_loose.GetError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));;
-
-			float b_SF_tight = bSF_table_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSVTight"); 
-			float b_SF_tight_error = bSF_table_tight.GetError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));;
-
-			//for Mediem tagger
-			float l_SF = leff_SF_table_medium.GetLightSFValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","M");
-			float l_SF_up = leff_SF_table_medium.GetLightSFError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","M","Up");
-			float l_SF_down = leff_SF_table_medium.GetLightSFError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","M","Down");
-			float l_data_eff = leff_SF_table_medium.GetMistagValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","M");
-
-			//for Loose tagger
-			float l_SF_loose = leff_SF_table_loose.GetLightSFValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","L");
-			float l_SF_up_loose = leff_SF_table_loose.GetLightSFError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","L","Up");
-			float l_SF_down_loose = leff_SF_table_loose.GetLightSFError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","L","Down");
-			float l_data_eff_loose = leff_SF_table_loose.GetMistagValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","L");
-
-
-			//for Tight tagger
-			float l_SF_tight = leff_SF_table_tight.GetLightSFValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","T");
-			float l_SF_up_tight = leff_SF_table_tight.GetLightSFError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","T","Up");
-			float l_SF_down_tight = leff_SF_table_tight.GetLightSFError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","T","Down");
-			float l_data_eff_tight = leff_SF_table_tight.GetMistagValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","T");
-			 */
-
-			double seed = abs(static_cast<int>(sin(p4jets[kk].Phi()*1000000)*100000));
-			BTagSFUtil btsfutil = BTagSFUtil( seed );
-
-			//b jet
-			if ( fIsMC && abs(listflavor[kk])==5 ){
-
-				//Medium
-				bool tmp_IsTag = isTagb["CSVM"][kk];
-				isTagb["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), b_SF, b_data_eff, l_SF, l_data_eff); 
-	
-				//Loose
-				bool tmp_IsTag_loose = isTagb["CSVL"][kk];
-				isTagb["CSVL"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_loose, abs(listflavor[kk]), b_SF_loose, b_data_eff_loose, l_SF, l_data_eff); 
-
-
-				//Tight
-				bool tmp_IsTag_tight = isTagb["CSVT"][kk];
-				isTagb["CSVT"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_tight, abs(listflavor[kk]), b_SF_tight, b_data_eff_tight, l_SF, l_data_eff); 
-
-
-				//the uncerntainty has been considered when getting the value
-				tmp_IsTag = isTagbUp["CSVM"][kk];
-				isTagbUp["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag , abs(listflavor[kk]), b_SF + b_SF_error, b_data_eff, l_SF, l_data_eff);
-				tmp_IsTag = isTagbDown["CSVM"][kk];
-				isTagbDown["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag , abs(listflavor[kk]), b_SF - b_SF_error, b_data_eff, l_SF, l_data_eff);
-	
-				tmp_IsTag_loose = isTagbUp["CSVL"][kk];
-				isTagbUp["CSVL"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_loose, abs(listflavor[kk]), b_SF_loose + b_SF_loose_error, b_data_eff_loose, l_SF, l_data_eff);
-				tmp_IsTag_loose = isTagbDown["CSVL"][kk];
-				isTagbDown["CSVL"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_loose, abs(listflavor[kk]), b_SF_loose - b_SF_loose_error, b_data_eff_loose, l_SF, l_data_eff);
-
-
-				tmp_IsTag_tight = isTagbUp["CSVT"][kk];
-				isTagbUp["CSVT"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_tight, abs(listflavor[kk]), b_SF_tight + b_SF_tight_error, b_data_eff_tight, l_SF, l_data_eff);
-				tmp_IsTag_tight = isTagbDown["CSVT"][kk];
-				isTagbDown["CSVT"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_tight, abs(listflavor[kk]), b_SF_tight - b_SF_tight_error, b_data_eff_tight, l_SF, l_data_eff);
-			}
-
-			if ( fIsMC && abs(listflavor[kk])==4 ) {
-
-				bool tmp_IsTag = isTagb["CSVM"][kk];
-				isTagb["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), b_SF, c_data_eff,l_SF, l_data_eff  );
-	
-				//For the Loose
-				bool tmp_IsTag_loose = isTagb["CSVL"][kk];
-				isTagb["CSVL"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_loose, abs(listflavor[kk]), b_SF_loose, c_data_eff_loose,l_SF, l_data_eff  );
-	
-				//For the Tight 
-				bool tmp_IsTag_tight = isTagb["CSVT"][kk];
-				isTagb["CSVT"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_tight, abs(listflavor[kk]), b_SF_tight, c_data_eff_tight,l_SF, l_data_eff  );
-
-
-				//use uncerntainty on the cjet, two times of B btag error
-				tmp_IsTag = isTagbUp["CSVM"][kk];
-				isTagbUp["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), b_SF + 2.0 * b_SF_error , c_data_eff, l_SF, l_data_eff);
-				tmp_IsTag = isTagbDown["CSVM"][kk];
-				isTagbDown["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), b_SF - 2.0 * b_SF_error, c_data_eff, l_SF, l_data_eff);
-
-				//use uncerntainty on the cjet
-				tmp_IsTag_loose = isTagbUp["CSVL"][kk];
-				isTagbUp["CSVL"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_loose, abs(listflavor[kk]), b_SF_loose + 2.0 * b_SF_loose_error, c_data_eff_loose, l_SF, l_data_eff);
-				tmp_IsTag_loose = isTagbDown["CSVL"][kk];
-				isTagbDown["CSVL"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_loose, abs(listflavor[kk]), b_SF_loose - 2.0 * b_SF_loose_error, c_data_eff_loose, l_SF, l_data_eff);
-
-
-				//use uncerntainty on the cjet
-				tmp_IsTag_tight = isTagbUp["CSVT"][kk];
-				isTagbUp["CSVT"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_tight, abs(listflavor[kk]), b_SF_tight + 2.0 * b_SF_tight_error, c_data_eff_tight, l_SF, l_data_eff);
-				tmp_IsTag_tight = isTagbDown["CSVT"][kk];
-				isTagbDown["CSVT"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_tight, abs(listflavor[kk]), b_SF_tight - 2.0 * b_SF_tight_error, c_data_eff_tight, l_SF, l_data_eff);
-			}
-
-			if ( fIsMC && (abs(listflavor[kk])==1 || abs(listflavor[kk])==2 || abs(listflavor[kk])==3 || abs(listflavor[kk])==21 )){
-
-				bool tmp_IsTag = isTagb["CSVM"][kk];
-				isTagb["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), b_SF, b_data_eff, l_SF, l_data_eff);
-
-				//for loose
-				bool tmp_IsTag_loose = isTagb["CSVL"][kk];
-				isTagb["CSVL"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_loose, abs(listflavor[kk]), b_SF_loose, b_data_eff_loose, l_SF_loose, l_data_eff_loose);
-
-				//for tight
-				bool tmp_IsTag_tight = isTagb["CSVT"][kk];
-				isTagb["CSVT"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_tight, abs(listflavor[kk]), b_SF_tight, b_data_eff_tight, l_SF_tight, l_data_eff_tight);
-
-	
-				tmp_IsTag = isTagbUp["CSVM"][kk];
-				isTagbUp["CSVM"][kk] = btsfutil.modifyBTagsWithSF(  tmp_IsTag, abs(listflavor[kk]), b_SF, b_data_eff, l_SF_up , l_data_eff);
-				tmp_IsTag = isTagbDown["CSVM"][kk];
-				isTagbDown["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), b_SF, b_data_eff, l_SF_down, l_data_eff);
-
-				//for Loose
-				tmp_IsTag_loose = isTagbUp["CSVL"][kk];
-				isTagbUp["CSVL"][kk] = btsfutil.modifyBTagsWithSF(  tmp_IsTag_loose  , abs(listflavor[kk]), b_SF_loose, b_data_eff_loose, l_SF_up_loose, l_data_eff_loose);
-				tmp_IsTag_loose = isTagbDown["CSVL"][kk];
-				isTagbDown["CSVL"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_loose, abs(listflavor[kk]), b_SF_loose, b_data_eff_loose, l_SF_down_loose, l_data_eff_loose);
-
-
-				//for tight 
-				tmp_IsTag_tight = isTagbUp["CSVT"][kk];
-				isTagbUp["CSVT"][kk] = btsfutil.modifyBTagsWithSF(  tmp_IsTag_tight  , abs(listflavor[kk]), b_SF_tight, b_data_eff_tight, l_SF_up_tight, l_data_eff_tight);
-				tmp_IsTag_tight = isTagbDown["CSVT"][kk];
-				isTagbDown["CSVT"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_tight, abs(listflavor[kk]), b_SF_tight, b_data_eff_tight, l_SF_down_tight, l_data_eff_tight);
-			}
-		}
-	}
-
-
-	if( fIsMC ){
-		//zero btag
-		BTagWeight b0(0,0); // number of tags 1 to 3
-
-		//Using the Pt and Eta dependent Btag efficiency
-		vector<BTagWeight::JetInfo> j;
-		//for systematic Btag
-		vector<BTagWeight::JetInfo> jj;//UP
-		vector<BTagWeight::JetInfo> jk;//DOWN
-
-		//New Recommendtion from the Btag Group
-		for(size_t kk = 0; kk < p4jets.size(); ++kk){
-			//Still Support for the Medium
-			//For the Mediem
-			float b_data_eff = 0.730;
-			float c_data_eff = 0.192;
-
-			float b_SF1 = bSF_table.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-			float b_SF_error1 = bSF_table_error.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-
-			float l_SF1 = lSF_table.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-			float l_SF_up1 = lSF_table_error_up.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-			float l_SF_down1 = lSF_table_error_down.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-			float l_data_eff1  = leff_table.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-
-			Double_t ptmax = 670.;
-
-			if(p4jets[kk].Pt() > ptmax){
-				//btag scale factor error > Ptmax, two times uncerntainty
-				b_SF_error1 = 2.0 * b_SF_error1;
-
-				//mistag scale factor error
-				l_SF_up1 = l_SF1 + 2.0 * (l_SF_up1 - l_SF1);
-				l_SF_down1 = l_SF1 - 2.0 * (l_SF1 - l_SF_down1);
-			}
-
-			/*//From the twiki: https://twiki.cern.ch/twiki/pub/CMS/BtagPOG/SFb-mujet_payload.txt 
-			float b_SF1 = bSF_table_medium.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSVMedium"); 
-			float b_SF_error1 = bSF_table_medium.GetError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
-	
-			//for Mediem tagger
-			float l_SF1 = leff_SF_table_medium.GetLightSFValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","M");
-			float l_SF_up1 = leff_SF_table_medium.GetLightSFError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","M","Up");
-			float l_SF_down1 = leff_SF_table_medium.GetLightSFError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","M","Down");
-			float l_data_eff1 = leff_SF_table_medium.GetMistagValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","M");
-			 */
-
-			if(abs(listflavor[kk]) == 5) {  
-				Double_t tageff = b_data_eff; 
-				Double_t b_SF = b_SF1;
-				Double_t b_SF_error = b_SF_error1;
-	
-				BTagWeight::JetInfo bjlow(tageff,b_SF);
-				BTagWeight::JetInfo bjlowUP(tageff,b_SF + b_SF_error);
-				BTagWeight::JetInfo bjlowDOWN(tageff,b_SF - b_SF_error);
-				j.push_back(bjlow);
-				jj.push_back(bjlowUP);
-				jk.push_back(bjlowDOWN);
-			}
-
-			if(abs(listflavor[kk]) == 4){
-				Double_t tageff = c_data_eff; 
-				Double_t b_SF = b_SF1;
-				Double_t b_SF_error = b_SF_error1;
-
-				BTagWeight::JetInfo cjlow(tageff,b_SF);
-				BTagWeight::JetInfo cjlowUP(tageff,b_SF + 2.0 * b_SF_error);
-				BTagWeight::JetInfo cjlowDOWN(tageff,b_SF - 2.0 * b_SF_error);
-				j.push_back(cjlow);
-				jj.push_back(cjlowUP);
-				jk.push_back(cjlowDOWN);
-			}
-
-			if(abs(listflavor[kk]) == 1 || abs(listflavor[kk]) == 2 || abs(listflavor[kk]) == 3 || abs(listflavor[kk]) == 21) {
-				Double_t tageff = l_data_eff1;
-				Double_t l_SF = l_SF1;
-				Double_t l_SF_up = l_SF_up1;
-				Double_t l_SF_down = l_SF_down1;
-
-				BTagWeight::JetInfo lightj(tageff,l_SF);
-				BTagWeight::JetInfo lightjUP(tageff,l_SF_up);
-				BTagWeight::JetInfo lightjDOWN(tageff,l_SF_down);
-
-				j.push_back(lightj);
-				jj.push_back(lightjUP);
-				jk.push_back(lightjDOWN);
-			}
-		}//LOOP of Jet
-
-		//changed from TCHPM to CSVM
-		if(myNbtags_CSVM == 0){
-			SFb0only = b0.weight(j,0);
-		}
-
-		if(myNbtags_CSVM == 1){
-			BTagWeight b11(1,1);
-			SFb1only = b11.weight(j,1);
-
-			SFb_only1tag_syst[0] = b11.weight(jj,1); //UP
-			SFb_only1tag_syst[1] = b11.weight(jk,1);//DOWN
-		}
-
-		if(myNbtags_CSVM >= 1){
-			BTagWeight b1(1,Nbtags_CSVM); 
-			SFb_1btag = b1.weight(j,1);
-
-			SFb_1tag_syst[0] = b1.weight(jj,1); //UP
-			SFb_1tag_syst[1] = b1.weight(jk,1);//DOWN
-       		 }
-
-		if(myNbtags_CSVM >= 2) {
-			BTagWeight b2(2,myNbtags_CSVM);
-			SFb_2btag = b2.weight(j,2);
-
-			SFb_2tag_syst[0] = b2.weight(jj,2); //UP
-			SFb_2tag_syst[1] = b2.weight(jk,2);//DOWN
-		}
-	}//MC sample
-
-	number_of_b_all = number_of_b + number_of_b_highpt;
-	number_of_c_all = number_of_c + number_of_c_highpt;
-
-	// count number of b-tags
-	Int_t Nbtags_TCHPM = 0;
-
-	//This number of btag jet has been applied the scale factor, so be careful!!!!!!!!!!!!!!!!!!
-	for ( size_t itag=0; itag< isTagb["TCHPM"].size(); ++itag ){
-		if ( isTagb["TCHPM"][itag] )  Nbtags_TCHPM++;
-		if ( isTagb["CSVM"][itag] ) Nbtags_CSVM++;
-		if ( isTagb["CSVL"][itag] ) Nbtags_CSVL++;
-		if ( isTagb["CSVT"][itag] ) Nbtags_CSVT++;
-		if ( isTagbUp["CSVL"][itag] ) NbtagsUp_CSVL++;
-		if ( isTagbDown["CSVL"][itag] ) NbtagsDown_CSVL++;
-		if ( isTagbUp["CSVT"][itag] ) NbtagsUp_CSVT++;
-		if ( isTagbDown["CSVT"][itag] ) NbtagsDown_CSVT++;
-		if ( isTagbUp["CSVM"][itag] ) NbtagsUp_CSVM++;
-		if ( isTagbDown["CSVM"][itag] ) NbtagsDown_CSVM++;
+  if ( njets < 4 ) return kTRUE; 
+  if ( njets > 3) {
+
+  cutmap["4Jet"] += PUweight;
+      if(fIsMC)
+      {
+
+         //use the new Btag method
+         for(size_t kk = 0; kk < p4jets.size(); ++kk) 
+         {
+
+            //The official Twiki of Btag Efficiency and Scale factor: https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagPOG
+            //For the CSV Btag efficiency: x is the CSV btag discriminator
+            //effb = -1.73338329789*x*x*x*x +  1.26161794785*x*x*x +  0.784721653518*x*x +  -1.03328577451*x +  1.04305075822
+            //effc = -1.5734604211*x*x*x*x +  1.52798999269*x*x*x +  0.866697059943*x*x +  -1.66657942274*x +  0.780639301724
+            //Tight Tagger has been Commented
+
+            //For the Mediem
+            float b_data_eff = 0.730;
+            float c_data_eff = 0.192;
+
+            //For the Loose
+            float b_data_eff_loose = 0.850;
+            float c_data_eff_loose = 0.442;
+
+            //For the tight
+            float b_data_eff_tight = 0.534;
+            float c_data_eff_tight = 0.0663;
+
+            //Medium
+            float b_SF = bSF_table.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta())); 
+            float c_SF = b_SF;
+            float b_SF_error = bSF_table_error.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float c_SF_error = b_SF_error;
+            float l_SF = lSF_table.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float l_SF_up = lSF_table_error_up.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float l_SF_down = lSF_table_error_down.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float l_data_eff = leff_table.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+
+            //Loose
+            float b_SF_loose = bSF_table_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta())); 
+            float c_SF_loose = b_SF_loose;
+            float b_SF_loose_error = bSF_table_error_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float c_SF_loose_error = b_SF_loose_error;
+            float l_SF_loose = lSF_table_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float l_SF_up_loose = lSF_table_error_up_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float l_SF_down_loose = lSF_table_error_down_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float l_data_eff_loose = leff_table_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+
+            //Tight
+            float b_SF_tight = bSF_table_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta())); 
+            float c_SF_tight = b_SF_tight;
+            float b_SF_tight_error = bSF_table_error_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float c_SF_tight_error = b_SF_tight_error;
+            float l_SF_tight = lSF_table_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float l_SF_up_tight = lSF_table_error_up_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float l_SF_down_tight = lSF_table_error_down_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float l_data_eff_tight = leff_table_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+
+            //#####################Fast Sim Btag correction factor################################
+            //Medium
+            float b_CF = bCF_table.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta())); 
+            float b_CF_error = bCF_table_error.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float c_CF = cCF_table.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float c_CF_error = cCF_table_error.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float l_CF = leff_CF_table.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float l_CF_error = lCF_table_error.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+
+            //Loose
+            /*float b_CF_loose = bCF_table_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta())); 
+              float b_CF_error_loose = bCF_table_error_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+              float c_CF_loose = cCF_table_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+              float c_CF_error_loose = cCF_table_error_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+              float l_CF_loose = lCF_table_error_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+              float l_CF_error_loose = leff_CF_table_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+             */
+
+            //Tight
+            float b_CF_tight = bCF_table_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta())); 
+            float b_CF_error_tight = bCF_table_error_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float c_CF_tight = cCF_table_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float c_CF_error_tight = cCF_table_error_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float l_CF_tight = lCF_table_error_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float l_CF_error_tight = leff_CF_table_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+
+            Double_t ptmax = 670.;
+            Double_t times = 2.0;
+
+            //Fast Sim Btag correction factor
+            if(fIsMC && fSample.Contains("tttt") && !fSample.Contains("SM") && (p4jets[kk].Pt() <= ptmax))
+            {
+               //Medium
+               b_SF = b_SF * b_CF;
+               c_SF = c_SF * c_CF;
+               l_SF = l_SF * l_CF;
+               
+               //Correction Factor is relative uncertainty
+               b_CF_error = b_CF_error * b_CF;
+               c_CF_error = c_CF_error * c_CF;
+               l_CF_error = l_CF_error * l_CF;
+
+               //Tight
+               b_SF_tight = b_SF_tight * b_CF_tight;
+               c_SF_tight = c_SF_tight * c_CF_tight;
+               l_SF_tight = l_SF_tight * l_CF_tight;
+               
+               b_CF_error_tight = b_CF_error_tight * b_CF_tight;  
+               c_CF_error_tight = c_CF_error_tight * c_CF_tight;  
+               l_CF_error_tight = l_CF_error_tight * l_CF_tight;  
+               
+               //Medium Error
+               b_SF_error = TMath::Sqrt(TMath::Power(b_SF_error,2) + TMath::Power(b_CF_error,2));
+               c_SF_error = TMath::Sqrt(TMath::Power(c_SF_error,2) + TMath::Power(c_CF_error,2));  
+               l_SF_up = l_SF + TMath::Sqrt(TMath::Power((l_SF_up - l_SF),2) + TMath::Power(l_CF_error,2));
+               l_SF_down = l_SF - TMath::Sqrt(TMath::Power((l_SF - l_SF_down),2) + TMath::Power(l_CF_error,2));
+             
+               //Tight Error
+               b_SF_tight_error = TMath::Sqrt(TMath::Power(b_SF_tight_error,2) + TMath::Power(b_CF_error_tight,2));
+               c_SF_tight_error = TMath::Sqrt(TMath::Power(c_SF_tight_error,2) + TMath::Power(c_CF_error_tight,2));  
+               l_SF_up_tight = l_SF_tight + TMath::Sqrt(TMath::Power((l_SF_up_tight - l_SF_tight),2) + TMath::Power(l_CF_error_tight,2));
+               l_SF_down_tight = l_SF_tight - TMath::Sqrt(TMath::Power((l_SF_tight - l_SF_down_tight),2) + TMath::Power(l_CF_error_tight,2));
+            }
+
+            if(p4jets[kk].Pt() > ptmax)
+            {
+               //btag scale factor error > Ptmax, two times uncerntainty, This has been considered into the Txt Files
+               //b_SF_error = times * b_SF_error;
+               //b_SF_loose_error = times * b_SF_loose_error;
+               //b_SF_tight_error = times * b_SF_tight_error;
+
+               if(fIsMC && fSample.Contains("tttt")&& !fSample.Contains("SM"))
+               {
+                  //Medium
+                  b_SF = b_SF * b_CF;
+                  c_SF = c_SF * c_CF;
+                  l_SF = l_SF * l_CF;
+
+                  //Correction Factor is relative uncertainty
+                  b_CF_error = b_CF_error * b_CF;
+                  c_CF_error = c_CF_error * c_CF;
+                  l_CF_error = l_CF_error * l_CF;
+
+                  //Tight
+                  b_SF_tight = b_SF_tight * b_CF_tight;
+                  c_SF_tight = c_SF_tight * c_CF_tight;
+                  l_SF_tight = l_SF_tight * l_CF_tight;
+
+                  b_CF_error_tight = b_CF_error_tight * b_CF_tight;  
+                  c_CF_error_tight = c_CF_error_tight * c_CF_tight;  
+                  l_CF_error_tight = l_CF_error_tight * l_CF_tight;  
+
+                  //Medium Error
+                  b_SF_error = TMath::Sqrt(TMath::Power(b_SF_error,2) + TMath::Power(b_CF_error,2));
+                  c_SF_error = TMath::Sqrt(TMath::Power(c_SF_error,2) + TMath::Power(c_CF_error,2));  
+                  l_SF_up = l_SF + TMath::Sqrt(TMath::Power((l_SF_up - l_SF),2) + TMath::Power(l_CF_error,2));
+                  l_SF_down = l_SF - TMath::Sqrt(TMath::Power((l_SF - l_SF_down),2) + TMath::Power(l_CF_error,2));
+
+                  //Tight Error
+                  b_SF_tight_error = TMath::Sqrt(TMath::Power(b_SF_tight_error,2) + TMath::Power(b_CF_error_tight,2));
+                  c_SF_tight_error = TMath::Sqrt(TMath::Power(c_SF_tight_error,2) + TMath::Power(c_CF_error_tight,2));  
+                  l_SF_up_tight = l_SF_tight + TMath::Sqrt(TMath::Power((l_SF_up_tight - l_SF_tight),2) + TMath::Power(l_CF_error_tight,2));
+                  l_SF_down_tight = l_SF_tight - TMath::Sqrt(TMath::Power((l_SF_tight - l_SF_down_tight),2) + TMath::Power(l_CF_error_tight,2));
+
+               }
+
+               //mistag scale factor error
+               l_SF_up = l_SF + times * (l_SF_up - l_SF);
+               l_SF_down = l_SF - times * (l_SF - l_SF_down);
+
+               //Loose
+               l_SF_up_loose = l_SF_loose + times * (l_SF_up_loose - l_SF_loose);
+               l_SF_down_loose = l_SF_loose - times * (l_SF_loose - l_SF_down_loose);
+
+               //Tight
+               l_SF_up_tight = l_SF_tight + times * (l_SF_up_tight - l_SF_tight);
+               l_SF_down_tight = l_SF_tight - times * (l_SF_tight - l_SF_down_tight);
+            }
+
+            /*
+            //From the twiki: https://twiki.cern.ch/twiki/pub/CMS/BtagPOG/SFb-mujet_payload.txt 
+
+            float b_SF = bSF_table_medium.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSVMedium"); 
+            float b_SF_error = bSF_table_medium.GetError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+
+            float b_SF_loose = bSF_table_loose.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSVLoose"); 
+            float b_SF_loose_error = bSF_table_loose.GetError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));;
+
+
+            float b_SF_tight = bSF_table_tight.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSVTight"); 
+            float b_SF_tight_error = bSF_table_tight.GetError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));;
+
+            //for Mediem tagger
+            float l_SF = leff_SF_table_medium.GetLightSFValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","M");
+            float l_SF_up = leff_SF_table_medium.GetLightSFError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","M","Up");
+            float l_SF_down = leff_SF_table_medium.GetLightSFError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","M","Down");
+            float l_data_eff = leff_SF_table_medium.GetMistagValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","M");
+
+            //for Loose tagger
+            float l_SF_loose = leff_SF_table_loose.GetLightSFValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","L");
+            float l_SF_up_loose = leff_SF_table_loose.GetLightSFError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","L","Up");
+            float l_SF_down_loose = leff_SF_table_loose.GetLightSFError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","L","Down");
+            float l_data_eff_loose = leff_SF_table_loose.GetMistagValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","L");
+
+
+            //for Tight tagger
+            float l_SF_tight = leff_SF_table_tight.GetLightSFValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","T");
+            float l_SF_up_tight = leff_SF_table_tight.GetLightSFError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","T","Up");
+            float l_SF_down_tight = leff_SF_table_tight.GetLightSFError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","T","Down");
+            float l_data_eff_tight = leff_SF_table_tight.GetMistagValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","T");
+             */
+
+            double seed = abs(static_cast<int>(sin(p4jets[kk].Phi()*1000000)*100000));
+            BTagSFUtil btsfutil = BTagSFUtil( seed );
+
+            //b jet
+            if ( fIsMC && abs(listflavor[kk])==5 ){
+
+               //Medium
+               bool tmp_IsTag = isTagb["CSVM"][kk];
+               isTagb["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), b_SF, b_data_eff, l_SF, l_data_eff); 
+
+               //Loose
+               bool tmp_IsTag_loose = isTagb["CSVL"][kk];
+               isTagb["CSVL"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_loose, abs(listflavor[kk]), b_SF_loose, b_data_eff_loose, l_SF, l_data_eff); 
+
+
+               //Tight
+               bool tmp_IsTag_tight = isTagb["CSVT"][kk];
+               isTagb["CSVT"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_tight, abs(listflavor[kk]), b_SF_tight, b_data_eff_tight, l_SF, l_data_eff); 
+
+
+               //the uncerntainty has been considered when getting the value
+               tmp_IsTag = isTagbUp["CSVM"][kk];
+               isTagbUp["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag , abs(listflavor[kk]), b_SF + b_SF_error, b_data_eff, l_SF, l_data_eff);
+               tmp_IsTag = isTagbDown["CSVM"][kk];
+               isTagbDown["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag , abs(listflavor[kk]), b_SF - b_SF_error, b_data_eff, l_SF, l_data_eff);
+
+               tmp_IsTag_loose = isTagbUp["CSVL"][kk];
+               isTagbUp["CSVL"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_loose, abs(listflavor[kk]), b_SF_loose + b_SF_loose_error, b_data_eff_loose, l_SF, l_data_eff);
+               tmp_IsTag_loose = isTagbDown["CSVL"][kk];
+               isTagbDown["CSVL"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_loose, abs(listflavor[kk]), b_SF_loose - b_SF_loose_error, b_data_eff_loose, l_SF, l_data_eff);
+
+
+               tmp_IsTag_tight = isTagbUp["CSVT"][kk];
+               isTagbUp["CSVT"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_tight, abs(listflavor[kk]), b_SF_tight + b_SF_tight_error, b_data_eff_tight, l_SF, l_data_eff);
+               tmp_IsTag_tight = isTagbDown["CSVT"][kk];
+               isTagbDown["CSVT"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_tight, abs(listflavor[kk]), b_SF_tight - b_SF_tight_error, b_data_eff_tight, l_SF, l_data_eff);
+
+            }
+
+            if ( fIsMC && abs(listflavor[kk])==4 ) {
+
+               bool tmp_IsTag = isTagb["CSVM"][kk];
+               isTagb["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), c_SF, c_data_eff,l_SF, l_data_eff  );
+
+               //For the Loose
+               bool tmp_IsTag_loose = isTagb["CSVL"][kk];
+               isTagb["CSVL"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_loose, abs(listflavor[kk]), c_SF_loose, c_data_eff_loose,l_SF, l_data_eff  );
+
+               //For the Tight 
+               bool tmp_IsTag_tight = isTagb["CSVT"][kk];
+               isTagb["CSVT"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_tight, abs(listflavor[kk]), c_SF_tight, c_data_eff_tight,l_SF, l_data_eff  );
+
+
+               //use uncerntainty on the cjet, two times of B btag error
+               tmp_IsTag = isTagbUp["CSVM"][kk];
+               isTagbUp["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), c_SF + 2.0 * c_SF_error , c_data_eff, l_SF, l_data_eff);
+               tmp_IsTag = isTagbDown["CSVM"][kk];
+               isTagbDown["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), c_SF - 2.0 * c_SF_error, c_data_eff, l_SF, l_data_eff);
+
+               //use uncerntainty on the cjet
+               tmp_IsTag_loose = isTagbUp["CSVL"][kk];
+               isTagbUp["CSVL"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_loose, abs(listflavor[kk]), c_SF_loose + 2.0 * c_SF_loose_error, c_data_eff_loose, l_SF, l_data_eff);
+               tmp_IsTag_loose = isTagbDown["CSVL"][kk];
+               isTagbDown["CSVL"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_loose, abs(listflavor[kk]), c_SF_loose - 2.0 * c_SF_loose_error, c_data_eff_loose, l_SF, l_data_eff);
+
+
+               //use uncerntainty on the cjet
+               tmp_IsTag_tight = isTagbUp["CSVT"][kk];
+               isTagbUp["CSVT"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_tight, abs(listflavor[kk]), c_SF_tight + 2.0 * c_SF_tight_error, c_data_eff_tight, l_SF, l_data_eff);
+               tmp_IsTag_tight = isTagbDown["CSVT"][kk];
+               isTagbDown["CSVT"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_tight, abs(listflavor[kk]), c_SF_tight - 2.0 * c_SF_tight_error, c_data_eff_tight, l_SF, l_data_eff);
+
+            }
+
+
+            if ( fIsMC && (abs(listflavor[kk])==1 || abs(listflavor[kk])==2 || abs(listflavor[kk])==3 || abs(listflavor[kk])==21 )){
+
+               bool tmp_IsTag = isTagb["CSVM"][kk];
+               isTagb["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), b_SF, b_data_eff, l_SF, l_data_eff);
+
+               //for loose
+               bool tmp_IsTag_loose = isTagb["CSVL"][kk];
+               isTagb["CSVL"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_loose, abs(listflavor[kk]), b_SF_loose, b_data_eff_loose, l_SF_loose, l_data_eff_loose);
+
+               //for tight
+               bool tmp_IsTag_tight = isTagb["CSVT"][kk];
+               isTagb["CSVT"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_tight, abs(listflavor[kk]), b_SF_tight, b_data_eff_tight, l_SF_tight, l_data_eff_tight);
+
+
+               tmp_IsTag = isTagbUp["CSVM"][kk];
+               isTagbUp["CSVM"][kk] = btsfutil.modifyBTagsWithSF(  tmp_IsTag, abs(listflavor[kk]), b_SF, b_data_eff, l_SF_up , l_data_eff);
+               tmp_IsTag = isTagbDown["CSVM"][kk];
+               isTagbDown["CSVM"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag, abs(listflavor[kk]), b_SF, b_data_eff, l_SF_down, l_data_eff);
+
+               //for Loose
+               tmp_IsTag_loose = isTagbUp["CSVL"][kk];
+               isTagbUp["CSVL"][kk] = btsfutil.modifyBTagsWithSF(  tmp_IsTag_loose  , abs(listflavor[kk]), b_SF_loose, b_data_eff_loose, l_SF_up_loose, l_data_eff_loose);
+               tmp_IsTag_loose = isTagbDown["CSVL"][kk];
+               isTagbDown["CSVL"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_loose, abs(listflavor[kk]), b_SF_loose, b_data_eff_loose, l_SF_down_loose, l_data_eff_loose);
+
+
+               //for tight 
+               tmp_IsTag_tight = isTagbUp["CSVT"][kk];
+               isTagbUp["CSVT"][kk] = btsfutil.modifyBTagsWithSF(  tmp_IsTag_tight  , abs(listflavor[kk]), b_SF_tight, b_data_eff_tight, l_SF_up_tight, l_data_eff_tight);
+               tmp_IsTag_tight = isTagbDown["CSVT"][kk];
+               isTagbDown["CSVT"][kk] = btsfutil.modifyBTagsWithSF( tmp_IsTag_tight, abs(listflavor[kk]), b_SF_tight, b_data_eff_tight, l_SF_down_tight, l_data_eff_tight);
+
+            }
+
+         }//Loop of Jet
+      }//MC sample
+
+      if( fIsMC )
+      {
+         //zero btag
+         BTagWeight b0(0,0); // number of tags 1 to 3
+
+         //Using the Pt and Eta dependent Btag efficiency
+         vector<BTagWeight::JetInfo> j;
+         //for systematic Btag
+         vector<BTagWeight::JetInfo> jj;//UP
+         vector<BTagWeight::JetInfo> jk;//DOWN
+
+         //New Recommendtion from the Btag Group
+         for(size_t kk = 0; kk < p4jets.size(); ++kk)
+         {
+            //Still Support for the Medium
+            //For the Mediem
+            float b_data_eff = 0.730;
+            float c_data_eff = 0.192;
+
+            float b_SF1 = bSF_table.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float b_SF_error1 = bSF_table_error.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+
+            float l_SF1 = lSF_table.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float l_SF_up1 = lSF_table_error_up.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float l_SF_down1 = lSF_table_error_down.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+            float l_data_eff1  = leff_table.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+
+            Double_t ptmax = 670.;
+
+            if(p4jets[kk].Pt() > ptmax)
+            {
+               //btag scale factor error > Ptmax, two times uncerntainty
+               b_SF_error1 = 2.0 * b_SF_error1;
+
+               //mistag scale factor error
+               l_SF_up1 = l_SF1 + 2.0 * (l_SF_up1 - l_SF1);
+               l_SF_down1 = l_SF1 - 2.0 * (l_SF1 - l_SF_down1);
+            }
+
+            /*//From the twiki: https://twiki.cern.ch/twiki/pub/CMS/BtagPOG/SFb-mujet_payload.txt 
+              float b_SF1 = bSF_table_medium.GetValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSVMedium"); 
+              float b_SF_error1 = bSF_table_medium.GetError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()));
+
+            //for Mediem tagger
+            float l_SF1 = leff_SF_table_medium.GetLightSFValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","M");
+            float l_SF_up1 = leff_SF_table_medium.GetLightSFError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","M","Up");
+            float l_SF_down1 = leff_SF_table_medium.GetLightSFError(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","M","Down");
+            float l_data_eff1 = leff_SF_table_medium.GetMistagValue(p4jets[kk].Pt(),fabs(p4jets[kk].Eta()),"CSV","M");
+             */
+
+            if(abs(listflavor[kk]) == 5) 
+            {  
+               Double_t tageff = b_data_eff; 
+               Double_t b_SF = b_SF1;
+               Double_t b_SF_error = b_SF_error1;
+
+               BTagWeight::JetInfo bjlow(tageff,b_SF);
+               BTagWeight::JetInfo bjlowUP(tageff,b_SF + b_SF_error);
+               BTagWeight::JetInfo bjlowDOWN(tageff,b_SF - b_SF_error);
+               j.push_back(bjlow);
+               jj.push_back(bjlowUP);
+               jk.push_back(bjlowDOWN);
+            }
+
+            if(abs(listflavor[kk]) == 4)
+            {
+               Double_t tageff = c_data_eff; 
+               Double_t b_SF = b_SF1;
+               Double_t b_SF_error = b_SF_error1;
+
+               BTagWeight::JetInfo cjlow(tageff,b_SF);
+               BTagWeight::JetInfo cjlowUP(tageff,b_SF + 2.0 * b_SF_error);
+               BTagWeight::JetInfo cjlowDOWN(tageff,b_SF - 2.0 * b_SF_error);
+               j.push_back(cjlow);
+               jj.push_back(cjlowUP);
+               jk.push_back(cjlowDOWN);
+            }
+
+            if(abs(listflavor[kk]) == 1 || abs(listflavor[kk]) == 2 || abs(listflavor[kk]) == 3 || abs(listflavor[kk]) == 21) 
+            {
+               Double_t tageff = l_data_eff1;
+               Double_t l_SF = l_SF1;
+               Double_t l_SF_up = l_SF_up1;
+               Double_t l_SF_down = l_SF_down1;
+
+               BTagWeight::JetInfo lightj(tageff,l_SF);
+               BTagWeight::JetInfo lightjUP(tageff,l_SF_up);
+               BTagWeight::JetInfo lightjDOWN(tageff,l_SF_down);
+
+               j.push_back(lightj);
+               jj.push_back(lightjUP);
+               jk.push_back(lightjDOWN);
+
+            }
+         }//LOOP of Jet
+
+         //changed from TCHPM to CSVM
+         if(myNbtags_CSVM == 0){
+            SFb0only = b0.weight(j,0);
+         }
+
+         if(myNbtags_CSVM == 1){
+            BTagWeight b11(1,1);
+            SFb1only = b11.weight(j,1);
+
+            SFb_only1tag_syst[0] = b11.weight(jj,1); //UP
+            SFb_only1tag_syst[1] = b11.weight(jk,1);//DOWN
+         }
+
+         if(myNbtags_CSVM >= 1){
+            BTagWeight b1(1,myNbtags_CSVM); 
+            SFb_1btag = b1.weight(j,1);
+
+            SFb_1tag_syst[0] = b1.weight(jj,1); //UP
+            SFb_1tag_syst[1] = b1.weight(jk,1);//DOWN
+         }
+
+         if(myNbtags_CSVM >= 2) {
+            BTagWeight b2(2,myNbtags_CSVM);
+            SFb_2btag = b2.weight(j,2);
+
+            SFb_2tag_syst[0] = b2.weight(jj,2); //UP
+            SFb_2tag_syst[1] = b2.weight(jk,2);//DOWN
+         }
+      }//MC sample
+
+      number_of_b_all = number_of_b + number_of_b_highpt;
+      number_of_c_all = number_of_c + number_of_c_highpt;
+
+      // count number of b-tags
+      Int_t Nbtags_TCHPM = 0;
+      Int_t Nbtags_SSVHEM = 0;
+
+      //This number of btag jet has been applied the scale factor, so be careful!!!!!!!!!!!!!!!!!!
+      for ( size_t itag=0; itag< isTagb["TCHPM"].size(); ++itag )
+      {
+         if ( isTagb["TCHPM"][itag] )  Nbtags_TCHPM++;
+         if ( isTagb["SSVHEM"][itag] ) Nbtags_SSVHEM++;
+         if ( isTagb["CSVM"][itag] ) Nbtags_CSVM++;
+         if ( isTagb["CSVL"][itag] ) Nbtags_CSVL++;
+         if ( isTagb["CSVT"][itag] ) Nbtags_CSVT++;
+         if ( isTagbUp["CSVL"][itag] ) NbtagsUp_CSVL++;
+         if ( isTagbDown["CSVL"][itag] ) NbtagsDown_CSVL++;
+         if ( isTagbUp["CSVT"][itag] ) NbtagsUp_CSVT++;
+         if ( isTagbDown["CSVT"][itag] ) NbtagsDown_CSVT++;
+         if ( isTagbUp["CSVM"][itag] ) NbtagsUp_CSVM++;
+         if ( isTagbDown["CSVM"][itag] ) NbtagsDown_CSVM++;
+
 	}///////////////////////////////////////////////////////////////// end btaging
 
-  p4dileadjet = p4jets[0] + p4jets[1];
-  dileadjet_mass = p4dileadjet.M();
 
   //calculate cloest di jet mass which is the cloest to W mass 
-  Int_t bestjetTopindex[3] = {-1,-1,-1};
+  Int_t bestjettopindex[3] = {-1,-1,-1};
+  Int_t bestjetindex[2] = {-1, -1}; // best index combination cloest to the Top mass
+  Int_t bestjetsecondWindex[2] = {-1,-1};
+  Int_t bestjettopindex2[3] = {-1,-1,-1};
+  Int_t mymetnum = 2;
+  //Double_t mindeltamass = 100000000.;
+  vector<Double_t> topmasscombination;
+  topmasscombination.clear();
 
-         for ( Int_t iijet = 0; iijet < (njets - 2); ++iijet ) {
+/*         for ( Int_t iijet = 0; iijet < (njets - 2); ++iijet ) {
             for ( Int_t jjjet = iijet + 1; jjjet < njets - 1; ++jjjet ) {
                for(Int_t kkjet = iijet + 2; kkjet < njets; ++kkjet){
                   TLorentzVector tmpvv = p4jets[iijet] + p4jets[jjjet];
@@ -1830,27 +2031,184 @@ Bool_t Analyzer::Process(Long64_t entry)
                   Double_t reconstructionchi2 = TMath::Abs(tmpmass - 80.4) * TMath::Abs(tmpmass - 80.4)/sigma2 + TMath::Abs(tmptopmass - 172.5) * TMath::Abs(tmptopmass - 172.5)/sigma2top;
                   if( tmpchi2 > reconstructionchi2){
                      tmpchi2 = reconstructionchi2;
-                     bestjetTopindex[0] = iijet;
-                     bestjetTopindex[1] = jjjet;
-                     bestjetTopindex[2] = kkjet;
+                     bestjettopindex[0] = iijet;
+                     bestjettopindex[1] = jjjet;
+                     bestjettopindex[2] = kkjet;
                   }
                }
             }
-         }
+         }  */
 
-  p4HadW = p4jets[bestjetTopindex[0]] + p4jets[bestjetTopindex[1]];
-  p4HadTop = p4jets[bestjetTopindex[0]] + p4jets[bestjetTopindex[1]] + p4jets[bestjetTopindex[2]];
-  hadW_mass = p4HadW.M();
-  Htop_mass = p4HadTop.M();
+         //Leptonic and First Hadronic Top
+
+         Int_t loopnumber = 0;
+         if(njets < 6)
+         {
+            for(Int_t l = 0; l < mymetnum; l++){
+               for ( Int_t iijet = 0; iijet < (njets ); ++iijet ) {//leptonic top jet
+                  for ( Int_t jjjet = 0; jjjet < njets - 1; ++jjjet ) { //first hadronic top jet
+                     for(Int_t kkjet = jjjet + 1; kkjet < njets; ++kkjet){ //second hadronic top jet
+                        for(Int_t lljet = 0; lljet < njets; ++lljet){//third hadronic top jet
+                           if(jjjet == iijet || jjjet == lljet || kkjet == lljet) continue;
+                           if(kkjet == iijet) continue;
+                           if(lljet == iijet) continue;
+                           loopnumber++;
+                           //cout << l << " " << iijet << " " << jjjet << " "<< kkjet << " " << lljet  << << endl;
+                           TLorentzVector tmpleptop = p4lepton + nup4[l] + p4jets[iijet];
+                           TLorentzVector tmpvv = p4jets[jjjet] + p4jets[kkjet];
+                           Double_t tmpmass = tmpvv.M();
+                           TLorentzVector tmptop = p4jets[jjjet] + p4jets[kkjet] + p4jets[lljet];
+                           Double_t tmptopmass = tmptop.M();
+                           //Double_t reconstructionchi2 = TMath::Abs(tmpleptop.M() - 172.5) * TMath::Abs(tmpleptop.M() - 172.5) /lepsigma2 + TMath::Abs(tmpmass - 80.4) * TMath::Abs(tmpmass - 80.4)/sigma2 + TMath::Abs(tmptopmass - 172.5) * TMath::Abs(tmptopmass - 172.5)/sigma2top;
+                           Double_t reconstructionchi2 = TMath::Abs(tmpleptop.M() - TLep) * TMath::Abs(tmpleptop.M() - TLep) /lepsigma2 + TMath::Abs(tmpmass - Whad) * TMath::Abs(tmpmass - Whad)/sigma2 + TMath::Abs(tmptopmass - Thad) * TMath::Abs(tmptopmass - Thad)/sigma2top;
+                           if( tmpfirstchi2 > reconstructionchi2){
+                              tmpfirstchi2 = reconstructionchi2;
+                              bestjetindex[0] = l;
+                              bestjetindex[1] = iijet;
+                              //bestjetWindex[0] = jjjet;
+                              //bestjetWindex[1] = kkjet;
+                              bestjettopindex[0] = jjjet;
+                              bestjettopindex[1] = kkjet;
+                              bestjettopindex[2] = lljet;
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+            //cout<< "Jet Loop:" << loopnumber << endl;
+         }
+         else if(njets >= 6)
+         {
+            for(Int_t l = 0; l < mymetnum; l++){
+               for ( Int_t iijet = 0; iijet < (njets ); ++iijet ) {//leptonic top jet
+                  for ( Int_t jjjet = 0; jjjet < njets - 1; ++jjjet ) { //first hadronic top jet
+                     for(Int_t kkjet = jjjet + 1; kkjet < njets; ++kkjet){ //second hadronic top jet
+                        for(Int_t lljet = 0; lljet < njets; ++lljet){//third hadronic top jet
+                           for(Int_t mmjet = 0; mmjet < (njets - 1); ++mmjet){
+                              for(Int_t nnjet = mmjet + 1; nnjet < njets; ++nnjet){
+                                 if(jjjet == iijet || jjjet == lljet || kkjet == lljet || jjjet == mmjet || jjjet == nnjet) continue;
+                                 if(kkjet == iijet || kkjet == mmjet || kkjet == nnjet) continue;
+                                 if(lljet == iijet || lljet == mmjet || lljet == nnjet) continue;
+                                 if(mmjet == iijet) continue;
+                                 if(nnjet == iijet) continue;
+                                 loopnumber++;
+                                 TLorentzVector tmpleptop = p4lepton + nup4[l] + p4jets[iijet];
+                                 TLorentzVector tmpvv = p4jets[jjjet] + p4jets[kkjet];
+                                 Double_t tmpmass = tmpvv.M();
+                                 TLorentzVector tmptop = p4jets[jjjet] + p4jets[kkjet] + p4jets[lljet];
+                                 Double_t tmptopmass = tmptop.M();
+                                 TLorentzVector tmpsecondvv = p4jets[mmjet] + p4jets[nnjet];
+                                 //Double_t tmpsecondmass = tmpsecondvv.M();
+                                 //Double_t reconstructionchi2 = TMath::Abs(tmpleptop.M() - 172.5) * TMath::Abs(tmpleptop.M() - 172.5) /lepsigma2 + TMath::Abs(tmpmass - 80.4) * TMath::Abs(tmpmass - 80.4)/sigma2 + TMath::Abs(tmptopmass - 172.5) * TMath::Abs(tmptopmass - 172.5)/sigma2top + TMath::Abs(tmpsecondmass - 80.4) * TMath::Abs(tmpsecondmass - 80.4) / sigma2;
+                           	 Double_t reconstructionchi2 = TMath::Abs(tmpleptop.M() - TLep) * TMath::Abs(tmpleptop.M() - TLep) /lepsigma2 + TMath::Abs(tmpmass - Whad) * TMath::Abs(tmpmass - Whad)/sigma2 + TMath::Abs(tmptopmass - Thad) * TMath::Abs(tmptopmass - Thad)/sigma2top;
+                                 if( tmpsecondwchi2 > reconstructionchi2){
+                                    tmpsecondwchi2 = reconstructionchi2;
+                                    bestjetindex[0] = l; 
+                                    bestjetindex[1] = iijet;
+                                    //bestjetWindex[0] = jjjet;
+                                    //bestjetWindex[1] = kkjet;
+                                    bestjettopindex[0] = jjjet;
+                                    bestjettopindex[1] = kkjet;
+                                    bestjettopindex[2] = lljet;
+                                    bestjetsecondWindex[0] = mmjet;
+                                    bestjetsecondWindex[1] = nnjet;
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+            //cout<< "Jet Loop:" << loopnumber << endl;
+         }
+	 //
+	 // second try 
+         /*for(Int_t l = 0; l < mymetnum; l++){
+		 for ( Int_t iijet = 0; iijet < (njets ); ++iijet ) {
+			for ( Int_t jjjet = 0; jjjet < (njets - 2); ++jjjet ) {
+				for(Int_t kkjet = jjjet + 1; kkjet < (njets - 1); ++kkjet){
+					for(Int_t lljet = jjjet + 2; lljet < njets; ++lljet){
+						if(jjjet == iijet) continue;
+						if(kkjet == iijet) continue;
+						if(lljet == iijet) continue;
+
+						TLorentzVector tmpleptop = p4lepton + nup4[l] + p4jets[iijet];
+						TLorentzVector tmpvv = p4jets[jjjet] + p4jets[kkjet];
+						Double_t tmpmass = tmpvv.M();
+						TLorentzVector tmptop = p4jets[jjjet] + p4jets[kkjet] + p4jets[lljet];
+						Double_t tmptopmass = tmptop.M();
+						Double_t reconstructionchi2 = TMath::Abs(tmpleptop.M() - 172.5) * TMath::Abs(tmpleptop.M() - 172.5) /lepsigma2 + TMath::Abs(tmpmass - 80.4) * TMath::Abs(tmpmass - 80.4)/sigma2 + TMath::Abs(tmptopmass - 172.5) * TMath::Abs(tmptopmass - 172.5)/sigma2top;
+						if( tmpfirstchi2 > reconstructionchi2){
+							tmpfirstchi2 = reconstructionchi2;
+							//tmpchi2 = reconstructionchi2;
+							bestjetindex[0] = l;
+							bestjetindex[1] = iijet;
+							//bestjetWindex[0] = jjjet;
+							//bestjetWindex[1] = kkjet;
+							bestjettopindex[0] = jjjet;
+							bestjettopindex[1] = kkjet;
+							bestjettopindex[2] = lljet;
+						}
+					}
+				}
+			}
+		 }
+	 }*/
+
+	 tmpchi2 = tmpfirstchi2;
+
+  //calculate second closest di jet mass which is the cloest to W mass 
+         if(njets > 5){  /// larger than 6 because we are only reconstructing the 2nd W
+		 /*for ( Int_t iijet = 0; iijet < (njets - 1); ++iijet ) {
+			 for ( Int_t jjjet = iijet + 1; jjjet < (njets); ++jjjet ) {
+				 if(iijet == bestjetindex[1] || iijet == bestjettopindex[0] || iijet == bestjettopindex[1] || iijet == bestjettopindex[2]) continue;
+				 if(jjjet == bestjetindex[1] || jjjet == bestjettopindex[0] || jjjet == bestjettopindex[1] || jjjet == bestjettopindex[2]) continue;
+				 TLorentzVector tmpvv = p4jets[iijet] + p4jets[jjjet];
+				 Double_t tmpmass = tmpvv.M();
+				 Double_t reconstructionchi2 = TMath::Abs(tmpmass - 80.4) * TMath::Abs(tmpmass - 80.4)/sigma2;
+				 if( tmpsecondwchi2 > reconstructionchi2){
+					 tmpsecondwchi2 = reconstructionchi2;
+					 bestjetsecondWindex[0] = iijet;
+					 bestjetsecondWindex[1] = jjjet;
+				 }
+			 }
+		 }*/
+
+		 //tmpchi2 = tmpfirstchi2 + tmpsecondwchi2; 
+		 tmpchi2 = tmpsecondwchi2; 
+	 }
+
+         //Second Hadronic Top
+         Double_t tmpchi22 = 9999999;
+	 if (njets >=7 ) {
+         for ( Int_t iijet = 0; iijet < (njets - 2); ++iijet ) {
+		 for ( Int_t jjjet = iijet + 1; jjjet < njets - 1; ++jjjet ) {
+			 for(Int_t kkjet = iijet + 2; kkjet < njets; ++kkjet){
+				 if(iijet == bestjetindex[1] || iijet == bestjettopindex[0] || iijet == bestjettopindex[1] || iijet == bestjettopindex[2]) continue;
+				 if(jjjet == bestjetindex[1] || jjjet == bestjettopindex[0] || jjjet == bestjettopindex[1] || jjjet == bestjettopindex[2]) continue;
+				 if(kkjet == bestjetindex[1] || kkjet == bestjettopindex[0] || kkjet == bestjettopindex[1] || kkjet == bestjettopindex[2]) continue;
+				 TLorentzVector tmpvv = p4jets[iijet] + p4jets[jjjet];
+				 Double_t tmpmass = tmpvv.M();
+				 TLorentzVector tmptop = p4jets[iijet] + p4jets[jjjet] + p4jets[kkjet];
+				 Double_t tmptopmass = tmptop.M();
+				 //Double_t reconstructionchi2 = TMath::Abs(tmpmass - 80.4) * TMath::Abs(tmpmass - 80.4)/sigma2 + TMath::Abs(tmptopmass - 172.5) * TMath::Abs(tmptopmass - 172.5)/sigma2top;
+                           	 Double_t reconstructionchi2 = TMath::Abs(tmpmass - Whad) * TMath::Abs(tmpmass - Whad)/sigma2 + TMath::Abs(tmptopmass - Thad) * TMath::Abs(tmptopmass - Thad)/sigma2top;
+				 if( tmpchi22 > reconstructionchi2){
+					 tmpchi22 = reconstructionchi2;
+					 bestjettopindex2[0] = iijet;
+					 bestjettopindex2[1] = jjjet;
+					 bestjettopindex2[2] = kkjet;
+				 }
+			 }
+		 }
+	 }
+	 }
 
 
   // Leptonic Top
-  Int_t index[2] = {-1, -1}; // best index combination cloest to the Top mass
-  Double_t mindeltamass = 100000000.;
-  vector<Double_t> topmasscombination;
-  topmasscombination.clear();
-
-  for(Int_t l = 0; l < 2; l++){
+  /*for(Int_t l = 0; l < 2; l++){
 	  for(Int_t m = 0; m < njets; m++){   
 		  TLorentzVector sum;
 		  sum = p4lepton + nup4[l] + p4jets[m];
@@ -1865,20 +2223,35 @@ Bool_t Analyzer::Process(Long64_t entry)
 			  index[1] = m;
 		  }
 	  }
-  }
+  }*/
 
+  p4dileadjet = p4jets[0] + p4jets[1];
+  dileadjet_mass = p4dileadjet.M();
+  p4LepW = p4lepton + nup4[bestjetindex[0]];
+  p4Leptop = p4lepton + nup4[bestjetindex[0]] + p4jets[bestjetindex[1]];
+  p4HadW = p4jets[bestjettopindex[0]] + p4jets[bestjettopindex[1]];
+  p4HadTop = p4jets[bestjettopindex[0]] + p4jets[bestjettopindex[1]] + p4jets[bestjettopindex[2]];
+  p4secondHadW = p4jets[bestjetsecondWindex[0]] + p4jets[bestjetsecondWindex[1]];
+  p4secondHadTop = p4jets[bestjettopindex2[0]] + p4jets[bestjettopindex2[1]] + p4jets[bestjettopindex2[2]];
 
-  TLorentzVector p4LepW = p4lepton + nup4[index[0]];
-
-  TLorentzVector hadwbosonp4 = p4jets[bestjetTopindex[0]] + p4jets[bestjetTopindex[1]];
-  diWdeltaphi = p4LepW.DeltaPhi(hadwbosonp4);
-  diWdeltaR = p4LepW.DeltaR(hadwbosonp4);
+  bestchi2 = tmpchi2;
+  hadW_mass = p4HadW.M();
+  hadW_pt = p4HadW.Pt();
+  Htop_mass = p4HadTop.M();
+  Htop_pt = p4HadTop.Pt();
+  double secondhadW_mass = p4secondHadW.M();
+  double secondhadW_pt = p4secondHadW.Pt();
+  double secondHtop_mass = p4secondHadTop.M();
+  double secondHtop_pt = p4secondHadTop.Pt();
+  diWdeltaphi = p4LepW.DeltaPhi(p4HadW);
+  diWdeltaR = p4LepW.DeltaR(p4HadW);
   DeltaPhiMETWlep = p4LepW.DeltaPhi(p4MET);
   DeltaPhiMETlep = p4lepton.DeltaPhi(p4MET);
   DeltaPhiNulep = p4lepton.DeltaPhi(p4Nu);
-
   lepW_pt = p4LepW.Pt();
   lepW_mass = p4LepW.M();
+  Leptop_pt = p4Leptop.Pt();
+  Leptop_mass = p4Leptop.M();
 
 
 
@@ -1887,32 +2260,37 @@ Bool_t Analyzer::Process(Long64_t entry)
 	hMET["Stjet_cut0"]->Fill( Stjet , PUweight );
 	hM["dileadjet_cut0"]->Fill( dileadjet_mass, PUweight );
 	hM["hadW_mass_cut0"]->Fill( hadW_mass, PUweight );
-	hM["top_mass_cut0"]->Fill( Htop_mass, PUweight );
-	hM["top_pt_cut0"]->Fill( p4HadTop.Pt(), PUweight );
+	hM["Htop_mass_cut0"]->Fill( Htop_mass, PUweight );
+	hM["Leptop_mass_cut0"]->Fill( Leptop_mass, PUweight );
+	hM["Htop_pt_cut0"]->Fill( Htop_pt, PUweight );
+	hM["Leptop_pt_cut0"]->Fill( Leptop_pt, PUweight );
+	hM["diWdeltaR_cut0"]->Fill( diWdeltaR, PUweight );
   	hjets["1st_pt_cut0"]->Fill( p4jets[0].Pt(), PUweight );
 	hjets["1st_eta_cut0"]->Fill( p4jets[0].Eta(), PUweight );
 	hjets["2nd_pt_cut0"]->Fill( p4jets[1].Pt(), PUweight );
 	hjets["2nd_eta_cut0"]->Fill( p4jets[1].Eta(), PUweight );
 	hjets["3rd_pt_cut0"]->Fill( p4jets[2].Pt(), PUweight );
+	hjets["3rd_eta_cut0"]->Fill( p4jets[2].Eta(), PUweight );
 	hjets["4th_pt_cut0"]->Fill( p4jets[3].Pt(), PUweight );
-	hjets["5th_pt_cut0"]->Fill( p4jets[4].Pt(), PUweight );
-	hjets["6th_pt_cut0"]->Fill( p4jets[5].Pt(), PUweight );
-	hjets["7th_pt_cut0"]->Fill( p4jets[6].Pt(), PUweight );
+	hjets["4th_eta_cut0"]->Fill( p4jets[3].Eta(), PUweight );
 	hjets["Njets_cut0"]->Fill( njets, PUweight ); 
+	hjets["mindeltaRjj_cut0"]->Fill( deltaRminjj, PUweight );
+	hjets["deltaRmu2j_cut0"]->Fill( deltaRmu2j, PUweight );
 	hjets["Nbtags_CSVL_cut0"]->Fill( Nbtags_CSVL, PUweight ); 
 	hjets["Nbtags_CSVM_cut0"]->Fill( Nbtags_CSVM, PUweight ); 
 	hjets["Nbtags_CSVT_cut0"]->Fill( Nbtags_CSVT, PUweight ); 
 	hjets["Nbtags_TCHPM_cut0"]->Fill( Nbtags_TCHPM, PUweight ); 
 	hjets["deltaPhijj_cut0"]->Fill( deltaPhijj, PUweight );
+	hPVs["Nreweight"]->Fill( total_pvs, PUweight );
 
-	if ( total_muons == 1){
+/*	if ( total_muons == 1){
 		if ( Nbtags_CSVL == 0 ){
 			if (njets == 4){
 				hjets["Stjetm1j4b0"]->Fill( Stjet , PUweight );
 				hjets["DeltaRdijetm1j4b0"]->Fill( deltaRjj , PUweight );
 				hjets["DeltaPhiMETWlepm1j4b0"]->Fill( DeltaPhiMETWlep , PUweight );
 				hjets["trijetmassm1j4b0"]->Fill( Htop_mass , PUweight );
-				hjets["trijetptm1j4b0"]->Fill( p4HadTop.Pt() , PUweight );
+				hjets["trijetptm1j4b0"]->Fill( Htop_pt , PUweight );
 				hjets["deltaRmindijetm1j4b0"]->Fill( deltaRminjj , PUweight );
 				hjets["deltaRmu2jetm1j4b0"]->Fill( deltaRmu2j , PUweight );
 				hjets["deltaPhidijetm1j4b0"]->Fill( deltaPhijj , PUweight );
@@ -1926,7 +2304,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 				hjets["DeltaRdijetm1j5b0"]->Fill( deltaRjj , PUweight );
 				hjets["DeltaPhiMETWlepm1j5b0"]->Fill( DeltaPhiMETWlep , PUweight );
 				hjets["trijetmassm1j5b0"]->Fill( Htop_mass , PUweight );
-				hjets["trijetptm1j5b0"]->Fill( p4HadTop.Pt() , PUweight );
+				hjets["trijetptm1j5b0"]->Fill( Htop_pt , PUweight );
 				hjets["deltaRmindijetm1j5b0"]->Fill( deltaRminjj , PUweight );
 				hjets["deltaRmu2jetm1j5b0"]->Fill( deltaRmu2j , PUweight );
 				hjets["deltaPhidijetm1j5b0"]->Fill( deltaPhijj , PUweight );
@@ -1940,7 +2318,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 				hjets["DeltaRdijetm1j6b0"]->Fill( deltaRjj , PUweight );
 				hjets["DeltaPhiMETWlepm1j6b0"]->Fill( DeltaPhiMETWlep , PUweight );
 				hjets["trijetmassm1j6b0"]->Fill( Htop_mass , PUweight );
-				hjets["trijetptm1j6b0"]->Fill( p4HadTop.Pt() , PUweight );
+				hjets["trijetptm1j6b0"]->Fill( Htop_pt , PUweight );
 				hjets["deltaRmindijetm1j6b0"]->Fill( deltaRminjj , PUweight );
 				hjets["deltaRmu2jetm1j6b0"]->Fill( deltaRmu2j , PUweight );
 				hjets["deltaPhidijetm1j6b0"]->Fill( deltaPhijj , PUweight );
@@ -1957,7 +2335,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 				hjets["DeltaRdijetm1j4b1"]->Fill( deltaRjj , PUweight );
 				hjets["DeltaPhiMETWlepm1j4b1"]->Fill( DeltaPhiMETWlep , PUweight );
 				hjets["trijetmassm1j4b1"]->Fill( Htop_mass , PUweight );
-				hjets["trijetptm1j4b1"]->Fill( p4HadTop.Pt() , PUweight );
+				hjets["trijetptm1j4b1"]->Fill( Htop_pt , PUweight );
 				hjets["deltaRmindijetm1j4b1"]->Fill( deltaRminjj , PUweight );
 				hjets["deltaRmu2jetm1j4b1"]->Fill( deltaRmu2j , PUweight );
 				hjets["deltaPhidijetm1j4b1"]->Fill( deltaPhijj , PUweight );
@@ -1971,7 +2349,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 				hjets["DeltaRdijetm1j5b1"]->Fill( deltaRjj , PUweight );
 				hjets["DeltaPhiMETWlepm1j5b1"]->Fill( DeltaPhiMETWlep , PUweight );
 				hjets["trijetmassm1j5b1"]->Fill( Htop_mass , PUweight );
-				hjets["trijetptm1j5b1"]->Fill( p4HadTop.Pt() , PUweight );
+				hjets["trijetptm1j5b1"]->Fill( Htop_pt , PUweight );
 				hjets["deltaRmindijetm1j5b1"]->Fill( deltaRminjj , PUweight );
 				hjets["deltaRmu2jetm1j5b1"]->Fill( deltaRmu2j , PUweight );
 				hjets["deltaPhidijetm1j5b1"]->Fill( deltaPhijj , PUweight );
@@ -1985,7 +2363,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 				hjets["DeltaRdijetm1j6b1"]->Fill( deltaRjj , PUweight );
 				hjets["DeltaPhiMETWlepm1j6b1"]->Fill( DeltaPhiMETWlep , PUweight );
 				hjets["trijetmassm1j6b1"]->Fill( Htop_mass , PUweight );
-				hjets["trijetptm1j6b1"]->Fill( p4HadTop.Pt() , PUweight );
+				hjets["trijetptm1j6b1"]->Fill( Htop_pt , PUweight );
 				hjets["deltaRmindijetm1j6b1"]->Fill( deltaRminjj , PUweight );
 				hjets["deltaRmu2jetm1j6b1"]->Fill( deltaRmu2j , PUweight );
 				hjets["deltaPhidijetm1j6b1"]->Fill( deltaPhijj , PUweight );
@@ -2002,7 +2380,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 				hjets["DeltaRdijetm1j4b2"]->Fill( deltaRjj , PUweight );
 				hjets["DeltaPhiMETWlepm1j4b2"]->Fill( DeltaPhiMETWlep , PUweight );
 				hjets["trijetmassm1j4b2"]->Fill( Htop_mass , PUweight );
-				hjets["trijetptm1j4b2"]->Fill( p4HadTop.Pt() , PUweight );
+				hjets["trijetptm1j4b2"]->Fill( Htop_pt , PUweight );
 				hjets["deltaRmindijetm1j4b2"]->Fill( deltaRminjj , PUweight );
 				hjets["deltaRmu2jetm1j4b2"]->Fill( deltaRmu2j , PUweight );
 				hjets["deltaPhidijetm1j4b2"]->Fill( deltaPhijj , PUweight );
@@ -2016,7 +2394,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 				hjets["DeltaRdijetm1j5b2"]->Fill( deltaRjj , PUweight );
 				hjets["DeltaPhiMETWlepm1j5b2"]->Fill( DeltaPhiMETWlep , PUweight );
 				hjets["trijetmassm1j5b2"]->Fill( Htop_mass , PUweight );
-				hjets["trijetptm1j5b2"]->Fill( p4HadTop.Pt() , PUweight );
+				hjets["trijetptm1j5b2"]->Fill( Htop_pt , PUweight );
 				hjets["deltaRmindijetm1j5b2"]->Fill( deltaRminjj , PUweight );
 				hjets["deltaRmu2jetm1j5b2"]->Fill( deltaRmu2j , PUweight );
 				hjets["deltaPhidijetm1j5b2"]->Fill( deltaPhijj , PUweight );
@@ -2030,7 +2408,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 				hjets["DeltaRdijetm1j6b2"]->Fill( deltaRjj , PUweight );
 				hjets["DeltaPhiMETWlepm1j6b2"]->Fill( DeltaPhiMETWlep , PUweight );
 				hjets["trijetmassm1j6b2"]->Fill( Htop_mass , PUweight );
-				hjets["trijetptm1j6b2"]->Fill( p4HadTop.Pt() , PUweight );
+				hjets["trijetptm1j6b2"]->Fill( Htop_pt , PUweight );
 				hjets["deltaRmindijetm1j6b2"]->Fill( deltaRminjj , PUweight );
 				hjets["deltaRmu2jetm1j6b2"]->Fill( deltaRmu2j , PUweight );
 				hjets["deltaPhidijetm1j6b2"]->Fill( deltaPhijj , PUweight );
@@ -2050,7 +2428,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 				hjets["DeltaRdijetm2j4b0"]->Fill( deltaRjj , PUweight );
 				hjets["DeltaPhiMETWlepm2j4b0"]->Fill( DeltaPhiMETWlep , PUweight );
 				hjets["trijetmassm2j4b0"]->Fill( Htop_mass , PUweight );
-				hjets["trijetptm2j4b0"]->Fill( p4HadTop.Pt() , PUweight );
+				hjets["trijetptm2j4b0"]->Fill( Htop_pt , PUweight );
 				hjets["deltaRmindijetm2j4b0"]->Fill( deltaRminjj , PUweight );
 				hjets["deltaRmu2jetm2j4b0"]->Fill( deltaRmu2j , PUweight );
 				hjets["deltaPhidijetm2j4b0"]->Fill( deltaPhijj , PUweight );
@@ -2064,7 +2442,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 				hjets["DeltaRdijetm2j5b0"]->Fill( deltaRjj , PUweight );
 				hjets["DeltaPhiMETWlepm2j5b0"]->Fill( DeltaPhiMETWlep , PUweight );
 				hjets["trijetmassm2j5b0"]->Fill( Htop_mass , PUweight );
-				hjets["trijetptm2j5b0"]->Fill( p4HadTop.Pt() , PUweight );
+				hjets["trijetptm2j5b0"]->Fill( Htop_pt , PUweight );
 				hjets["deltaRmindijetm2j5b0"]->Fill( deltaRminjj , PUweight );
 				hjets["deltaRmu2jetm2j5b0"]->Fill( deltaRmu2j , PUweight );
 				hjets["deltaPhidijetm2j5b0"]->Fill( deltaPhijj , PUweight );
@@ -2078,7 +2456,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 				hjets["DeltaRdijetm2j6b0"]->Fill( deltaRjj , PUweight );
 				hjets["DeltaPhiMETWlepm2j6b0"]->Fill( DeltaPhiMETWlep , PUweight );
 				hjets["trijetmassm2j6b0"]->Fill( Htop_mass , PUweight );
-				hjets["trijetptm2j6b0"]->Fill( p4HadTop.Pt() , PUweight );
+				hjets["trijetptm2j6b0"]->Fill( Htop_pt , PUweight );
 				hjets["deltaRmindijetm2j6b0"]->Fill( deltaRminjj , PUweight );
 				hjets["deltaRmu2jetm2j6b0"]->Fill( deltaRmu2j , PUweight );
 				hjets["deltaPhidijetm2j6b0"]->Fill( deltaPhijj , PUweight );
@@ -2095,7 +2473,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 				hjets["DeltaRdijetm2j4b1"]->Fill( deltaRjj , PUweight );
 				hjets["DeltaPhiMETWlepm2j4b1"]->Fill( DeltaPhiMETWlep , PUweight );
 				hjets["trijetmassm2j4b1"]->Fill( Htop_mass , PUweight );
-				hjets["trijetptm2j4b1"]->Fill( p4HadTop.Pt() , PUweight );
+				hjets["trijetptm2j4b1"]->Fill( Htop_pt , PUweight );
 				hjets["deltaRmindijetm2j4b1"]->Fill( deltaRminjj , PUweight );
 				hjets["deltaRmu2jetm2j4b1"]->Fill( deltaRmu2j , PUweight );
 				hjets["deltaPhidijetm2j4b1"]->Fill( deltaPhijj , PUweight );
@@ -2109,7 +2487,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 				hjets["DeltaRdijetm2j5b1"]->Fill( deltaRjj , PUweight );
 				hjets["DeltaPhiMETWlepm2j5b1"]->Fill( DeltaPhiMETWlep , PUweight );
 				hjets["trijetmassm2j5b1"]->Fill( Htop_mass , PUweight );
-				hjets["trijetptm2j5b1"]->Fill( p4HadTop.Pt() , PUweight );
+				hjets["trijetptm2j5b1"]->Fill( Htop_pt , PUweight );
 				hjets["deltaRmindijetm2j5b1"]->Fill( deltaRminjj , PUweight );
 				hjets["deltaRmu2jetm2j5b1"]->Fill( deltaRmu2j , PUweight );
 				hjets["deltaPhidijetm2j5b1"]->Fill( deltaPhijj , PUweight );
@@ -2123,7 +2501,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 				hjets["DeltaRdijetm2j6b1"]->Fill( deltaRjj , PUweight );
 				hjets["DeltaPhiMETWlepm2j6b1"]->Fill( DeltaPhiMETWlep , PUweight );
 				hjets["trijetmassm2j6b1"]->Fill( Htop_mass , PUweight );
-				hjets["trijetptm2j6b1"]->Fill( p4HadTop.Pt() , PUweight );
+				hjets["trijetptm2j6b1"]->Fill( Htop_pt , PUweight );
 				hjets["deltaRmindijetm2j6b1"]->Fill( deltaRminjj , PUweight );
 				hjets["deltaRmu2jetm2j6b1"]->Fill( deltaRmu2j , PUweight );
 				hjets["deltaPhidijetm2j6b1"]->Fill( deltaPhijj , PUweight );
@@ -2140,7 +2518,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 				hjets["DeltaRdijetm2j4b2"]->Fill( deltaRjj , PUweight );
 				hjets["DeltaPhiMETWlepm2j4b2"]->Fill( DeltaPhiMETWlep , PUweight );
 				hjets["trijetmassm2j4b2"]->Fill( Htop_mass , PUweight );
-				hjets["trijetptm2j4b2"]->Fill( p4HadTop.Pt() , PUweight );
+				hjets["trijetptm2j4b2"]->Fill( Htop_pt , PUweight );
 				hjets["deltaRmindijetm2j4b2"]->Fill( deltaRminjj , PUweight );
 				hjets["deltaRmu2jetm2j4b2"]->Fill( deltaRmu2j , PUweight );
 				hjets["deltaPhidijetm2j4b2"]->Fill( deltaPhijj , PUweight );
@@ -2154,7 +2532,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 				hjets["DeltaRdijetm2j5b2"]->Fill( deltaRjj , PUweight );
 				hjets["DeltaPhiMETWlepm2j5b2"]->Fill( DeltaPhiMETWlep , PUweight );
 				hjets["trijetmassm2j5b2"]->Fill( Htop_mass , PUweight );
-				hjets["trijetptm2j5b2"]->Fill( p4HadTop.Pt() , PUweight );
+				hjets["trijetptm2j5b2"]->Fill( Htop_pt , PUweight );
 				hjets["deltaRmindijetm2j5b2"]->Fill( deltaRminjj , PUweight );
 				hjets["deltaRmu2jetm2j5b2"]->Fill( deltaRmu2j , PUweight );
 				hjets["deltaPhidijetm2j5b2"]->Fill( deltaPhijj , PUweight );
@@ -2168,7 +2546,7 @@ Bool_t Analyzer::Process(Long64_t entry)
 				hjets["DeltaRdijetm2j6b2"]->Fill( deltaRjj , PUweight );
 				hjets["DeltaPhiMETWlepm2j6b2"]->Fill( DeltaPhiMETWlep , PUweight );
 				hjets["trijetmassm2j6b2"]->Fill( Htop_mass , PUweight );
-				hjets["trijetptm2j6b2"]->Fill( p4HadTop.Pt() , PUweight );
+				hjets["trijetptm2j6b2"]->Fill( Htop_pt , PUweight );
 				hjets["deltaRmindijetm2j6b2"]->Fill( deltaRminjj , PUweight );
 				hjets["deltaRmu2jetm2j6b2"]->Fill( deltaRmu2j , PUweight );
 				hjets["deltaPhidijetm2j6b2"]->Fill( deltaPhijj , PUweight );
@@ -2179,31 +2557,44 @@ Bool_t Analyzer::Process(Long64_t entry)
 			}
 		}
 
+	} */
+
+	if ( Nbtags_CSVL == 0){ 
+		hjets["Njetsj4b0"]->Fill( njets, PUweight ); 
+		hjets["Stjetj4b0"]->Fill( Stjet , PUweight );
+ 		if (njets == 5) hjets["Stjetj5b0"]->Fill( Stjet , PUweight );
+ 		if (njets == 6) hjets["Stjetj6b0"]->Fill( Stjet , PUweight );
+ 		if (njets >= 7) hjets["Stjetj7b0"]->Fill( Stjet , PUweight );
+	}
+	if ( Nbtags_CSVL >= 1){ 
+		hjets["Njetsj4b1"]->Fill( njets, PUweight ); 
+		hjets["Stjetj4b1"]->Fill( Stjet , PUweight );
+ 		if (njets == 5) hjets["Stjetj5b1"]->Fill( Stjet , PUweight );
+ 		if (njets == 6) hjets["Stjetj6b1"]->Fill( Stjet , PUweight );
+ 		if (njets >= 7) hjets["Stjetj7b1"]->Fill( Stjet , PUweight );
+	}
+	if ( Nbtags_CSVL >= 2){ 
+		hjets["Njetsj4b2"]->Fill( njets, PUweight ); 
+	}
+	if ( Nbtags_CSVL >= 3){ 
+		hjets["Njetsj4b3"]->Fill( njets, PUweight ); 
+	}
+	if ( Nbtags_CSVL >= 4){ 
+		hjets["Njetsj4b4"]->Fill( njets, PUweight ); 
 	}
 
-	hjets["Stjet41"]->Fill( Stjet , PUweight );
-	hjets["Stjet42"]->Fill( Stjet , PUweight );
- 	if (njets > 4){
-		hjets["Stjet51"]->Fill( Stjet , PUweight );
-		hjets["Stjet52"]->Fill( Stjet , PUweight );
-	}
- 	if (njets > 5){
-		hjets["Stjet61"]->Fill( Stjet , PUweight );
-		hjets["Stjet62"]->Fill( Stjet , PUweight );
-	}
-	//   Cuts
-	//bool passcut = true;
+	///////////////////////////////////////////////////////////   Cuts
 	if ( Ht < 300. ) return kTRUE;
 
 	if ( Ht >= 300.0 ) {
 		cutmap["Ht"] += PUweight;
-		if(Nbtags_CSVM == 4){
+		/*if(Nbtags_CSVM == 4){
 		       	cout <<"Run : "<< ntuple->run <<", Lumi : "<< ntuple->lumi << ", Event: "<< ntuple->event << endl;
 			for (size_t h = 0; h < p4jets.size(); ++h){
 				TopJetEvent jet = jets[h];
 				cout << h << " " << p4jets[h].Pt() << " " << jet.btag_CSV << endl;
 			}
-		}
+		}*/
 
 
 		/*double jet1CSVMpt = 0;
@@ -2227,16 +2618,17 @@ Bool_t Analyzer::Process(Long64_t entry)
 		if ( Nbtags_CSVM > 3 ){ jet4CSVMpt = p4bjetscsvl[3].Pt(); hjets["jet4_CSVM_pt"]->Fill ( jet4CSVMpt, PUweight ); } */
 		
 		
-		if ( !fbtag_up && fbtag_down && NbtagsDown_CSVL < 1 ){ cutmap["4Jet0b"] += PUweight; return kTRUE;}
-		if ( !fbtag_up && !fbtag_down && Nbtags_CSVL < 1 ){ cutmap["4Jet0b"] += PUweight; return kTRUE;}
-		if ( fbtag_up && !fbtag_down && NbtagsUp_CSVL < 1 ){ cutmap["4Jet0b"] += PUweight; return kTRUE;}
-		if ( Nbtags_CSVL > 0){ 
+		if ( !fbtag_up && !fbtag_down && Nbtags_CSVL < 3 ){ cutmap["4Jet0b"] += PUweight; return kTRUE;}
+		if ( fbtag_down && NbtagsDown_CSVL < 3 ){ cutmap["4Jet0b"] += PUweight; return kTRUE;}
+		if ( fbtag_up && NbtagsUp_CSVL < 3) { cutmap["4Jet0b"] += PUweight; return kTRUE;}
+		//if ( Nbtags_CSVL < 3 ) return kTRUE;
+		if ( Nbtags_CSVL > 2){ 
 			cutmap["4Jet1b"] += PUweight;
+			//return kTRUE;
 
 			//double jet1CSVLpt = p4bjetscsvl[0].Pt(); 
 			//hjets["jet1_CSVL_pt"]->Fill ( jet1CSVLpt, PUweight ); 
 
-			hPVs["Nreweight"]->Fill( total_pvs, PUweight );
 			hMET["Ht"]->Fill( Ht, PUweight );
 			hMET["MET"]->Fill( p4MET.Pt(), PUweight );
 	  		hMET["phi"]->Fill( p4MET.Phi(), PUweight );
@@ -2273,26 +2665,81 @@ Bool_t Analyzer::Process(Long64_t entry)
 			hjets["Nbtags_TCHPM"]->Fill( Nbtags_TCHPM, PUweight ); 
 
 
-			hM["dileadjet"]->Fill( dileadjet_mass, PUweight );
 			hM["hadW_mass"]->Fill( hadW_mass, PUweight );
-			hM["top_mass"]->Fill( Htop_mass, PUweight );
+			hM["hadW_pt"]->Fill( hadW_pt, PUweight );
+			hM["Htop_mass"]->Fill( Htop_mass, PUweight );
+			hM["Htop_pt"]->Fill( Htop_pt, PUweight );
 			hM["Leptop_mass"]->Fill( Leptop_mass, PUweight );
-			hM["top_pt"]->Fill( p4HadTop.Pt(), PUweight );
 			hM["Leptop_pt"]->Fill( Leptop_pt, PUweight );
-			hM["chi2"]->Fill( tmpchi2, PUweight );
 			hM["lepW_mass"]->Fill(lepW_mass, PUweight );
+			hM["lepW_pt"]->Fill( lepW_pt, PUweight );
+			hM["secondhadW_mass"]->Fill( secondhadW_mass, PUweight );
+			hM["secondhadW_pt"]->Fill( secondhadW_pt, PUweight );
+			if ( secondHtop_mass > 0) {
+				hM["secondHtop_mass"]->Fill( secondHtop_mass, PUweight );
+				hM["secondHtop_pt"]->Fill( secondHtop_pt, PUweight );
+			}
+			hM["chi2"]->Fill( bestchi2, PUweight );
+			hM["dileadjet"]->Fill( dileadjet_mass, PUweight );
 			hM["diWdeltaphi"]->Fill( diWdeltaphi , PUweight );
 			hM["diWdeltaR"]->Fill( diWdeltaR , PUweight );
-			hM["lepW_pt"]->Fill( lepW_pt, PUweight );
 			hMET["deltaPhiMETWlep"]->Fill( DeltaPhiMETWlep , PUweight );
 			hMET["deltaPhiMETlep"]->Fill( DeltaPhiMETlep , PUweight );
 			hMET["deltaPhiNulep"]->Fill( DeltaPhiNulep , PUweight );
 
+     			/* vector<double>mvaInputVal;
+			mvaInputVal.push_back( Stjet ); 
+			double jet2_pt = p4jets[1].Pt();
+			double jet3_pt = p4jets[2].Pt();
+			double jet4_pt = p4jets[3].Pt();
+			mvaInputVal.push_back( jet2_pt ); 
+			mvaInputVal.push_back( jet3_pt ); 
+			mvaInputVal.push_back( jet4_pt ); 
+			double jet1_eta = p4jets[0].Eta();
+			double jet2_eta = p4jets[1].Eta();
+			double jet3_eta = p4jets[2].Eta();
+			double jet4_eta = p4jets[3].Eta();
+			mvaInputVal.push_back( jet1_eta ); 
+			mvaInputVal.push_back( jet2_eta ); 
+			mvaInputVal.push_back( jet3_eta ); 
+			mvaInputVal.push_back( jet4_eta ); 
+			double deltaRmindijet = deltaRminjj;
+			mvaInputVal.push_back( deltaRmindijet ); 
+			mvaInputVal.push_back( diWdeltaR); 
+			double deltaRdijet = deltaRjj;
+			mvaInputVal.push_back( deltaRdijet); 
+			double deltaRmu2jet = deltaRmu2j;
+			mvaInputVal.push_back( deltaRmu2jet ); 
+			double Muonpt = p4lepton.Pt();
+			mvaInputVal.push_back( Muonpt ); 
+			double Muoneta = p4lepton.Eta();
+			mvaInputVal.push_back( Muoneta ); 
+			double MuondeltaR = deltaR;
+			mvaInputVal.push_back( MuondeltaR ); 
+			double MET = p4MET.Pt();
+			mvaInputVal.push_back( MET ); 
+			double Htopmass = Htop_mass;
+			mvaInputVal.push_back( Htopmass); 
+			double Htoppt = Htop_pt;
+			mvaInputVal.push_back( Htoppt); 
+			double Leptopmass = Leptop_mass;
+			mvaInputVal.push_back( Leptopmass); 
+			double Leptoppt = Leptop_pt;
+			mvaInputVal.push_back( Leptoppt); 
+			double jet_number = njets;
+			mvaInputVal.push_back( jet_number); 
+			double numBjets_csvl = Nbtags_CSVL;  
+			mvaInputVal.push_back( numBjets_csvl ); 
+
+			bdtresponse = mvaReader.GetMvaValue( mvaInputVal );
+			if ( bdtresponse > - 0.3 ){ */
+			
+
 			if ( p4jets[3].Pt() > 50.){ 
 				cutmap["4JetCut"] += PUweight;
-				if ( Stjet >= 500 ) {
+				if ( Stjet >= 500 ) { 
 					cutmap["Stjet"] += PUweight;
-					hPVs["Nreweight_cut2"]->Fill( total_pvs, PUweight );
+					//hPVs["Nreweight_cut2"]->Fill( total_pvs, PUweight );
 					hMET["Ht_cut2"]->Fill( Ht, PUweight );
 					hMET["MET_cut2"]->Fill( p4MET.Pt(), PUweight );
 					hMET["Stlep_cut2"]->Fill( Stlep , PUweight );
@@ -2316,8 +2763,8 @@ Bool_t Analyzer::Process(Long64_t entry)
 					hM["WMt_cut2"]->Fill( WMt, PUweight ); 
  					hM["dileadjet_cut2"]->Fill( dileadjet_mass, PUweight );
  					hM["hadW_mass_cut2"]->Fill( hadW_mass, PUweight );
- 					hM["top_mass_cut2"]->Fill( Htop_mass, PUweight );
- 					hM["top_pt_cut2"]->Fill( p4HadTop.Pt(), PUweight );
+ 					hM["Htop_mass_cut2"]->Fill( Htop_mass, PUweight );
+ 					hM["Htop_pt_cut2"]->Fill( Htop_pt, PUweight );
 				}  // Stjet cut
 			}  // 4 leading jet
 
@@ -2333,14 +2780,24 @@ Bool_t Analyzer::Process(Long64_t entry)
 		MyStoreTree->GetMetVariable()->METphi = p4MET.Phi();
 		MyStoreTree->GetMetVariable()->Stlep = Stlep;
 		MyStoreTree->GetMetVariable()->Stjet = Stjet;
+		MyStoreTree->GetMetVariable()->dileadjetmass = dileadjet_mass;
 		MyStoreTree->GetMetVariable()->diWdeltaphi = diWdeltaphi;
 		MyStoreTree->GetMetVariable()->diWdeltaR = diWdeltaR;
 		MyStoreTree->GetMetVariable()->DeltaPhiMETWlep = DeltaPhiMETWlep;
 		MyStoreTree->GetMetVariable()->DeltaPhiMETlep = DeltaPhiMETlep;
 		MyStoreTree->GetMetVariable()->DeltaPhiNulep = DeltaPhiNulep;
 		MyStoreTree->GetMetVariable()->LepWPt = lepW_pt;
-		MyStoreTree->GetMetVariable()->topmass = Htop_mass;
-		MyStoreTree->GetMetVariable()->toppt = p4HadTop.Pt();
+		MyStoreTree->GetMetVariable()->Leptopmass = Leptop_mass;
+		MyStoreTree->GetMetVariable()->Leptoppt = Leptop_pt;
+		MyStoreTree->GetMetVariable()->hadWmass = hadW_mass;
+		MyStoreTree->GetMetVariable()->hadWpt = hadW_pt;
+		MyStoreTree->GetMetVariable()->Htopmass = Htop_mass;
+		MyStoreTree->GetMetVariable()->Htoppt = Htop_pt;
+		MyStoreTree->GetMetVariable()->secondHtopmass = secondHtop_mass;
+		MyStoreTree->GetMetVariable()->secondHtoppt = secondHtop_pt;
+		MyStoreTree->GetMetVariable()->secondhadWmass = secondhadW_mass;
+		MyStoreTree->GetMetVariable()->secondhadWpt = secondhadW_pt;
+		MyStoreTree->GetMetVariable()->chi2 = bestchi2;
                 MyStoreTree->GetJetVariable()->numjets= njets;
                 MyStoreTree->GetJetVariable()->numBjets_csvl= Nbtags_CSVL;
                 MyStoreTree->GetJetVariable()->numBjets_csvm= Nbtags_CSVM;
@@ -2349,6 +2806,10 @@ Bool_t Analyzer::Process(Long64_t entry)
                 MyStoreTree->GetJetVariable()->jet2pt = p4jets[1].Pt() ;
                 MyStoreTree->GetJetVariable()->jet3pt = p4jets[2].Pt() ;
                 MyStoreTree->GetJetVariable()->jet4pt = p4jets[3].Pt() ;
+                MyStoreTree->GetJetVariable()->jet1eta = p4jets[0].Eta() ;
+                MyStoreTree->GetJetVariable()->jet2eta = p4jets[1].Eta() ;
+                MyStoreTree->GetJetVariable()->jet3eta = p4jets[2].Eta() ;
+                MyStoreTree->GetJetVariable()->jet4eta = p4jets[3].Eta() ;
                 MyStoreTree->GetJetVariable()->deltaRmindijet = deltaRminjj ;
                 MyStoreTree->GetJetVariable()->deltaRdijet = deltaRjj ;
                 MyStoreTree->GetJetVariable()->deltaPhidijet = deltaPhijj ;
@@ -2364,6 +2825,27 @@ Bool_t Analyzer::Process(Long64_t entry)
                 if (p4bjetscsvm[3].Pt() < 1000 && p4bjetscsvm[3].Pt() > 40 ) MyStoreTree->GetJetVariable()->jet4CSVMpt = p4bjetscsvm[3].Pt() ;*/
 		//////////////////////////////////////////////////////////////////////////////////
 		
+	//////////////////////////////////////////////////////////////////////////////////
+			//if ( njets < 7 ) return kTRUE;
+			if ( njets > 6){ 
+				cutmap["7Jet"] += PUweight;
+				hjets["Njets_7jets"]->Fill( njets, PUweight); 
+				hjets["Nbtags_CSVL_7jets"]->Fill( Nbtags_CSVL, PUweight); 
+			}
+		
+			//if ( njets < 8 ) return kTRUE;
+			if ( njets > 7){ 
+				cutmap["8Jet"] += PUweight;
+				hjets["Njets_8jets"]->Fill( njets, PUweight); 
+				hjets["Nbtags_CSVL_8jets"]->Fill( Nbtags_CSVL, PUweight); 
+			}
+		
+			//if ( njets < 9 ) return kTRUE;
+			if ( njets > 8){ 
+				cutmap["9Jet"] += PUweight;
+				hjets["Njets_9jets"]->Fill( njets, PUweight); 
+				hjets["Nbtags_CSVL_9jets"]->Fill( Nbtags_CSVL, PUweight); 
+			}
 		}  // 1 btag */
 	}  // Ht
   }  // jets

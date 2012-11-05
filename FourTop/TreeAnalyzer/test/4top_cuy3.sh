@@ -11,17 +11,16 @@ args=("$@")
 
 VARFILE="varcuy.txt"
 MAIN_Dir="/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/"
-SAMPLE_DIR="/uscms/home/algomez/nobackup/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/"
-#SAMPLE_DIR="/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/tmp/"
+SAMPLE_DIR="/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/tmp/"
 
-#sample=(data tttt_Gh600 ttbar Wbb Wcc Wqq ZJets STtch STtch_bar STsch_bar STsch STtWch STtWch_bar WW WZ)
-sample=(data tttt_SM tttt_Gh400 ttttUED6 tttt_Gh600 ttbar Wbb Wcc Wqq ZJets STtch STtch_bar STsch_bar STsch STtWch STtWch_bar WW WZ)
+#sample=(data ttbar Wbb Wcc Wqq ZJets STtch STtch_bar STsch_bar STsch STtWch STtWch_bar WW WZ)
+sample=(data tttt_SM tttt_Gh400  tttt_Gh500 tttt_Gh600 ttbar STtWch)
 
 #OUTFILEPLOTS='/uscms/home/algomez/public_html/plots/BDTFinal/tmp/'
-OUTFILEPLOTS='/uscms/home/algomez/public_html/plots/BDTv110/Nbjets3/'
-BANNER='#mu+jets'
-#BANNER='#mu+jets, BDToutput > -0.3'
-#BANNER='#mu+jets, Njets #geq 4, Ht > 300, Nbtag #geq 3'
+OUTFILEPLOTS='/uscms/home/algomez/public_html/plots/BDTv108/'
+#BANNER='#mu+jets'
+#BANNER='#mu+jets, Njets #geq 4'
+BANNER='#mu+jets, Ht > 300, Nbtag #geq 0, Njets #geq 9'
 #BANNER='#mu+jets, sel + S_{T}^{jet} > 500GeV'
 #BANNER='#mu+jets, Nbtag #geq 3, S_{T}^{jet} > 500GeV'
 
@@ -36,9 +35,9 @@ nttbar="ttbar"
 nWjets="Wbb"
 nZjets="ZJets"
 nDibosons="WW"
-nST="STtch"
+nST="STtWch"
 n4TopSM="tttt_SM"
-n4TopUED6="ttttUED6"
+n4TopUED6="4TopUED6"
 n4Top1200="tttt_Gh1200"
 n4Top1000="tttt_Gh1000"
 n4Top800="tttt_Gh800"
@@ -93,24 +92,9 @@ do
 	done
 
 	echo '<additionArray name="ST" title="ST"> 
-<additionArrayItem array="STtch"/>
 <additionArrayItem array="STtWch"/>
-<additionArrayItem array="STsch"/>
-<additionArrayItem array="STsch_bar"/>
-<additionArrayItem array="STtch_bar"/>
-<additionArrayItem array="STtWch_bar"/>
 </additionArray>
 
-<additionArray name="wjets" title="wjets">
-<additionArrayItem array="Wbb" weight="1.21"/>
-<additionArrayItem array="Wcc" weight="1.66"/>
-<additionArrayItem array="Wqq" weight="0.58"/> 
-</additionArray>
-
-<additionArray name="Dibosons" title="Dibosons">
-<additionArrayItem array="WW"/>
-<additionArrayItem array="WZ"/>
-</additionArray>
 '>> $OUTFILE
 
 	if [ $setlog != "false" ]; then
@@ -133,19 +117,18 @@ do
 	in_array $nDibosons "${sample[@]}" && echo "<superimposeItem name=\"${var}_Dibosons\" color=\"top\" legend=\"Dibosons\"/>" >> $OUTFILE
 	in_array $nQCD "${sample[@]}" && echo "<superimposeItem name=\"${var}_QCD\" color=\"top\" legend=\"QCD\"/>" >> $OUTFILE
 	in_array $nST "${sample[@]}" && echo "<superimposeItem name=\"${var}_ST\" color=\"top\" legend=\"ST\" />" >> $OUTFILE
+	in_array $n4TopSM "${sample[@]}" && echo "<superimposeItem name=\"${var}_$n4TopSM\" color=\"1\" legend=\"t#bar{t}t#bar{t} SM (x10)\" NoStack=\"true\" SF=\"10\" />" >> $OUTFILE
 	#in_array $n4TopUED6 "${sample[@]}" && echo "<superimposeItem name=\"${var}_$n4TopUED6\" color=\"1\" legend=\"t#bar{t}t#bar{t} UED6\" NoStack=\"true\" />" >> $OUTFILE
-	in_array $n4Top400 "${sample[@]}" && echo "<superimposeItem name=\"${var}_$n4Top400\" color=\"1\" legend=\"t#bar{t}t#bar{t} G_{H} 0.4 TeV (x5)\" NoStack=\"true\" SF=\"5\" />" >> $OUTFILE
+	in_array $n4Top400 "${sample[@]}" && echo "<superimposeItem name=\"${var}_$n4Top400\" color=\"1\" legend=\"t#bar{t}t#bar{t} G_{H} 0.4 TeV (x10)\" NoStack=\"true\" SF=\"10\" />" >> $OUTFILE
 	in_array $n4Top500 "${sample[@]}" && echo "<superimposeItem name=\"${var}_$n4Top500\" color=\"1\" legend=\"t#bar{t}t#bar{t} G_{H} 0.5 TeV (x20)\" NoStack=\"true\" SF=\"20\" />" >> $OUTFILE
-	in_array $n4Top600 "${sample[@]}" && echo "<superimposeItem name=\"${var}_$n4Top600\" color=\"1\" legend=\"t#bar{t}t#bar{t} G_{H} 0.6 TeV (x5)\" NoStack=\"true\" SF=\"5\" />" >> $OUTFILE
+	in_array $n4Top600 "${sample[@]}" && echo "<superimposeItem name=\"${var}_$n4Top600\" color=\"1\" legend=\"t#bar{t}t#bar{t} G_{H} 0.6 TeV (x10)\" NoStack=\"true\" SF=\"10\" />" >> $OUTFILE
 	in_array $n4Top700 "${sample[@]}" && echo "<superimposeItem name=\"${var}_$n4Top700\" color=\"1\" legend=\"t#bar{t}t#bar{t} G_{H} 0.7 TeV (x20)\" NoStack=\"true\" SF=\"20\" />" >> $OUTFILE
 	in_array $n4Top800 "${sample[@]}" && echo "<superimposeItem name=\"${var}_$n4Top800\" color=\"1\" legend=\"t#bar{t}t#bar{t} G_{H} 0.8 TeV (x20)\" NoStack=\"true\"  SF=\"20\"/>" >> $OUTFILE
 	in_array $n4Top1000 "${sample[@]}" && echo "<superimposeItem name=\"${var}_$n4Top1000\" color=\"1\" legend=\"t#bar{t}t#bar{t} G_{H} 1.0 TeV (x20)\" NoStack=\"true\"  SF=\"20\"/>" >> $OUTFILE
 	in_array $n4Top1200 "${sample[@]}" && echo "<superimposeItem name=\"${var}_$n4Top1200\" color=\"1\" legend=\"t#bar{t}t#bar{t} G_{H} 1.2 TeV (x20)\" NoStack=\"true\"  SF=\"20\"/>" >> $OUTFILE
-	in_array $n4TopSM "${sample[@]}" && echo "<superimposeItem name=\"${var}_$n4TopSM\" color=\"1\" legend=\"t#bar{t}t#bar{t} SM (x5)\" NoStack=\"true\" SF=\"5\" />" >> $OUTFILE
-	in_array $n4TopUED6 "${sample[@]}" && echo "<superimposeItem name=\"${var}_$n4TopUED6\" color=\"1\" legend=\"t#bar{t}t#bar{t} UED6 A^{(1,1)}_{#mu}#rightarrowt#bar{t}(b=20\%) (x5)\" NoStack=\"true\" SF=\"5\" />" >> $OUTFILE
 	echo '</superimpose>' >> $OUTFILE
 	echo '</cuy>' >> $OUTFILE
 
-	../../cuy/scripts/cuy.py -x $OUTFILE -f " #splitline{CMS Preliminary 2011}{5.0 fb^{-1} at #sqrt{s}=7TeV $BANNER}" -o $OUTFILEPLOTS -p "pdf" -b -q 
+	../../cuy/scripts/cuy.py -x $OUTFILE -f " #splitline{CMS Preliminary - 5.0 fb^{-1} at #sqrt{s}=7TeV}{$BANNER}" -o $OUTFILEPLOTS -p "pdf" -b -q 
 	rm -rf $OUTFILE
 done

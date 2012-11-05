@@ -1,9 +1,11 @@
 #!/bin/bash 
-#sample=(500 900 1100)
-sample=(400 600 800 1000 1200)
-num=(0.4 0.6 0.8 1.0 1.2)
-version='v4'
-results='resultsFinal'
+sample=(400 500 600 700 800 900 1000)
+#sample=(800 900 1000)
+num=(0.4 0.5 0.6 0.7 0.8 0.9 1.0)
+version='v2'
+#results='results109'
+#results='results109/CSVM1/' #Nbjets3/' ##
+results='results110/Nbjets3/' 
 
 sample_elements=${#sample[@]}
 num_elements=${#num[@]}
@@ -825,4 +827,4 @@ rm $OUTFILE
 done
 
 hadd mu_disc_templates.root mu_disc*
-mv mu_disc* /uscms/home/algomez/nobackup/files/fourtop/resultsTreeAnalyzer/resultsFinal/BDTResponse${version}/
+mv mu_disc* /uscms/home/algomez/nobackup/files/fourtop/resultsTreeAnalyzer/${results}/BDTResponse${version}/

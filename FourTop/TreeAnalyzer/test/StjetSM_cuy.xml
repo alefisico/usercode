@@ -3,40 +3,13 @@
     <TH1 name="mu_stjet__DATA" source="/MET/Stjet_cut2_data"/>
   </validation>
 
-  <validation type="tttt_Gh400" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh400.root" weight="MCScaleFactors.txt:tttt_Gh400"> 
-    <TH1 name="mu_stjet__fourtop400" source="/MET/Stjet_cut2_tttt_Gh400"/>
+
+  <validation type="tttt_SM" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_SM.root" weight="MCScaleFactors.txt:tttt_SM"> 
+    <TH1 name="mu_stjet__fourtopsm" source="/MET/Stjet_cut2_tttt_SM"/>
   </validation>
 
-  <validation type="tttt_Gh500" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh500.root" weight="MCScaleFactors.txt:tttt_Gh500"> 
-    <TH1 name="mu_stjet__fourtop500" source="/MET/Stjet_cut2_tttt_Gh500"/>
-  </validation>
-
-  <validation type="tttt_Gh600" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh600.root" weight="MCScaleFactors.txt:tttt_Gh600"> 
-    <TH1 name="mu_stjet__fourtop600" source="/MET/Stjet_cut2_tttt_Gh600"/>
-  </validation>
-
-  <validation type="tttt_Gh700" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh700.root" weight="MCScaleFactors.txt:tttt_Gh700"> 
-    <TH1 name="mu_stjet__fourtop700" source="/MET/Stjet_cut2_tttt_Gh700"/>
-  </validation>
-
-  <validation type="tttt_Gh800" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh800.root" weight="MCScaleFactors.txt:tttt_Gh800"> 
-    <TH1 name="mu_stjet__fourtop800" source="/MET/Stjet_cut2_tttt_Gh800"/>
-  </validation>
-
-  <validation type="tttt_Gh900" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh900.root" weight="MCScaleFactors.txt:tttt_Gh900"> 
-    <TH1 name="mu_stjet__fourtop900" source="/MET/Stjet_cut2_tttt_Gh900"/>
-  </validation>
-
-  <validation type="tttt_Gh1000" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh1000.root" weight="MCScaleFactors.txt:tttt_Gh1000"> 
-    <TH1 name="mu_stjet__fourtop1000" source="/MET/Stjet_cut2_tttt_Gh1000"/>
-  </validation>
-
-  <!--<validation type="tttt_GhSM" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_GhSM.root" weight="MCScaleFactors.txt:tttt_GhSM"> 
-    <TH1 name="mu_stjet__fourtopsm" source="/MET/Stjet_cut2_tttt_GhSM"/>
-  </validation>
-
-  <validation type="tttt_GhUED6" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_GhUED6.root" weight="MCScaleFactors.txt:tttt_GhUED6"> 
-    <TH1 name="mu_stjet__fourtopued" source="/MET/Stjet_cut2_tttt_GhUED6"/>
+  <!--<validation type="tttt_UED6" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_UED6.root" weight="MCScaleFactors.txt:tttt_UED6"> 
+    <TH1 name="mu_stjet__fourtopued" source="/MET/Stjet_cut2_tttt_UED6"/>
   </validation>-->
 
   <validation type="ttbar" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_ttbar.root" weight="MCScaleFactors.txt:ttbar"> 
@@ -122,53 +95,19 @@
     <superimposeItem name="mu_stjet__zjets" color="top" legend="Zjets"/>
     <superimposeItem name="mu_stjet__dibosons" color="top" legend="Dibosons"/>
     <superimposeItem name="mu_stjet__singletop" color="top" legend="ST"/>
-    <superimposeItem name="mu_stjet__fourtop400" color="1" legend="t#bar{t}t#bar{t} Gh 0.4 TeV" NoStack="true" />
-    <superimposeItem name="mu_stjet__fourtop500" color="1" legend="t#bar{t}t#bar{t} Gh 0.5 TeV" NoStack="true" />
-    <superimposeItem name="mu_stjet__fourtop600" color="1" legend="t#bar{t}t#bar{t} Gh 0.6 TeV" NoStack="true" />
-    <superimposeItem name="mu_stjet__fourtop700" color="1" legend="t#bar{t}t#bar{t} Gh 0.7 TeV" NoStack="true" />
-    <superimposeItem name="mu_stjet__fourtop800" color="1" legend="t#bar{t}t#bar{t} Gh 0.8 TeV" NoStack="true" />
-    <superimposeItem name="mu_stjet__fourtop900" color="1" legend="t#bar{t}t#bar{t} Gh 0.9 TeV" NoStack="true" />
-    <superimposeItem name="mu_stjet__fourtop1000" color="1" legend="t#bar{t}t#bar{t} Gh 1.0 TeV" NoStack="true" />
-    <!--<superimposeItem name="mu_stjet__fourtopued" color="1" legend="t#bar{t}t#bar{t} UED6" NoStack="true" />
-    <superimposeItem name="mu_stjet__fourtopsm" color="1" legend="t#bar{t}t#bar{t} SM" NoStack="true" />-->
+    <!--<superimposeItem name="mu_stjet__fourtopued" color="1" legend="t#bar{t}t#bar{t} UED6" NoStack="true" />-->
+
+    <superimposeItem name="mu_stjet__fourtopsm" color="1" legend="t#bar{t}t#bar{t} SM" NoStack="true" />
   </superimpose>
 
 
   <!-- JECDOWN -->
-  <validation type="tttt_Gh400JECDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh400_JECDOWN.root" weight="MCScaleFactors.txt:tttt_Gh400"> 
-    <TH1 name="mu_stjet__fourtop400__jes__minus" source="/MET/Stjet_cut2_tttt_Gh400_JECDOWN"/>
+<validation type="tttt_SMJECDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_SM_JECDOWN.root" weight="MCScaleFactors.txt:tttt_SM"> 
+    <TH1 name="mu_stjet__fourtopsm__jes__minus" source="/MET/Stjet_cut2_tttt_SM_JECDOWN"/>
   </validation>
 
-  <validation type="tttt_Gh500JECDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh500_JECDOWN.root" weight="MCScaleFactors.txt:tttt_Gh500"> 
-    <TH1 name="mu_stjet__fourtop500__jes__minus" source="/MET/Stjet_cut2_tttt_Gh500_JECDOWN"/>
-  </validation>
-
-  <validation type="tttt_Gh600JECDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh600_JECDOWN.root" weight="MCScaleFactors.txt:tttt_Gh600"> 
-    <TH1 name="mu_stjet__fourtop600__jes__minus" source="/MET/Stjet_cut2_tttt_Gh600_JECDOWN"/>
-  </validation>
-
-  <validation type="tttt_Gh700JECDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh700_JECDOWN.root" weight="MCScaleFactors.txt:tttt_Gh700"> 
-    <TH1 name="mu_stjet__fourtop700__jes__minus" source="/MET/Stjet_cut2_tttt_Gh700_JECDOWN"/>
-  </validation>
-
-  <validation type="tttt_Gh800JECDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh800_JECDOWN.root" weight="MCScaleFactors.txt:tttt_Gh800"> 
-    <TH1 name="mu_stjet__fourtop800__jes__minus" source="/MET/Stjet_cut2_tttt_Gh800_JECDOWN"/>
-  </validation>
-
-  <validation type="tttt_Gh900JECDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh900_JECDOWN.root" weight="MCScaleFactors.txt:tttt_Gh900"> 
-    <TH1 name="mu_stjet__fourtop900__jes__minus" source="/MET/Stjet_cut2_tttt_Gh900_JECDOWN"/>
-  </validation>
-
-  <validation type="tttt_Gh1000JECDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh1000_JECDOWN.root" weight="MCScaleFactors.txt:tttt_Gh1000"> 
-    <TH1 name="mu_stjet__fourtop1000__jes__minus" source="/MET/Stjet_cut2_tttt_Gh1000_JECDOWN"/>
-  </validation>
-
-  <!--<validation type="tttt_GhSMJECDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_GhSM_JECDOWN.root" weight="MCScaleFactors.txt:tttt_GhSM"> 
-    <TH1 name="mu_stjet__fourtopsm__jes__minus" source="/MET/Stjet_cut2_tttt_GhSM_JECDOWN"/>
-  </validation>
-
-  <validation type="tttt_GhUED6JECDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_GhUED6_JECDOWN.root" weight="MCScaleFactors.txt:tttt_GhUED6"> 
-    <TH1 name="mu_stjet__fourtopued__jes__minus" source="/MET/Stjet_cut2_tttt_GhUED6_JECDOWN"/>
+   <!-- <validation type="tttt_UED6JECDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_UED6_JECDOWN.root" weight="MCScaleFactors.txt:tttt_UED6"> 
+    <TH1 name="mu_stjet__fourtopued__jes__minus" source="/MET/Stjet_cut2_tttt_UED6_JECDOWN"/>
   </validation>-->
 
   <validation type="ttbarJECDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_ttbar_JECDOWN.root" weight="MCScaleFactors.txt:ttbar"> 
@@ -238,9 +177,9 @@
   </additionArray>
 
   <additionArray name="wjets__jes__minus" title="wjets__jes__minus">
-    <additionArrayItem array="WbbJERDOWN" weight="1.21"/>
-    <additionArrayItem array="WccJERDOWN" weight="1.66"/>
-    <additionArrayItem array="WqqJERDOWN" weight="0.58"/> 
+    <additionArrayItem array="WbbJECDOWN" weight="1.21"/>
+    <additionArrayItem array="WccJECDOWN" weight="1.66"/>
+    <additionArrayItem array="WqqJECDOWN" weight="0.58"/> 
   </additionArray>
 
 
@@ -250,52 +189,17 @@
     <superimposeItem name="mu_stjet__zjets__jes__minus" color="top" legend="Zjets"/>
     <superimposeItem name="mu_stjet__singletop__jes__minus" color="top" legend="ST"/>
     <superimposeItem name="mu_stjet__dibosons__jes__minus" color="top" legend="Dibosons"/>
-    <superimposeItem name="mu_stjet__fourtop400__jes__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.4 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop600__jes__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.6 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop500__jes__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.5 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop700__jes__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.7 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop800__jes__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.8 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop900__jes__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.9 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop1000__jes__minus" color="1" legend="t#bar{t}t#bar{t} Gh 1.0 TeV" NoStack="true"/>
-    <!--<superimposeItem name="mu_stjet__fourtopued__jes__minus" color="1" legend="t#bar{t}t#bar{t} UED6" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtopsm__jes__minus" color="1" legend="t#bar{t}t#bar{t} SM" NoStack="true"/>-->
+    <!--<superimposeItem name="mu_stjet__fourtopued__jes__minus" color="1" legend="t#bar{t}t#bar{t} UED6" NoStack="true"/>-->
+    <superimposeItem name="mu_stjet__fourtopsm__jes__minus" color="1" legend="t#bar{t}t#bar{t} SM" NoStack="true"/>
   </superimpose>
 
   <!-- JECUP -->
-  <validation type="tttt_Gh400JECUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh400_JECUP.root" weight="MCScaleFactors.txt:tttt_Gh400"> 
-    <TH1 name="mu_stjet__fourtop400__jes__plus" source="/MET/Stjet_cut2_tttt_Gh400_JECUP"/>
+<validation type="tttt_SMJECUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_SM_JECUP.root" weight="MCScaleFactors.txt:tttt_SM"> 
+    <TH1 name="mu_stjet__fourtopsm__jes__plus" source="/MET/Stjet_cut2_tttt_SM_JECUP"/>
   </validation>
 
-  <validation type="tttt_Gh500JECUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh500_JECUP.root" weight="MCScaleFactors.txt:tttt_Gh500"> 
-    <TH1 name="mu_stjet__fourtop500__jes__plus" source="/MET/Stjet_cut2_tttt_Gh500_JECUP"/>
-  </validation>
-
-  <validation type="tttt_Gh600JECUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh600_JECUP.root" weight="MCScaleFactors.txt:tttt_Gh600"> 
-    <TH1 name="mu_stjet__fourtop600__jes__plus" source="/MET/Stjet_cut2_tttt_Gh600_JECUP"/>
-  </validation>
-
-  <validation type="tttt_Gh700JECUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh700_JECUP.root" weight="MCScaleFactors.txt:tttt_Gh700"> 
-    <TH1 name="mu_stjet__fourtop700__jes__plus" source="/MET/Stjet_cut2_tttt_Gh700_JECUP"/>
-  </validation>
-
-  <validation type="tttt_Gh800JECUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh800_JECUP.root" weight="MCScaleFactors.txt:tttt_Gh800"> 
-    <TH1 name="mu_stjet__fourtop800__jes__plus" source="/MET/Stjet_cut2_tttt_Gh800_JECUP"/>
-  </validation>
-
-  <validation type="tttt_Gh900JECUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh900_JECUP.root" weight="MCScaleFactors.txt:tttt_Gh900"> 
-    <TH1 name="mu_stjet__fourtop900__jes__plus" source="/MET/Stjet_cut2_tttt_Gh900_JECUP"/>
-  </validation>
-
-  <validation type="tttt_Gh1000JECUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh1000_JECUP.root" weight="MCScaleFactors.txt:tttt_Gh1000"> 
-    <TH1 name="mu_stjet__fourtop1000__jes__plus" source="/MET/Stjet_cut2_tttt_Gh1000_JECUP"/>
-  </validation>
-
-  <!--<validation type="tttt_GhSMJECUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_GhSM_JECUP.root" weight="MCScaleFactors.txt:tttt_GhSM"> 
-    <TH1 name="mu_stjet__fourtopsm__jes__plus" source="/MET/Stjet_cut2_tttt_GhSM_JECUP"/>
-  </validation>
-
-  <validation type="tttt_GhUED6JECUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_GhUED6_JECUP.root" weight="MCScaleFactors.txt:tttt_GhUED6"> 
-    <TH1 name="mu_stjet__fourtopued__jes__plus" source="/MET/Stjet_cut2_tttt_GhUED6_JECUP"/>
+   <!-- <validation type="tttt_UED6JECUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_UED6_JECUP.root" weight="MCScaleFactors.txt:tttt_UED6"> 
+    <TH1 name="mu_stjet__fourtopued__jes__plus" source="/MET/Stjet_cut2_tttt_UED6_JECUP"/>
   </validation>-->
 
   <validation type="ttbarJECUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_ttbar_JECUP.root" weight="MCScaleFactors.txt:ttbar"> 
@@ -365,9 +269,9 @@
   </additionArray>
 
   <additionArray name="wjets__jes__plus" title="wjets__jes__plus">
-    <additionArrayItem array="WbbJERUP" weight="1.21"/>
-    <additionArrayItem array="WccJERUP" weight="1.66"/>
-    <additionArrayItem array="WqqJERUP" weight="0.58"/> 
+    <additionArrayItem array="WbbJECUP" weight="1.21"/>
+    <additionArrayItem array="WccJECUP" weight="1.66"/>
+    <additionArrayItem array="WqqJECUP" weight="0.58"/> 
   </additionArray>
 
   <superimpose name="mu_stjet__jes__plus" title="Stjet" YTitle="Events" Fill="true" Weight="true" Lumi="5000.0" SetLogy="true" Maximum="10e3"  Minimum="0.01" Stack="true"  SubBanner="p_T^{4jet} #geq 50, Stjet > 500 GeV">
@@ -376,52 +280,17 @@
     <superimposeItem name="mu_stjet__zjets__jes__plus" color="top" legend="Zjets"/>
     <superimposeItem name="mu_stjet__singletop__jes__plus" color="top" legend="ST"/>
     <superimposeItem name="mu_stjet__dibosons__jes__plus" color="top" legend="Dibosons"/>
-    <superimposeItem name="mu_stjet__fourtop400__jes__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.4 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop500__jes__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.5 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop600__jes__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.6 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop700__jes__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.7 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop800__jes__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.6 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop900__jes__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.6 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop1000__jes__plus" color="1" legend="t#bar{t}t#bar{t} Gh 1.0 TeV" NoStack="true"/>
-    <!--<superimposeItem name="mu_stjet__fourtopsm__jes__plus" color="1" legend="t#bar{t}t#bar{t} SM" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtopued__jes__plus" color="1" legend="t#bar{t}t#bar{t} UED6" NoStack="true"/>-->
+<superimposeItem name="mu_stjet__fourtopsm__jes__plus" color="1" legend="t#bar{t}t#bar{t} SM" NoStack="true"/>
+     <!--   <superimposeItem name="mu_stjet__fourtopued__jes__plus" color="1" legend="t#bar{t}t#bar{t} UED6" NoStack="true"/>-->
   </superimpose>
 
   <!-- JERDOWN -->
-  <validation type="tttt_Gh400JERDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh400_JERDOWN.root" weight="MCScaleFactors.txt:tttt_Gh400"> 
-    <TH1 name="mu_stjet__fourtop400__jer__minus" source="/MET/Stjet_cut2_tttt_Gh400_JERDOWN"/>
+<validation type="tttt_SMJERDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_SM_JERDOWN.root" weight="MCScaleFactors.txt:tttt_SM"> 
+    <TH1 name="mu_stjet__fourtopsm__jer__minus" source="/MET/Stjet_cut2_tttt_SM_JERDOWN"/>
   </validation>
 
-  <validation type="tttt_Gh500JERDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh500_JERDOWN.root" weight="MCScaleFactors.txt:tttt_Gh500"> 
-    <TH1 name="mu_stjet__fourtop500__jer__minus" source="/MET/Stjet_cut2_tttt_Gh500_JERDOWN"/>
-  </validation>
-
-  <validation type="tttt_Gh600JERDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh600_JERDOWN.root" weight="MCScaleFactors.txt:tttt_Gh600"> 
-    <TH1 name="mu_stjet__fourtop600__jer__minus" source="/MET/Stjet_cut2_tttt_Gh600_JERDOWN"/>
-  </validation>
-
-  <validation type="tttt_Gh700JERDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh700_JERDOWN.root" weight="MCScaleFactors.txt:tttt_Gh700"> 
-    <TH1 name="mu_stjet__fourtop700__jer__minus" source="/MET/Stjet_cut2_tttt_Gh700_JERDOWN"/>
-  </validation>
-
-  <validation type="tttt_Gh800JERDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh800_JERDOWN.root" weight="MCScaleFactors.txt:tttt_Gh800"> 
-    <TH1 name="mu_stjet__fourtop800__jer__minus" source="/MET/Stjet_cut2_tttt_Gh800_JERDOWN"/>
-  </validation>
-
-  <validation type="tttt_Gh900JERDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh900_JERDOWN.root" weight="MCScaleFactors.txt:tttt_Gh900"> 
-    <TH1 name="mu_stjet__fourtop900__jer__minus" source="/MET/Stjet_cut2_tttt_Gh900_JERDOWN"/>
-  </validation>
-
-  <validation type="tttt_Gh1000JERDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh1000_JERDOWN.root" weight="MCScaleFactors.txt:tttt_Gh1000"> 
-    <TH1 name="mu_stjet__fourtop1000__jer__minus" source="/MET/Stjet_cut2_tttt_Gh1000_JERDOWN"/>
-  </validation>
-
-  <!--<validation type="tttt_GhSMJERDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_GhSM_JERDOWN.root" weight="MCScaleFactors.txt:tttt_GhSM"> 
-    <TH1 name="mu_stjet__fourtopsm__jer__minus" source="/MET/Stjet_cut2_tttt_GhSM_JERDOWN"/>
-  </validation>
-
-  <validation type="tttt_GhUED6JERDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_GhUED6_JERDOWN.root" weight="MCScaleFactors.txt:tttt_GhUED6"> 
-    <TH1 name="mu_stjet__fourtopued__jer__minus" source="/MET/Stjet_cut2_tttt_GhUED6_JERDOWN"/>
+   <!-- <validation type="tttt_UED6JERDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_UED6_JERDOWN.root" weight="MCScaleFactors.txt:tttt_UED6"> 
+    <TH1 name="mu_stjet__fourtopued__jer__minus" source="/MET/Stjet_cut2_tttt_UED6_JERDOWN"/>
   </validation>-->
 
   <validation type="ttbarJERDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_ttbar_JERDOWN.root" weight="MCScaleFactors.txt:ttbar"> 
@@ -502,52 +371,17 @@
     <superimposeItem name="mu_stjet__zjets__jer__minus" color="top" legend="Zjets"/>
     <superimposeItem name="mu_stjet__singletop__jer__minus" color="top" legend="ST"/>
     <superimposeItem name="mu_stjet__dibosons__jer__minus" color="top" legend="Dibosons"/>
-    <superimposeItem name="mu_stjet__fourtop400__jer__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.4 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop500__jer__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.5 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop600__jer__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.6 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop700__jer__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.7 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop800__jer__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.8 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop900__jer__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.9 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop1000__jer__minus" color="1" legend="t#bar{t}t#bar{t} Gh 1.0 TeV" NoStack="true"/>
-    <!--<superimposeItem name="mu_stjet__fourtopued__jer__minus" color="1" legend="t#bar{t}t#bar{t} UED6" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtopsm__jer__minus" color="1" legend="t#bar{t}t#bar{t} SM" NoStack="true"/>-->
+    <!--<superimposeItem name="mu_stjet__fourtopued__jer__minus" color="1" legend="t#bar{t}t#bar{t} UED6" NoStack="true"/>-->
+    <superimposeItem name="mu_stjet__fourtopsm__jer__minus" color="1" legend="t#bar{t}t#bar{t} SM" NoStack="true"/>
   </superimpose>
 
   <!-- JERUP -->
-  <validation type="tttt_Gh400JERUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh400_JERUP.root" weight="MCScaleFactors.txt:tttt_Gh400"> 
-    <TH1 name="mu_stjet__fourtop400__jer__plus" source="/MET/Stjet_cut2_tttt_Gh400_JERUP"/>
+<validation type="tttt_SMJERUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_SM_JERUP.root" weight="MCScaleFactors.txt:tttt_SM"> 
+    <TH1 name="mu_stjet__fourtopsm__jer__plus" source="/MET/Stjet_cut2_tttt_SM_JERUP"/>
   </validation>
 
-  <validation type="tttt_Gh500JERUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh500_JERUP.root" weight="MCScaleFactors.txt:tttt_Gh500"> 
-    <TH1 name="mu_stjet__fourtop500__jer__plus" source="/MET/Stjet_cut2_tttt_Gh500_JERUP"/>
-  </validation>
-
-  <validation type="tttt_Gh600JERUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh600_JERUP.root" weight="MCScaleFactors.txt:tttt_Gh600"> 
-    <TH1 name="mu_stjet__fourtop600__jer__plus" source="/MET/Stjet_cut2_tttt_Gh600_JERUP"/>
-  </validation>
-
-  <validation type="tttt_Gh700JERUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh700_JERUP.root" weight="MCScaleFactors.txt:tttt_Gh700"> 
-    <TH1 name="mu_stjet__fourtop700__jer__plus" source="/MET/Stjet_cut2_tttt_Gh700_JERUP"/>
-  </validation>
-
-  <validation type="tttt_Gh800JERUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh800_JERUP.root" weight="MCScaleFactors.txt:tttt_Gh800"> 
-    <TH1 name="mu_stjet__fourtop800__jer__plus" source="/MET/Stjet_cut2_tttt_Gh800_JERUP"/>
-  </validation>
-
-  <validation type="tttt_Gh900JERUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh900_JERUP.root" weight="MCScaleFactors.txt:tttt_Gh900"> 
-    <TH1 name="mu_stjet__fourtop900__jer__plus" source="/MET/Stjet_cut2_tttt_Gh900_JERUP"/>
-  </validation>
-
-  <validation type="tttt_Gh1000JERUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh1000_JERUP.root" weight="MCScaleFactors.txt:tttt_Gh1000"> 
-    <TH1 name="mu_stjet__fourtop1000__jer__plus" source="/MET/Stjet_cut2_tttt_Gh1000_JERUP"/>
-  </validation>
-
-  <!--<validation type="tttt_GhSMJERUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_GhSM_JERUP.root" weight="MCScaleFactors.txt:tttt_GhSM"> 
-    <TH1 name="mu_stjet__fourtopsm__jer__plus" source="/MET/Stjet_cut2_tttt_GhSM_JERUP"/>
-  </validation>
-
-  <validation type="tttt_GhUED6JERUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_GhUED6_JERUP.root" weight="MCScaleFactors.txt:tttt_GhUED6"> 
-    <TH1 name="mu_stjet__fourtopued__jer__plus" source="/MET/Stjet_cut2_tttt_GhUED6_JERUP"/>
+   <!-- <validation type="tttt_UED6JERUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_UED6_JERUP.root" weight="MCScaleFactors.txt:tttt_UED6"> 
+    <TH1 name="mu_stjet__fourtopued__jer__plus" source="/MET/Stjet_cut2_tttt_UED6_JERUP"/>
   </validation>-->
 
   <validation type="ttbarJERUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_ttbar_JERUP.root" weight="MCScaleFactors.txt:ttbar"> 
@@ -628,52 +462,17 @@
     <superimposeItem name="mu_stjet__zjets__jer__plus" color="top" legend="Zjets"/>
     <superimposeItem name="mu_stjet__singletop__jer__plus" color="top" legend="ST"/>
     <superimposeItem name="mu_stjet__dibosons__jer__plus" color="top" legend="Dibosons"/>
-    <superimposeItem name="mu_stjet__fourtop400__jer__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.4 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop500__jer__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.5 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop600__jer__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.6 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop700__jer__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.7 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop800__jer__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.8 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop900__jer__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.9 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop1000__jer__plus" color="1" legend="t#bar{t}t#bar{t} Gh 1.0 TeV" NoStack="true"/>
-    <!--<superimposeItem name="mu_stjet__fourtopued__jer__plus" color="1" legend="t#bar{t}t#bar{t} UED6" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtopsm__jer__plus" color="1" legend="t#bar{t}t#bar{t} SM" NoStack="true"/>-->
+      <!--<superimposeItem name="mu_stjet__fourtopued__jer__plus" color="1" legend="t#bar{t}t#bar{t} UED6" NoStack="true"/>-->
+    <superimposeItem name="mu_stjet__fourtopsm__jer__plus" color="1" legend="t#bar{t}t#bar{t} SM" NoStack="true"/>
   </superimpose>
 
   <!-- PUDOWN -->
-  <validation type="tttt_Gh400PUDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh400_PUDOWN.root" weight="MCScaleFactors.txt:tttt_Gh400"> 
-    <TH1 name="mu_stjet__fourtop400__pu__minus" source="/MET/Stjet_cut2_tttt_Gh400_PUDOWN"/>
+<validation type="tttt_SMPUDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_SM_PUDOWN.root" weight="MCScaleFactors.txt:tttt_SM"> 
+    <TH1 name="mu_stjet__fourtopsm__pu__minus" source="/MET/Stjet_cut2_tttt_SM_PUDOWN"/>
   </validation>
 
-  <validation type="tttt_Gh500PUDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh500_PUDOWN.root" weight="MCScaleFactors.txt:tttt_Gh500"> 
-    <TH1 name="mu_stjet__fourtop500__pu__minus" source="/MET/Stjet_cut2_tttt_Gh500_PUDOWN"/>
-  </validation>
-
-  <validation type="tttt_Gh600PUDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh600_PUDOWN.root" weight="MCScaleFactors.txt:tttt_Gh600"> 
-    <TH1 name="mu_stjet__fourtop600__pu__minus" source="/MET/Stjet_cut2_tttt_Gh600_PUDOWN"/>
-  </validation>
-
-  <validation type="tttt_Gh700PUDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh700_PUDOWN.root" weight="MCScaleFactors.txt:tttt_Gh700"> 
-    <TH1 name="mu_stjet__fourtop700__pu__minus" source="/MET/Stjet_cut2_tttt_Gh700_PUDOWN"/>
-  </validation>
-
-  <validation type="tttt_Gh800PUDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh800_PUDOWN.root" weight="MCScaleFactors.txt:tttt_Gh800"> 
-    <TH1 name="mu_stjet__fourtop800__pu__minus" source="/MET/Stjet_cut2_tttt_Gh800_PUDOWN"/>
-  </validation>
-
-  <validation type="tttt_Gh900PUDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh900_PUDOWN.root" weight="MCScaleFactors.txt:tttt_Gh900"> 
-    <TH1 name="mu_stjet__fourtop900__pu__minus" source="/MET/Stjet_cut2_tttt_Gh900_PUDOWN"/>
-  </validation>
-
-  <validation type="tttt_Gh1000PUDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh1000_PUDOWN.root" weight="MCScaleFactors.txt:tttt_Gh1000"> 
-    <TH1 name="mu_stjet__fourtop1000__pu__minus" source="/MET/Stjet_cut2_tttt_Gh1000_PUDOWN"/>
-  </validation>
-
-  <!-- <validation type="tttt_GhSMPUDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_GhSM_PUDOWN.root" weight="MCScaleFactors.txt:tttt_GhSM"> 
-    <TH1 name="mu_stjet__fourtopsm__pu__minus" source="/MET/Stjet_cut2_tttt_GhSM_PUDOWN"/>
-  </validation>
-
-  <validation type="tttt_GhUED6PUDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_GhUED6_PUDOWN.root" weight="MCScaleFactors.txt:tttt_GhUED6"> 
-    <TH1 name="mu_stjet__fourtopued__pu__minus" source="/MET/Stjet_cut2_tttt_GhUED6_PUDOWN"/>
+   <!--  <validation type="tttt_UED6PUDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_UED6_PUDOWN.root" weight="MCScaleFactors.txt:tttt_UED6"> 
+    <TH1 name="mu_stjet__fourtopued__pu__minus" source="/MET/Stjet_cut2_tttt_UED6_PUDOWN"/>
   </validation>-->
 
   <validation type="ttbarPUDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_ttbar_PUDOWN.root" weight="MCScaleFactors.txt:ttbar"> 
@@ -754,52 +553,18 @@
     <superimposeItem name="mu_stjet__zjets__pu__minus" color="top" legend="Zjets"/>
     <superimposeItem name="mu_stjet__singletop__pu__minus" color="top" legend="ST"/>
     <superimposeItem name="mu_stjet__dibosons__pu__minus" color="top" legend="Dibosons"/>
-    <superimposeItem name="mu_stjet__fourtop400__pu__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.4 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop500__pu__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.5 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop600__pu__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.6 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop700__pu__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.7 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop800__pu__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.8 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop900__pu__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.9 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop1000__pu__minus" color="1" legend="t#bar{t}t#bar{t} Gh 1.0 TeV" NoStack="true"/>
-    <!--<superimposeItem name="mu_stjet__fourtopued__pu__minus" color="1" legend="t#bar{t}t#bar{t} UED6" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtopsm__pu__minus" color="1" legend="t#bar{t}t#bar{t} SM" NoStack="true"/>-->
+        <!--<superimposeItem name="mu_stjet__fourtopued__pu__minus" color="1" legend="t#bar{t}t#bar{t} UED6" NoStack="true"/>-->
+    <superimposeItem name="mu_stjet__fourtopsm__pu__minus" color="1" legend="t#bar{t}t#bar{t} SM" NoStack="true"/>
   </superimpose>
 
   <!-- PUUP -->
-  <validation type="tttt_Gh400PUUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh400_PUUP.root" weight="MCScaleFactors.txt:tttt_Gh400"> 
-    <TH1 name="mu_stjet__fourtop400__pu__plus" source="/MET/Stjet_cut2_tttt_Gh400_PUUP"/>
+
+<validation type="tttt_SMPUUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_SM_PUUP.root" weight="MCScaleFactors.txt:tttt_SM"> 
+    <TH1 name="mu_stjet__fourtopsm__pu__plus" source="/MET/Stjet_cut2_tttt_SM_PUUP"/>
   </validation>
 
-  <validation type="tttt_Gh500PUUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh500_PUUP.root" weight="MCScaleFactors.txt:tttt_Gh500"> 
-    <TH1 name="mu_stjet__fourtop500__pu__plus" source="/MET/Stjet_cut2_tttt_Gh500_PUUP"/>
-  </validation>
-
-  <validation type="tttt_Gh600PUUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh600_PUUP.root" weight="MCScaleFactors.txt:tttt_Gh600"> 
-    <TH1 name="mu_stjet__fourtop600__pu__plus" source="/MET/Stjet_cut2_tttt_Gh600_PUUP"/>
-  </validation>
-
-  <validation type="tttt_Gh700PUUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh700_PUUP.root" weight="MCScaleFactors.txt:tttt_Gh700"> 
-    <TH1 name="mu_stjet__fourtop700__pu__plus" source="/MET/Stjet_cut2_tttt_Gh700_PUUP"/>
-  </validation>
-
-  <validation type="tttt_Gh800PUUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh800_PUUP.root" weight="MCScaleFactors.txt:tttt_Gh800"> 
-    <TH1 name="mu_stjet__fourtop800__pu__plus" source="/MET/Stjet_cut2_tttt_Gh800_PUUP"/>
-  </validation>
-
-  <validation type="tttt_Gh900PUUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh900_PUUP.root" weight="MCScaleFactors.txt:tttt_Gh900"> 
-    <TH1 name="mu_stjet__fourtop900__pu__plus" source="/MET/Stjet_cut2_tttt_Gh900_PUUP"/>
-  </validation>
-
-  <validation type="tttt_Gh1000PUUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh1000_PUUP.root" weight="MCScaleFactors.txt:tttt_Gh1000"> 
-    <TH1 name="mu_stjet__fourtop1000__pu__plus" source="/MET/Stjet_cut2_tttt_Gh1000_PUUP"/>
-  </validation>
-
-  <!--<validation type="tttt_GhSMPUUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_GhSM_PUUP.root" weight="MCScaleFactors.txt:tttt_GhSM"> 
-    <TH1 name="mu_stjet__fourtopsm__pu__plus" source="/MET/Stjet_cut2_tttt_GhSM_PUUP"/>
-  </validation>
-
-  <validation type="tttt_GhUED6PUUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_GhUED6_PUUP.root" weight="MCScaleFactors.txt:tttt_GhUED6"> 
-    <TH1 name="mu_stjet__fourtopued__pu__plus" source="/MET/Stjet_cut2_tttt_GhUED6_PUUP"/>
+   <!-- <validation type="tttt_UED6PUUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_UED6_PUUP.root" weight="MCScaleFactors.txt:tttt_UED6"> 
+    <TH1 name="mu_stjet__fourtopued__pu__plus" source="/MET/Stjet_cut2_tttt_UED6_PUUP"/>
   </validation>-->
 
   <validation type="ttbarPUUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_ttbar_PUUP.root" weight="MCScaleFactors.txt:ttbar"> 
@@ -880,19 +645,11 @@
     <superimposeItem name="mu_stjet__zjets__pu__plus" color="top" legend="Zjets"/>
     <superimposeItem name="mu_stjet__singletop__pu__plus" color="top" legend="ST"/>
     <superimposeItem name="mu_stjet__dibosons__pu__plus" color="top" legend="Dibosons"/>
-    <superimposeItem name="mu_stjet__fourtop400__pu__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.4 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop500__pu__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.5 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop600__pu__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.6 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop700__pu__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.7 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop800__pu__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.8 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop900__pu__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.9 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop1000__pu__plus" color="1" legend="t#bar{t}t#bar{t} Gh 1.0 TeV" NoStack="true"/>
-    <!--<superimposeItem name="mu_stjet__fourtopued__pu__plus" color="1" legend="t#bar{t}t#bar{t} UED6" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtopsm__pu__plus" color="1" legend="t#bar{t}t#bar{t} SM" NoStack="true"/>-->
+    <!--<superimposeItem name="mu_stjet__fourtopued__pu__plus" color="1" legend="t#bar{t}t#bar{t} UED6" NoStack="true"/>-->
+    <superimposeItem name="mu_stjet__fourtopsm__pu__plus" color="1" legend="t#bar{t}t#bar{t} SM" NoStack="true"/>
   </superimpose>
 
-  <!-- ttbar Match and Scale -->
-  <validation type="ttbarmatchup" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_ttbarMatchup.root" weight="MCScaleFactors.txt:ttbarmatchup"> 
+  <!-- ttbar Match and Scale   <validation type="ttbarmatchup" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_ttbarMatchup.root" weight="MCScaleFactors.txt:ttbarmatchup"> 
     <TH1 name="mu_stjet__ttbar__match__plus" source="/MET/Stjet_cut2_ttbarMatchup"/>
   </validation>
 
@@ -914,41 +671,16 @@
     <superimposeItem name="mu_stjet__ttbar__scale__plus" color="1" legend="TTbar"/>
     <superimposeItem name="mu_stjet__ttbar__scale__minus" color="1" legend="TTbar"/>
   </superimpose>
+-->
 
   <!-- BTAGDOWN -->
-  <validation type="tttt_Gh400BTAGDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh400_BTAGDOWN.root" weight="MCScaleFactors.txt:tttt_Gh400"> 
-    <TH1 name="mu_stjet__fourtop400__btag__minus" source="/MET/Stjet_cut2_tttt_Gh400_BTAGDOWN"/>
+
+<validation type="tttt_SMBTAGDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_SM_BTAGDOWN.root" weight="MCScaleFactors.txt:tttt_SM"> 
+    <TH1 name="mu_stjet__fourtopsm__btag__minus" source="/MET/Stjet_cut2_tttt_SM_BTAGDOWN"/>
   </validation>
 
-  <validation type="tttt_Gh500BTAGDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh500_BTAGDOWN.root" weight="MCScaleFactors.txt:tttt_Gh500"> 
-    <TH1 name="mu_stjet__fourtop500__btag__minus" source="/MET/Stjet_cut2_tttt_Gh500_BTAGDOWN"/>
-  </validation>
-
-  <validation type="tttt_Gh600BTAGDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh600_BTAGDOWN.root" weight="MCScaleFactors.txt:tttt_Gh600"> 
-    <TH1 name="mu_stjet__fourtop600__btag__minus" source="/MET/Stjet_cut2_tttt_Gh600_BTAGDOWN"/>
-  </validation>
-
-  <validation type="tttt_Gh700BTAGDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh700_BTAGDOWN.root" weight="MCScaleFactors.txt:tttt_Gh700"> 
-    <TH1 name="mu_stjet__fourtop700__btag__minus" source="/MET/Stjet_cut2_tttt_Gh700_BTAGDOWN"/>
-  </validation>
-
-  <validation type="tttt_Gh800BTAGDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh800_BTAGDOWN.root" weight="MCScaleFactors.txt:tttt_Gh800"> 
-    <TH1 name="mu_stjet__fourtop800__btag__minus" source="/MET/Stjet_cut2_tttt_Gh800_BTAGDOWN"/>
-  </validation>
-
-  <validation type="tttt_Gh900BTAGDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh900_BTAGDOWN.root" weight="MCScaleFactors.txt:tttt_Gh900"> 
-    <TH1 name="mu_stjet__fourtop900__btag__minus" source="/MET/Stjet_cut2_tttt_Gh900_BTAGDOWN"/>
-  </validation>
-  <validation type="tttt_Gh1000BTAGDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh1000_BTAGDOWN.root" weight="MCScaleFactors.txt:tttt_Gh1000"> 
-    <TH1 name="mu_stjet__fourtop1000__btag__minus" source="/MET/Stjet_cut2_tttt_Gh1000_BTAGDOWN"/>
-  </validation>
-
-  <!-- <validation type="tttt_GhSMBTAGDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_GhSM_BTAGDOWN.root" weight="MCScaleFactors.txt:tttt_GhSM"> 
-    <TH1 name="mu_stjet__fourtopsm__btag__minus" source="/MET/Stjet_cut2_tttt_GhSM_BTAGDOWN"/>
-  </validation>
-
-  <validation type="tttt_GhUED6BTAGDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_GhUED6_BTAGDOWN.root" weight="MCScaleFactors.txt:tttt_GhUED6"> 
-    <TH1 name="mu_stjet__fourtobtaged__btag__minus" source="/MET/Stjet_cut2_tttt_GhUED6_BTAGDOWN"/>
+   <!--  <validation type="tttt_UED6BTAGDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_UED6_BTAGDOWN.root" weight="MCScaleFactors.txt:tttt_UED6"> 
+    <TH1 name="mu_stjet__fourtobtaged__btag__minus" source="/MET/Stjet_cut2_tttt_UED6_BTAGDOWN"/>
   </validation>-->
 
   <validation type="ttbarBTAGDOWN" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_ttbar_BTAGDOWN.root" weight="MCScaleFactors.txt:ttbar"> 
@@ -1023,64 +755,24 @@
     <additionArrayItem array="WqqBTAGDOWN" weight="0.58"/> 
   </additionArray>
 
-  <additionArray name="wjets__btag__minus" title="wjets__btag__minus">
-    <additionArrayItem array="WbbBTAGDOWN" weight="1.21"/>
-    <additionArrayItem array="WccBTAGDOWN" weight="1.66"/>
-    <additionArrayItem array="WqqBTAGDOWN" weight="0.58"/> 
-  </additionArray>
-
   <superimpose name="mu_stjet__btag__minus" title="Stjet" YTitle="Events" Fill="true" Weight="true" Lumi="5000.0" SetLogy="true" Maximum="10e3"  Minimum="0.01" Stack="true"  SubBanner="p_T^{4jet} #geq 50, Stjet > 500 GeV">
     <superimposeItem name="mu_stjet__ttbar__btag__minus" color="top" legend="TTbar"/>
     <superimposeItem name="mu_stjet__wjets__btag__minus" color="top" legend="Wjets"/>
     <superimposeItem name="mu_stjet__zjets__btag__minus" color="top" legend="Zjets"/>
     <superimposeItem name="mu_stjet__singletop__btag__minus" color="top" legend="ST"/>
     <superimposeItem name="mu_stjet__dibosons__btag__minus" color="top" legend="Dibosons"/>
-    <superimposeItem name="mu_stjet__fourtop400__btag__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.4 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop500__btag__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.5 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop600__btag__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.6 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop700__btag__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.7 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop800__btag__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.8 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop900__btag__minus" color="1" legend="t#bar{t}t#bar{t} Gh 0.9 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop1000__btag__minus" color="1" legend="t#bar{t}t#bar{t} Gh 1.0 TeV" NoStack="true"/>
-    <!--<superimposeItem name="mu_stjet__fourtobtaged__btag__minus" color="1" legend="t#bar{t}t#bar{t} UED6" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtopsm__btag__minus" color="1" legend="t#bar{t}t#bar{t} SM" NoStack="true"/>-->
+    <!--<superimposeItem name="mu_stjet__fourtobtaged__btag__minus" color="1" legend="t#bar{t}t#bar{t} UED6" NoStack="true"/>-->
+    <superimposeItem name="mu_stjet__fourtopsm__btag__minus" color="1" legend="t#bar{t}t#bar{t} SM" NoStack="true"/>
   </superimpose>
 
   <!-- BTAGUP -->
-  <validation type="tttt_Gh400BTAGUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh400_BTAGUP.root" weight="MCScaleFactors.txt:tttt_Gh400"> 
-    <TH1 name="mu_stjet__fourtop400__btag__plus" source="/MET/Stjet_cut2_tttt_Gh400_BTAGUP"/>
+
+<validation type="tttt_SMBTAGUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_SM_BTAGUP.root" weight="MCScaleFactors.txt:tttt_SM"> 
+    <TH1 name="mu_stjet__fourtopsm__btag__plus" source="/MET/Stjet_cut2_tttt_SM_BTAGUP"/>
   </validation>
 
-  <validation type="tttt_Gh500BTAGUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh500_BTAGUP.root" weight="MCScaleFactors.txt:tttt_Gh500"> 
-    <TH1 name="mu_stjet__fourtop500__btag__plus" source="/MET/Stjet_cut2_tttt_Gh500_BTAGUP"/>
-  </validation>
-
-  <validation type="tttt_Gh600BTAGUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh600_BTAGUP.root" weight="MCScaleFactors.txt:tttt_Gh600"> 
-    <TH1 name="mu_stjet__fourtop600__btag__plus" source="/MET/Stjet_cut2_tttt_Gh600_BTAGUP"/>
-  </validation>
-
-  <validation type="tttt_Gh700BTAGUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh700_BTAGUP.root" weight="MCScaleFactors.txt:tttt_Gh700"> 
-    <TH1 name="mu_stjet__fourtop700__btag__plus" source="/MET/Stjet_cut2_tttt_Gh700_BTAGUP"/>
-  </validation>
-
-  <validation type="tttt_Gh800BTAGUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh800_BTAGUP.root" weight="MCScaleFactors.txt:tttt_Gh800"> 
-    <TH1 name="mu_stjet__fourtop800__btag__plus" source="/MET/Stjet_cut2_tttt_Gh800_BTAGUP"/>
-  </validation>
-
-  <validation type="tttt_Gh900BTAGUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh900_BTAGUP.root" weight="MCScaleFactors.txt:tttt_Gh900"> 
-    <TH1 name="mu_stjet__fourtop900__btag__plus" source="/MET/Stjet_cut2_tttt_Gh900_BTAGUP"/>
-  </validation>
-
-  <validation type="tttt_Gh1000BTAGUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_Gh1000_BTAGUP.root" weight="MCScaleFactors.txt:tttt_Gh1000"> 
-    <TH1 name="mu_stjet__fourtop1000__btag__plus" source="/MET/Stjet_cut2_tttt_Gh1000_BTAGUP"/>
-  </validation>
-
-  <!--<validation type="tttt_GhSMBTAGUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_GhSM_BTAGUP.root" weight="MCScaleFactors.txt:tttt_GhSM"> 
-    <TH1 name="mu_stjet__fourtopsm__btag__plus" source="/MET/Stjet_cut2_tttt_GhSM_BTAGUP"/>
-  </validation>
-
-  <validation type="tttt_GhUED6BTAGUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_GhUED6_BTAGUP.root" weight="MCScaleFactors.txt:tttt_GhUED6"> 
-    <TH1 name="mu_stjet__fourtobtaged__btag__plus" source="/MET/Stjet_cut2_tttt_GhUED6_BTAGUP"/>
+   <!-- <validation type="tttt_UED6BTAGUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_tttt_UED6_BTAGUP.root" weight="MCScaleFactors.txt:tttt_UED6"> 
+    <TH1 name="mu_stjet__fourtobtaged__btag__plus" source="/MET/Stjet_cut2_tttt_UED6_BTAGUP"/>
   </validation>-->
 
   <validation type="ttbarBTAGUP" file="/uscms_data/d3/algomez/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/results_ttbar_BTAGUP.root" weight="MCScaleFactors.txt:ttbar"> 
@@ -1161,14 +853,7 @@
     <superimposeItem name="mu_stjet__zjets__btag__plus" color="top" legend="Zjets"/>
     <superimposeItem name="mu_stjet__singletop__btag__plus" color="top" legend="ST"/>
     <superimposeItem name="mu_stjet__dibosons__btag__plus" color="top" legend="Dibosons"/>
-    <superimposeItem name="mu_stjet__fourtop400__btag__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.4 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop500__btag__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.5 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop600__btag__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.6 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop700__btag__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.7 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop800__btag__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.8 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop900__btag__plus" color="1" legend="t#bar{t}t#bar{t} Gh 0.9 TeV" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtop1000__btag__plus" color="1" legend="t#bar{t}t#bar{t} Gh 1.0 TeV" NoStack="true"/>
-    <!--<superimposeItem name="mu_stjet__fourtobtaged__btag__plus" color="1" legend="t#bar{t}t#bar{t} UED6" NoStack="true"/>
-    <superimposeItem name="mu_stjet__fourtopsm__btag__plus" color="1" legend="t#bar{t}t#bar{t} SM" NoStack="true"/>-->
-  </superimpose>
+    <!--<superimposeItem name="mu_stjet__fourtobtaged__btag__plus" color="1" legend="t#bar{t}t#bar{t} UED6" NoStack="true"/>-->
+    <superimposeItem name="mu_stjet__fourtopsm__btag__plus" color="1" legend="t#bar{t}t#bar{t} SM" NoStack="true"/> 
+ </superimpose>
 </cuy>

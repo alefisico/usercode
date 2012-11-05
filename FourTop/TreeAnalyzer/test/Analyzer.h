@@ -35,6 +35,7 @@
 #include "CondFormats/JetMETObjects/interface/JetCorrectionUncertainty.h"
 #include "PhysicsTools/Utilities/interface/Lumi3DReWeighting.h"
 
+#include "weights/myTMVAClassification_BDT.class.C"
 
 #include <map>
 #include <string>
@@ -118,12 +119,30 @@ private:
       LOTable  lSF_table_error_down_tight;
       LOTable  lSF_table_error_up_tight;
       LOTable  leff_table_tight;
-      //LOTableHeavy bSF_table_loose;
-      //LOTableHeavy bSF_table_medium;
-      //LOTableHeavy bSF_table_tight;
-      //LOTableLight leff_SF_table_loose;
-      //LOTableLight leff_SF_table_medium;
-      //LOTableLight leff_SF_table_tight;
+
+      //Fast Sim Btag correction factor
+      //Medium
+      LOTable  bCF_table;
+      LOTable  bCF_table_error;
+      LOTable  cCF_table;
+      LOTable  cCF_table_error;
+      LOTable  lCF_table_error;
+      LOTable  leff_CF_table;
+      //Loose
+      /*LOTable  bCF_table_loose;
+      LOTable  bCF_table_error_loose;
+      LOTable  cCF_table_loose;
+      LOTable  cCF_table_error_loose;
+      LOTable  lCF_table_error_loose;
+      LOTable  leff_CF_table_loose;
+      */
+      //Tight
+      LOTable  bCF_table_tight;
+      LOTable  bCF_table_error_tight;
+      LOTable  cCF_table_tight;
+      LOTable  cCF_table_error_tight;
+      LOTable  lCF_table_error_tight;
+      LOTable  leff_CF_table_tight;
 
       map<string, TH1*> jethist;
       map<string, TH2*> btageff;

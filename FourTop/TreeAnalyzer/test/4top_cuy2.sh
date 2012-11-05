@@ -9,11 +9,13 @@
 args=("$@")
 #declare -a var
 
-VARFILE="varcuy2.txt"
+VARFILE="varcuy.txt"
 MAIN_Dir="/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/"
-SAMPLE_DIR="/uscms/home/algomez/nobackup/files/fourtop/resultsTreeAnalyzer/resultsFinal/"
-sample=(ttbar ttbar_powheg)
-OUTFILEPLOTS='/uscms/home/algomez/public_html/plots/BDTFinal/'
+#SAMPLE_DIR="/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/"
+SAMPLE_DIR="/uscms/home/algomez/nobackup/files/fourtop/resultsTreeAnalyzer/results110/Nbjets3/"
+#sample=(ttbar ttbar_powheg)
+sample=(ttbar TTbar)
+OUTFILEPLOTS='/uscms/home/algomez/public_html/plots/BDTv110/Nbjets3/'
 
 Lumi="5000.0"
 
@@ -26,6 +28,7 @@ Lumi="5000.0"
 ### Some extra definitions
 ndata="data"
 nttbar="ttbar"
+nTTbar="TTbar"
 nWjets="WJets"
 nZjets="ZJets"
 nDibosons="WW"
@@ -81,12 +84,17 @@ do
 	echo '' >> $OUTFILE
 	done
 
-	echo "<superimpose name=\"${var}_ttbardiff\" title=\"${var}_ttbardiff\" YTitle=\"Unit Area\" Lumi=\"${Lumi}\" Normalize=\"true\" PlotDiff=\"true\" >" >> $OUTFILE
-	echo "<superimposeItem name=\"${var}_ttbar_powheg\" color=\"top\" legend=\"TTbarOther\" />" >> $OUTFILE
-	echo "<superimposeItem name=\"${var}_ttbar\" color=\"top\" legend=\"TTbar\" />" >> $OUTFILE
+	echo "<superimpose name=\"${var}_ttbardiff\" title=\"${var}_ttbardiff\" Fill=\"true\" YTitle=\"Unit Area\" Lumi=\"${Lumi}\" Normalize=\"false\" >" >> $OUTFILE
+	#echo "<superimpose name=\"${var}\" title=\"${var}\" Fill=\"true\" Weight=\"true\" Lumi=\"${Lumi}\" Stack=\"false\"  >" >> $OUTFILE
+	echo "<superimposeItem name=\"${var}_TTbar\" color=\"1\" legend=\"TTbarOther\"  />" >> $OUTFILE
+	echo "<superimposeItem name=\"${var}_ttbar\" color=\"1\" legend=\"TTbar\"  />" >> $OUTFILE
 	echo '</superimpose>' >> $OUTFILE
 	echo '</cuy>' >> $OUTFILE
 
-	../../cuy/scripts/cuy.py -x $OUTFILE -f "CMS 2011 Simulation" -o $OUTFILEPLOTS -p "pdf" -b -q 
+	#../../cuy/scripts/cuy.py -x $OUTFILE -f "CMS 2011 Simulation" -o $OUTFILEPLOTS -p "pdf" -b -q 
+	../../cuy/scripts/cuy.py -x $OUTFILE -O tmp_Ttbardiff_${var}.root -b -q 
 	rm -rf $OUTFILE
 done
+
+hadd TTbardiff.root tmp_Ttbardiff*
+rm tmp_Ttbardiff*

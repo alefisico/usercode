@@ -2,7 +2,7 @@
 sample=(SM)
 num=(sm)
 version='SM'
-results='results102'
+results='results110/Nbjets3'
 
 sample_elements=${#sample[@]}
 num_elements=${#num[@]}

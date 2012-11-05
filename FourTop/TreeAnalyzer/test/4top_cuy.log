@@ -1,0 +1,274 @@
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+lepW_mass  &  1.0 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+lepW_mass_log  &  1.0 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+Leptop  &  0.994 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+Leptop_log  &  0.994 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+chi2  &  0.995 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+chi2_log  &  0.995 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+hadW_mass  &  1.0 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+hadW_mass_log  &  1.0 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+hadW_pt  &  0.826 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+hadW_pt_log  &  0.826 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+secondhadW_mass  &  0.689 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+secondhadW_mass_log  &  0.689 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+secondhadW_pt  &  0.0 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+secondhadW_pt_log  &  0.0 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+Htop_mass  &  0.983 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+Htop_mass_log  &  0.983 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+Htop_pt  &  0.401 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+Htop_pt_log  &  0.401 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+ERROR: histogram name: /mass/secondHtop_mass_STsch does not exist.
+ERROR: histogram name: /mass/secondHtop_mass_STtch_bar does not exist.
+ERROR: histogram name: /mass/secondHtop_mass_STsch_bar does not exist.
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+ERROR: histogram name: /mass/secondHtop_mass_STsch does not exist.
+ERROR: histogram name: /mass/secondHtop_mass_STtch_bar does not exist.
+ERROR: histogram name: /mass/secondHtop_mass_STsch_bar does not exist.
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+ERROR: histogram name: /mass/secondHtop_pt_STsch does not exist.
+ERROR: histogram name: /mass/secondHtop_pt_STtch_bar does not exist.
+ERROR: histogram name: /mass/secondHtop_pt_STsch_bar does not exist.
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+ERROR: histogram name: /mass/secondHtop_pt_STsch does not exist.
+ERROR: histogram name: /mass/secondHtop_pt_STtch_bar does not exist.
+ERROR: histogram name: /mass/secondHtop_pt_STsch_bar does not exist.
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+Stjet  &  0.794 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+Stjet_log  &  0.794 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+Stlep  &  0.965 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+Stlep_log  &  0.965 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+jet1_pt  &  0.926 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+jet1_pt_log  &  0.926 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+jet2_pt  &  0.968 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+jet2_pt_log  &  0.968 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+jet3_pt  &  0.991 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+jet3_pt_log  &  0.991 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+ERROR: histogram name: /mass/top_pt_STsch does not exist.
+ERROR: histogram name: /mass/top_pt_STtch does not exist.
+ERROR: histogram name: /mass/top_pt_WW does not exist.
+ERROR: histogram name: /mass/top_pt_STtWch_bar does not exist.
+ERROR: histogram name: /mass/top_pt_tttt_Gh400 does not exist.
+ERROR: histogram name: /mass/top_pt_Wqq does not exist.
+ERROR: histogram name: /mass/top_pt_tttt_SM does not exist.
+ERROR: histogram name: /mass/top_pt_STtch_bar does not exist.
+ERROR: histogram name: /mass/top_pt_Wcc does not exist.
+ERROR: histogram name: /mass/top_pt_Wbb does not exist.
+ERROR: histogram name: /mass/top_pt_STsch_bar does not exist.
+ERROR: histogram name: /mass/top_pt_ttbar does not exist.
+ERROR: histogram name: /mass/top_pt_ZJets does not exist.
+ERROR: histogram name: /mass/top_pt_data does not exist.
+ERROR: histogram name: /mass/top_pt_WZ does not exist.
+ERROR: histogram name: /mass/top_pt_tttt_Gh600 does not exist.
+ERROR: histogram name: /mass/top_pt_STtWch does not exist.
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+ERROR: histogram name: /mass/top_pt_STsch does not exist.
+ERROR: histogram name: /mass/top_pt_STtch does not exist.
+ERROR: histogram name: /mass/top_pt_WW does not exist.
+ERROR: histogram name: /mass/top_pt_STtWch_bar does not exist.
+ERROR: histogram name: /mass/top_pt_tttt_Gh400 does not exist.
+ERROR: histogram name: /mass/top_pt_Wqq does not exist.
+ERROR: histogram name: /mass/top_pt_tttt_SM does not exist.
+ERROR: histogram name: /mass/top_pt_STtch_bar does not exist.
+ERROR: histogram name: /mass/top_pt_Wcc does not exist.
+ERROR: histogram name: /mass/top_pt_Wbb does not exist.
+ERROR: histogram name: /mass/top_pt_STsch_bar does not exist.
+ERROR: histogram name: /mass/top_pt_ttbar does not exist.
+ERROR: histogram name: /mass/top_pt_ZJets does not exist.
+ERROR: histogram name: /mass/top_pt_data does not exist.
+ERROR: histogram name: /mass/top_pt_WZ does not exist.
+ERROR: histogram name: /mass/top_pt_tttt_Gh600 does not exist.
+ERROR: histogram name: /mass/top_pt_STtWch does not exist.
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+mindeltaRjj  &  0.999 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+mindeltaRjj_log  &  0.999 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+deltaRjj  &  0.876 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+deltaRjj_log  &  0.876 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+deltaPhijj  &  0.884 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+deltaPhijj_log  &  0.884 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+diWdeltaR  &  0.998 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+diWdeltaR_log  &  0.998 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+diWdeltaphi  &  1.0 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+diWdeltaphi_log  &  1.0 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+deltaRmu2j  &  0.903 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+deltaRmu2j_log  &  0.903 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+deltaPhimu2j  &  1.0 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+deltaPhimu2j_log  &  1.0 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+muon_pt  &  0.994 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+muon_pt_log  &  0.994 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+muon_eta  &  0.842 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+muon_eta_log  &  0.842 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+muon_phi  &  0.98 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+muon_phi_log  &  0.98 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+deltaR  &  0.97 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+deltaR_log  &  0.97 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+MET  &  0.995 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+MET_log  &  0.995 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+jet4_pt  &  0.979 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+jet4_pt_log  &  0.979 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+jet1_eta  &  0.984 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+jet1_eta_log  &  0.984 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+jet2_eta  &  0.434 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+jet2_eta_log  &  0.434 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+jet3_eta  &  0.99 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+jet3_eta_log  &  0.99 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+jet4_eta  &  0.373 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+jet4_eta_log  &  0.373 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+Njets  &  0.996 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+Njets_log  &  0.996 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+Nbjets_CSVL  &  0.779 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+Nbjets_CSVL_log  &  0.779 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+lepW_pt  &  0.371 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+lepW_pt_log  &  0.371 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+Leptop_pt  &  0.196 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+Leptop_pt_log  &  0.196 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+deltaPhiMETlep  &  0.736 \\
+Found tdrstyle.C file, using this style.
+Found CMSTopStyle.cc file, use TOP style if requested in xml file.
+deltaPhiMETlep_log  &  0.736 \\
