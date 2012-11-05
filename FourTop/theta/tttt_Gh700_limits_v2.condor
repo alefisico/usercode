@@ -1,0 +1,12 @@
+universe = vanilla
+Executable = /uscms/home/algomez/work/CMSSW_4_2_4/src/theta/utils/examples/fourtop//results110_Nbjets3_v2//tttt_Gh700_limits_v2.sh 
+Requirements = Memory >= 199 &&OpSys == "LINUX"&& (Arch != "DUMMY" )&& Disk > 1000000
+Should_Transfer_Files = YES
+WhenToTransferOutput = ON_EXIT
+Output = /uscms/home/algomez/work/CMSSW_4_2_4/src/theta/utils/examples/fourtop//results110_Nbjets3_v2//tttt_Gh700_limits_v2.stdout
+Error = /uscms/home/algomez/work/CMSSW_4_2_4/src/theta/utils/examples/fourtop//results110_Nbjets3_v2//tttt_Gh700_limits_v2.stderr
+Log = /uscms/home/algomez/work/CMSSW_4_2_4/src/theta/utils/examples/fourtop//results110_Nbjets3_v2//tttt_Gh700_limits_v2.condorlog
+notify_user = algomez@FNAL.GOV
+Arguments = 
+Queue 1
+
