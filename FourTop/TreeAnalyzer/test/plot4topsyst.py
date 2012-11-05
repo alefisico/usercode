@@ -22,8 +22,7 @@ file = TFile(filename)
 
 sample = sys.argv[2]
 systname = sys.argv[3]
-ghsample = sys.argv[4]
-variable = sys.argv[5]
+variable = sys.argv[4]
 
 #SF_Wbb = 1.21
 #SF_Wcc = 1.66
@@ -47,11 +46,11 @@ for key in list:
     obj = file.Get(name)
     #obj.SetName( key.GetName() )
     #print "obj name = "+ obj.GetName() +" title = "+ obj.GetTitle()
-    if name =="mu_"+variable+ghsample+"__"+sample:
+    if name =="mu_"+variable+"__"+sample:
         hbb['nominal'] = obj
-    if name == "mu_"+variable+ghsample+"__"+sample+"__"+systname+"__plus":
+    if name == "mu_"+variable+"__"+sample+"__"+systname+"__plus":
         hbb['plus'] = obj
-    if name == "mu_"+variable+ghsample+"__"+sample+"__"+systname+"__minus":
+    if name == "mu_"+variable+"__"+sample+"__"+systname+"__minus":
         hbb['minus'] = obj
                                         
     #if name.find("mu1allb_mass__wqq") !=-1: obj.Scale( SF_Wqq)
@@ -70,10 +69,12 @@ hbb['minus'].SetMarkerColor(4)
 hbb['plus'].SetMarkerStyle(2)
 hbb['nominal'].SetMarkerStyle(2)
 hbb['minus'].SetMarkerStyle(2)
+hbb['plus'].GetYaxis().SetTitle("Unit Area")
 
 hbb['plus'].DrawNormalized()
 hbb['nominal'].DrawNormalized("same")
 hbb['minus'].DrawNormalized("same")
+
 
 aleg = TLegend(0.6,0.65,0.93,0.93)
 SetOwnership( aleg, 0 )
@@ -89,7 +90,7 @@ aleg.AddEntry(hbb['nominal'],"nominal","PL")
 aleg.AddEntry(hbb['minus'],"minus","PL")
 aleg.Draw()
 
-cbb.Print(sample+"_"+variable+"_"+ghsample+"_"+systname+"_syst.png")
+cbb.Print(sample+"_"+variable+"_"+systname+"_syst.pdf")
 
 #sigma_bb = 0.28
 #sigma_cc = 0.06

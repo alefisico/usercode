@@ -1,30 +1,30 @@
-##!/bin/tcsh -f
-#
-#date
-#source /uscmst1/prod/sw/cms/setup/cshrc prod
-#setenv SCRAM_ARCH slc5_amd64_gcc434
-#
-#set MAIN_Dir =/uscms/home/algomez/work/CMSSW_4_2_4/src/Yumiceva/TreeAnalyzer/test/
-#
-#cd $MAIN_Dir
-#
-#eval `scram runtime -csh`
-#
-#echo "SCRAM_ARCH " $SCRAM_ARCH
-#pwd
-#
-root -l loadLibraries.C -b runAnalysis.C\(\"tttt\",\"all\"\) -q
-root -l loadLibraries.C -b runAnalysis.C\(\"MC\",\"all\"\) -q
-root -l loadLibraries.C -b runAnalysis.C\(\"data\",\"all\"\) -q
-root -l loadLibraries.C -b runAnalysis.C\(\"tttt\",\"sys\",\"JEC\"\) -q
-root -l loadLibraries.C -b runAnalysis.C\(\"tttt\",\"sys\",\"JER\"\) -q
-root -l loadLibraries.C -b runAnalysis.C\(\"tttt\",\"sys\",\"PU\"\) -q
-root -l loadLibraries.C -b runAnalysis.C\(\"tttt\",\"sys\",\"BTAG\"\) -q
-root -l loadLibraries.C -b runAnalysis.C\(\"MC\",\"sys\",\"JEC\"\) -q
-root -l loadLibraries.C -b runAnalysis.C\(\"MC\",\"sys\",\"JER\"\) -q
-root -l loadLibraries.C -b runAnalysis.C\(\"MC\",\"sys\",\"PU\"\) -q
-root -l loadLibraries.C -b runAnalysis.C\(\"MC\",\"sys\",\"BTAG\"\) -q
-#echo Done.
-#date
-#end
-##
+#!/bin/bash 
+#root -l loadLibraries.C -b runAnalysis.C\(\"ttttSM\",\"all\"\) -q
+root -l loadLibraries.C -b runAnalysis.C\(\"ttttUED6\",\"all\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"tttt400\",\"all\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"tttt500\",\"all\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"tttt600\",\"all\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"tttt700\",\"all\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"tttt800\",\"all\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"tttt900\",\"all\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"tttt1000\",\"all\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"Wqq\",\"all\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"Wbb\",\"all\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"Wcc\",\"all\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"ttbar\",\"all\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"ZJets\",\"all\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"ST\",\"all\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"diboson\",\"all\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"data\",\"all\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"tttt\",\"sys\",\"JEC\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"tttt\",\"sys\",\"JER\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"tttt\",\"sys\",\"PU\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"tttt\",\"sys\",\"BTAG\"\) -q
+root -l loadLibraries.C -b runAnalysis.C\(\"ttttUED6\",\"sys\",\"JEC\"\) -q
+root -l loadLibraries.C -b runAnalysis.C\(\"ttttUED6\",\"sys\",\"JER\"\) -q
+root -l loadLibraries.C -b runAnalysis.C\(\"ttttUED6\",\"sys\",\"PU\"\) -q
+root -l loadLibraries.C -b runAnalysis.C\(\"ttttUED6\",\"sys\",\"BTAG\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"MC\",\"sys\",\"JEC\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"MC\",\"sys\",\"JER\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"MC\",\"sys\",\"PU\"\) -q
+#root -l loadLibraries.C -b runAnalysis.C\(\"MC\",\"sys\",\"BTAG\"\) -q
