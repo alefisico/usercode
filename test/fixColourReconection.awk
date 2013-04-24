@@ -65,10 +65,12 @@ BEGIN{
 		if($3!=$4){					# For decaying particles right after initial state
 			if($5!=$6){				# If the colour is the same something is wrong or if 0 we do not care about colour
 				if($1>0){			# For particles
+					mother1=linecount;	# Record number of mother particle
 					$5=initialcolour1;	# Assign colour of initial particle
 					$6=0;
 				}
 				else{				# Assign colour of initial ANTIparticle
+					mother2=linecount;
 					$6=initialcolour2;
 					$5=0;
 				}
