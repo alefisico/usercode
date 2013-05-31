@@ -7,9 +7,11 @@
 ###  Alejandro Gomez Espinosa
 ###  gomez@physics.rutgers.edu
 ###
-###  How to run: source run_hadronizer_crab_job.sh stop1=100 stop2=250
+###  How to run: 
+###  source run_hadronizer_crab_job.sh 100 250
+###  100 is the mass of the daugher particle and 250 of the mother
 ###  (If it is an executable (chmod +x run_hadronizer_crab_job.sh):
-###  ./run_hadronizer_crab_job.sh stop1=100 stop2=250
+###  ./run_hadronizer_crab_job.sh 100 250
 ###
 ####################################################
 
