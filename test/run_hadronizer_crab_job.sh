@@ -27,7 +27,7 @@ set stop2 = $2									# Mass of the stop2
 set Main_Dir = /uscms/home/algomez/work/CMSSW_5_2_6/src/			# Main Dir
 set Name = st2_h_bb_st1_${Process}_${stop2}_${stop1}				# Name of the process
 set Sample_Dir = ${Main_Dir}/${Name}_AOD/					# Name of directory for each process
-set Store_Dir = /uscms_data/d3/algomez/files/stops/				# Name of store directory
+set LHE_Dir = /uscms_data/d3/algomez/files/stops/lhe/				# Name of lhe directory
 
 
 #####################################################
@@ -78,7 +78,7 @@ process.maxEvents = cms.untracked.PSet(
 
 # Input source
 process.source = cms.Source("LHESource",
-    fileNames = cms.untracked.vstring('file:${Store_Dir}${Name}.lhe')
+    fileNames = cms.untracked.vstring('file:${LHE_Dir}${Name}.lhe')
 )
 
 process.options = cms.untracked.PSet(
