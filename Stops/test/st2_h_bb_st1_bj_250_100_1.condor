@@ -1,0 +1,12 @@
+universe = vanilla
+Executable = /uscms/home/algomez/work/CMSSW_5_3_3/src/TopQuarkAnalysis/TopPairBSM/test/Stops/st2_h_bb_st1_bj_250_100/st2_h_bb_st1_bj_250_100_1.sh
+Requirements = Memory >= 199 &&OpSys == "LINUX"&& (Arch != "DUMMY" )&& Disk > 1000000
+Should_Transfer_Files = YES
+WhenToTransferOutput = ON_EXIT
+Output = /uscms/home/algomez/work/CMSSW_5_3_3/src/TopQuarkAnalysis/TopPairBSM/test/Stops/st2_h_bb_st1_bj_250_100/st2_h_bb_st1_bj_250_100_1.stdout
+Error = /uscms/home/algomez/work/CMSSW_5_3_3/src/TopQuarkAnalysis/TopPairBSM/test/Stops/st2_h_bb_st1_bj_250_100/st2_h_bb_st1_bj_250_100_1.stderr
+Log = /uscms/home/algomez/work/CMSSW_5_3_3/src/TopQuarkAnalysis/TopPairBSM/test/Stops/st2_h_bb_st1_bj_250_100/st2_h_bb_st1_bj_250_100_1.condorlog
+notify_user = algomez@CERN.CH
+Arguments = 
+Queue 1
+
