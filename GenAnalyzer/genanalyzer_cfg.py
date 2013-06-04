@@ -2,6 +2,9 @@
 import FWCore.ParameterSet.Config as cms
 process = cms.Process("Demo")
 
+## Output Dir
+output_Dir='/uscms_data/d3/algomez/files/stops/GenPlots/'
+
 ###############################
 ####### Parameters ############
 ###############################
@@ -9,23 +12,23 @@ from FWCore.ParameterSet.VarParsing import VarParsing
 options = VarParsing ('standard')			### For a simple set of parameters
 #options = VarParsing ('analysis')			### For a complete set of parameters
 
-options.register ('stop1mass',
+options.register ('st1',
                   0,
                   VarParsing.multiplicity.singleton,
                   VarParsing.varType.int,
                   'Mass for the Stop1')
 
-options.register ('stop2mass',
+options.register ('st2',
                   0,
                   VarParsing.multiplicity.singleton,
                   VarParsing.varType.int,
                   'Mass for the Stop2')
 
-#options.register ('useData',
-#                  False,
-#                  VarParsing.multiplicity.singleton,
-#                  VarParsing.varType.int,
-#                  'Run this on real data')
+options.register ('use',
+                  '',
+                  VarParsing.multiplicity.singleton,
+                  VarParsing.varType.string,
+                  'Stop1 decay in')
 options.parseArguments()
 print options
 
@@ -40,16 +43,22 @@ process.load("FWCore.MessageService.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(100)
 
 ## Source
+stop2 = str(options.st2)			# Convert it into string only for inputfile names
+stop1 = str(options.st1)
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
 #	    'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_bj_250_100/st2_h_bb_st1_bj_250_100_tlbsm_53x_v2_mcst2_h_bb_st1_bj_250_100_1_tlbsm_53x_v2_mc.root',
 #	    'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_bj_250_100/st2_h_bb_st1_bj_250_100_tlbsm_53x_v2_mcst2_h_bb_st1_bj_250_100_2_tlbsm_53x_v2_mc.root',
 #	    'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_bj_250_100/st2_h_bb_st1_bj_250_100_tlbsm_53x_v2_mcst2_h_bb_st1_bj_250_100_3_tlbsm_53x_v2_mc.root',
 #	    'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_bj_250_100/st2_h_bb_st1_bj_250_100_tlbsm_53x_v2_mcst2_h_bb_st1_bj_250_100_4_tlbsm_53x_v2_mc.root'
- 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_jj_250_100/st2_h_bb_st1_jj_250_100_tlbsm_53x_v2_mc_2.root',
- 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_jj_250_100/st2_h_bb_st1_jj_250_100_tlbsm_53x_v2_mc_3.root',
- 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_jj_250_100/st2_h_bb_st1_jj_250_100_tlbsm_53x_v2_mc_4.root',
- 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_jj_250_100/st2_h_bb_st1_jj_250_100_tlbsm_53x_v2_mc.root'
+# 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_jj_250_100/st2_h_bb_st1_jj_250_100_tlbsm_53x_v2_mc_2.root',
+# 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_jj_250_100/st2_h_bb_st1_jj_250_100_tlbsm_53x_v2_mc_3.root',
+# 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_jj_250_100/st2_h_bb_st1_jj_250_100_tlbsm_53x_v2_mc_4.root',
+# 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_jj_250_100/st2_h_bb_st1_jj_250_100_tlbsm_53x_v2_mc.root'
+ 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'_tlbsm_53x_v2_mc_1.root',
+ 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'_tlbsm_53x_v2_mc_2.root',
+ 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'_tlbsm_53x_v2_mc_3.root',
+ 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'_tlbsm_53x_v2_mc_4.root'
 
     )
 )
@@ -134,15 +143,15 @@ process.partonPlusBHistos= cms.EDAnalyzer("CandViewHistoAnalyzer",
 ############################
 process.genHistos = cms.EDAnalyzer('GenAnalyzer',
 		src = cms.InputTag("prunedGenParticles"),
-		stop1Mass = cms.double(options.stop1mass),
-		stop2Mass = cms.double(options.stop2mass)
+		stop1Mass = cms.double(options.st1),
+		stop2Mass = cms.double(options.st2)
 )
 
 #############################
 ###### Output module  #######
 #############################
 process.TFileService = cms.Service("TFileService",
-		fileName = cms.string (options.output)
+		fileName = cms.string (output_Dir+options.output)
 )
 
 
