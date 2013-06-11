@@ -20,7 +20,7 @@
 ### PARAMETERS
 #####################################
 
-foreach Process ("jj" "bj")									# Here I have two different final states
+foreach Process ("bj"  "jj")									# Here I have two different final states
 set stop1 = $1											# Mass of the stop1
 set stop2 = $2											# Mass of the stop2
 
@@ -104,7 +104,7 @@ options.register ('writeSimpleInputs',
                   "Write four-vector and ID of PF candidates")
 
 options.register ('writeGenParticles',
-                  False,
+                  True, #False,
                   VarParsing.multiplicity.singleton,
                   VarParsing.varType.int,
                   "Output GenParticles collection")
@@ -1822,13 +1822,13 @@ foreach version(1 2 3 4 )
 /bin/rm -f ${Name}_${version}.condor
 cat > ${Name}_${version}.condor << EOF
 universe = vanilla
-Executable = /uscms/home/algomez/work/CMSSW_5_3_3/src/TopQuarkAnalysis/TopPairBSM/test/Stops/${Name}/${Name}_${version}.sh
+Executable = ${Working_Dir}/${Name}_${version}.sh
 Requirements = Memory >= 199 &&OpSys == "LINUX"&& (Arch != "DUMMY" )&& Disk > 1000000
 Should_Transfer_Files = YES
 WhenToTransferOutput = ON_EXIT
-Output = /uscms/home/algomez/work/CMSSW_5_3_3/src/TopQuarkAnalysis/TopPairBSM/test/Stops/${Name}/${Name}_${version}.stdout
-Error = /uscms/home/algomez/work/CMSSW_5_3_3/src/TopQuarkAnalysis/TopPairBSM/test/Stops/${Name}/${Name}_${version}.stderr
-Log = /uscms/home/algomez/work/CMSSW_5_3_3/src/TopQuarkAnalysis/TopPairBSM/test/Stops/${Name}/${Name}_${version}.condorlog
+Output = ${Working_Dir}/${Name}_${version}.stdout
+Error = ${Working_Dir}/${Name}_${version}.stderr
+Log = ${Working_Dir}/${Name}_${version}.condorlog
 notify_user = algomez@CERN.CH
 Arguments = 
 Queue 1
