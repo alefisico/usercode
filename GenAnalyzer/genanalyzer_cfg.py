@@ -2,9 +2,6 @@
 import FWCore.ParameterSet.Config as cms
 process = cms.Process("Demo")
 
-## Output Dir
-output_Dir='/uscms_data/d3/algomez/files/stops/GenPlots/'
-
 ###############################
 ####### Parameters ############
 ###############################
@@ -40,28 +37,24 @@ print options
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxEvents) )
 ## Report every ..
 process.load("FWCore.MessageService.MessageLogger_cfi")
-process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(100)
+process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(2000)
 
 ## Source
 stop2 = str(options.st2)			# Convert it into string only for inputfile names
 stop1 = str(options.st1)
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-#	    'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_bj_250_100/st2_h_bb_st1_bj_250_100_tlbsm_53x_v2_mcst2_h_bb_st1_bj_250_100_1_tlbsm_53x_v2_mc.root',
-#	    'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_bj_250_100/st2_h_bb_st1_bj_250_100_tlbsm_53x_v2_mcst2_h_bb_st1_bj_250_100_2_tlbsm_53x_v2_mc.root',
-#	    'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_bj_250_100/st2_h_bb_st1_bj_250_100_tlbsm_53x_v2_mcst2_h_bb_st1_bj_250_100_3_tlbsm_53x_v2_mc.root',
-#	    'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_bj_250_100/st2_h_bb_st1_bj_250_100_tlbsm_53x_v2_mcst2_h_bb_st1_bj_250_100_4_tlbsm_53x_v2_mc.root'
-# 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_jj_250_100/st2_h_bb_st1_jj_250_100_tlbsm_53x_v2_mc_2.root',
-# 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_jj_250_100/st2_h_bb_st1_jj_250_100_tlbsm_53x_v2_mc_3.root',
-# 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_jj_250_100/st2_h_bb_st1_jj_250_100_tlbsm_53x_v2_mc_4.root',
-# 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_jj_250_100/st2_h_bb_st1_jj_250_100_tlbsm_53x_v2_mc.root'
- 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'_tlbsm_53x_v2_mc_1.root',
- 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'_tlbsm_53x_v2_mc_2.root',
- 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'_tlbsm_53x_v2_mc_3.root',
- 'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'_tlbsm_53x_v2_mc_4.root'
+	    ##### For normal process
+	    'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'_tlbsm_53x_v2_mc_1.root',
+	    'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'_tlbsm_53x_v2_mc_2.root',
+	    'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'_tlbsm_53x_v2_mc_3.root',
+	    'file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'_tlbsm_53x_v2_mc_4.root'
 
     )
 )
+
+## Output Dir
+output_Dir='/uscms_data/d3/algomez/files/stops/GenPlots/st2_h_bb_st1_'+options.use+'_'+stop2+'_'+stop1+'/'
 
 
 ###############################
@@ -71,9 +64,12 @@ process.source = cms.Source("PoolSource",
 process.load("SimGeneral.HepPDTESSource.pythiapdt_cfi")
 
 
+############################# The following EDAnalyzer are usefull for simple analysis,
+############################# but I am not using them for the current GenAnalysis.
 ## Print Tree
 process.printGenParticle = cms.EDAnalyzer("ParticleListDrawer",
-		src = cms.InputTag("prunedGenParticles"),
+		#src = cms.InputTag("prunedGenParticles"),
+		src = cms.InputTag("genParticles"),
 		maxEventsToPrint = cms.untracked.int32(1)
 		)
 
@@ -138,13 +134,18 @@ process.partonPlusBHistos= cms.EDAnalyzer("CandViewHistoAnalyzer",
 			)
 		)
 
+dummyprocess = -999
+if options.use=='bj': dummyprocess = 1
+else: dummyprocess = 0
 ############################
 ###### My Analyzer  ########
 ############################
 process.genHistos = cms.EDAnalyzer('GenAnalyzer',
-		src = cms.InputTag("prunedGenParticles"),
+		#src = cms.InputTag("prunedGenParticles"),
+		src = cms.InputTag("genParticles"),
 		stop1Mass = cms.double(options.st1),
-		stop2Mass = cms.double(options.st2)
+		stop2Mass = cms.double(options.st2),
+		st1decay = cms.double(dummyprocess)
 )
 
 #############################

@@ -67,6 +67,7 @@ class GenAnalyzer : public edm::EDAnalyzer {
 	edm::InputTag src_;
 	double stop1Mass_;
 	double stop2Mass_;
+	double st1decay_;
 
 	TH1D * histo; 
 	// Higgs
@@ -148,7 +149,8 @@ class GenAnalyzer : public edm::EDAnalyzer {
 GenAnalyzer::GenAnalyzer(const edm::ParameterSet& iConfig) :
 	src_( iConfig.getParameter<edm::InputTag>( "src" ) ),  			// Obtain inputs
 	stop1Mass_( iConfig.getParameter<double>( "stop1Mass" ) ),
-	stop2Mass_( iConfig.getParameter<double>( "stop2Mass" ) )
+	stop2Mass_( iConfig.getParameter<double>( "stop2Mass" ) ),
+	st1decay_( iConfig.getParameter<double>( "st1decay" ) )
 {
 	//now do what ever initialization is needed
 	edm::Service<TFileService> fs;						// Output File 
@@ -264,62 +266,62 @@ void GenAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 
 	// Begin Loop for GenParticles
 	for(unsigned int i = 0; i < particles->size(); ++ i) {
+
+		if( p[i].status()!= 3 ) continue;				// Make sure only "final" particles are present
 		
 		const Candidate * mom = p[i].mother();				// call mother particle
-		int idAbs = abs( p[i].pdgId() );				// call pdg Id
-		if( idAbs == 5 ) histo->Fill( p[i].pt() ); 			// test
+		if( p[i].pdgId() == 5 ) histo->Fill( p[i].pt() ); 			// test
 
 
 		//////////// True Mass plots
-		if( idAbs == 25 ){
+		if( p[i].pdgId() == 25 ){
 			higgs_num++;						// Check number of Higgs
 			h_higgsTrue_mass->Fill(p[i].mass());			// Higgs true mass
 		}
-		if( idAbs == 1000002 ) h_stop1True_mass->Fill(p[i].mass());	// Stop1 true mass
-		if( idAbs == 1000004 ) h_stop2True_mass->Fill(p[i].mass());	// Stop2 true mass
+		if( p[i].pdgId() == 1000002 ) h_stop1True_mass->Fill(p[i].mass());	// Stop1 true mass
+		if( p[i].pdgId() == 1000004 ) h_stop2True_mass->Fill(p[i].mass());	// Stop2 true mass
 		////////////
 		
-		if( p[i].status()!= 3 ) continue;				// Make sure only "final" particles are present
 
 		//////////// Storing TLorentz Vectors
 		TLorentzVector tmpjet, tmpBjet, tmpjetsB, tmpHiggs, tmpStop1B, tmpStop1jet;	// tmp TLorentzVectors
 		if( mom ){
 			// Jets without b
-			if( ( idAbs == 1 ) | ( idAbs == 2 ) | ( idAbs == 3 ) | ( idAbs == 4) ){
+			if( ( p[i].pdgId() == 1 ) || ( p[i].pdgId() == 2 ) || ( p[i].pdgId() == 3 ) || ( p[i].pdgId() == 4) ){
 				tmpjet.SetPxPyPzE(p[i].px(),p[i].py(),p[i].pz(),p[i].energy());
 				p4jet.push_back( tmpjet );
 			}
 			std::sort(p4jet.begin(), p4jet.end(), ComparePt);
 			// Bjets
-			if( idAbs == 5 ){
+			if( p[i].pdgId() == 5 ){
 				tmpBjet.SetPxPyPzE(p[i].px(),p[i].py(),p[i].pz(),p[i].energy());
 				p4Bjet.push_back( tmpBjet );
 			}
 			std::sort(p4Bjet.begin(), p4Bjet.end(), ComparePt);
 	 		// Jets with b
-			if( ( idAbs == 1 ) | ( idAbs == 2 ) | ( idAbs == 3 ) | ( idAbs == 4) | ( idAbs == 5 )){
+			if( ( p[i].pdgId() == 1 ) || ( p[i].pdgId() == 2 ) || ( p[i].pdgId() == 3 ) || ( p[i].pdgId() == 4) || ( p[i].pdgId() == 5 )){
 				tmpBjet.SetPxPyPzE(p[i].px(),p[i].py(),p[i].pz(),p[i].energy());
 				p4jetsB.push_back( tmpBjet );
 			}
 			std::sort(p4jetsB.begin(), p4jetsB.end(), ComparePt);
 
 			// Higgs
-			if( ( idAbs == 5 ) & ( mom->pdgId() == 25 ) ){
+			if( ( p[i].pdgId() == 5 ) && ( mom->pdgId() == 25 ) ){
 				tmpHiggs.SetPxPyPzE(p[i].px(),p[i].py(),p[i].pz(),p[i].energy());
 				p4HiggsB.push_back( tmpHiggs );
 			}
 			std::sort(p4HiggsB.begin(), p4HiggsB.end(), ComparePt);
 		 	// Stop1
 			if( abs( mom->pdgId() )== 1000002 ){
-				if( ( idAbs == 1 ) | ( idAbs == 2 ) | ( idAbs == 3 ) | ( idAbs == 4) ){
-					tmpStop1B.SetPxPyPzE(p[i].px(),p[i].py(),p[i].pz(),p[i].energy());
-					p4Stop1B.push_back( tmpStop1B );
-					p4Stop1jetsB.push_back( tmpStop1B );
-				}
-				else {
+				if( ( p[i].pdgId() == 1 ) || ( p[i].pdgId() == 2 ) || ( p[i].pdgId() == 3 ) || ( p[i].pdgId() == 4) ){
 					tmpStop1jet.SetPxPyPzE(p[i].px(),p[i].py(),p[i].pz(),p[i].energy());
 					p4Stop1jet.push_back( tmpStop1jet );
 					p4Stop1jetsB.push_back( tmpStop1jet );
+				}
+				else {
+					tmpStop1B.SetPxPyPzE(p[i].px(),p[i].py(),p[i].pz(),p[i].energy());
+					p4Stop1B.push_back( tmpStop1B );
+					p4Stop1jetsB.push_back( tmpStop1B );
 				}
 			}
 			std::sort(p4Stop1B.begin(), p4Stop1B.end(), ComparePt);
@@ -328,9 +330,11 @@ void GenAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 		}
 	}  // end GenParticles loop 
 
+
 	// Test number of true Higgs
 	h_higgs_num->Fill( higgs_num );
 
+	//cout << "run:lumi:event = " << iEvent.id().run() << ":" << iEvent.id().luminosityBlock() << ":" << iEvent.id().event() <<endl;
 
 	///// Higgs reconstructed mass
 	for(unsigned int j = 0; j < p4HiggsB.size()-1; ++j) {
@@ -349,23 +353,39 @@ void GenAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 			}
 		}
 	}
-	//////////////////////////////
+	///////////////////////////// /
 
 
 	/////// Stop1 reconstructed mass
-	for(unsigned int j = 0; j < p4Stop1B.size(); ++j) {
-		for(unsigned int k= 0; k < p4Stop1jet.size(); ++k) {
-			TLorentzVector p4CandidateStop1 = p4Stop1B[j] + p4Stop1jet[k];		// Higgs TLorentzVector
-			Double_t massStop1 = stop1Mass_ ;						// nominal mass value
-			Double_t diffmassStop1 = p4CandidateStop1.M() - massStop1;		// mass difference
-			if( abs(diffmassStop1) < 1.0 ){						// diffmass presicion
-			       	h_stop1_mass->Fill( p4CandidateStop1.M() );			// Stop1 mass
-			       	h_stop1_pt->Fill( p4CandidateStop1.Pt() );			// Stop1 pt
-				p4Stop1.push_back( p4CandidateStop1 );
+	if( st1decay_==1){
+		for(unsigned int j = 0; j < p4Stop1B.size(); ++j) {
+			for(unsigned int k= 0; k < p4Stop1jet.size(); ++k) {
+				TLorentzVector p4CandidateStop1 = p4Stop1B[j] + p4Stop1jet[k];		// higgs tlorentzvector
+				Double_t massStop1 = stop1Mass_ ;						// nominal mass value
+				Double_t diffmassStop1 = p4CandidateStop1.M() - massStop1;		// mass difference
+				if( abs(diffmassStop1) < 1.0 ){						// diffmass presicion
+				       	h_stop1_mass->Fill( p4CandidateStop1.M() );			// stop1 mass
+				       	h_stop1_pt->Fill( p4CandidateStop1.Pt() );			// stop1 pt
+					p4Stop1.push_back( p4CandidateStop1 );
+				}
+			}
+		}
+	} else {
+		for(unsigned int j = 0; j < p4Stop1jet.size(); ++j) {
+			for(unsigned int k= 0; k < p4Stop1jet.size(); ++k) {
+				if( j==k ) continue;
+				TLorentzVector p4CandidateStop1 = p4Stop1jet[j] + p4Stop1jet[k];		// higgs tlorentzvector 
+				Double_t massStop1 = stop1Mass_ ;						// nominal mass value
+				Double_t diffmassStop1 = p4CandidateStop1.M() - massStop1;		// mass difference
+				if( abs(diffmassStop1) < 1.0 ){						// diffmass presicion
+				       	h_stop1_mass->Fill( p4CandidateStop1.M() );			// stop1 mass
+				       	h_stop1_pt->Fill( p4CandidateStop1.Pt() );			// stop1 pt
+					p4Stop1.push_back( p4CandidateStop1 );
+				}
 			}
 		}
 	}
-	//////////////////////////////////
+	///////////////////////////////// /
 	
 	// Stop2 reconstructed mass
 	for(unsigned int j = 0; j < p4Higgs.size(); ++j) {
@@ -377,7 +397,7 @@ void GenAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 			       	h_stop2_mass->Fill( p4CandidateStop2.M() );			// Stop1 mass
 			}
 		}
-	}
+	}//
 
 	// Jets + B
 	Double_t Ht = 0;
@@ -405,9 +425,9 @@ void GenAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 		for(unsigned int k= 0; k < p4Stop1jet.size(); ++k) {
 			if( p4Stop1jet[k].Pt() == p4jetsB[j].Pt() ) h_jetfromStop1->Fill( j+1 );
 				//cout << k << " "<< j << " " <<p4Stop1jet[k].Pt() << " " << p4jetsB[j].Pt() << endl;
-		}
+		}/*
 		if( p4Stop1B[0].Pt() == p4jetsB[j].Pt() ) h_Bjet1fromStop1->Fill( j+1 );
-		if( p4Stop1B[1].Pt() == p4jetsB[j].Pt() ) h_Bjet2fromStop1->Fill( j+1 );
+		if( p4Stop1B[1].Pt() == p4jetsB[j].Pt() ) h_Bjet2fromStop1->Fill( j+1 );*/
 		for(unsigned int kk= 0; kk < p4Stop1B.size(); ++kk) {
 			if( p4Stop1B[kk].Pt() == p4jetsB[j].Pt() ) h_BjetfromStop1->Fill( j+1 );
 				//cout << kk << " "<< j << " " <<p4Stop1B[kk].Pt() << " " << p4jetsB[j].Pt() << endl;
@@ -422,7 +442,7 @@ void GenAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 		}
 	}
 	h_jetsB_ht->Fill( Ht );
-	/////////////////////////////
+	//////////////////////////// 
 
 	// Bjets 
 	for(unsigned int j = 0; j < p4Bjet.size(); ++j) {
@@ -433,15 +453,15 @@ void GenAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 		h_Bjet1Bjet2_cosDeltaPhi->Fill( cos( p4Bjet[0].DeltaPhi( p4Bjet[1] ) ) );
 		h_Bjet1Bjet2_deltaR->Fill( p4Bjet[0].DeltaR( p4Bjet[1] ) );
 	}
-	/////////////////////////////
+	//////////////////////////// /
 
 	// Jets 
 	for(unsigned int j = 0; j < p4jet.size(); ++j) {
 		h_jet_pt->Fill( p4jet[j].Pt() );
 		h_jet1_pt->Fill( p4jet[0].Pt() );
 		h_jet2_pt->Fill( p4jet[1].Pt() );
-		h_jet_num->Fill( p4jet.size() );
 	}
+		h_jet_num->Fill( p4jet.size() );
 	/////////////////////////////
 
 }
