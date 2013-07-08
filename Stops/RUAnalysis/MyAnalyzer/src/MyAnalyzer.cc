@@ -75,11 +75,19 @@ MyAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	
 	/////////// define some TLorentzVectors
-	vector< TLorentzVector > p4RecoJets;
-	vector< TLorentzVector > p4RecoBjets;
 	vector< TLorentzVector > p4GenTruthAlljets;
 	vector< TLorentzVector > p4GenTruthJets;
 	vector< TLorentzVector > p4GenTruthBjets; 
+	vector< TLorentzVector > p4GenTruthHiggs;
+	vector< TLorentzVector > p4GenTruthBjetsHiggs; 
+	vector< TLorentzVector > p4GenTruthB1Higgs; 
+	vector< TLorentzVector > p4GenTruthB2Higgs; 
+	vector< TLorentzVector > p4GenTruthJetsStop1;
+	vector< TLorentzVector > p4GenTruthBjetsStop1; 
+
+	vector< TLorentzVector > p4RecoJets;
+	vector< TLorentzVector > p4RecoBjets;
+
 	vector< TLorentzVector > p4GenAlljets;
 	vector< TLorentzVector > p4GenJets;
 	vector< TLorentzVector > p4GenBjets; 
@@ -89,16 +97,23 @@ MyAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	vector< TLorentzVector > p4GenbjetStop1;
 	vector< TLorentzVector > p4GenStop1;
 	vector< TLorentzVector > p4GenStop2;
-	vector< TLorentzVector > p4MatchTruthGenAlljets;
-	vector< TLorentzVector > p4MatchTruthGenJets;
-	vector< TLorentzVector > p4MatchTruthGenBjets;
+
+	vector< TLorentzVector > p4MatchAllBjetsHiggs;
+	vector< TLorentzVector > p4MatchB1Higgs;
+	vector< TLorentzVector > p4MatchB2Higgs;
+	vector< TLorentzVector > p4MatchbbsHiggs;
+	vector< TLorentzVector > p4MatchAllBjetsStop1;
+	vector< TLorentzVector > p4MatchAllJetsStop1;
+
+	//vector< TLorentzVector > p4MatchTruthGenAlljets;
+	//vector< TLorentzVector > p4MatchTruthGenJets;
+	//vector< TLorentzVector > p4MatchTruthGenBjets;
 	vector< TLorentzVector > p4MatchTruthAlljets;
 	vector< TLorentzVector > p4MatchTruthJets;
 	vector< TLorentzVector > p4MatchTruthBjets;
-	vector< TLorentzVector > p4MatchAlljets;
-	vector< TLorentzVector > p4MatchJets;
-	vector< TLorentzVector > p4MatchBjets;
-	vector< TLorentzVector > p4MatchBjetsHiggs;
+	//vector< TLorentzVector > p4MatchAlljets;
+	//vector< TLorentzVector > p4MatchJets;
+	//vector< TLorentzVector > p4MatchBjets;
 	//////////////////////////////////////////////////
 
 
@@ -109,16 +124,16 @@ MyAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	//std::cout << run << " " << event << std::endl;
 	//////////////////////////////////////////////////
 
-	////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////
 	//  GenParticles
-	////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////
 	for(unsigned int i = 0; i < particles->size(); ++ i) {
 
 		if( p[i].status()!= 3 ) continue;				// Make sure only "final" particles are present
 		const Candidate * mom = p[i].mother();				// call mother particle
 
 		//////////// Storing TLorentz Vectors
-		TLorentzVector tmpGenTruthAlljets, tmpGenTruthBjets, tmpGenTruthJets;
+		TLorentzVector tmpGenTruthAlljets, tmpGenTruthBjets, tmpGenTruthJets, tmpGenTruthHiggs, tmpGenTruthBjetsHiggs, tmpGenTruthB2Higgs,tmpGenTruthB1Higgs, tmpGenTruthBjetsStop1, tmpGenTruthJetsStop1;
 		if( mom ){
 			if ( p[i].pt() > 20.0 && fabs( p[i].eta() ) < 3.0){
 				// AllJets 
@@ -136,17 +151,62 @@ MyAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 					tmpGenTruthBjets.SetPxPyPzE(p[i].px(),p[i].py(),p[i].pz(),p[i].energy());
 					p4GenTruthBjets.push_back( tmpGenTruthBjets );
 				}
+				////// Store components of Higgs
+				if( abs( p[i].pdgId() ) == 25 && abs( p[i].mother()->pdgId() ) == 1000004 ){
+					tmpGenTruthHiggs.SetPxPyPzE(p[i].px(),p[i].py(),p[i].pz(),p[i].energy());
+					p4GenTruthHiggs.push_back( tmpGenTruthHiggs );
+				}
+				if ( abs( p[i].mother()->pdgId() ) == 25 ){
+					if ( abs( p[i].pdgId() ) == 5 ){
+						tmpGenTruthBjetsHiggs.SetPtEtaPhiE( p[i].pt(), p[i].eta(), p[i].phi(), p[i].energy() );
+						p4GenTruthBjetsHiggs.push_back( tmpGenTruthBjetsHiggs );
+
+						if ( p4GenTruthHiggs.size() > 1 ){
+							if ( abs( p4GenTruthHiggs[0].P() - p[i].mother()->p() ) < 0.0001 ){
+								tmpGenTruthB1Higgs.SetPtEtaPhiE( p[i].pt(), p[i].eta(), p[i].phi(), p[i].energy() );
+								p4GenTruthB1Higgs.push_back( tmpGenTruthB1Higgs );
+							}
+							if ( abs( p4GenTruthHiggs[1].P() - p[i].mother()->p() ) < 0.0001 ){
+								tmpGenTruthB2Higgs.SetPtEtaPhiE( p[i].pt(), p[i].eta(), p[i].phi(), p[i].energy() );
+								p4GenTruthB2Higgs.push_back( tmpGenTruthB2Higgs );
+							}
+						}
+					}
+				} 
+
+				//cout << p4GenTruthB1Higgs.size() << " "  << p4GenTruthB2Higgs.size() << endl;
+
+				////// Store components of Stop1
+				if ( abs( p[i].mother()->pdgId() ) == 1000002 ){
+					if ( abs( p[i].pdgId() ) == 5 ){
+					       tmpGenTruthBjetsStop1.SetPtEtaPhiE( p[i].pt(), p[i].eta(), p[i].phi(), p[i].energy()  );
+					       p4GenTruthBjetsStop1.push_back( tmpGenTruthBjetsStop1 );
+					}
+					if ( abs(p[i].pdgId() ) == 1 || abs(p[i].pdgId() ) == 2 || abs(p[i].pdgId() ) == 3 || abs(p[i].pdgId() ) == 4 ){
+					       tmpGenTruthJetsStop1.SetPtEtaPhiE( p[i].pt(), p[i].eta(), p[i].phi(), p[i].energy()  );
+					       p4GenTruthJetsStop1.push_back( tmpGenTruthJetsStop1 );
+					}
+				} 
 			}
 		}
 		std::sort(p4GenTruthAlljets.begin(), p4GenTruthAlljets.end(), ComparePt);
 		std::sort(p4GenTruthBjets.begin(), p4GenTruthBjets.end(), ComparePt);
 		std::sort(p4GenTruthJets.begin(), p4GenTruthJets.end(), ComparePt);
+		std::sort(p4GenTruthBjetsHiggs.begin(), p4GenTruthBjetsHiggs.end(), ComparePt);
+		std::sort(p4GenTruthJetsStop1.begin(), p4GenTruthJetsStop1.end(), ComparePt);
+		std::sort(p4GenTruthBjetsStop1.begin(), p4GenTruthBjetsStop1.end(), ComparePt);
 	}
 	//cout << p4GenTruthAlljets[0].Pt() << " "  << p4GenTruthBjets[0].Pt() << " "  << p4GenTruthJets[0].Pt() << endl;
-	/////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/////////////////////////////////////////////////////////////////////
+	//  RECO
+	/////////////////////////////////////////////////////////////////////
+	
 
 	///////////////////////////
-	//  Jet Corrections
+	//  Jet Corrections    ////
 	///////////////////////////
 	for (std::vector<pat::Jet>::const_iterator rawJet = PatJets->begin(); rawJet != PatJets->end(); ++rawJet) {       
 
@@ -201,8 +261,8 @@ MyAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
 	////////////////////////////////////
-	// Loop over corrected jets
-	///////////////////////////////////
+	// Loop over corrected jets      ///
+	////////////////////////////////////
 	
 	double bdiscCSV_PF = -999;
 	for (std::list<jetElem>::const_iterator correctedJet = adjJetList.begin(); correctedJet != adjJetList.end(); ++correctedJet) {
@@ -210,7 +270,9 @@ MyAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		//const reco::Candidate::LorentzVector *adjJet = &(correctedJet->adjJet); 	// Only TLorentzVector
 		const pat::Jet *Jet = correctedJet->origJet;					// pat::Jet info (whole info)
 
+		///////////////////////////////////////////////////
 		/////////// RECO Store jets and bjets
+		//////////////////////////////////////////////////
 		bdiscCSV_PF=Jet->bDiscriminator("combinedSecondaryVertexBJetTags");		// define btagging CSV
 		TLorentzVector tmpRecoJets, tmpRecoBjets;
 
@@ -227,37 +289,56 @@ MyAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		}
 		std::sort(p4RecoJets.begin(), p4RecoJets.end(), ComparePt);
 		std::sort(p4RecoBjets.begin(), p4RecoBjets.end(), ComparePt);
+		/// Add here some definitions for btagging, bdisc, num of daughters, etc...
+		//
 		////////////////////////////////////////////////////////////////////////////////////////////
 	
 
-		/// Add here some definitions for btagging, bdisc, num of daughters, etc...
-		//
 
-
-		////////////////// GenParticle
+		////////////////////////////////////////////////////
+		/////////// Matching 
+		////////////////////////////////////////////////////
 		// In future, check if is data or not
-		//int jetMom = -1; 
+		// int jetMom = -1; 
 		const reco::GenParticle * part = Jet->genParton();
 
 		if (part){
 			//cout<<"GenParton: "<<part->pdgId()<<endl;
 			const reco::GenParticle * mom = (const reco::GenParticle*) (*part).mother();
 
-			////////////// Store Parton Info
-			TLorentzVector tmpGenAllJets, tmpGenJets, tmpGenBjets, tmpGenbjetHiggs, tmpGenbjetStop1, tmpGenjetStop1;
+			///////////////////////////////
+			///// RecoJets Matching
+			///////////////////////////////
 
-				/*//////////////////////////////// TEST
+			/*TLorentzVector tmpMatchBjets, tmpMatchAlljets, tmpMatchPosBjetsHiggs, tmpMatchNegBjetsHiggs,  tmpMatchBjetsStop1, tmpMatchJetsStop1;
+			if ( Jet->pt() > 20.0 && fabs( Jet->eta() ) < 3.0){
+
 				if (mom->pdgId() == 25){
-					if ( Jet->pt() > 20.0 && fabs( Jet->eta() ) < 3.0){
-						if ( abs( Jet->partonFlavour() ) == 5 ){
-						//if ( bdiscCSV_PF > 0.679  ){
-					       tmpGenbjetHiggs.SetPtEtaPhiE( Jet->px(), Jet->py(), Jet->pz(), Jet->energy() );
-					       cout << Jet->partonFlavour() << " " << tmpGenbjetHiggs.Pt() << endl;
-					       p4GenbjetHiggs.push_back( tmpGenbjetHiggs );
-						}
+					if ( Jet->partonFlavour() == 5 ){
+					//if ( bdiscCSV_PF > 0.679  ){
+						tmpMatchPosBjetsHiggs.SetPxPyPzE( Jet->px(), Jet->py(), Jet->pz(), Jet->energy() );
+						//cout << Jet->partonFlavour() << " " << tmpMatchPosBjetsHiggs.Pt() << endl;
+						p4MatchPosBjetsHiggs.push_back( tmpMatchPosBjetsHiggs );
+					}
+					if ( Jet->partonFlavour() == -5 ){
+					//if ( bdiscCSV_PF > 0.679  ){
+						tmpMatchNegBjetsHiggs.SetPxPyPzE( Jet->px(), Jet->py(), Jet->pz(), Jet->energy() );
+						//cout << Jet->partonFlavour() << " " << tmpMatchNegBjetsHiggs.Pt() << endl;
+						p4MatchNegBjetsHiggs.push_back( tmpMatchNegBjetsHiggs );
+					}
+				}
+				if ( abs( mom->pdgId() ) == 1000002 ){
+					if ( abs( Jet->partonFlavour() ) == 5 ){
+					       tmpMatchBjetsStop1.SetPtEtaPhiE( Jet->pt(), Jet->eta(), Jet->phi(), Jet->energy()  );
+					       p4MatchAllBjetsStop1.push_back( tmpMatchBjetsStop1 );
+					}
+					if ( abs(Jet->partonFlavour() ) == 1 || abs(Jet->partonFlavour() ) == 2 || abs(Jet->partonFlavour() ) == 3 || abs(Jet->partonFlavour() ) == 4 ){
+					       tmpMatchJetsStop1.SetPtEtaPhiE( Jet->pt(), Jet->eta(), Jet->phi(), Jet->energy()  );
+					       p4MatchAllJetsStop1.push_back( tmpMatchJetsStop1 );
 					}
 				} 
-				///////////////////////////////////////////////////////////////////////////////////////*/
+			}*/
+			///////////////////////////////////////////////////////////////////////////////////////*/
 
 			/*////// This is part of Claudia's code... I am not sure where should I use it.
 			//cout<<mom->pdgId()<<endl;
@@ -275,7 +356,11 @@ MyAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 			}///////////////////////////////////////////////////*/
 
 
-
+			/////////////////////////////////////////
+			////// Store Parton Info from PAT
+			////////////////////////////////////////
+			//  Same info as GenParticle, but with cuts from Pattuple Matching
+			/*TLorentzVector tmpGenAllJets, tmpGenJets, tmpGenBjets, tmpGenbjetHiggs, tmpGenbjetStop1, tmpGenjetStop1;
 			if ( part->pt() > 20.0 && fabs( part->eta() ) < 3.0){
 				//// Jets with Bjets
 				if ( abs(part->pdgId() ) == 1 || abs(part->pdgId() ) == 2 || abs(part->pdgId() ) == 3 || abs(part->pdgId() ) == 4 || abs(part->pdgId() ) == 5 || abs(part->pdgId() ) == 21){
@@ -320,14 +405,39 @@ MyAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 				std::sort(p4GenbjetHiggs.begin(), p4GenbjetHiggs.end(), ComparePt);
 				std::sort(p4GenbjetStop1.begin(), p4GenbjetStop1.end(), ComparePt);
 				std::sort(p4GenJetsStop1.begin(), p4GenJetsStop1.end(), ComparePt);
-			}
+			}*/
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////
 	
+	//////////////////// Matching with bjets from Higgs
+	if( p4GenTruthB1Higgs.size() == 2 ) {
+		for(unsigned int j = 0; j < p4RecoBjets.size(); ++j) {
+			double deltaRB1Higgs = 999999;
+			for(unsigned int i = 0; i < p4GenTruthB1Higgs.size(); ++i) {
+				double tmpdeltaRB1Higgs = p4GenTruthB1Higgs[i].DeltaR( p4RecoBjets[j] );
+				if ( tmpdeltaRB1Higgs < deltaRB1Higgs ) deltaRB1Higgs = tmpdeltaRB1Higgs;
+			}
+			h_MatchB1Higgs_deltaR->Fill( deltaRB1Higgs );
+			if ( deltaRB1Higgs < 0.4 ) p4MatchB1Higgs.push_back( p4RecoBjets[j] );   
+		}
+	}
 
-
+	if( p4GenTruthB2Higgs.size() == 2 ) {
+		for(unsigned int j = 0; j < p4RecoBjets.size(); ++j) {
+			double deltaRB2Higgs = 999999;
+			for(unsigned int i = 0; i < p4GenTruthB2Higgs.size(); ++i) {
+				double tmpdeltaRB2Higgs = p4GenTruthB2Higgs[i].DeltaR( p4RecoBjets[j] );
+				if ( tmpdeltaRB2Higgs < deltaRB2Higgs ) deltaRB2Higgs = tmpdeltaRB2Higgs;
+			}
+			h_MatchB2Higgs_deltaR->Fill( deltaRB2Higgs );
+			if ( deltaRB2Higgs < 0.4 ) p4MatchB2Higgs.push_back( p4RecoBjets[j] );   
+		}
+	}
+	////////////////////////////////////////////////////////////////*/
+	//
 	//////////////////// Matching with genParticles
 	// All Jets + b
 	for(unsigned int j = 0; j < p4RecoJets.size(); ++j) {
@@ -352,21 +462,22 @@ MyAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	}
 
 	// Bjets
-	for(unsigned int j = 0; j < p4RecoBjets.size(); ++j) {
+	for(unsigned int j = 0; j < p4RecoJets.size(); ++j) {
 		double deltaRTruthBjets = 999999;
 		for(unsigned int i = 0; i < p4GenTruthBjets.size(); ++i) {
-			double tmpdeltaRTruthBjets = p4GenTruthBjets[i].DeltaR( p4RecoBjets[j] );
+			double tmpdeltaRTruthBjets = p4GenTruthBjets[i].DeltaR( p4RecoJets[j] );
 			if ( tmpdeltaRTruthBjets < deltaRTruthBjets ) deltaRTruthBjets = tmpdeltaRTruthBjets;
 		}
 		h_MatchTruthBjets_deltaR->Fill( deltaRTruthBjets );
-		if ( deltaRTruthBjets < 0.4 ) p4MatchTruthBjets.push_back( p4RecoBjets[j] );   
+		if ( deltaRTruthBjets < 0.4 ) p4MatchTruthBjets.push_back( p4RecoJets[j] );   
 	}
 	std::sort(p4MatchTruthAlljets.begin(), p4MatchTruthAlljets.end(), ComparePt);
 	std::sort(p4MatchTruthJets.begin(), p4MatchTruthJets.end(), ComparePt);
 	std::sort(p4MatchTruthBjets.begin(), p4MatchTruthBjets.end(), ComparePt);
 	/////////////////////////////////////////////////////////////////
 	
-	//////////////////// Matching with genParticles and Pat::GenParticle
+	/*/////////////////// Matching with genParticles and Pat::GenParticle
+	/////// Not longer usefull, just to check if both collections have the same info
 	// All Jets + b
 	for(unsigned int j = 0; j < p4GenAlljets.size(); ++j) {
 		double deltaRTruthGenAlljets = 99999;
@@ -402,9 +513,10 @@ MyAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	std::sort(p4MatchTruthGenAlljets.begin(), p4MatchTruthGenAlljets.end(), ComparePt);
 	std::sort(p4MatchTruthGenJets.begin(), p4MatchTruthGenJets.end(), ComparePt);
 	std::sort(p4MatchTruthGenBjets.begin(), p4MatchTruthGenBjets.end(), ComparePt);
-	/////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////*/
 	
-	//////////////////// Matching with Pat::Jets
+	/*/////////////////// Matching with Pat::Jets
+	/// Not longer usefull, using matching from Pattuplizer
 	// All Jets + b
 	for(unsigned int j = 0; j < p4RecoJets.size(); ++j) {
 		double deltaRAlljets = 99999;
@@ -442,25 +554,12 @@ MyAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	std::sort(p4MatchAlljets.begin(), p4MatchAlljets.end(), ComparePt);
 	std::sort(p4MatchJets.begin(), p4MatchJets.end(), ComparePt);
 	std::sort(p4MatchBjets.begin(), p4MatchBjets.end(), ComparePt);
-	/////////////////////////////////////////////////////////////////
-
-
-	//////////////////// Matching with bjets from Higgs
-	// Bjets
-	for(unsigned int j = 0; j < p4RecoBjets.size(); ++j) {
-		double deltaRBjetsHiggs = 999999;
-		for(unsigned int i = 0; i < p4GenbjetHiggs.size(); ++i) {
-			double tmpdeltaRBjetsHiggs = p4GenbjetHiggs[i].DeltaR( p4RecoBjets[j] );
-			if ( tmpdeltaRBjetsHiggs < deltaRBjetsHiggs ) deltaRBjetsHiggs = tmpdeltaRBjetsHiggs;
-		}
-		h_MatchBjetsHiggs_deltaR->Fill( deltaRBjetsHiggs );
-		if ( deltaRBjetsHiggs < 0.4 ) p4MatchBjetsHiggs.push_back( p4RecoBjets[j] );   
-	}
-	std::sort(p4MatchBjetsHiggs.begin(), p4MatchBjetsHiggs.end(), ComparePt);
 	////////////////////////////////////////////////////////////////*/
 
 	// Plot Reconstructed Mass/particles plots
-	Plots( p4MatchJets, p4MatchBjets,p4MatchAlljets, p4MatchBjetsHiggs, p4RecoJets, p4RecoBjets, p4GenJets, p4GenBjets, p4GenAlljets, p4GenTruthJets, p4GenTruthBjets, p4GenTruthAlljets, p4GenbjetHiggs, p4GenHiggs, p4GenJetsStop1, p4GenbjetStop1, p4GenStop1, p4GenStop2 );
+	BasicPlots( p4GenTruthAlljets, p4GenTruthJets, p4GenTruthBjets, p4GenTruthBjetsHiggs, p4GenTruthB1Higgs, p4GenTruthB2Higgs, p4GenTruthJetsStop1, p4GenTruthBjetsStop1, p4MatchTruthJets,  p4MatchTruthBjets, p4MatchB1Higgs, p4MatchB2Higgs, p4RecoJets, p4RecoBjets );
+	Analysis( p4GenTruthB1Higgs, p4GenTruthB2Higgs, p4RecoJets, p4RecoBjets, p4MatchTruthBjets, p4MatchB1Higgs,  p4MatchB2Higgs, p4MatchTruthAlljets);
+
 }
 
 
@@ -478,14 +577,11 @@ MyAnalyzer::endJob()
 ///////////////////////////////////////////////////////////////
 
 
-///////////////////////////////////////////////////////////////
-/////////////  Reco Mass and some histos
-void MyAnalyzer::Plots( vector< TLorentzVector > p4MatchJets, vector< TLorentzVector > p4MatchBjets, vector< TLorentzVector > p4MatchAlljets, vector< TLorentzVector > p4MatchBjetsHiggs, vector< TLorentzVector > p4RecoJets, vector< TLorentzVector > p4RecoBjets, vector< TLorentzVector > p4GenJets, vector< TLorentzVector > p4GenBjets, vector< TLorentzVector > p4GenAlljets,  vector< TLorentzVector > p4GenTruthJets, vector< TLorentzVector > p4GenTruthBjets, vector< TLorentzVector > p4GenTruthAlljets , vector< TLorentzVector > p4bjetHiggs, vector< TLorentzVector > p4Higgs, vector< TLorentzVector > p4jetStop1, vector< TLorentzVector > p4bjetStop1, vector< TLorentzVector > p4Stop1, vector< TLorentzVector > p4Stop2 ){
+//////////////////////////////////////////////////////////////////////
+///////           General Basic Plots                          ///////
+//////////////////////////////////////////////////////////////////////
+void MyAnalyzer::BasicPlots( vector< TLorentzVector > p4GenTruthAlljets, vector< TLorentzVector > p4GenTruthJets, vector< TLorentzVector > p4GenTruthBjets, vector< TLorentzVector > p4GenTruthBjetsHiggs, vector< TLorentzVector > p4GenTruthB1Higgs, vector< TLorentzVector > p4GenTruthB2Higgs, vector< TLorentzVector > p4GenTruthJetsStop1, vector< TLorentzVector > p4GenTruthBjetsStop1, vector< TLorentzVector > p4MatchTruthJets,  vector< TLorentzVector > p4MatchTruthBjets, vector< TLorentzVector > p4MatchB1Higgs, vector< TLorentzVector > p4MatchB2Higgs, vector< TLorentzVector > p4RecoJets, vector< TLorentzVector > p4RecoBjets ) {
 
-
-	//////////////////////////////////////////////////////////////////////
-	///////           General Basic Plots                          ///////
-	//////////////////////////////////////////////////////////////////////
 
 	//////// Basic plots for All jets
 	// Gen Truth Level
@@ -499,7 +595,7 @@ void MyAnalyzer::Plots( vector< TLorentzVector > p4MatchJets, vector< TLorentzVe
 	h_genTruthAlljets_sumpt->Fill( sumGenTruthAlljetsPt );	
 	h_genTruthAlljets_num->Fill( p4GenTruthAlljets.size() );	
 
-	// Gen Level from PAT
+	/*/ Gen Level from PAT
 	double sumGenAlljetsPt = 0;
 	for(unsigned int j = 0; j < p4GenAlljets.size(); ++j) {
 		sumGenAlljetsPt += p4GenAlljets[j].Pt();
@@ -508,7 +604,7 @@ void MyAnalyzer::Plots( vector< TLorentzVector > p4MatchJets, vector< TLorentzVe
 		h_genAlljets_phi->Fill(p4GenAlljets[j].Phi());
 	} 
 	h_genAlljets_sumpt->Fill( sumGenAlljetsPt );	
-	h_genAlljets_num->Fill( p4GenAlljets.size() );	
+	h_genAlljets_num->Fill( p4GenAlljets.size() );*/
 
 	// RECO level
 	double sumRecoJetsPt = 0;
@@ -521,7 +617,7 @@ void MyAnalyzer::Plots( vector< TLorentzVector > p4MatchJets, vector< TLorentzVe
 	h_recoJets_sumpt->Fill( sumRecoJetsPt );	
 	h_recoJets_num->Fill( p4RecoJets.size() );	
 
-	// Match jets
+	/*/ Match jets
 	double sumMatchAlljetsPt = 0;
 	for(unsigned int j = 0; j < p4MatchAlljets.size(); ++j) {
 		sumMatchAlljetsPt += p4MatchAlljets[j].Pt();
@@ -530,7 +626,7 @@ void MyAnalyzer::Plots( vector< TLorentzVector > p4MatchJets, vector< TLorentzVe
 		h_matchAlljets_phi->Fill(p4MatchAlljets[j].Phi());
 	} 
 	h_matchAlljets_num->Fill( p4MatchAlljets.size() );	
-	h_matchAlljets_sumpt->Fill( sumMatchAlljetsPt );	
+	h_matchAlljets_sumpt->Fill( sumMatchAlljetsPt );*/	
 	//////////////////////////////////////////////////////////
 
 	//////// Basic plots for jets without bs
@@ -545,7 +641,7 @@ void MyAnalyzer::Plots( vector< TLorentzVector > p4MatchJets, vector< TLorentzVe
 	h_genTruthJets_sumpt->Fill( sumGenTruthJetsPt );	
 	h_genTruthJets_num->Fill( p4GenTruthJets.size() );	
 
-	// Gen Level from PAT
+	/*/ Gen Level from PAT
 	double sumGenJetsPt = 0;
 	for(unsigned int j = 0; j < p4GenJets.size(); ++j) {
 		sumGenJetsPt += p4GenJets[j].Pt();
@@ -554,18 +650,18 @@ void MyAnalyzer::Plots( vector< TLorentzVector > p4MatchJets, vector< TLorentzVe
 		h_genJets_phi->Fill(p4GenJets[j].Phi());
 	} 
 	h_genJets_sumpt->Fill( sumGenJetsPt );	
-	h_genJets_num->Fill( p4GenJets.size() );	
+	h_genJets_num->Fill( p4GenJets.size() );*/
 
 	// Match jets
-	double sumMatchJetsPt = 0;
-	for(unsigned int j = 0; j < p4MatchJets.size(); ++j) {
-		sumMatchJetsPt += p4MatchJets[j].Pt();
-		h_matchJets_pt->Fill( p4MatchJets[j].Pt() );	
-		h_matchJets_eta->Fill( p4MatchJets[j].Eta() );
-		h_matchJets_phi->Fill(p4MatchJets[j].Phi());
+	double sumMatchTruthJetsPt = 0;
+	for(unsigned int j = 0; j < p4MatchTruthJets.size(); ++j) {
+		sumMatchTruthJetsPt += p4MatchTruthJets[j].Pt();
+		h_matchJets_pt->Fill( p4MatchTruthJets[j].Pt() );	
+		h_matchJets_eta->Fill( p4MatchTruthJets[j].Eta() );
+		h_matchJets_phi->Fill(p4MatchTruthJets[j].Phi());
 	} 
-	h_matchJets_num->Fill( p4MatchJets.size() );	
-	h_matchJets_sumpt->Fill( sumMatchJetsPt );	
+	h_matchJets_num->Fill( p4MatchTruthJets.size() );	
+	h_matchJets_sumpt->Fill( sumMatchTruthJetsPt );	
 	//////////////////////////////////////////////////////////
 
 	//////// Basic plots for bs 
@@ -582,7 +678,7 @@ void MyAnalyzer::Plots( vector< TLorentzVector > p4MatchJets, vector< TLorentzVe
 	h_genTruthBJets_num->Fill( p4GenTruthBjets.size() );	
 	h_genTruthBJets_sumpt->Fill( sumGenTruthBjetsPt );	
 
-	// Gen Level from PAT
+	/*/ Gen Level from PAT
 	double sumGenBjetsPt = 0;
 	if ( p4GenBjets.size() > 0 ){
 		for(unsigned int k = 0; k < p4GenBjets.size(); ++k) {
@@ -593,7 +689,7 @@ void MyAnalyzer::Plots( vector< TLorentzVector > p4MatchJets, vector< TLorentzVe
 		}
 	}
 	h_genBJets_num->Fill( p4GenBjets.size() );	
-	h_genBJets_sumpt->Fill( sumGenBjetsPt );	
+	h_genBJets_sumpt->Fill( sumGenBjetsPt );*/
 
 	// RECO level
 	double sumRecoBjetsPt = 0;
@@ -609,118 +705,141 @@ void MyAnalyzer::Plots( vector< TLorentzVector > p4MatchJets, vector< TLorentzVe
 	h_recoBJets_sumpt->Fill( sumRecoBjetsPt );	
 
 	// Match bjets
-	double sumMatchBjetsPt = 0;
-	if ( p4MatchBjets.size() > 0 ){
-		for(unsigned int k = 0; k < p4MatchBjets.size(); ++k) {
-			sumMatchBjetsPt += p4MatchBjets[k].Pt();
-			h_matchBJets_pt->Fill( p4MatchBjets[k].Pt() );	
-			h_matchBJets_eta->Fill( p4MatchBjets[k].Eta() );
-			h_matchBJets_phi->Fill( p4MatchBjets[k].Phi() );
+	double sumMatchTruthBjetsPt = 0;
+	if ( p4MatchTruthBjets.size() > 0 ){
+		for(unsigned int k = 0; k < p4MatchTruthBjets.size(); ++k) {
+			sumMatchTruthBjetsPt += p4MatchTruthBjets[k].Pt();
+			h_matchBJets_pt->Fill( p4MatchTruthBjets[k].Pt() );	
+			h_matchBJets_eta->Fill( p4MatchTruthBjets[k].Eta() );
+			h_matchBJets_phi->Fill( p4MatchTruthBjets[k].Phi() );
 		}
 	}	
-	h_matchBJets_num->Fill( p4MatchBjets.size() );	
-	h_matchBJets_sumpt->Fill( sumMatchBjetsPt );	
+	h_matchBJets_num->Fill( p4MatchTruthBjets.size() );	
+	h_matchBJets_sumpt->Fill( sumMatchTruthBjetsPt );	
 
-	// Match bjets from Higgs
-	double sumMatchBjetsHiggsPt = 0;
-	if ( p4MatchBjetsHiggs.size() > 0 ){
-		for(unsigned int k = 0; k < p4MatchBjetsHiggs.size(); ++k) {
-			sumMatchBjetsHiggsPt += p4MatchBjetsHiggs[k].Pt();
-			h_matchBJetsHiggs_pt->Fill( p4MatchBjetsHiggs[k].Pt() );	
-			h_matchBJetsHiggs_eta->Fill( p4MatchBjetsHiggs[k].Eta() );
-			h_matchBJetsHiggs_phi->Fill( p4MatchBjetsHiggs[k].Phi() );
+	// Match All bjets from Higgs
+	// HERE I am plotting ALL the Higgs in the sample, e.g., there are events with only one Higgs.
+	double sumMatchB1HiggsPt = 0;
+	if ( p4MatchB1Higgs.size() > 1 ){
+		TLorentzVector MatchHiggs1Mass = p4MatchB1Higgs[0] + p4MatchB1Higgs[1];
+		h_matchBJetsHiggs_mass->Fill( MatchHiggs1Mass.M() );	
+		for(unsigned int k = 0; k < p4MatchB1Higgs.size(); ++k) {
+			sumMatchB1HiggsPt += p4MatchB1Higgs[k].Pt();
+			h_matchBJetsHiggs_pt->Fill( p4MatchB1Higgs[k].Pt() );	
+			h_matchBJetsHiggs_eta->Fill( p4MatchB1Higgs[k].Eta() );
+			h_matchBJetsHiggs_phi->Fill( p4MatchB1Higgs[k].Phi() );
 		}
 	}	
-	h_matchBJetsHiggs_num->Fill( p4MatchBjetsHiggs.size() );	
-	h_matchBJetsHiggs_sumpt->Fill( sumMatchBjetsHiggsPt );	
+	h_matchBJetsHiggs_num->Fill( p4MatchB1Higgs.size() );	
+	h_matchBJetsHiggs1_num->Fill( p4MatchB1Higgs.size() );	
+	h_matchBJetsHiggs_sumpt->Fill( sumMatchB1HiggsPt );	
+	double sumMatchB2HiggsPt = 0;
+	if ( p4MatchB2Higgs.size() > 1 ){
+		TLorentzVector MatchHiggs2Mass = p4MatchB2Higgs[0] + p4MatchB2Higgs[1];
+		h_matchBJetsHiggs_mass->Fill( MatchHiggs2Mass.M() );	
+		for(unsigned int k = 0; k < p4MatchB2Higgs.size(); ++k) {
+			sumMatchB2HiggsPt += p4MatchB2Higgs[k].Pt();
+			h_matchBJetsHiggs_pt->Fill( p4MatchB2Higgs[k].Pt() );	
+			h_matchBJetsHiggs_eta->Fill( p4MatchB2Higgs[k].Eta() );
+			h_matchBJetsHiggs_phi->Fill( p4MatchB2Higgs[k].Phi() );
+		}
+	}	
+	h_matchBJetsHiggs_num->Fill( p4MatchB2Higgs.size() );	
+	h_matchBJetsHiggs2_num->Fill( p4MatchB2Higgs.size() );	
+	h_matchBJetsHiggs_sumpt->Fill( sumMatchB2HiggsPt );	
 	/////////////////////////////////////////////////////////////
 
 	///////////////////////////////////////////////////////
-	//   Basic Plots PAT::Gen Level                      //
+	//   Basic Plots Gen Level                           //
 	///////////////////////////////////////////////////////
 	
 	//////// Basic plots for bs coming from higgs
-	if ( p4bjetHiggs.size() > 0 ){
-		for(unsigned int k = 0; k < p4bjetHiggs.size(); ++k) {
-			h_bjetsHiggs_pt->Fill( p4bjetHiggs[k].Pt() );	
-			h_bjetsHiggs_eta->Fill( p4bjetHiggs[k].Eta() );
-			h_bjetsHiggs_phi->Fill( p4bjetHiggs[k].Phi() );
+	if ( p4GenTruthBjetsHiggs.size() > 0 ){
+		for(unsigned int k = 0; k < p4GenTruthBjetsHiggs.size(); ++k) {
+			h_bjetsHiggs_pt->Fill( p4GenTruthBjetsHiggs[k].Pt() );	
+			h_bjetsHiggs_eta->Fill( p4GenTruthBjetsHiggs[k].Eta() );
+			h_bjetsHiggs_phi->Fill( p4GenTruthBjetsHiggs[k].Phi() );
 		}
 	}	
 
+	//////// Higgs Truth Mass
+	if ( p4GenTruthB1Higgs.size() > 1 ){
+		TLorentzVector GenTruthHiggsMass = p4GenTruthB1Higgs[0] + p4GenTruthB1Higgs[1];
+		h_genTruthBJetsHiggs_mass->Fill( GenTruthHiggsMass.M() );	
+	}	
+	h_genTruthBJetsHiggs_num->Fill( p4GenTruthB1Higgs.size() );	
+	if ( p4GenTruthB2Higgs.size() > 1 ){
+		TLorentzVector GenTruthHiggsMass = p4GenTruthB2Higgs[0] + p4GenTruthB2Higgs[1];
+		h_genTruthBJetsHiggs_mass->Fill( GenTruthHiggsMass.M() );	
+	}	
+	h_genTruthBJetsHiggs_num->Fill( p4GenTruthB2Higgs.size() );	
+
 	/////// Higgs reconstructed mass
-	vector< TLorentzVector > p4MatchbbsHiggs;
-	if ( p4bjetHiggs.size() > 1 ){
-		for(unsigned int j = 0; j < p4bjetHiggs.size()-1; ++j) {
-			for(unsigned int k=j+1; k < p4bjetHiggs.size(); ++k) {
+	vector< TLorentzVector > p4GenTruthHiggs; 
+	if ( p4GenTruthBjetsHiggs.size() > 1 ){
+		for(unsigned int j = 0; j < p4GenTruthBjetsHiggs.size()-1; ++j) {
+			for(unsigned int k=j+1; k < p4GenTruthBjetsHiggs.size(); ++k) {
 				if(j==k) continue;							// avoid repetition
-				TLorentzVector p4CandidateHiggs = p4bjetHiggs[j] + p4bjetHiggs[k];		// Higgs TLorentzVector
+				TLorentzVector p4CandidateHiggs = p4GenTruthBjetsHiggs[j] + p4GenTruthBjetsHiggs[k];		// Higgs TLorentzVector
 				Double_t massHiggs = 125.0;						// nominal mass value
 				Double_t diffmassHiggs = p4CandidateHiggs.M() - massHiggs;		// mass difference
 				if( abs(diffmassHiggs) < 0.5 ){						// diffmass presicion
-					p4Higgs.push_back( p4CandidateHiggs );				// store final TLorentzVector
-					p4MatchbbsHiggs.push_back( p4bjetHiggs[j] );
-					p4MatchbbsHiggs.push_back( p4bjetHiggs[k] );
+					p4GenTruthHiggs.push_back( p4CandidateHiggs );				// store final TLorentzVector
 				}
 			}
 		}
 	}
-	///// Just to test index of p4MatchbbsHiggs
-	/*/if ( p4bbsHiggs.size() > 2 ){
-		TLorentzVector tmpp4bbsHiggs1 = p4bbsHiggs[0] + p4bbsHiggs[1];
-		TLorentzVector tmpp4bbsHiggs2 = p4bbsHiggs[2] + p4bbsHiggs[3];
-		cout << tmpp4bbsHiggs1.M() << " " << tmpp4bbsHiggs2.M() << " " << p4bbsHiggs[0].Pt()  << " " << p4bbsHiggs[1].Pt() << " " << p4bbsHiggs[2].Pt() << " " << p4bbsHiggs[3].Pt() << endl;
-	}*/
 
-	if ( p4Higgs.size() > 0 ){
+	if ( p4GenTruthHiggs.size() > 0 ){
 		// Plots for hardest Higgs
-		h_higgs1_mass->Fill( p4Higgs[0].M() );
-		h_higgs1_pt->Fill( p4Higgs[0].Pt() );	
-		h_higgs1_eta->Fill( p4Higgs[0].Eta() );	
+		h_higgs1_mass->Fill( p4GenTruthHiggs[0].M() );
+		h_higgs1_pt->Fill( p4GenTruthHiggs[0].Pt() );	
+		h_higgs1_eta->Fill( p4GenTruthHiggs[0].Eta() );	
 		// Plots for softer Higgs
-		if ( p4Higgs.size() > 1 ){
-		       	h_higgs2_mass->Fill( p4Higgs[1].M() );
-		       	h_higgs2_pt->Fill( p4Higgs[1].Pt() );
-		       	h_higgs2_eta->Fill( p4Higgs[1].Eta() );
-		       	h_higgs_deltaR->Fill( p4Higgs[0].DeltaR( p4Higgs[1] ) );
-		       	h_higgs_deltaPhi->Fill( p4Higgs[0].DeltaPhi( p4Higgs[1] ) );
-		       	h_higgs_cosDeltaPhi->Fill( cos (p4Higgs[0].DeltaPhi( p4Higgs[1] ) ) );
+		if ( p4GenTruthHiggs.size() > 1 ){
+		       	h_higgs2_mass->Fill( p4GenTruthHiggs[1].M() );
+		       	h_higgs2_pt->Fill( p4GenTruthHiggs[1].Pt() );
+		       	h_higgs2_eta->Fill( p4GenTruthHiggs[1].Eta() );
+		       	h_higgs_deltaR->Fill( p4GenTruthHiggs[0].DeltaR( p4GenTruthHiggs[1] ) );
+		       	h_higgs_deltaPhi->Fill( p4GenTruthHiggs[0].DeltaPhi( p4GenTruthHiggs[1] ) );
+		       	h_higgs_cosDeltaPhi->Fill( cos (p4GenTruthHiggs[0].DeltaPhi( p4GenTruthHiggs[1] ) ) );
 		}
 	}
 	///////////////////////////// /
 
 
 	////// bjets from Stop1 histos
-	if ( p4bjetStop1.size() > 0 ){
-		for(unsigned int k = 0; k < p4bjetStop1.size(); ++k) {
-			h_bjetsStop1_pt->Fill( p4bjetStop1[k].Pt() );	
-			h_bjetsStop1_eta->Fill( p4bjetStop1[k].Eta() );
-			h_bjetsStop1_phi->Fill( p4bjetStop1[k].Phi() );
+	if ( p4GenTruthBjetsStop1.size() > 0 ){
+		for(unsigned int k = 0; k < p4GenTruthBjetsStop1.size(); ++k) {
+			h_bjetsStop1_pt->Fill( p4GenTruthBjetsStop1[k].Pt() );	
+			h_bjetsStop1_eta->Fill( p4GenTruthBjetsStop1[k].Eta() );
+			h_bjetsStop1_phi->Fill( p4GenTruthBjetsStop1[k].Phi() );
 		}
 	}	
 
 	/////// Stop1 reconstructed mass
+	vector< TLorentzVector > p4GenTruthStop1; 
 	if( st1decay.compare("bj") == 0){
-		if( p4bjetStop1.size() > 0 && p4jetStop1.size() > 0 ){
-			for(unsigned int j = 0; j < p4bjetStop1.size(); ++j) {
-				for(unsigned int k= 0; k < p4jetStop1.size(); ++k) {
-					TLorentzVector p4CandidateStop1 = p4bjetStop1[j] + p4jetStop1[k];		// higgs tlorentzvector
-					Double_t diffmassStop1 = p4CandidateStop1.M() - stop1Mass;		// mass difference
+		if( p4GenTruthBjetsStop1.size() > 0 && p4GenTruthJetsStop1.size() > 0 ){
+			for(unsigned int j = 0; j < p4GenTruthBjetsStop1.size(); ++j) {
+				for(unsigned int k= 0; k < p4GenTruthJetsStop1.size(); ++k) {
+					TLorentzVector p4CandidateStop1 = p4GenTruthBjetsStop1[j] + p4GenTruthJetsStop1[k];		// higgs tlorentzvector
+					double diffmassStop1 = p4CandidateStop1.M() - stop1Mass;		// mass difference
 					if( abs(diffmassStop1) < 1.0 ){						// diffmass presicion
-						p4Stop1.push_back( p4CandidateStop1 );
+						p4GenTruthStop1.push_back( p4CandidateStop1 );
 					}
 				}
 			}
 		}
 	} else {
-		if( p4jetStop1.size() > 0 ){
-			for(unsigned int j = 0; j < p4jetStop1.size(); ++j) {
-				for(unsigned int k= 0; k < p4jetStop1.size(); ++k) {
+		if( p4GenTruthJetsStop1.size() > 0 ){
+			for(unsigned int j = 0; j < p4GenTruthJetsStop1.size(); ++j) {
+				for(unsigned int k= 0; k < p4GenTruthJetsStop1.size(); ++k) {
 					if( j==k ) continue;
-					TLorentzVector p4CandidateStop1 = p4jetStop1[j] + p4jetStop1[k];		// higgs tlorentzvector 
+					TLorentzVector p4CandidateStop1 = p4GenTruthJetsStop1[j] + p4GenTruthJetsStop1[k];		// higgs tlorentzvector 
 					Double_t diffmassStop1 = p4CandidateStop1.M() - stop1Mass;		// mass difference
 					if( abs(diffmassStop1) < 1.0 ){						// diffmass presicion
-						p4Stop1.push_back( p4CandidateStop1 );
+						p4GenTruthStop1.push_back( p4CandidateStop1 );
 					}
 				}
 			}
@@ -728,49 +847,58 @@ void MyAnalyzer::Plots( vector< TLorentzVector > p4MatchJets, vector< TLorentzVe
 	}
 
 
-	if ( p4Stop1.size() > 0) {
+	if ( p4GenTruthStop1.size() > 0) {
 		// Plots for hardest Stop1
-		h_stop11_mass->Fill( p4Stop1[0].M() );
-		h_stop11_pt->Fill( p4Stop1[0].Pt() );	
-		h_stop11_eta->Fill( p4Stop1[0].Eta() );	
+		h_stop11_mass->Fill( p4GenTruthStop1[0].M() );
+		h_stop11_pt->Fill( p4GenTruthStop1[0].Pt() );	
+		h_stop11_eta->Fill( p4GenTruthStop1[0].Eta() );	
 
 		// Plots for softer Stop1
-		if ( p4Stop1.size() > 1 ){
-			h_stop12_mass->Fill( p4Stop1[1].M() );
-			h_stop12_pt->Fill( p4Stop1[1].Pt() );
-		       	h_stop12_eta->Fill( p4Stop1[1].Eta() );
-		       	h_stop1_deltaR->Fill( p4Stop1[0].DeltaR( p4Stop1[1] ) );
-		       	h_stop1_deltaPhi->Fill( p4Stop1[0].DeltaPhi( p4Stop1[1] ) );
-	       		h_stop1_cosDeltaPhi->Fill( cos (p4Stop1[0].DeltaPhi( p4Stop1[1] ) ) );
+		if ( p4GenTruthStop1.size() > 1 ){
+			h_stop12_mass->Fill( p4GenTruthStop1[1].M() );
+			h_stop12_pt->Fill( p4GenTruthStop1[1].Pt() );
+		       	h_stop12_eta->Fill( p4GenTruthStop1[1].Eta() );
+		       	h_stop1_deltaR->Fill( p4GenTruthStop1[0].DeltaR( p4GenTruthStop1[1] ) );
+		       	h_stop1_deltaPhi->Fill( p4GenTruthStop1[0].DeltaPhi( p4GenTruthStop1[1] ) );
+	       		h_stop1_cosDeltaPhi->Fill( cos (p4GenTruthStop1[0].DeltaPhi( p4GenTruthStop1[1] ) ) );
 		}
 	}
 	/////////////////////////////////////////////////
 
 
 	// Stop2 reconstructed mass
-	for(unsigned int j = 0; j < p4Higgs.size(); ++j) {
-		for(unsigned int k= 0; k < p4Stop1.size(); ++k) {
-			TLorentzVector p4CandidateStop2 = p4Higgs[j] + p4Stop1[k];		// Higgs TLorentzVector
+	vector< TLorentzVector > p4GenTruthStop2; 
+	for(unsigned int j = 0; j < p4GenTruthHiggs.size(); ++j) {
+		for(unsigned int k= 0; k < p4GenTruthStop1.size(); ++k) {
+			TLorentzVector p4CandidateStop2 = p4GenTruthHiggs[j] + p4GenTruthStop1[k];		// Higgs TLorentzVector
 			Double_t diffmassStop2 = p4CandidateStop2.M() - stop2Mass;		// mass difference
 			if( abs(diffmassStop2) < 1.0 ){						// diffmass presicion
-				p4Stop2.push_back( p4CandidateStop2 );
+				p4GenTruthStop2.push_back( p4CandidateStop2 );
 			}
 		}
 	}
 
-	if ( p4Stop2.size() > 0 ){
+	if ( p4GenTruthStop2.size() > 0 ){
 		// Plots for hardest Stop2
-		h_stop21_mass->Fill( p4Stop2[0].M() );
-		h_stop21_pt->Fill( p4Stop2[0].Pt() );	
-		h_stop21_eta->Fill( p4Stop2[0].Eta() );	
+		h_stop21_mass->Fill( p4GenTruthStop2[0].M() );
+		h_stop21_pt->Fill( p4GenTruthStop2[0].Pt() );	
+		h_stop21_eta->Fill( p4GenTruthStop2[0].Eta() );	
 		// Plots for softer Stop2
-		if ( p4Stop2.size() > 1 ){
-		       	h_stop22_mass->Fill( p4Stop2[1].M() );
-		       	h_stop22_pt->Fill( p4Stop2[1].Pt() );
-		       	h_stop22_eta->Fill( p4Stop2[1].Eta() );
+		if ( p4GenTruthStop2.size() > 1 ){
+		       	h_stop22_mass->Fill( p4GenTruthStop2[1].M() );
+		       	h_stop22_pt->Fill( p4GenTruthStop2[1].Pt() );
+		       	h_stop22_eta->Fill( p4GenTruthStop2[1].Eta() );
 		}
 	}
 	//////////////////////////////////////////////////// */
+}
+
+
+//////////////////////////////////////////////////////////////////////
+///////           ANALYSIS                                     ///////
+//////////////////////////////////////////////////////////////////////
+void MyAnalyzer::Analysis( vector< TLorentzVector > p4GenTruthB1Higgs, vector< TLorentzVector > p4GenTruthB2Higgs, vector< TLorentzVector > p4RecoJets, vector< TLorentzVector > p4RecoBjets, vector< TLorentzVector > p4MatchTruthBjets,  vector< TLorentzVector > p4MatchB1Higgs,  vector< TLorentzVector > p4MatchB2Higgs, vector< TLorentzVector > p4MatchTruthAlljets){
+
 	////////////////////////////////////////////////////////////////////
 	//////       STEP 1                                         ////////
 	//////  Best combination of bjets with smallest delta Mass  ////////
@@ -879,12 +1007,12 @@ void MyAnalyzer::Plots( vector< TLorentzVector > p4MatchJets, vector< TLorentzVe
 	int ti=0;
 
 	//if ( p4MatchBjets.size() > 3 ){
-	if ( p4MatchBjets.size() == 4 ){
+	if ( p4MatchTruthBjets.size() == 4 ){
 		////// Check index of the bs with the smallest mass diff
-		for(unsigned int ii = 0; ii < p4MatchBjets.size()-3; ++ii) {
-			for(unsigned int ij = 1; ij < p4MatchBjets.size()-2; ++ij) {
-				for(unsigned int ik = 2; ik < p4MatchBjets.size()-1; ++ik) {
-					for(unsigned int il = 3; il < p4MatchBjets.size(); ++il) {
+		for(unsigned int ii = 0; ii < p4MatchTruthBjets.size()-3; ++ii) {
+			for(unsigned int ij = 1; ij < p4MatchTruthBjets.size()-2; ++ij) {
+				for(unsigned int ik = 2; ik < p4MatchTruthBjets.size()-1; ++ik) {
+					for(unsigned int il = 3; il < p4MatchTruthBjets.size(); ++il) {
 						//if( ii==ij && ik==il && ii==ik && ii==il && ij==ik && ij==il  ) continue;
 						if ( ii==ij ) continue;
 						if ( ii==ik ) continue;
@@ -893,10 +1021,10 @@ void MyAnalyzer::Plots( vector< TLorentzVector > p4MatchJets, vector< TLorentzVe
 						if ( ij==il ) continue;
 						if ( ik==il ) continue;
 						//cout << ii << " " << ij << " " << ik << " " << il << endl;
-						TLorentzVector candMassbb1 = p4MatchBjets[ii]+p4MatchBjets[ij];
+						TLorentzVector candMassbb1 = p4MatchTruthBjets[ii]+p4MatchTruthBjets[ij];
 						double tmpmassbb1 = candMassbb1.M();
 						//cout << tmpmassbb1 << endl;
-						TLorentzVector candMassbb2 = p4MatchBjets[ik]+p4MatchBjets[il];
+						TLorentzVector candMassbb2 = p4MatchTruthBjets[ik]+p4MatchTruthBjets[il];
 						double tmpmassbb2 = candMassbb2.M();
 						//cout << tmpmassbb2 << endl;
 						double massDiff = abs( tmpmassbb1 - tmpmassbb2 );
@@ -914,14 +1042,14 @@ void MyAnalyzer::Plots( vector< TLorentzVector > p4MatchJets, vector< TLorentzVe
 		}
 		
 		//cout << bestMassIndex[0] << " "  << bestMassIndex[1] << " " << bestMassIndex[2] << " " << bestMassIndex[3] << " "<< endl;
-		p4bbSmallMassDiff.push_back( p4MatchBjets[bestMassIndex[0]] );
-		p4bbSmallMassDiff.push_back( p4MatchBjets[bestMassIndex[1]] );
-		p4bbSmallMassDiff.push_back( p4MatchBjets[bestMassIndex[2]] );
-		p4bbSmallMassDiff.push_back( p4MatchBjets[bestMassIndex[3]] );
-		TLorentzVector tmpMass1 = p4MatchBjets[bestMassIndex[0]] + p4MatchBjets[bestMassIndex[1]];
-		TLorentzVector tmpMass2 = p4MatchBjets[bestMassIndex[2]] + p4MatchBjets[bestMassIndex[3]];
-		double scalarPtbb1 = p4MatchBjets[bestMassIndex[0]].Pt() + p4MatchBjets[bestMassIndex[1]].Pt();
-		double scalarPtbb2 = p4MatchBjets[bestMassIndex[2]].Pt() + p4MatchBjets[bestMassIndex[3]].Pt();
+		p4bbSmallMassDiff.push_back( p4MatchTruthBjets[bestMassIndex[0]] );
+		p4bbSmallMassDiff.push_back( p4MatchTruthBjets[bestMassIndex[1]] );
+		p4bbSmallMassDiff.push_back( p4MatchTruthBjets[bestMassIndex[2]] );
+		p4bbSmallMassDiff.push_back( p4MatchTruthBjets[bestMassIndex[3]] );
+		TLorentzVector tmpMass1 = p4MatchTruthBjets[bestMassIndex[0]] + p4MatchTruthBjets[bestMassIndex[1]];
+		TLorentzVector tmpMass2 = p4MatchTruthBjets[bestMassIndex[2]] + p4MatchTruthBjets[bestMassIndex[3]];
+		double scalarPtbb1 = p4MatchTruthBjets[bestMassIndex[0]].Pt() + p4MatchTruthBjets[bestMassIndex[1]].Pt();
+		double scalarPtbb2 = p4MatchTruthBjets[bestMassIndex[2]].Pt() + p4MatchTruthBjets[bestMassIndex[3]].Pt();
 
 		////// Store vectors
 		massbb.push_back ( tmpMass1.M() );
@@ -966,18 +1094,16 @@ void MyAnalyzer::Plots( vector< TLorentzVector > p4MatchJets, vector< TLorentzVe
 	///////////////////////////////////////////////////////////////////
 
 	// MatchBJets from Higgs
-	vector< TLorentzVector > p4bbHiggsSmallMassDiff;
 	vector< double > massbbHiggs;
 	vector< double > ptbbHiggs;
 	vector< double > scalarPtbbHiggs;
 
-	int tii=0;
-	if ( p4MatchbbsHiggs.size() == 4 ){
+	if ( p4MatchB1Higgs.size() == 2 && p4MatchB2Higgs.size() == 2 ){
 		
-		TLorentzVector tmpMassbbHiggs1 = p4MatchbbsHiggs[0] + p4MatchbbsHiggs[1];
-		TLorentzVector tmpMassbbHiggs2 = p4MatchbbsHiggs[2] + p4MatchbbsHiggs[3];
-		double scalarPtbbHiggs1 = p4MatchbbsHiggs[0].Pt() + p4MatchbbsHiggs[1].Pt();
-		double scalarPtbbHiggs2 = p4MatchbbsHiggs[2].Pt() + p4MatchbbsHiggs[3].Pt();
+		TLorentzVector tmpMassbbHiggs1 = p4MatchB1Higgs[0] + p4MatchB1Higgs[1];
+		TLorentzVector tmpMassbbHiggs2 = p4MatchB2Higgs[0] + p4MatchB2Higgs[1];
+		double scalarPtbbHiggs1 = p4MatchB1Higgs[0].Pt() + p4MatchB1Higgs[1].Pt();
+		double scalarPtbbHiggs2 = p4MatchB2Higgs[0].Pt() + p4MatchB2Higgs[1].Pt();
 
 		////// Store vectors
 		massbbHiggs.push_back ( tmpMassbbHiggs1.M() );
@@ -986,7 +1112,9 @@ void MyAnalyzer::Plots( vector< TLorentzVector > p4MatchJets, vector< TLorentzVe
 		ptbbHiggs.push_back ( tmpMassbbHiggs2.Pt() );
 		scalarPtbbHiggs.push_back ( scalarPtbbHiggs1 );
 		scalarPtbbHiggs.push_back ( scalarPtbbHiggs2 );
+	}
 
+	for(unsigned int tii = 0; tii < massbbHiggs.size(); ++tii) {
 		///// Simple plots
 		h_massbbHiggs->Fill( massbbHiggs[tii] );
 		h_PtbbHiggs->Fill( ptbbHiggs[tii], massbbHiggs[tii] );
@@ -1017,7 +1145,35 @@ void MyAnalyzer::Plots( vector< TLorentzVector > p4MatchJets, vector< TLorentzVe
 			h_massbbHiggs_cut200->Fill( massbbHiggs[tii] );
 			h_scalarPtbbHiggs_cut200->Fill( scalarPtbbHiggs[tii], massbbHiggs[tii] );
 		}
-	} 
+	}
+
+	// Gen Truth Higgs
+	vector< double > massGenTruthHiggs;
+	vector< double > ptGenTruthHiggs;
+	vector< double > scalarPtGenTruthHiggs;
+
+	if ( p4GenTruthB1Higgs.size() == 2 && p4GenTruthB2Higgs.size() == 2 ){
+		
+		TLorentzVector tmpMassGenTruthHiggs1 = p4GenTruthB1Higgs[0] + p4GenTruthB1Higgs[1];
+		TLorentzVector tmpMassGenTruthHiggs2 = p4GenTruthB2Higgs[0] + p4GenTruthB2Higgs[1];
+		double scalarPtGenTruthHiggs1 = p4GenTruthB1Higgs[0].Pt() + p4GenTruthB1Higgs[1].Pt();
+		double scalarPtGenTruthHiggs2 = p4GenTruthB2Higgs[0].Pt() + p4GenTruthB2Higgs[1].Pt();
+
+		////// Store vectors
+		massGenTruthHiggs.push_back ( tmpMassGenTruthHiggs1.M() );
+		massGenTruthHiggs.push_back ( tmpMassGenTruthHiggs2.M() );
+		ptGenTruthHiggs.push_back ( tmpMassGenTruthHiggs1.Pt() );
+		ptGenTruthHiggs.push_back ( tmpMassGenTruthHiggs2.Pt() );
+		scalarPtGenTruthHiggs.push_back ( scalarPtGenTruthHiggs1 );
+		scalarPtGenTruthHiggs.push_back ( scalarPtGenTruthHiggs2 );
+	}
+
+	for(unsigned int tii = 0; tii < massGenTruthHiggs.size(); ++tii) {
+		///// Simple plots
+		h_massGenTruthHiggs->Fill( massGenTruthHiggs[tii] );
+		h_PtGenTruthHiggs->Fill( ptGenTruthHiggs[tii], massGenTruthHiggs[tii] );
+		h_scalarPtGenTruthHiggs->Fill( scalarPtGenTruthHiggs[tii], massGenTruthHiggs[tii] );
+	}
 	///////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -1030,24 +1186,24 @@ void MyAnalyzer::Plots( vector< TLorentzVector > p4MatchJets, vector< TLorentzVe
 	vector< TLorentzVector > p4jjWObb;
 	vector< TLorentzVector > p4jWObb;
 	vector< double > scalarsumjjWObbpt;
-	if ( p4MatchAlljets.size() > 1 ){
-		for(unsigned int iii = 0; iii < p4MatchAlljets.size(); ++iii) {
+	if ( p4MatchTruthAlljets.size() > 1 ){
+		for(unsigned int iii = 0; iii < p4MatchTruthAlljets.size(); ++iii) {
 
 			////// Step 2 - dijet mass vs sum pt of jets
-			for(unsigned int iij = 0; iij < p4MatchAlljets.size(); ++iij) {
+			for(unsigned int iij = 0; iij < p4MatchTruthAlljets.size(); ++iij) {
 				if ( iii==iij ) continue;
-				TLorentzVector p4jj = p4MatchAlljets[iii] + p4MatchAlljets[iij];
-				double sumjjpt = p4MatchAlljets[iii].Pt() + p4MatchAlljets[iij].Pt();
+				TLorentzVector p4jj = p4MatchTruthAlljets[iii] + p4MatchTruthAlljets[iij];
+				double sumjjpt = p4MatchTruthAlljets[iii].Pt() + p4MatchTruthAlljets[iij].Pt();
 				h_jj_masspt->Fill( sumjjpt, p4jj.M() );
 			}
 
 			////// Step 2 - dijet mass vs sum pt of jets
 			for(unsigned int iij = 0; iij < p4bbSmallMassDiff.size(); ++iij) {
-				if ( p4MatchAlljets[iii].Pt() == p4bbSmallMassDiff[iij].Pt() ) continue;
-				p4jWObb.push_back( p4MatchAlljets[iii] );
-				TLorentzVector tmpp4jjWObb = p4MatchAlljets[iii] + p4MatchAlljets[iij];
+				if ( p4MatchTruthAlljets[iii].Pt() == p4bbSmallMassDiff[iij].Pt() ) continue;
+				p4jWObb.push_back( p4MatchTruthAlljets[iii] );
+				TLorentzVector tmpp4jjWObb = p4MatchTruthAlljets[iii] + p4MatchTruthAlljets[iij];
 				p4jjWObb.push_back( tmpp4jjWObb );
-				double sumjjWObbpt = p4MatchAlljets[iii].Pt() + p4MatchAlljets[iij].Pt();
+				double sumjjWObbpt = p4MatchTruthAlljets[iii].Pt() + p4MatchTruthAlljets[iij].Pt();
 				scalarsumjjWObbpt.push_back( sumjjWObbpt );
 				h_jjWObb_masspt->Fill( sumjjWObbpt, tmpp4jjWObb.M() );
 			}
