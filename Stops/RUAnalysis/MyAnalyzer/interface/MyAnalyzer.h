@@ -148,7 +148,7 @@ class MyAnalyzer : public edm::EDAnalyzer {
       // ----------member data ---------------------------
 
 	void BasicPlots( vector< TLorentzVector > p4GenTruthAlljets, vector< TLorentzVector > p4GenTruthJets, vector< TLorentzVector > p4GenTruthBjets, vector< TLorentzVector > p4GenTruthBjetsHiggs, vector< TLorentzVector > p4GenTruthB1Higgs, vector< TLorentzVector > p4GenTruthB2Higgs, vector< TLorentzVector > p4GenTruthJetsStop1, vector< TLorentzVector > p4GenTruthBjetsStop1, vector< TLorentzVector > p4MatchTruthJets,  vector< TLorentzVector > p4MatchTruthBjets, vector< TLorentzVector > p4MatchB1Higgs, vector< TLorentzVector > p4MatchB2Higgs, vector< TLorentzVector > p4RecoJets, vector< TLorentzVector > p4RecoBjets );
-	void Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< TLorentzVector > p4GenTruthB2Higgs, vector< TLorentzVector > p4RecoJets, vector< TLorentzVector > p4RecoBjets, vector< TLorentzVector > p4MatchTruthBjets,  vector< TLorentzVector > p4MatchB1Higgs, vector< TLorentzVector > p4MatchB2Higgs, vector< TLorentzVector > p4MatchTruthAlljets);
+	void Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< TLorentzVector > p4GenTruthB2Higgs, vector< TLorentzVector > p4RecoJets, vector< TLorentzVector > p4RecoBjets, vector< TLorentzVector > p4RecoBtagJets_CSVM, vector< TLorentzVector > p4RecoPartonFlavorBtagJets_CSVM, vector< TLorentzVector > p4MatchTruthBjets,  vector< TLorentzVector > p4MatchB1Higgs, vector< TLorentzVector > p4MatchB2Higgs, vector< TLorentzVector > p4MatchTruthAlljets, vector<double> RecoBjets_CSVM );
 
 	// Input definitions
 	edm::InputTag Gensrc;
@@ -159,15 +159,9 @@ class MyAnalyzer : public edm::EDAnalyzer {
 	double stop2Mass;
 
 	// Matching Histos
-	/*TH1D * h_MatchTruthGenAlljets_deltaR;
-	TH1D * h_MatchTruthGenJets_deltaR;
-	TH1D * h_MatchTruthGenBjets_deltaR;*/
 	TH1D * h_MatchTruthAlljets_deltaR;
 	TH1D * h_MatchTruthJets_deltaR;
 	TH1D * h_MatchTruthBjets_deltaR;
-	/*TH1D * h_MatchAlljets_deltaR;
-	TH1D * h_MatchJets_deltaR;
-	TH1D * h_MatchBjets_deltaR;*/
 	TH1D * h_MatchB1Higgs_deltaR;
 	TH1D * h_MatchB2Higgs_deltaR;
 
@@ -177,11 +171,6 @@ class MyAnalyzer : public edm::EDAnalyzer {
 	TH1D * h_genTruthBJets_sumpt;
 	TH1D * h_genTruthBJets_eta;
 	TH1D * h_genTruthBJets_phi;
-	/*TH1D * h_genBJets_num;
-	TH1D * h_genBJets_pt;
-	TH1D * h_genBJets_sumpt;
-	TH1D * h_genBJets_eta;
-	TH1D * h_genBJets_phi;*/
 	TH1D * h_recoBJets_num;
 	TH1D * h_recoBJets_pt;
 	TH1D * h_recoBJets_sumpt;
@@ -207,11 +196,6 @@ class MyAnalyzer : public edm::EDAnalyzer {
 	TH1D * h_genTruthJets_sumpt;
 	TH1D * h_genTruthJets_eta;
 	TH1D * h_genTruthJets_phi;
-	/*TH1D * h_genJets_num;
-	TH1D * h_genJets_pt;
-	TH1D * h_genJets_sumpt;
-	TH1D * h_genJets_eta;
-	TH1D * h_genJets_phi;*/
 	TH1D * h_recoJets_num;
 	TH1D * h_recoJets_pt;
 	TH1D * h_recoJets_sumpt;
@@ -229,16 +213,6 @@ class MyAnalyzer : public edm::EDAnalyzer {
 	TH1D * h_genTruthAlljets_sumpt;
 	TH1D * h_genTruthAlljets_eta;
 	TH1D * h_genTruthAlljets_phi;
-	/*TH1D * h_genAlljets_num;
-	TH1D * h_genAlljets_pt;
-	TH1D * h_genAlljets_sumpt;
-	TH1D * h_genAlljets_eta;
-	TH1D * h_genAlljets_phi;
-	TH1D * h_matchAlljets_num;
-	TH1D * h_matchAlljets_pt;
-	TH1D * h_matchAlljets_sumpt;
-	TH1D * h_matchAlljets_eta;
-	TH1D * h_matchAlljets_phi;*/
 
 	// Higgs histos
 	TH1D * h_bjetsHiggs_pt;
@@ -281,6 +255,7 @@ class MyAnalyzer : public edm::EDAnalyzer {
 
 	///// RECO histos
 	TH1D * h_massRecobb;
+	TH1D * h_massRecobb_num;
 	TH1D * h_massRecobb_cut50;
 	TH1D * h_massRecobb_cut100;
 	TH1D * h_massRecobb_cut150;
@@ -291,6 +266,28 @@ class MyAnalyzer : public edm::EDAnalyzer {
 	TH2D * h_scalarPtRecobb_cut150;
 	TH2D * h_scalarPtRecobb_cut200;
 	TH2D * h_PtRecobb;
+	TH1D * h_massRecoBtagJets_CSVM;
+	TH1D * h_massRecoBtagJets_CSVM_cut50;
+	TH1D * h_massRecoBtagJets_CSVM_cut100;
+	TH1D * h_massRecoBtagJets_CSVM_cut150;
+	TH1D * h_massRecoBtagJets_CSVM_cut200;
+	TH2D * h_scalarPtRecoBtagJets_CSVM;
+	TH2D * h_scalarPtRecoBtagJets_CSVM_cut50;
+	TH2D * h_scalarPtRecoBtagJets_CSVM_cut100;
+	TH2D * h_scalarPtRecoBtagJets_CSVM_cut150;
+	TH2D * h_scalarPtRecoBtagJets_CSVM_cut200;
+	TH2D * h_PtRecoBtagJets_CSVM;
+	TH1D * h_massRecoPartonFlavorBtagJets_CSVM;
+	TH1D * h_massRecoPartonFlavorBtagJets_CSVM_cut50;
+	TH1D * h_massRecoPartonFlavorBtagJets_CSVM_cut100;
+	TH1D * h_massRecoPartonFlavorBtagJets_CSVM_cut150;
+	TH1D * h_massRecoPartonFlavorBtagJets_CSVM_cut200;
+	TH2D * h_scalarPtRecoPartonFlavorBtagJets_CSVM;
+	TH2D * h_scalarPtRecoPartonFlavorBtagJets_CSVM_cut50;
+	TH2D * h_scalarPtRecoPartonFlavorBtagJets_CSVM_cut100;
+	TH2D * h_scalarPtRecoPartonFlavorBtagJets_CSVM_cut150;
+	TH2D * h_scalarPtRecoPartonFlavorBtagJets_CSVM_cut200;
+	TH2D * h_PtRecoPartonFlavorBtagJets_CSVM;
 	TH1D * h_massbb;
 	TH1D * h_massbb_cut50;
 	TH1D * h_massbb_cut100;
@@ -303,6 +300,7 @@ class MyAnalyzer : public edm::EDAnalyzer {
 	TH2D * h_scalarPtbb_cut200;
 	TH2D * h_Ptbb;
 	TH1D * h_massbbHiggs;
+	TH1D * h_massbbHiggs_num;
 	TH1D * h_massbbHiggs_cut50;
 	TH1D * h_massbbHiggs_cut100;
 	TH1D * h_massbbHiggs_cut150;
@@ -316,8 +314,51 @@ class MyAnalyzer : public edm::EDAnalyzer {
 	TH1D * h_massGenTruthHiggs;
 	TH2D * h_PtGenTruthHiggs;
 	TH2D * h_scalarPtGenTruthHiggs;
-	TH2D * h_jj_masspt;
-	TH2D * h_jjWObb_masspt;
+	TH2D * h_matchjj_masspt;
+	TH2D * h_matchjjWObb_masspt;
+	TH2D * h_matchjjWObb_masspt_cut50;
+	TH2D * h_matchjjWObb_masspt_cut100;
+	TH2D * h_matchjjWObb_masspt_cut150;
+	TH2D * h_matchjjWObb_masspt_cut200;
+	TH1D * h_massmatchjjWObb;
+	TH1D * h_massmatchjjWObb_cut50;
+	TH1D * h_massmatchjjWObb_cut100;
+	TH1D * h_massmatchjjWObb_cut150;
+	TH1D * h_massmatchjjWObb_cut200;
+	TH2D * h_matchjjHiggs_masspt;
+	TH2D * h_matchjjWObbHiggs_masspt;
+	TH2D * h_matchjjWObbHiggs_masspt_cut50;
+	TH2D * h_matchjjWObbHiggs_masspt_cut100;
+	TH2D * h_matchjjWObbHiggs_masspt_cut150;
+	TH2D * h_matchjjWObbHiggs_masspt_cut200;
+	TH1D * h_massmatchjjWObbHiggs;
+	TH1D * h_massmatchjjWObbHiggs_cut50;
+	TH1D * h_massmatchjjWObbHiggs_cut100;
+	TH1D * h_massmatchjjWObbHiggs_cut150;
+	TH1D * h_massmatchjjWObbHiggs_cut200;
+	TH2D * h_Recojj_masspt;
+	TH2D * h_jjWORecobb_masspt;
+	TH2D * h_jjWORecobb_masspt_cut50;
+	TH2D * h_jjWORecobb_masspt_cut100;
+	TH2D * h_jjWORecobb_masspt_cut150;
+	TH2D * h_jjWORecobb_masspt_cut200;
+	TH1D * h_massjjWORecobb;
+	TH1D * h_massjjWORecobb_cut50;
+	TH1D * h_massjjWORecobb_cut100;
+	TH1D * h_massjjWORecobb_cut150;
+	TH1D * h_massjjWORecobb_cut200;
+	TH2D * h_RecoBtagJetsjj_masspt;
+	TH2D * h_jjWORecoBtagJets_CSVM_masspt;
+	TH2D * h_jjWORecoBtagJets_CSVM_masspt_cut50;
+	TH2D * h_jjWORecoBtagJets_CSVM_masspt_cut100;
+	TH2D * h_jjWORecoBtagJets_CSVM_masspt_cut150;
+	TH2D * h_jjWORecoBtagJets_CSVM_masspt_cut200;
+	TH1D * h_massjjWORecoBtagJets_CSVM;
+	TH1D * h_massjjWORecoBtagJets_CSVM_cut50;
+	TH1D * h_massjjWORecoBtagJets_CSVM_cut100;
+	TH1D * h_massjjWORecoBtagJets_CSVM_cut150;
+	TH1D * h_massjjWORecoBtagJets_CSVM_cut200;
+
 	TH2D * h_recojj_masspt;
 	TH2D * h_recojjWObb_masspt;
 	TH2D * h_recobbjj_masspt;
@@ -338,6 +379,14 @@ typedef struct {
 	const pat::Jet *origJet;
 	double jecUnc;
 } jetElem;
+
+typedef struct {
+	vector< TLorentzVector > p4SmallMassDiff;
+	vector< double > mass;
+	vector< double > pt;
+	vector< double > scalarPt;
+} step1Vectors;
+
 
 // Comparison function for jet list. Want highest pt first
 bool cmpJets(jetElem first, jetElem second){
@@ -369,15 +418,9 @@ MyAnalyzer::MyAnalyzer(const edm::ParameterSet& iConfig){
 
 	//cout << "hello" << endl;
 	///// Matching Histos
-	/*h_MatchTruthGenAlljets_deltaR = basicPlots.make<TH1D>("matchTruthGenAllJets_deltaR" , "#Delta R (GenJets, All Truth GenJets)" , 100 , -0.5 , 5.5 );
-	h_MatchTruthGenJets_deltaR = basicPlots.make<TH1D>("matchTruthGenJets_deltaR" , "#Delta R (GenJets, Truth GenJets)" , 100 , -0.5 , 5.5 );
-	h_MatchTruthGenBjets_deltaR = basicPlots.make<TH1D>("matchTruthGenBjets_deltaR" , "#Delta R (GenBjets, Truth GenBjets)" , 100 , -0.5 , 5.5 );*/
 	h_MatchTruthAlljets_deltaR = basicPlots.make<TH1D>("matchTruthAllJets_deltaR" , "#Delta R (RecoJets, All Truth GenJets)" , 100 , -0.5 , 5.5 );
 	h_MatchTruthJets_deltaR = basicPlots.make<TH1D>("matchTruthJets_deltaR" , "#Delta R (RecoJets, Truth GenJets)" , 100 , -0.5 , 5.5 );
 	h_MatchTruthBjets_deltaR = basicPlots.make<TH1D>("matchTruthBjets_deltaR" , "#Delta R (RecoBjets, Truth GenBjets)" , 100 , -0.5 , 5.5 );
-	/*h_MatchAlljets_deltaR = basicPlots.make<TH1D>("matchAllJets_deltaR" , "#Delta R (RecoJets, All GenJets)" , 100 , -0.5 , 5.5 );
-	h_MatchJets_deltaR = basicPlots.make<TH1D>("matchJets_deltaR" , "#Delta R (RecoJets, GenJets)" , 100 , -0.5 , 5.5 );
-	h_MatchBjets_deltaR = basicPlots.make<TH1D>("matchBjets_deltaR" , "#Delta R (RecoBjets, GenBjets)" , 100 , -0.5 , 5.5 );*/
 	h_MatchB1Higgs_deltaR = basicPlots.make<TH1D>("matchB1Higgs_deltaR" , "#Delta R (RecoBjets, Higgs 1 Bjets)" , 100 , -0.5 , 5.5 );
 	h_MatchB2Higgs_deltaR = basicPlots.make<TH1D>("matchB2Higgs_deltaR" , "#Delta R (RecoBjets, Higgs 2 Bjets)" , 100 , -0.5 , 5.5 );
 
@@ -387,11 +430,6 @@ MyAnalyzer::MyAnalyzer(const edm::ParameterSet& iConfig){
 	h_genTruthBJets_sumpt = genTruthPlots.make<TH1D>("genTruthBJets_sumpt" , "#sum GenTruth bJets p_{T}" , 200 , 0., 1000. );
 	h_genTruthBJets_eta = genTruthPlots.make<TH1D>("genTruthBJets_eta" , "GenTruth bJets #eta" , 40 , -5.0, 5.0 );
 	h_genTruthBJets_phi = genTruthPlots.make<TH1D>("genTruthBJets_phi" , "GenTruth bJets #phi" , 40 , -5.0, 5.0 );
-	/*h_genBJets_num = basicPlots.make<TH1D>("genBJets_num" , "Number of Gen bJets" , 11 , -0.5, 10.5 );
-	h_genBJets_pt = basicPlots.make<TH1D>("genBJets_pt" , "Gen bJets p_{T}" , 98 , 0., 500. );
-	h_genBJets_sumpt = basicPlots.make<TH1D>("genBJets_sumpt" , "#sum Gen bJets p_{T}" , 200 , 0., 1000. );
-	h_genBJets_eta = basicPlots.make<TH1D>("genBJets_eta" , "Gen bJets #eta" , 40 , -5.0, 5.0 );
-	h_genBJets_phi = basicPlots.make<TH1D>("genBJets_phi" , "Gen bJets #phi" , 40 , -5.0, 5.0 );*/
 	h_recoBJets_num = basicPlots.make<TH1D>("recoBJets_num" , "Number of Reco bJets" , 11 , -0.5, 10.5 );
 	h_recoBJets_pt = basicPlots.make<TH1D>("recoBJets_pt" , "Reco bJets p_{T}" , 98 , 0., 500. );
 	h_recoBJets_sumpt = basicPlots.make<TH1D>("recoBJets_sumpt" , "#sum Reco bJets p_{T}" , 200 , 0., 1000. );
@@ -417,11 +455,6 @@ MyAnalyzer::MyAnalyzer(const edm::ParameterSet& iConfig){
 	h_genTruthJets_sumpt = genTruthPlots.make<TH1D>("genTruthJets_sumpt" , "#sum GenTruth Jets p_{T}" , 200 , 0., 1000. );
 	h_genTruthJets_eta = genTruthPlots.make<TH1D>("genTruthJets_eta" , "GenTruth Jets #eta" , 40 , -5.0, 5.0 );
 	h_genTruthJets_phi = genTruthPlots.make<TH1D>("genTruthJets_phi" , "GenTruth Jets #phi" , 40 , -5.0, 5.0 );
-	/*h_genJets_num = basicPlots.make<TH1D>("genJets_num" , "Number of Gen Jets" , 21 , -0.5, 20.5 );
-	h_genJets_pt = basicPlots.make<TH1D>("genJets_pt" , "Gen Jets p_{T}" , 98 , 0., 500. );
-	h_genJets_sumpt = basicPlots.make<TH1D>("genJets_sumpt" , "#sum Gen Jets p_{T}" , 200 , 0., 1000. );
-	h_genJets_eta = basicPlots.make<TH1D>("genJets_eta" , "Gen Jets #eta" , 40 , -5.0, 5.0 );
-	h_genJets_phi = basicPlots.make<TH1D>("genJets_phi" , "Gen Jets #phi" , 40 , -5.0, 5.0 ); */
 	h_recoJets_num = basicPlots.make<TH1D>("recoJets_num" , "Number of Reco Jets" , 21 , -0.5, 20.5 );
 	h_recoJets_pt = basicPlots.make<TH1D>("recoJets_pt" , "Reco Jets p_{T}" , 98 , 0., 500. );
 	h_recoJets_sumpt = basicPlots.make<TH1D>("recoJets_sumpt" , "#sum Reco Jets p_{T}" , 200 , 0., 1000. );
@@ -439,16 +472,6 @@ MyAnalyzer::MyAnalyzer(const edm::ParameterSet& iConfig){
 	h_genTruthAlljets_sumpt = genTruthPlots.make<TH1D>("genTruthAlljets_sumpt" , "#sum GenTruth Alljets p_{T}" , 200 , 0., 1000. );
 	h_genTruthAlljets_eta = genTruthPlots.make<TH1D>("genTruthAlljets_eta" , "GenTruth Alljets #eta" , 40 , -5.0, 5.0 );
 	h_genTruthAlljets_phi = genTruthPlots.make<TH1D>("genTruthAlljets_phi" , "GenTruth Alljets #phi" , 40 , -5.0, 5.0 );
-	/*h_genAlljets_num = basicPlots.make<TH1D>("genAlljets_num" , "Number of Gen Alljets" , 11 , -0.5, 10.5 );
-	h_genAlljets_pt = basicPlots.make<TH1D>("genAlljets_pt" , "Gen Alljets p_{T}" , 98 , 0., 500. );
-	h_genAlljets_sumpt = basicPlots.make<TH1D>("genAlljets_sumpt" , "#sum Gen Alljets p_{T}" , 200 , 0., 1000. );
-	h_genAlljets_eta = basicPlots.make<TH1D>("genAlljets_eta" , "Gen Alljets #eta" , 40 , -5.0, 5.0 );
-	h_genAlljets_phi = basicPlots.make<TH1D>("genAlljets_phi" , "Gen Alljets #phi" , 40 , -5.0, 5.0 );
-	h_matchAlljets_num = basicPlots.make<TH1D>("matchAlljets_num" , "Number of Match Alljets" , 11 , -0.5, 10.5 );
-	h_matchAlljets_pt = basicPlots.make<TH1D>("matchAlljets_pt" , "Match Alljets p_{T}" , 98 , 0., 500. );
-	h_matchAlljets_sumpt = basicPlots.make<TH1D>("matchAlljets_sumpt" , "#sum Match Alljets p_{T}" , 200 , 0., 1000. );
-	h_matchAlljets_eta = basicPlots.make<TH1D>("matchAlljets_eta" , "Match Alljets #eta" , 40 , -5.0, 5.0 );
-	h_matchAlljets_phi = basicPlots.make<TH1D>("matchAlljets_phi" , "Match Alljets #phi" , 40 , -5.0, 5.0 );*/
 
 	///// Higgs histos
 	h_bjetsHiggs_pt = genTruthPlots.make<TH1D>("bjetsHiggs_pt" , "Bjets from Higgs p_{T}" , 98 , 0., 500. );
@@ -511,6 +534,7 @@ MyAnalyzer::MyAnalyzer(const edm::ParameterSet& iConfig){
 
 	// Match bjets from Higgs
 	h_massbbHiggs = analysisPlots.make<TH1D>("massbbHiggs" , "Mass of bbHiggs" , 98.0 , 0.0, 300.0 );
+	h_massbbHiggs_num = analysisPlots.make<TH1D>("massbbHiggs_num" , "Num of bbHiggs" , 11 , -0.5, 10.5 ); 
 	h_scalarPtbbHiggs = analysisPlots.make<TH2D>("scalarPtbbHiggs" , "Mass of bbHiggs vs scalar #sum p_{T}^{bbHiggs}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
 	h_PtbbHiggs = analysisPlots.make<TH2D>("PtbbHiggs" , "Mass of bbHiggs vs #sum p_{T}^{bbHiggs}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
 	h_massbbHiggs_cut50 = analysisPlots.make<TH1D>("massbbHiggs_cut50" , "Mass of bbHiggs" , 98.0 , 0.0, 300.0 );
@@ -524,6 +548,7 @@ MyAnalyzer::MyAnalyzer(const edm::ParameterSet& iConfig){
 
 	// RECO jets
 	h_massRecobb = analysisPlots.make<TH1D>("massRecobb" , "Mass of Recobb" , 80.0 , 0.0, 800.0 );
+	h_massRecobb_num = analysisPlots.make<TH1D>("massRecobb_num" , "Number of Recobb" , 11 , -0.5, 10.5 );
 	h_scalarPtRecobb = analysisPlots.make<TH2D>("scalarPtRecobb" , "Mass of Recobb vs scalar #sum p_{T}^{Recobb}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
 	h_PtRecobb = analysisPlots.make<TH2D>("PtRecobb" , "Mass of Recobb vs #sum p_{T}^{Recobb}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
 	h_massRecobb_cut50 = analysisPlots.make<TH1D>("massRecobb_cut50" , "Mass of Recobb" , 80.0 , 0.0, 800.0 );
@@ -535,12 +560,83 @@ MyAnalyzer::MyAnalyzer(const edm::ParameterSet& iConfig){
 	h_massRecobb_cut200 = analysisPlots.make<TH1D>("massRecobb_cut200" , "Mass of Recobb" , 80.0 , 0.0, 800.0 );
 	h_scalarPtRecobb_cut200 = analysisPlots.make<TH2D>("scalarPtRecobb_cut200" , "Mass of Recobb vs scalar #sum p_{T}^{Recobb}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
 
+	// RECO Bjets with CSVM
+	h_massRecoBtagJets_CSVM = analysisPlots.make<TH1D>("massRecoBtagJets_CSVM" , "Mass of RecoBtagJets_CSVM" , 80.0 , 0.0, 800.0 );
+	h_scalarPtRecoBtagJets_CSVM = analysisPlots.make<TH2D>("scalarPtRecoBtagJets_CSVM" , "Mass of RecoBtagJets_CSVM vs scalar #sum p_{T}^{RecoBtagJets_CSVM}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_PtRecoBtagJets_CSVM = analysisPlots.make<TH2D>("PtRecoBtagJets_CSVM" , "Mass of RecoBtagJets_CSVM vs #sum p_{T}^{RecoBtagJets_CSVM}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_massRecoBtagJets_CSVM_cut50 = analysisPlots.make<TH1D>("massRecoBtagJets_CSVM_cut50" , "Mass of RecoBtagJets_CSVM" , 80.0 , 0.0, 800.0 );
+	h_scalarPtRecoBtagJets_CSVM_cut50 = analysisPlots.make<TH2D>("scalarPtRecoBtagJets_CSVM_cut50" , "Mass of RecoBtagJets_CSVM vs scalar #sum p_{T}^{RecoBtagJets_CSVM}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_massRecoBtagJets_CSVM_cut100 = analysisPlots.make<TH1D>("massRecoBtagJets_CSVM_cut100" , "Mass of RecoBtagJets_CSVM" , 80.0 , 0.0, 800.0 );
+	h_scalarPtRecoBtagJets_CSVM_cut100 = analysisPlots.make<TH2D>("scalarPtRecoBtagJets_CSVM_cut100" , "Mass of RecoBtagJets_CSVM vs scalar #sum p_{T}^{RecoBtagJets_CSVM}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_massRecoBtagJets_CSVM_cut150 = analysisPlots.make<TH1D>("massRecoBtagJets_CSVM_cut150" , "Mass of RecoBtagJets_CSVM" , 80.0 , 0.0, 800.0 );
+	h_scalarPtRecoBtagJets_CSVM_cut150 = analysisPlots.make<TH2D>("scalarPtRecoBtagJets_CSVM_cut150" , "Mass of RecoBtagJets_CSVM vs scalar #sum p_{T}^{RecoBtagJets_CSVM}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_massRecoBtagJets_CSVM_cut200 = analysisPlots.make<TH1D>("massRecoBtagJets_CSVM_cut200" , "Mass of RecoBtagJets_CSVM" , 80.0 , 0.0, 800.0 );
+	h_scalarPtRecoBtagJets_CSVM_cut200 = analysisPlots.make<TH2D>("scalarPtRecoBtagJets_CSVM_cut200" , "Mass of RecoBtagJets_CSVM vs scalar #sum p_{T}^{RecoBtagJets_CSVM}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	//
+	h_massRecoPartonFlavorBtagJets_CSVM = analysisPlots.make<TH1D>("massRecoPartonFlavorBtagJets_CSVM" , "Mass of RecoPartonFlavorBtagJets_CSVM" , 80.0 , 0.0, 800.0 );
+	h_scalarPtRecoPartonFlavorBtagJets_CSVM = analysisPlots.make<TH2D>("scalarPtRecoPartonFlavorBtagJets_CSVM" , "Mass of RecoPartonFlavorBtagJets_CSVM vs scalar #sum p_{T}^{RecoPartonFlavorBtagJets_CSVM}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_PtRecoPartonFlavorBtagJets_CSVM = analysisPlots.make<TH2D>("PtRecoPartonFlavorBtagJets_CSVM" , "Mass of RecoPartonFlavorBtagJets_CSVM vs #sum p_{T}^{RecoPartonFlavorBtagJets_CSVM}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_massRecoPartonFlavorBtagJets_CSVM_cut50 = analysisPlots.make<TH1D>("massRecoPartonFlavorBtagJets_CSVM_cut50" , "Mass of RecoPartonFlavorBtagJets_CSVM" , 80.0 , 0.0, 800.0 );
+	h_scalarPtRecoPartonFlavorBtagJets_CSVM_cut50 = analysisPlots.make<TH2D>("scalarPtRecoPartonFlavorBtagJets_CSVM_cut50" , "Mass of RecoPartonFlavorBtagJets_CSVM vs scalar #sum p_{T}^{RecoPartonFlavorBtagJets_CSVM}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_massRecoPartonFlavorBtagJets_CSVM_cut100 = analysisPlots.make<TH1D>("massRecoPartonFlavorBtagJets_CSVM_cut100" , "Mass of RecoPartonFlavorBtagJets_CSVM" , 80.0 , 0.0, 800.0 );
+	h_scalarPtRecoPartonFlavorBtagJets_CSVM_cut100 = analysisPlots.make<TH2D>("scalarPtRecoPartonFlavorBtagJets_CSVM_cut100" , "Mass of RecoPartonFlavorBtagJets_CSVM vs scalar #sum p_{T}^{RecoPartonFlavorBtagJets_CSVM}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_massRecoPartonFlavorBtagJets_CSVM_cut150 = analysisPlots.make<TH1D>("massRecoPartonFlavorBtagJets_CSVM_cut150" , "Mass of RecoPartonFlavorBtagJets_CSVM" , 80.0 , 0.0, 800.0 );
+	h_scalarPtRecoPartonFlavorBtagJets_CSVM_cut150 = analysisPlots.make<TH2D>("scalarPtRecoPartonFlavorBtagJets_CSVM_cut150" , "Mass of RecoPartonFlavorBtagJets_CSVM vs scalar #sum p_{T}^{RecoPartonFlavorBtagJets_CSVM}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_massRecoPartonFlavorBtagJets_CSVM_cut200 = analysisPlots.make<TH1D>("massRecoPartonFlavorBtagJets_CSVM_cut200" , "Mass of RecoPartonFlavorBtagJets_CSVM" , 80.0 , 0.0, 800.0 );
+	h_scalarPtRecoPartonFlavorBtagJets_CSVM_cut200 = analysisPlots.make<TH2D>("scalarPtRecoPartonFlavorBtagJets_CSVM_cut200" , "Mass of RecoPartonFlavorBtagJets_CSVM vs scalar #sum p_{T}^{RecoPartonFlavorBtagJets_CSVM}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
 
-	h_jj_masspt = analysisPlots.make<TH2D>("jj_masspt" , "Mass of jj vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
-	h_jjWObb_masspt = analysisPlots.make<TH2D>("jjWObb_masspt" , "Mass of jj w/o bb vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
-	h_recojj_masspt = analysisPlots.make<TH2D>("recojj_masspt" , "Mass of recojj vs scalar #sum p_{T}^{recojj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
-	h_recojjWObb_masspt = analysisPlots.make<TH2D>("recojjWObb_masspt" , "Mass of recojj w/o bb vs scalar #sum p_{T}^{recojj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+
+	h_matchjj_masspt = analysisPlots.make<TH2D>("matchjj_masspt" , "Mass of jj vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_matchjjWObb_masspt = analysisPlots.make<TH2D>("matchjjWObb_masspt" , "Mass of Match jj w/o bb vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_massmatchjjWObb = analysisPlots.make<TH1D>("massmatchjjWObb" , "Mass of jj w/o bb" , 80.0 , 0.0, 800.0 );
+	h_matchjjWObb_masspt_cut50 = analysisPlots.make<TH2D>("matchjjWObb_masspt_cut50" , "Mass of Match jj w/o bb vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_matchjjWObb_masspt_cut100 = analysisPlots.make<TH2D>("matchjjWObb_masspt_cut100" , "Mass of Match jj w/o bb vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_matchjjWObb_masspt_cut150 = analysisPlots.make<TH2D>("matchjjWObb_masspt_cut150" , "Mass of Match jj w/o bb vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_matchjjWObb_masspt_cut200 = analysisPlots.make<TH2D>("matchjjWObb_masspt_cut200" , "Mass of Match jj w/o bb vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_massmatchjjWObb_cut50 = analysisPlots.make<TH1D>("massmatchjjWObb_cut50" , "Mass of jj w/o bb" , 80.0 , 0.0, 800.0 );
+	h_massmatchjjWObb_cut100 = analysisPlots.make<TH1D>("massmatchjjWObb_cut100" , "Mass of jj w/o bb" , 80.0 , 0.0, 800.0 );
+	h_massmatchjjWObb_cut150 = analysisPlots.make<TH1D>("massmatchjjWObb_cut150" , "Mass of jj w/o bb" , 80.0 , 0.0, 800.0 );
+	h_massmatchjjWObb_cut200 = analysisPlots.make<TH1D>("massmatchjjWObb_cut200" , "Mass of jj w/o bb" , 80.0 , 0.0, 800.0 );
+	//
+	h_matchjjHiggs_masspt = analysisPlots.make<TH2D>("matchjjHiggs_masspt" , "Mass of jj vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_matchjjWObbHiggs_masspt = analysisPlots.make<TH2D>("matchjjWObbHiggs_masspt" , "Mass of Match jj w/o bbHiggs vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_massmatchjjWObbHiggs = analysisPlots.make<TH1D>("massmatchjjWObbHiggs" , "Mass of jj w/o bbHiggs" , 80.0 , 0.0, 800.0 );
+	h_matchjjWObbHiggs_masspt_cut50 = analysisPlots.make<TH2D>("matchjjWObbHiggs_masspt_cut50" , "Mass of Match jj w/o bbHiggs vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_matchjjWObbHiggs_masspt_cut100 = analysisPlots.make<TH2D>("matchjjWObbHiggs_masspt_cut100" , "Mass of Match jj w/o bbHiggs vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_matchjjWObbHiggs_masspt_cut150 = analysisPlots.make<TH2D>("matchjjWObbHiggs_masspt_cut150" , "Mass of Match jj w/o bbHiggs vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_matchjjWObbHiggs_masspt_cut200 = analysisPlots.make<TH2D>("matchjjWObbHiggs_masspt_cut200" , "Mass of Match jj w/o bbHiggs vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_massmatchjjWObbHiggs_cut50 = analysisPlots.make<TH1D>("massmatchjjWObbHiggs_cut50" , "Mass of jj w/o bbHiggs" , 80.0 , 0.0, 800.0 );
+	h_massmatchjjWObbHiggs_cut100 = analysisPlots.make<TH1D>("massmatchjjWObbHiggs_cut100" , "Mass of jj w/o bbHiggs" , 80.0 , 0.0, 800.0 );
+	h_massmatchjjWObbHiggs_cut150 = analysisPlots.make<TH1D>("massmatchjjWObbHiggs_cut150" , "Mass of jj w/o bbHiggs" , 80.0 , 0.0, 800.0 );
+	h_massmatchjjWObbHiggs_cut200 = analysisPlots.make<TH1D>("massmatchjjWObbHiggs_cut200" , "Mass of jj w/o bbHiggs" , 80.0 , 0.0, 800.0 );
+	//
+	h_Recojj_masspt = analysisPlots.make<TH2D>("Recojj_masspt" , "Mass of jj vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_jjWORecobb_masspt = analysisPlots.make<TH2D>("jjWORecobb_masspt" , "Mass of Match jj w/o Recobb vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_massjjWORecobb = analysisPlots.make<TH1D>("massjjWORecobb" , "Mass of jj w/o Recobb" , 80.0 , 0.0, 800.0 );
+	h_jjWORecobb_masspt_cut50 = analysisPlots.make<TH2D>("jjWORecobb_masspt_cut50" , "Mass of Match jj w/o Recobb vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_jjWORecobb_masspt_cut100 = analysisPlots.make<TH2D>("jjWORecobb_masspt_cut100" , "Mass of Match jj w/o Recobb vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_jjWORecobb_masspt_cut150 = analysisPlots.make<TH2D>("jjWORecobb_masspt_cut150" , "Mass of Match jj w/o Recobb vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_jjWORecobb_masspt_cut200 = analysisPlots.make<TH2D>("jjWORecobb_masspt_cut200" , "Mass of Match jj w/o Recobb vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_massjjWORecobb_cut50 = analysisPlots.make<TH1D>("massjjWORecobb_cut50" , "Mass of jj w/o Recobb" , 80.0 , 0.0, 800.0 );
+	h_massjjWORecobb_cut100 = analysisPlots.make<TH1D>("massjjWORecobb_cut100" , "Mass of jj w/o Recobb" , 80.0 , 0.0, 800.0 );
+	h_massjjWORecobb_cut150 = analysisPlots.make<TH1D>("massjjWORecobb_cut150" , "Mass of jj w/o Recobb" , 80.0 , 0.0, 800.0 );
+	h_massjjWORecobb_cut200 = analysisPlots.make<TH1D>("massjjWORecobb_cut200" , "Mass of jj w/o Recobb" , 80.0 , 0.0, 800.0 );
+	//
+	h_RecoBtagJetsjj_masspt = analysisPlots.make<TH2D>("RecoBtagJetsjj_masspt" , "Mass of jj vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_jjWORecoBtagJets_CSVM_masspt = analysisPlots.make<TH2D>("jjWORecoBtagJets_CSVM_masspt" , "Mass of Match jj w/o RecoBtagJets vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_jjWORecoBtagJets_CSVM_masspt_cut50 = analysisPlots.make<TH2D>("jjWORecoBtagJets_CSVM_masspt_cut50" , "Mass of Match jj w/o RecoBtagJets vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_jjWORecoBtagJets_CSVM_masspt_cut100 = analysisPlots.make<TH2D>("jjWORecoBtagJets_CSVM_masspt_cut100" , "Mass of Match jj w/o RecoBtagJets vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_jjWORecoBtagJets_CSVM_masspt_cut150 = analysisPlots.make<TH2D>("jjWORecoBtagJets_CSVM_masspt_cut150" , "Mass of Match jj w/o RecoBtagJets vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_jjWORecoBtagJets_CSVM_masspt_cut200 = analysisPlots.make<TH2D>("jjWORecoBtagJets_CSVM_masspt_cut200" , "Mass of Match jj w/o RecoBtagJets vs scalar #sum p_{T}^{jj}" , 80.0 , 0.0, 800.0, 80 , 0.0, 800.0 );
+	h_massjjWORecoBtagJets_CSVM = analysisPlots.make<TH1D>("massjjWORecoBtagJets_CSVM" , "Mass of jj w/o RecoBtagJets" , 80.0 , 0.0, 800.0 );
+	h_massjjWORecoBtagJets_CSVM_cut50 = analysisPlots.make<TH1D>("massjjWORecoBtagJets_CSVM_cut50" , "Mass of jj w/o RecoBtagJets" , 80.0 , 0.0, 800.0 );
+	h_massjjWORecoBtagJets_CSVM_cut100 = analysisPlots.make<TH1D>("massjjWORecoBtagJets_CSVM_cut100" , "Mass of jj w/o RecoBtagJets" , 80.0 , 0.0, 800.0 );
+	h_massjjWORecoBtagJets_CSVM_cut150 = analysisPlots.make<TH1D>("massjjWORecoBtagJets_CSVM_cut150" , "Mass of jj w/o RecoBtagJets" , 80.0 , 0.0, 800.0 );
+	h_massjjWORecoBtagJets_CSVM_cut200 = analysisPlots.make<TH1D>("massjjWORecoBtagJets_CSVM_cut200" , "Mass of jj w/o RecoBtagJets" , 80.0 , 0.0, 800.0 );
+
+
 	h_recobbjj_masspt = analysisPlots.make<TH2D>("recobbjj_masspt" , "Mass of bbjj vs scalar #sum p_{T}^{bbjj}" , 120.0 , 0.0, 1200.0, 120 , 0.0, 1200.0 );
+
 	h_bbjj_masspt = analysisPlots.make<TH2D>("bbjj_masspt" , "Mass of bbjj vs scalar #sum p_{T}^{bbjj}" , 120.0 , 0.0, 1200.0, 120 , 0.0, 1200.0 );
 	h_massrecobbjj = analysisPlots.make<TH1D>("massrecobbjj" , "Mass of Reco bbjj" , 80.0 , 0.0, 800.0 );
 	h_massbbjj = analysisPlots.make<TH1D>("massbbjj" , "Mass of bbjj" , 80.0 , 0.0, 800.0 );

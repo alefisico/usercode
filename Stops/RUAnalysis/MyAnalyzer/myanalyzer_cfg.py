@@ -4,8 +4,8 @@ import glob,sys
 st1mass = int (sys.argv[2])
 st2mass = int (sys.argv[3])
 decay = sys.argv[4]
-print sys.argv[2], sys.argv[3], sys.argv[4]
-
+numEvents = int (sys.argv[5])
+print sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
 
 suffix_list = glob.glob('/cms/gomez/Stops/PATTuples/st2_h_bb_st1_'+decay+'_'+str(st2mass)+'_'+str(st1mass)+'/*root')
 this_fin_nocfi = [i if i.startswith('file:') else 'file:' + i for i in suffix_list]
@@ -46,9 +46,13 @@ jetcorrserv = 'ak5PFchsL1FastL2L3'
 process.load("RUAnalysis.MyAnalyzer.ak5PFchsJetCorrectionServices_cff")
 process.prefer(jetcorrserv)
 
-
-process.maxEvents = cms.untracked.PSet(
+if numEvents == 0:
+	process.maxEvents = cms.untracked.PSet(
 		input = cms.untracked.int32(-1)
+		)
+else:
+	process.maxEvents = cms.untracked.PSet(
+		input = cms.untracked.int32(numEvents)
 		)
 
 process.source = cms.Source("PoolSource",
