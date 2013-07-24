@@ -30,9 +30,13 @@
 // member functions
 //
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////// Function analyze small mass difference
 smallMassDiffVectors smallMassDiff( vector< TLorentzVector > p4StoreJets ){
 
 	double tmpMassDiff = 9999999;
+	double avgMassBjets = -99999;
+	double avgPtBjets = -99999;
 	Int_t bestMassIndex[4] = {-1, -1, -1, -1};
 	vector< TLorentzVector > p4MatchBjetsSmallMassDiff;
 	vector< double > massMatchBjets;
@@ -83,16 +87,66 @@ smallMassDiffVectors smallMassDiff( vector< TLorentzVector > p4StoreJets ){
 		ptMatchBjets.push_back ( tmpMass2.Pt() );
 		scalarPtMatchBjets.push_back ( scalarPtMatchBjets1 );
 		scalarPtMatchBjets.push_back ( scalarPtMatchBjets2 );
+		avgMassBjets = std::accumulate(massMatchBjets.begin(), massMatchBjets.end(), 0.0) / massMatchBjets.size();
+		avgPtBjets = std::accumulate(scalarPtMatchBjets.begin(), scalarPtMatchBjets.end(), 0.0) / scalarPtMatchBjets.size();
 	}
 	smallMassDiffVectors tmpVectors;
 	tmpVectors.p4SmallMassDiff = p4MatchBjetsSmallMassDiff;
 	tmpVectors.mass = massMatchBjets;
+	tmpVectors.avgMass = avgMassBjets;
 	tmpVectors.pt = ptMatchBjets;
 	tmpVectors.scalarPt = scalarPtMatchBjets;
+	tmpVectors.avgPt = avgPtBjets;
 
 
 	return tmpVectors;
 }
+////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////
+/////////// Function Compare two TLorentzVectors
+vector< TLorentzVector > compare2VectorsTLorentzVectors( vector< TLorentzVector > vec1, vector< TLorentzVector > vec2 ){
+
+	vector< TLorentzVector > diffVec;
+
+	for(unsigned int i = 0; i < vec1.size(); ++i) {
+		//cout << vec2[0].Pt() << " " << vec2[1].Pt() << " " << vec2[2].Pt() << " " << vec2[3].Pt() << endl; 
+		if ( ( vec1[i].Pt() == vec2[0].Pt() ) || ( vec1[i].Pt() == vec2[1].Pt() ) || ( vec1[i].Pt() == vec2[2].Pt() ) || ( vec1[i].Pt() == vec2[3].Pt() ) ) continue;
+		diffVec.push_back( vec1[i] );
+	}
+	return diffVec;
+}
+////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////
+/////// Function Step3 (dijet mass from one vector)
+s3VecMassSumPt s3Vectors( vector< TLorentzVector > p4Store ){
+
+	vector< TLorentzVector > p4Vec;
+	vector< double > massVec;
+	vector< double > scalarSumPtVec;
+
+	for(unsigned int iim = 0; iim < p4Store.size(); ++iim) {
+		for(unsigned int iin = 0; iin < p4Store.size(); ++iin) {
+			if ( iim >= iin ) continue;
+			//cout << "0 " << iin << " " << p4Store[iin].Pt() << endl;
+			TLorentzVector tmpp4 = p4Store[iim] + p4Store[iin];
+			double sumpt = p4Store[iim].Pt() + p4Store[iin].Pt();
+			p4Vec.push_back( tmpp4 );
+			massVec.push_back( tmpp4.M() );
+			scalarSumPtVec.push_back( sumpt );
+		}
+	}
+	s3VecMassSumPt tmpVectors;
+	tmpVectors.s3VectorTL = p4Vec;
+	tmpVectors.s3Mass = massVec;
+	tmpVectors.s3ScalarPt = scalarSumPtVec;
+
+
+	return tmpVectors;
+}
+///////////////////////////////////////////////////////////////////////////////////
+
 
 // ------------ method called for each event  ------------
 void
@@ -721,50 +775,71 @@ void MyAnalyzer::Analysis( vector< TLorentzVector > p4GenTruthB1Higgs, vector< T
 	vector< double > ptRecoBjetsCSVM = RecoBjetsCSVM_Vectors.pt;
 	vector< double > scalarPtRecoBjetsCSVM = RecoBjetsCSVM_Vectors.scalarPt;
 	vector< TLorentzVector > p4RecoBjetsCSVM_SmallMassDiff = RecoBjetsCSVM_Vectors.p4SmallMassDiff;
+	double avgMassRecoBjetsCSVM = RecoBjetsCSVM_Vectors.avgMass;
+	double avgPtRecoBjetsCSVM = RecoBjetsCSVM_Vectors.avgPt;
 
 	//// TLorentzVectors for cuts
-	vector< TLorentzVector > p4RecoBjetsCSVM_SmallMassDiff_cut50;
-	vector< TLorentzVector > p4RecoBjetsCSVM_SmallMassDiff_cut100;
-	vector< TLorentzVector > p4RecoBjetsCSVM_SmallMassDiff_cut150;
-	vector< TLorentzVector > p4RecoBjetsCSVM_SmallMassDiff_cut200;
+	vector< TLorentzVector > p4RecoBjetsCSVM_SmallMassDiff_1cut50;
+	vector< TLorentzVector > p4RecoBjetsCSVM_SmallMassDiff_1cut100;
+	vector< TLorentzVector > p4RecoBjetsCSVM_SmallMassDiff_1cut150;
+	vector< TLorentzVector > p4RecoBjetsCSVM_SmallMassDiff_1cut200;
 
-	for(unsigned int tiii = 0; tiii < massRecoBjetsCSVM.size(); ++tiii) {
+	for(unsigned int tii = 0; tii < massRecoBjetsCSVM.size(); ++tii) {
 		///// Simple plots
-		h_massRecoBjetsCSVM->Fill( massRecoBjetsCSVM[tiii] );
-		h_PtRecoBjetsCSVM->Fill( ptRecoBjetsCSVM[tiii], massRecoBjetsCSVM[tiii] );
-		h_scalarPtRecoBjetsCSVM->Fill( scalarPtRecoBjetsCSVM[tiii], massRecoBjetsCSVM[tiii] );
+		h_massRecoBjetsCSVM->Fill( massRecoBjetsCSVM[tii] );
+		if (tii==0) h_avgMassRecoBjetsCSVM->Fill( avgMassRecoBjetsCSVM );
+		if (tii==0) h_avgPtRecoBjetsCSVM->Fill( avgPtRecoBjetsCSVM, avgMassRecoBjetsCSVM );
+		h_PtRecoBjetsCSVM->Fill( ptRecoBjetsCSVM[tii], massRecoBjetsCSVM[tii] );
+		h_scalarPtRecoBjetsCSVM->Fill( scalarPtRecoBjetsCSVM[tii], massRecoBjetsCSVM[tii] );
+
+		//cout << " 1 " << massRecoBjetsCSVM[0] << " " << massRecoBjetsCSVM[1] << endl;
+		//	if ( massRecoBjetsCSVM[0] < 130 && massRecoBjetsCSVM[0] > 120 ) continue;
+		//	if ( massRecoBjetsCSVM[1] < 130 && massRecoBjetsCSVM[1] > 120 ) continue;
+		/*if ( massRecoBjetsCSVM[0] < 130 ) continue;
+		if ( massRecoBjetsCSVM[1] > 120 ) continue;
+		if ( massRecoBjetsCSVM[0] < 130 ) continue;
+		if ( massRecoBjetsCSVM[1] > 120 ) continue;*/
+		//cout << " 2 " << massRecoBjetsCSVM[0] << " " << massRecoBjetsCSVM[1] << endl;
 
 		///// Diagonal cuts
-		double iDiag=(double)tiii*10.0+50.0;
-		if( massRecoBjetsCSVM[tiii] < ( scalarPtRecoBjetsCSVM[tiii]-iDiag ) ) {
-			h_scalarPtRecoBjetsCSVM_cut50->Fill( scalarPtRecoBjetsCSVM[tiii], massRecoBjetsCSVM[tiii] );
-			h_massRecoBjetsCSVM_cut50->Fill( massRecoBjetsCSVM[tiii] );
-			h_scalarPtRecoBjetsCSVM_cut50->Fill( scalarPtRecoBjetsCSVM[tiii], massRecoBjetsCSVM[tiii] );
-			p4RecoBjetsCSVM_SmallMassDiff_cut50 = p4RecoBjetsCSVM_SmallMassDiff;
+		double iDiag=(double)tii*10.0+50.0;
+		if( massRecoBjetsCSVM[tii] < ( scalarPtRecoBjetsCSVM[tii]-iDiag ) ) {
+			h_scalarPtRecoBjetsCSVM_1cut50->Fill( scalarPtRecoBjetsCSVM[tii], massRecoBjetsCSVM[tii] );
+			h_massRecoBjetsCSVM_1cut50->Fill( massRecoBjetsCSVM[tii] );
+			h_scalarPtRecoBjetsCSVM_1cut50->Fill( scalarPtRecoBjetsCSVM[tii], massRecoBjetsCSVM[tii] );
+			if (tii==0) h_avgMassRecoBjetsCSVM_1cut50->Fill( avgMassRecoBjetsCSVM );
+			if (tii==0) h_avgPtRecoBjetsCSVM_1cut50->Fill( avgPtRecoBjetsCSVM, avgMassRecoBjetsCSVM);
+			p4RecoBjetsCSVM_SmallMassDiff_1cut50 = p4RecoBjetsCSVM_SmallMassDiff;
 		}
 							
-		double iiDiag=(double)tiii*10.0+100.0;
-		if( massRecoBjetsCSVM[tiii] < ( scalarPtRecoBjetsCSVM[tiii]-iiDiag ) ) {
-			h_scalarPtRecoBjetsCSVM_cut100->Fill( scalarPtRecoBjetsCSVM[tiii], massRecoBjetsCSVM[tiii] );
-			h_massRecoBjetsCSVM_cut100->Fill( massRecoBjetsCSVM[tiii] );
-			h_scalarPtRecoBjetsCSVM_cut100->Fill( scalarPtRecoBjetsCSVM[tiii], massRecoBjetsCSVM[tiii] );
-			p4RecoBjetsCSVM_SmallMassDiff_cut100 = p4RecoBjetsCSVM_SmallMassDiff;
+		double iiDiag=(double)tii*10.0+100.0;
+		if( massRecoBjetsCSVM[tii] < ( scalarPtRecoBjetsCSVM[tii]-iiDiag ) ) {
+			h_scalarPtRecoBjetsCSVM_1cut100->Fill( scalarPtRecoBjetsCSVM[tii], massRecoBjetsCSVM[tii] );
+			h_massRecoBjetsCSVM_1cut100->Fill( massRecoBjetsCSVM[tii] );
+			h_scalarPtRecoBjetsCSVM_1cut100->Fill( scalarPtRecoBjetsCSVM[tii], massRecoBjetsCSVM[tii] );
+			if (tii==0) h_avgMassRecoBjetsCSVM_1cut100->Fill( avgMassRecoBjetsCSVM );
+			if (tii==0) h_avgPtRecoBjetsCSVM_1cut100->Fill( avgPtRecoBjetsCSVM,avgMassRecoBjetsCSVM );
+			p4RecoBjetsCSVM_SmallMassDiff_1cut100 = p4RecoBjetsCSVM_SmallMassDiff;
 		}
 		
-		double iiiDiag=(double)tiii*10.0+150.0;
-		if( massRecoBjetsCSVM[tiii] < ( scalarPtRecoBjetsCSVM[tiii]-iiiDiag ) ) {
-			h_scalarPtRecoBjetsCSVM_cut150->Fill( scalarPtRecoBjetsCSVM[tiii], massRecoBjetsCSVM[tiii] );
-			h_massRecoBjetsCSVM_cut150->Fill( massRecoBjetsCSVM[tiii] );
-			h_scalarPtRecoBjetsCSVM_cut150->Fill( scalarPtRecoBjetsCSVM[tiii], massRecoBjetsCSVM[tiii] );
-			p4RecoBjetsCSVM_SmallMassDiff_cut150 = p4RecoBjetsCSVM_SmallMassDiff;
+		double iiiDiag=(double)tii*10.0+150.0;
+		if( massRecoBjetsCSVM[tii] < ( scalarPtRecoBjetsCSVM[tii]-iiiDiag ) ) {
+			h_scalarPtRecoBjetsCSVM_1cut150->Fill( scalarPtRecoBjetsCSVM[tii], massRecoBjetsCSVM[tii] );
+			h_massRecoBjetsCSVM_1cut150->Fill( massRecoBjetsCSVM[tii] );
+			h_scalarPtRecoBjetsCSVM_1cut150->Fill( scalarPtRecoBjetsCSVM[tii], massRecoBjetsCSVM[tii] );
+			if (tii==0) h_avgMassRecoBjetsCSVM_1cut150->Fill( avgMassRecoBjetsCSVM );
+			if (tii==0) h_avgPtRecoBjetsCSVM_1cut150->Fill( avgPtRecoBjetsCSVM, avgMassRecoBjetsCSVM );
+			p4RecoBjetsCSVM_SmallMassDiff_1cut150 = p4RecoBjetsCSVM_SmallMassDiff;
 		}
 
-		double ivDiag=(double)tiii*10.0+200.0;
-		if( massRecoBjetsCSVM[tiii] < ( scalarPtRecoBjetsCSVM[tiii]-ivDiag ) ){
-			h_scalarPtRecoBjetsCSVM_cut200->Fill( scalarPtRecoBjetsCSVM[tiii], massRecoBjetsCSVM[tiii] );
-			h_massRecoBjetsCSVM_cut200->Fill( massRecoBjetsCSVM[tiii] );
-			h_scalarPtRecoBjetsCSVM_cut200->Fill( scalarPtRecoBjetsCSVM[tiii], massRecoBjetsCSVM[tiii] );
-			p4RecoBjetsCSVM_SmallMassDiff_cut200 = p4RecoBjetsCSVM_SmallMassDiff;
+		double ivDiag=(double)tii*10.0+200.0;
+		if( massRecoBjetsCSVM[tii] < ( scalarPtRecoBjetsCSVM[tii]-ivDiag ) ){
+			h_scalarPtRecoBjetsCSVM_1cut200->Fill( scalarPtRecoBjetsCSVM[tii], massRecoBjetsCSVM[tii] );
+			h_massRecoBjetsCSVM_1cut200->Fill( massRecoBjetsCSVM[tii] );
+			h_scalarPtRecoBjetsCSVM_1cut200->Fill( scalarPtRecoBjetsCSVM[tii], massRecoBjetsCSVM[tii] );
+			if (tii==0) h_avgMassRecoBjetsCSVM_1cut200->Fill( avgMassRecoBjetsCSVM );
+			if (tii==0) h_avgPtRecoBjetsCSVM_1cut200->Fill( avgPtRecoBjetsCSVM, avgMassRecoBjetsCSVM );
+			p4RecoBjetsCSVM_SmallMassDiff_1cut200 = p4RecoBjetsCSVM_SmallMassDiff;
 		}
 
 	} 
@@ -779,50 +854,63 @@ void MyAnalyzer::Analysis( vector< TLorentzVector > p4GenTruthB1Higgs, vector< T
 	vector< double > ptRecoPartonFlavorBjetsCSVM = RecoPartonFlavorBjetsCSVM_Vectors.pt;
 	vector< double > scalarPtRecoPartonFlavorBjetsCSVM = RecoPartonFlavorBjetsCSVM_Vectors.scalarPt;
 	vector< TLorentzVector > p4RecoPartonFlavorBjetsCSVM_SmallMassDiff = RecoPartonFlavorBjetsCSVM_Vectors.p4SmallMassDiff;
+	double avgMassRecoPartonFlavorBjetsCSVM = RecoPartonFlavorBjetsCSVM_Vectors.avgMass;
+	double avgPtRecoPartonFlavorBjetsCSVM = RecoPartonFlavorBjetsCSVM_Vectors.avgPt;
 
 	//// TLorentzVectors for cuts
-	vector< TLorentzVector > p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut50;
-	vector< TLorentzVector > p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut100;
-	vector< TLorentzVector > p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut150;
-	vector< TLorentzVector > p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut200;
+	vector< TLorentzVector > p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_1cut50;
+	vector< TLorentzVector > p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_1cut100;
+	vector< TLorentzVector > p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_1cut150;
+	vector< TLorentzVector > p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_1cut200;
 
 	for(unsigned int tiii = 0; tiii < massRecoPartonFlavorBjetsCSVM.size(); ++tiii) {
 		///// Simple plots
 		h_massRecoPartonFlavorBjetsCSVM->Fill( massRecoPartonFlavorBjetsCSVM[tiii] );
 		h_PtRecoPartonFlavorBjetsCSVM->Fill( ptRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
 		h_scalarPtRecoPartonFlavorBjetsCSVM->Fill( scalarPtRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
+		if (tiii==0) h_avgMassRecoPartonFlavorBjetsCSVM->Fill( avgMassRecoPartonFlavorBjetsCSVM );
+		if (tiii==0) h_avgPtRecoPartonFlavorBjetsCSVM->Fill( avgPtRecoPartonFlavorBjetsCSVM, avgMassRecoPartonFlavorBjetsCSVM );
+
 
 		///// Diagonal cuts
 		double iDiag=(double)tiii*10.0+50.0;
 		if( massRecoPartonFlavorBjetsCSVM[tiii] < ( scalarPtRecoPartonFlavorBjetsCSVM[tiii]-iDiag ) ) {
-			h_scalarPtRecoPartonFlavorBjetsCSVM_cut50->Fill( scalarPtRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
-			h_massRecoPartonFlavorBjetsCSVM_cut50->Fill( massRecoPartonFlavorBjetsCSVM[tiii] );
-			h_scalarPtRecoPartonFlavorBjetsCSVM_cut50->Fill( scalarPtRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
-			p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut50 = p4RecoPartonFlavorBjetsCSVM_SmallMassDiff;
+			h_scalarPtRecoPartonFlavorBjetsCSVM_1cut50->Fill( scalarPtRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
+			h_massRecoPartonFlavorBjetsCSVM_1cut50->Fill( massRecoPartonFlavorBjetsCSVM[tiii] );
+			h_scalarPtRecoPartonFlavorBjetsCSVM_1cut50->Fill( scalarPtRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
+			if (tiii==0) h_avgMassRecoPartonFlavorBjetsCSVM_1cut50->Fill( avgMassRecoPartonFlavorBjetsCSVM );
+			if (tiii==0) h_avgPtRecoPartonFlavorBjetsCSVM_1cut50->Fill( avgPtRecoPartonFlavorBjetsCSVM, avgMassRecoPartonFlavorBjetsCSVM );
+			p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_1cut50 = p4RecoPartonFlavorBjetsCSVM_SmallMassDiff;
 		}
 		
 		double iiDiag=(double)tiii*10.0+100.0;
 		if( massRecoPartonFlavorBjetsCSVM[tiii] < ( scalarPtRecoPartonFlavorBjetsCSVM[tiii]-iiDiag ) ) {
-			h_scalarPtRecoPartonFlavorBjetsCSVM_cut100->Fill( scalarPtRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
-			h_massRecoPartonFlavorBjetsCSVM_cut100->Fill( massRecoPartonFlavorBjetsCSVM[tiii] );
-			h_scalarPtRecoPartonFlavorBjetsCSVM_cut100->Fill( scalarPtRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
-			p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut100 = p4RecoPartonFlavorBjetsCSVM_SmallMassDiff;
+			h_scalarPtRecoPartonFlavorBjetsCSVM_1cut100->Fill( scalarPtRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
+			h_massRecoPartonFlavorBjetsCSVM_1cut100->Fill( massRecoPartonFlavorBjetsCSVM[tiii] );
+			h_scalarPtRecoPartonFlavorBjetsCSVM_1cut100->Fill( scalarPtRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
+			if (tiii==0) h_avgMassRecoPartonFlavorBjetsCSVM_1cut100->Fill( avgMassRecoPartonFlavorBjetsCSVM );
+			if (tiii==0) h_avgPtRecoPartonFlavorBjetsCSVM_1cut100->Fill( avgPtRecoPartonFlavorBjetsCSVM, avgMassRecoPartonFlavorBjetsCSVM );
+			p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_1cut100 = p4RecoPartonFlavorBjetsCSVM_SmallMassDiff;
 		}
 		
 		double iiiDiag=(double)tiii*10.0+150.0;
 		if( massRecoPartonFlavorBjetsCSVM[tiii] < ( scalarPtRecoPartonFlavorBjetsCSVM[tiii]-iiiDiag ) ) {
-			h_scalarPtRecoPartonFlavorBjetsCSVM_cut150->Fill( scalarPtRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
-			h_massRecoPartonFlavorBjetsCSVM_cut150->Fill( massRecoPartonFlavorBjetsCSVM[tiii] );
-			h_scalarPtRecoPartonFlavorBjetsCSVM_cut150->Fill( scalarPtRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
-			p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut150 = p4RecoPartonFlavorBjetsCSVM_SmallMassDiff;
+			h_scalarPtRecoPartonFlavorBjetsCSVM_1cut150->Fill( scalarPtRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
+			h_massRecoPartonFlavorBjetsCSVM_1cut150->Fill( massRecoPartonFlavorBjetsCSVM[tiii] );
+			h_scalarPtRecoPartonFlavorBjetsCSVM_1cut150->Fill( scalarPtRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
+			if (tiii==0) h_avgMassRecoPartonFlavorBjetsCSVM_1cut150->Fill( avgMassRecoPartonFlavorBjetsCSVM );
+			if (tiii==0) h_avgPtRecoPartonFlavorBjetsCSVM_1cut150->Fill( avgPtRecoPartonFlavorBjetsCSVM, avgMassRecoPartonFlavorBjetsCSVM );
+			p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_1cut150 = p4RecoPartonFlavorBjetsCSVM_SmallMassDiff;
 		}
 
 		double ivDiag=(double)tiii*10.0+200.0;
 		if( massRecoPartonFlavorBjetsCSVM[tiii] < ( scalarPtRecoPartonFlavorBjetsCSVM[tiii]-ivDiag ) ) {
-			h_scalarPtRecoPartonFlavorBjetsCSVM_cut200->Fill( scalarPtRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
-			h_massRecoPartonFlavorBjetsCSVM_cut200->Fill( massRecoPartonFlavorBjetsCSVM[tiii] );
-			h_scalarPtRecoPartonFlavorBjetsCSVM_cut200->Fill( scalarPtRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
-			p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut200 = p4RecoPartonFlavorBjetsCSVM_SmallMassDiff;
+			h_scalarPtRecoPartonFlavorBjetsCSVM_1cut200->Fill( scalarPtRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
+			h_massRecoPartonFlavorBjetsCSVM_1cut200->Fill( massRecoPartonFlavorBjetsCSVM[tiii] );
+			h_scalarPtRecoPartonFlavorBjetsCSVM_1cut200->Fill( scalarPtRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
+			if (tiii==0) h_avgMassRecoPartonFlavorBjetsCSVM_1cut200->Fill( avgMassRecoPartonFlavorBjetsCSVM );
+			if (tiii==0) h_avgPtRecoPartonFlavorBjetsCSVM_1cut200->Fill( avgPtRecoPartonFlavorBjetsCSVM, avgMassRecoPartonFlavorBjetsCSVM );
+			p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_1cut200 = p4RecoPartonFlavorBjetsCSVM_SmallMassDiff;
 		}
 
 	} 
@@ -837,12 +925,14 @@ void MyAnalyzer::Analysis( vector< TLorentzVector > p4GenTruthB1Higgs, vector< T
 	vector< double > ptMatchBjets = MatchBjetsVectors.pt;
 	vector< double > scalarPtMatchBjets = MatchBjetsVectors.scalarPt;
 	vector< TLorentzVector > p4MatchBjetsSmallMassDiff = MatchBjetsVectors.p4SmallMassDiff;
+	double avgMassMatchBjets = MatchBjetsVectors.avgMass;
+	double avgPtMatchBjets = MatchBjetsVectors.avgPt;
 
 	//// TLorentzVectors for cuts
-	vector< TLorentzVector > p4MatchBjetsSmallMassDiff_cut50;
-	vector< TLorentzVector > p4MatchBjetsSmallMassDiff_cut100;
-	vector< TLorentzVector > p4MatchBjetsSmallMassDiff_cut150;
-	vector< TLorentzVector > p4MatchBjetsSmallMassDiff_cut200;
+	vector< TLorentzVector > p4MatchBjetsSmallMassDiff_1cut50;
+	vector< TLorentzVector > p4MatchBjetsSmallMassDiff_1cut100;
+	vector< TLorentzVector > p4MatchBjetsSmallMassDiff_1cut150;
+	vector< TLorentzVector > p4MatchBjetsSmallMassDiff_1cut200;
 
 	for(unsigned int ti = 0; ti < massMatchBjets.size(); ++ti) {
 
@@ -850,54 +940,65 @@ void MyAnalyzer::Analysis( vector< TLorentzVector > p4GenTruthB1Higgs, vector< T
 		h_massMatchBjets->Fill( massMatchBjets[ti] );
 		h_PtMatchBjets->Fill( ptMatchBjets[ti], massMatchBjets[ti] );
 		h_scalarPtMatchBjets->Fill( scalarPtMatchBjets[ti], massMatchBjets[ti] );
+		if (ti==0) h_avgMassMatchBjets->Fill( avgMassMatchBjets );
+		if (ti==0) h_avgPtMatchBjets->Fill( avgPtMatchBjets, avgMassMatchBjets );
 
-		//if ( massMatchBjets[ti] > 200 ) continue;
 
 		///// Diagonal cuts
 		double iDiag=(double)ti*10.0+50.0;
 		if( massMatchBjets[ti] < ( scalarPtMatchBjets[ti]-iDiag ) ){
-			h_scalarPtMatchBjets_cut50->Fill( scalarPtMatchBjets[ti], massMatchBjets[ti] );
-			h_massMatchBjets_cut50->Fill( massMatchBjets[ti] );
-			h_scalarPtMatchBjets_cut50->Fill( scalarPtMatchBjets[ti], massMatchBjets[ti] );
-			p4MatchBjetsSmallMassDiff_cut50 = p4MatchBjetsSmallMassDiff;
+			h_scalarPtMatchBjets_1cut50->Fill( scalarPtMatchBjets[ti], massMatchBjets[ti] );
+			h_massMatchBjets_1cut50->Fill( massMatchBjets[ti] );
+			h_scalarPtMatchBjets_1cut50->Fill( scalarPtMatchBjets[ti], massMatchBjets[ti] );
+			if (ti==0) h_avgMassMatchBjets_1cut50->Fill( avgMassMatchBjets );
+			if (ti==0) h_avgPtMatchBjets_1cut50->Fill( avgPtMatchBjets, avgMassMatchBjets );
+			p4MatchBjetsSmallMassDiff_1cut50 = p4MatchBjetsSmallMassDiff;
 		}
 
 		double iiDiag=(double)ti*10.0+100.0;
 		if( massMatchBjets[ti] < ( scalarPtMatchBjets[ti]-iiDiag ) ) {
-			h_scalarPtMatchBjets_cut100->Fill( scalarPtMatchBjets[ti], massMatchBjets[ti] );
-			h_massMatchBjets_cut100->Fill( massMatchBjets[ti] );
-			h_scalarPtMatchBjets_cut100->Fill( scalarPtMatchBjets[ti], massMatchBjets[ti] );
-			p4MatchBjetsSmallMassDiff_cut100 = p4MatchBjetsSmallMassDiff;
+			h_scalarPtMatchBjets_1cut100->Fill( scalarPtMatchBjets[ti], massMatchBjets[ti] );
+			h_massMatchBjets_1cut100->Fill( massMatchBjets[ti] );
+			h_scalarPtMatchBjets_1cut100->Fill( scalarPtMatchBjets[ti], massMatchBjets[ti] );
+			if (ti==0) h_avgMassMatchBjets_1cut100->Fill( avgMassMatchBjets );
+			if (ti==0) h_avgPtMatchBjets_1cut100->Fill( avgPtMatchBjets, avgMassMatchBjets );
+			p4MatchBjetsSmallMassDiff_1cut100 = p4MatchBjetsSmallMassDiff;
 		}
 	
 		double iiiDiag=(double)ti*10.0+150.0;
 		if( massMatchBjets[ti] < ( scalarPtMatchBjets[ti]-iiiDiag ) ) {
-			h_scalarPtMatchBjets_cut150->Fill( scalarPtMatchBjets[ti], massMatchBjets[ti] );
-			h_massMatchBjets_cut150->Fill( massMatchBjets[ti] );
-			h_scalarPtMatchBjets_cut150->Fill( scalarPtMatchBjets[ti], massMatchBjets[ti] );
-			p4MatchBjetsSmallMassDiff_cut150 = p4MatchBjetsSmallMassDiff;
+			h_scalarPtMatchBjets_1cut150->Fill( scalarPtMatchBjets[ti], massMatchBjets[ti] );
+			h_massMatchBjets_1cut150->Fill( massMatchBjets[ti] );
+			h_scalarPtMatchBjets_1cut150->Fill( scalarPtMatchBjets[ti], massMatchBjets[ti] );
+			if (ti==0) h_avgMassMatchBjets_1cut150->Fill( avgMassMatchBjets );
+			if (ti==0) h_avgPtMatchBjets_1cut150->Fill( avgPtMatchBjets, avgMassMatchBjets );
+			p4MatchBjetsSmallMassDiff_1cut150 = p4MatchBjetsSmallMassDiff;
 		}
 
 		double ivDiag=(double)ti*10.0+200.0;
 		if( massMatchBjets[ti] < ( scalarPtMatchBjets[ti]-ivDiag ) ) {
-			h_scalarPtMatchBjets_cut200->Fill( scalarPtMatchBjets[ti], massMatchBjets[ti] );
-			h_massMatchBjets_cut200->Fill( massMatchBjets[ti] );
-			h_scalarPtMatchBjets_cut200->Fill( scalarPtMatchBjets[ti], massMatchBjets[ti] );
-			p4MatchBjetsSmallMassDiff_cut200 = p4MatchBjetsSmallMassDiff;
+			h_scalarPtMatchBjets_1cut200->Fill( scalarPtMatchBjets[ti], massMatchBjets[ti] );
+			h_massMatchBjets_1cut200->Fill( massMatchBjets[ti] );
+			h_scalarPtMatchBjets_1cut200->Fill( scalarPtMatchBjets[ti], massMatchBjets[ti] );
+			if (ti==0) h_avgMassMatchBjets_1cut200->Fill( avgMassMatchBjets );
+			if (ti==0) h_avgPtMatchBjets_1cut200->Fill( avgPtMatchBjets, avgMassMatchBjets );
+			p4MatchBjetsSmallMassDiff_1cut200 = p4MatchBjetsSmallMassDiff;
 		}
 	}
-	//cout << p4MatchBjetsSmallMassDiff.size() << " " << p4MatchBjetsSmallMassDiff_cut50.size() << " " << p4MatchBjetsSmallMassDiff_cut100.size() << " " << p4MatchBjetsSmallMassDiff_cut150.size() << " " << p4MatchBjetsSmallMassDiff_cut200.size() << " " << endl;
+	//cout << p4MatchBjetsSmallMassDiff.size() << " " << p4MatchBjetsSmallMassDiff_1cut50.size() << " " << p4MatchBjetsSmallMassDiff_1cut100.size() << " " << p4MatchBjetsSmallMassDiff_1cut150.size() << " " << p4MatchBjetsSmallMassDiff_1cut200.size() << " " << endl;
 	///////////////////////////////////////////////////////////////////
 
 	// MatchBjets from Higgs
 	vector< TLorentzVector > p4MatchBjetsHiggsSmallMassDiff;
-	vector< TLorentzVector > p4MatchBjetsHiggsSmallMassDiff_cut50;
-	vector< TLorentzVector > p4MatchBjetsHiggsSmallMassDiff_cut100;
-	vector< TLorentzVector > p4MatchBjetsHiggsSmallMassDiff_cut150;
-	vector< TLorentzVector > p4MatchBjetsHiggsSmallMassDiff_cut200;
+	vector< TLorentzVector > p4MatchBjetsHiggsSmallMassDiff_1cut50;
+	vector< TLorentzVector > p4MatchBjetsHiggsSmallMassDiff_1cut100;
+	vector< TLorentzVector > p4MatchBjetsHiggsSmallMassDiff_1cut150;
+	vector< TLorentzVector > p4MatchBjetsHiggsSmallMassDiff_1cut200;
 	vector< double > massMatchBjetsHiggs;
 	vector< double > ptMatchBjetsHiggs;
 	vector< double > scalarPtMatchBjetsHiggs;
+	double avgMassMatchBjetsHiggs = -99999;
+	double avgPtMatchBjetsHiggs = -99999;
 
 	if ( p4MatchB1Higgs.size() == 2 && p4MatchB2Higgs.size() == 2 ){
 		
@@ -917,6 +1018,8 @@ void MyAnalyzer::Analysis( vector< TLorentzVector > p4GenTruthB1Higgs, vector< T
 		ptMatchBjetsHiggs.push_back ( tmpMassMatchBjetsHiggs2.Pt() );
 		scalarPtMatchBjetsHiggs.push_back ( scalarPtMatchBjetsHiggs1 );
 		scalarPtMatchBjetsHiggs.push_back ( scalarPtMatchBjetsHiggs2 );
+		avgMassMatchBjetsHiggs = std::accumulate(massMatchBjetsHiggs.begin(), massMatchBjetsHiggs.end(), 0.0) / massMatchBjetsHiggs.size();
+		avgPtMatchBjetsHiggs = std::accumulate(scalarPtMatchBjetsHiggs.begin(), scalarPtMatchBjetsHiggs.end(), 0.0) / scalarPtMatchBjetsHiggs.size();
 	}
 
 	h_massMatchBjetsHiggs_num->Fill( massMatchBjetsHiggs.size() );	/// test number of MatchBjetsHiggs
@@ -925,50 +1028,61 @@ void MyAnalyzer::Analysis( vector< TLorentzVector > p4GenTruthB1Higgs, vector< T
 		h_massMatchBjetsHiggs->Fill( massMatchBjetsHiggs[tiv] );
 		h_PtMatchBjetsHiggs->Fill( ptMatchBjetsHiggs[tiv], massMatchBjetsHiggs[tiv] );
 		h_scalarPtMatchBjetsHiggs->Fill( scalarPtMatchBjetsHiggs[tiv], massMatchBjetsHiggs[tiv] );
+		if (tiv==0) h_avgMassMatchBjetsHiggs->Fill( avgMassMatchBjetsHiggs );
+		if (tiv==0) h_avgPtMatchBjetsHiggs->Fill( avgPtMatchBjetsHiggs, avgMassMatchBjetsHiggs );
+
 
 		///// Diagonal cuts
 		double iDiag=(double)tiv*10.0+50.0;
 		if( massMatchBjetsHiggs[tiv] < ( scalarPtMatchBjetsHiggs[tiv]-iDiag ) ) {
-			h_scalarPtMatchBjetsHiggs_cut50->Fill( scalarPtMatchBjetsHiggs[tiv], massMatchBjetsHiggs[tiv] );
-			h_massMatchBjetsHiggs_cut50->Fill( massMatchBjetsHiggs[tiv] );
-			h_scalarPtMatchBjetsHiggs_cut50->Fill( scalarPtMatchBjetsHiggs[tiv], massMatchBjetsHiggs[tiv] );
-			p4MatchBjetsHiggsSmallMassDiff_cut50.push_back( p4MatchB1Higgs[0] );
-			p4MatchBjetsHiggsSmallMassDiff_cut50.push_back( p4MatchB1Higgs[1] );
-			p4MatchBjetsHiggsSmallMassDiff_cut50.push_back( p4MatchB2Higgs[0] );
-			p4MatchBjetsHiggsSmallMassDiff_cut50.push_back( p4MatchB2Higgs[1] );
+			h_scalarPtMatchBjetsHiggs_1cut50->Fill( scalarPtMatchBjetsHiggs[tiv], massMatchBjetsHiggs[tiv] );
+			h_massMatchBjetsHiggs_1cut50->Fill( massMatchBjetsHiggs[tiv] );
+			h_scalarPtMatchBjetsHiggs_1cut50->Fill( scalarPtMatchBjetsHiggs[tiv], massMatchBjetsHiggs[tiv] );
+			if (tiv==0) h_avgMassMatchBjetsHiggs_1cut50->Fill( avgMassMatchBjetsHiggs );
+			if (tiv==0) h_avgPtMatchBjetsHiggs_1cut50->Fill( avgPtMatchBjetsHiggs, avgMassMatchBjetsHiggs );
+			p4MatchBjetsHiggsSmallMassDiff_1cut50.push_back( p4MatchB1Higgs[0] );
+			p4MatchBjetsHiggsSmallMassDiff_1cut50.push_back( p4MatchB1Higgs[1] );
+			p4MatchBjetsHiggsSmallMassDiff_1cut50.push_back( p4MatchB2Higgs[0] );
+			p4MatchBjetsHiggsSmallMassDiff_1cut50.push_back( p4MatchB2Higgs[1] );
 		}
 
 		double iiDiag=(double)tiv*10.0+100.0;
 		if( massMatchBjetsHiggs[tiv] < ( scalarPtMatchBjetsHiggs[tiv]-iiDiag ) ){
-			h_scalarPtMatchBjetsHiggs_cut100->Fill( scalarPtMatchBjetsHiggs[tiv], massMatchBjetsHiggs[tiv] );
-			h_massMatchBjetsHiggs_cut100->Fill( massMatchBjetsHiggs[tiv] );
-			h_scalarPtMatchBjetsHiggs_cut100->Fill( scalarPtMatchBjetsHiggs[tiv], massMatchBjetsHiggs[tiv] );
-			p4MatchBjetsHiggsSmallMassDiff_cut100.push_back( p4MatchB1Higgs[0] );
-			p4MatchBjetsHiggsSmallMassDiff_cut100.push_back( p4MatchB1Higgs[1] );
-			p4MatchBjetsHiggsSmallMassDiff_cut100.push_back( p4MatchB2Higgs[0] );
-			p4MatchBjetsHiggsSmallMassDiff_cut100.push_back( p4MatchB2Higgs[1] );
+			h_scalarPtMatchBjetsHiggs_1cut100->Fill( scalarPtMatchBjetsHiggs[tiv], massMatchBjetsHiggs[tiv] );
+			h_massMatchBjetsHiggs_1cut100->Fill( massMatchBjetsHiggs[tiv] );
+			h_scalarPtMatchBjetsHiggs_1cut100->Fill( scalarPtMatchBjetsHiggs[tiv], massMatchBjetsHiggs[tiv] );
+			if (tiv==0) h_avgMassMatchBjetsHiggs_1cut100->Fill( avgMassMatchBjetsHiggs );
+			if (tiv==0) h_avgPtMatchBjetsHiggs_1cut100->Fill( avgPtMatchBjetsHiggs, avgMassMatchBjetsHiggs );
+			p4MatchBjetsHiggsSmallMassDiff_1cut100.push_back( p4MatchB1Higgs[0] );
+			p4MatchBjetsHiggsSmallMassDiff_1cut100.push_back( p4MatchB1Higgs[1] );
+			p4MatchBjetsHiggsSmallMassDiff_1cut100.push_back( p4MatchB2Higgs[0] );
+			p4MatchBjetsHiggsSmallMassDiff_1cut100.push_back( p4MatchB2Higgs[1] );
 		}
 
 		double iiiDiag=(double)tiv*10.0+150.0;
 		if( massMatchBjetsHiggs[tiv] < ( scalarPtMatchBjetsHiggs[tiv]-iiiDiag ) ) {
-			h_scalarPtMatchBjetsHiggs_cut150->Fill( scalarPtMatchBjetsHiggs[tiv], massMatchBjetsHiggs[tiv] );
-			h_massMatchBjetsHiggs_cut150->Fill( massMatchBjetsHiggs[tiv] );
-			h_scalarPtMatchBjetsHiggs_cut150->Fill( scalarPtMatchBjetsHiggs[tiv], massMatchBjetsHiggs[tiv] );
-			p4MatchBjetsHiggsSmallMassDiff_cut150.push_back( p4MatchB1Higgs[0] );
-			p4MatchBjetsHiggsSmallMassDiff_cut150.push_back( p4MatchB1Higgs[1] );
-			p4MatchBjetsHiggsSmallMassDiff_cut150.push_back( p4MatchB2Higgs[0] );
-			p4MatchBjetsHiggsSmallMassDiff_cut150.push_back( p4MatchB2Higgs[1] );
+			h_scalarPtMatchBjetsHiggs_1cut150->Fill( scalarPtMatchBjetsHiggs[tiv], massMatchBjetsHiggs[tiv] );
+			h_massMatchBjetsHiggs_1cut150->Fill( massMatchBjetsHiggs[tiv] );
+			h_scalarPtMatchBjetsHiggs_1cut150->Fill( scalarPtMatchBjetsHiggs[tiv], massMatchBjetsHiggs[tiv] );
+			if (tiv==0) h_avgMassMatchBjetsHiggs_1cut150->Fill( avgMassMatchBjetsHiggs );
+			if (tiv==0) h_avgPtMatchBjetsHiggs_1cut150->Fill( avgPtMatchBjetsHiggs, avgMassMatchBjetsHiggs );
+			p4MatchBjetsHiggsSmallMassDiff_1cut150.push_back( p4MatchB1Higgs[0] );
+			p4MatchBjetsHiggsSmallMassDiff_1cut150.push_back( p4MatchB1Higgs[1] );
+			p4MatchBjetsHiggsSmallMassDiff_1cut150.push_back( p4MatchB2Higgs[0] );
+			p4MatchBjetsHiggsSmallMassDiff_1cut150.push_back( p4MatchB2Higgs[1] );
 		}
 
 		double ivDiag=(double)tiv*10.0+200.0;
 		if( massMatchBjetsHiggs[tiv] < ( scalarPtMatchBjetsHiggs[tiv]-ivDiag ) ) {
-			h_scalarPtMatchBjetsHiggs_cut200->Fill( scalarPtMatchBjetsHiggs[tiv], massMatchBjetsHiggs[tiv] );
-			h_massMatchBjetsHiggs_cut200->Fill( massMatchBjetsHiggs[tiv] );
-			h_scalarPtMatchBjetsHiggs_cut200->Fill( scalarPtMatchBjetsHiggs[tiv], massMatchBjetsHiggs[tiv] );
-			p4MatchBjetsHiggsSmallMassDiff_cut200.push_back( p4MatchB1Higgs[0] );
-			p4MatchBjetsHiggsSmallMassDiff_cut200.push_back( p4MatchB1Higgs[1] );
-			p4MatchBjetsHiggsSmallMassDiff_cut200.push_back( p4MatchB2Higgs[0] );
-			p4MatchBjetsHiggsSmallMassDiff_cut200.push_back( p4MatchB2Higgs[1] );
+			h_scalarPtMatchBjetsHiggs_1cut200->Fill( scalarPtMatchBjetsHiggs[tiv], massMatchBjetsHiggs[tiv] );
+			h_massMatchBjetsHiggs_1cut200->Fill( massMatchBjetsHiggs[tiv] );
+			h_scalarPtMatchBjetsHiggs_1cut200->Fill( scalarPtMatchBjetsHiggs[tiv], massMatchBjetsHiggs[tiv] );
+			if (tiv==0) h_avgMassMatchBjetsHiggs_1cut200->Fill( avgMassMatchBjetsHiggs );
+			if (tiv==0) h_avgPtMatchBjetsHiggs_1cut200->Fill( avgPtMatchBjetsHiggs, avgMassMatchBjetsHiggs );
+			p4MatchBjetsHiggsSmallMassDiff_1cut200.push_back( p4MatchB1Higgs[0] );
+			p4MatchBjetsHiggsSmallMassDiff_1cut200.push_back( p4MatchB1Higgs[1] );
+			p4MatchBjetsHiggsSmallMassDiff_1cut200.push_back( p4MatchB2Higgs[0] );
+			p4MatchBjetsHiggsSmallMassDiff_1cut200.push_back( p4MatchB2Higgs[1] );
 		}
 
 	}
@@ -1005,523 +1119,484 @@ void MyAnalyzer::Analysis( vector< TLorentzVector > p4GenTruthB1Higgs, vector< T
 
 	///////////////////////////////////////
 	/////////// STEP 2 - 3 ////////////////
-	/////// Mass jj vs sum pt jj //////////
+	/////// Mass dijet vs sum pt dijet //////////
 	///////////////////////////////////////
-
-	///// Match All jets
-	vector< TLorentzVector > p4MatchjjWOMatchBjets;
-	vector< TLorentzVector > p4MatchjjWOMatchBjets_cut50;
-	vector< TLorentzVector > p4MatchjjWOMatchBjets_cut100;
-	vector< TLorentzVector > p4MatchjjWOMatchBjets_cut150;
-	vector< TLorentzVector > p4MatchjjWOMatchBjets_cut200;
-	vector< TLorentzVector > p4jWOMatchBjets;
-	vector< TLorentzVector > p4jWOMatchBjets_cut50;
-	vector< TLorentzVector > p4jWOMatchBjets_cut100;
-	vector< TLorentzVector > p4jWOMatchBjets_cut150;
-	vector< TLorentzVector > p4jWOMatchBjets_cut200;
-	vector< double > scalarsumMatchjjWOMatchBjetspt;
-	vector< double > scalarsumMatchjjWOMatchBjetspt_cut50;
-	vector< double > scalarsumMatchjjWOMatchBjetspt_cut100;
-	vector< double > scalarsumMatchjjWOMatchBjetspt_cut150;
-	vector< double > scalarsumMatchjjWOMatchBjetspt_cut200;
-
-	if ( p4MatchTruthAlljets.size() > 5 && p4MatchTruthBjets.size() > 3 ){
-		for(unsigned int iii = 0; iii < p4MatchTruthAlljets.size(); ++iii) {
-
-			////// Step 2 - dijet mass vs sum pt of jets
-			for(unsigned int iij = 0; iij < p4MatchTruthAlljets.size(); ++iij) {
-				if ( iii==iij ) continue;
-				TLorentzVector p4jj = p4MatchTruthAlljets[iii] + p4MatchTruthAlljets[iij];
-				double sumjjpt = p4MatchTruthAlljets[iii].Pt() + p4MatchTruthAlljets[iij].Pt();
-				h_matchjj_masspt->Fill( sumjjpt, p4jj.M() );
-			}
-			
-			////// Step 3 - dijet mass vs sum pt of jets without bs from step 1
-			//cout << "1 " << iii << " " << p4MatchTruthAlljets[iii].Pt() << " " << p4MatchTruthAlljets.size() << endl;
-			if ( p4MatchBjetsSmallMassDiff.size() == 4 ){
-				//cout << p4MatchBjetsSmallMassDiff[0].Pt() << " " << p4MatchBjetsSmallMassDiff[1].Pt() << " " << p4MatchBjetsSmallMassDiff[2].Pt() << " " << p4MatchBjetsSmallMassDiff[3].Pt() << endl; 
-				if ( ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff[0] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff[1] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff[2] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff[3] ) ) continue;
-				//cout << "3 " << iii << " " << p4MatchTruthAlljets[iii].Pt() << endl;
-				p4jWOMatchBjets.push_back( p4MatchTruthAlljets[iii] );
-			}
-
-			if ( p4MatchBjetsSmallMassDiff_cut50.size() == 4 ){
-				if ( ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff_cut50[0] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff_cut50[1] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff_cut50[2] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff_cut50[3] ) )continue;
-				p4jWOMatchBjets_cut50.push_back( p4MatchTruthAlljets[iii] );
-			}
-
-			if ( p4MatchBjetsSmallMassDiff_cut100.size() == 4 ){
-				if ( ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff_cut100[0] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff_cut100[1] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff_cut100[2] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff_cut100[3] ) )continue;
-				p4jWOMatchBjets_cut100.push_back( p4MatchTruthAlljets[iii] );
-			}
-
-			if ( p4MatchBjetsSmallMassDiff_cut150.size() == 4 ){
-				if ( ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff_cut150[0] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff_cut150[1] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff_cut150[2] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff_cut150[3] ) )continue;
-				p4jWOMatchBjets_cut150.push_back( p4MatchTruthAlljets[iii] );
-			}
-
-			if ( p4MatchBjetsSmallMassDiff_cut200.size() == 4 ){
-				if ( ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff_cut200[0] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff_cut200[1] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff_cut200[2] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsSmallMassDiff_cut200[3] ) )continue;
-				p4jWOMatchBjets_cut200.push_back( p4MatchTruthAlljets[iii] );
-			}
-		}
-	}
-	//cout << " 10 " << p4jWOMatchBjets.size() << " " << p4jWOMatchBjets_cut50.size() << " " << p4jWOMatchBjets_cut100.size() << " " << p4jWOMatchBjets_cut150.size() << " " << p4jWOMatchBjets_cut200.size() << " " << endl;
-			
-	for(unsigned int iim = 0; iim < p4jWOMatchBjets.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWOMatchBjets.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWOMatchBjets[iin].Pt() << endl;
-			TLorentzVector tmpp4MatchjjWOMatchBjets = p4jWOMatchBjets[iim] + p4jWOMatchBjets[iin];
-			double sumMatchjjWOMatchBjetspt = p4jWOMatchBjets[iim].Pt() + p4jWOMatchBjets[iin].Pt();
-			p4MatchjjWOMatchBjets.push_back( tmpp4MatchjjWOMatchBjets );
-			scalarsumMatchjjWOMatchBjetspt.push_back( sumMatchjjWOMatchBjetspt );
-			h_matchjjWOMatchBjets_masspt->Fill( sumMatchjjWOMatchBjetspt, tmpp4MatchjjWOMatchBjets.M() );
-			h_massmatchjjWOMatchBjets->Fill( tmpp4MatchjjWOMatchBjets.M() );
-		}
-	}
-
-	for(unsigned int iim = 0; iim < p4jWOMatchBjets_cut50.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWOMatchBjets_cut50.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWOMatchBjets_cut50[iin].Pt() << endl;
-			TLorentzVector tmpp4MatchjjWOMatchBjets_cut50 = p4jWOMatchBjets_cut50[iim] + p4jWOMatchBjets_cut50[iin];
-			double sumMatchjjWOMatchBjetspt_cut50 = p4jWOMatchBjets_cut50[iim].Pt() + p4jWOMatchBjets_cut50[iin].Pt();
-			p4MatchjjWOMatchBjets_cut50.push_back( tmpp4MatchjjWOMatchBjets_cut50 );
-			scalarsumMatchjjWOMatchBjetspt_cut50.push_back( sumMatchjjWOMatchBjetspt_cut50 );
-			h_matchjjWOMatchBjets_masspt_cut50->Fill( sumMatchjjWOMatchBjetspt_cut50, tmpp4MatchjjWOMatchBjets_cut50.M() );
-			h_massmatchjjWOMatchBjets_cut50->Fill( tmpp4MatchjjWOMatchBjets_cut50.M() );
-		}
-	}
-
-	for(unsigned int iim = 0; iim < p4jWOMatchBjets_cut100.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWOMatchBjets_cut100.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWOMatchBjets_cut100[iin].Pt() << endl;
-			TLorentzVector tmpp4MatchjjWOMatchBjets_cut100 = p4jWOMatchBjets_cut100[iim] + p4jWOMatchBjets_cut100[iin];
-			double sumMatchjjWOMatchBjetspt_cut100 = p4jWOMatchBjets_cut100[iim].Pt() + p4jWOMatchBjets_cut100[iin].Pt();
-			p4MatchjjWOMatchBjets_cut100.push_back( tmpp4MatchjjWOMatchBjets_cut100 );
-			scalarsumMatchjjWOMatchBjetspt_cut100.push_back( sumMatchjjWOMatchBjetspt_cut100 );
-			h_matchjjWOMatchBjets_masspt_cut100->Fill( sumMatchjjWOMatchBjetspt_cut100, tmpp4MatchjjWOMatchBjets_cut100.M() );
-			h_massmatchjjWOMatchBjets_cut100->Fill( tmpp4MatchjjWOMatchBjets_cut100.M() );
-		}
-	}
-
-	for(unsigned int iim = 0; iim < p4jWOMatchBjets_cut150.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWOMatchBjets_cut150.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWOMatchBjets_cut150[iin].Pt() << endl;
-			TLorentzVector tmpp4MatchjjWOMatchBjets_cut150 = p4jWOMatchBjets_cut150[iim] + p4jWOMatchBjets_cut150[iin];
-			double sumMatchjjWOMatchBjetspt_cut150 = p4jWOMatchBjets_cut150[iim].Pt() + p4jWOMatchBjets_cut150[iin].Pt();
-			p4MatchjjWOMatchBjets_cut150.push_back( tmpp4MatchjjWOMatchBjets_cut150 );
-			scalarsumMatchjjWOMatchBjetspt_cut150.push_back( sumMatchjjWOMatchBjetspt_cut150 );
-			h_matchjjWOMatchBjets_masspt_cut150->Fill( sumMatchjjWOMatchBjetspt_cut150, tmpp4MatchjjWOMatchBjets_cut150.M() );
-			h_massmatchjjWOMatchBjets_cut150->Fill( tmpp4MatchjjWOMatchBjets_cut150.M() );
-		}
-	}
-
-	for(unsigned int iim = 0; iim < p4jWOMatchBjets_cut200.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWOMatchBjets_cut200.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWOMatchBjets_cut200[iin].Pt() << endl;
-			TLorentzVector tmpp4MatchjjWOMatchBjets_cut200 = p4jWOMatchBjets_cut200[iim] + p4jWOMatchBjets_cut200[iin];
-			double sumMatchjjWOMatchBjetspt_cut200 = p4jWOMatchBjets_cut200[iim].Pt() + p4jWOMatchBjets_cut200[iin].Pt();
-			p4MatchjjWOMatchBjets_cut200.push_back( tmpp4MatchjjWOMatchBjets_cut200 );
-			scalarsumMatchjjWOMatchBjetspt_cut200.push_back( sumMatchjjWOMatchBjetspt_cut200 );
-			h_matchjjWOMatchBjets_masspt_cut200->Fill( sumMatchjjWOMatchBjetspt_cut200, tmpp4MatchjjWOMatchBjets_cut200.M() );
-			h_massmatchjjWOMatchBjets_cut200->Fill( tmpp4MatchjjWOMatchBjets_cut200.M() );
-		}
-	}
-	//////////////////////////////////////////////////////////////////////////////////
-
-
-	///// Match jets from Higgs
-	vector< TLorentzVector > p4MatchjjWOMatchBjetsHiggs;
-	vector< TLorentzVector > p4MatchjjWOMatchBjetsHiggs_cut50;
-	vector< TLorentzVector > p4MatchjjWOMatchBjetsHiggs_cut100;
-	vector< TLorentzVector > p4MatchjjWOMatchBjetsHiggs_cut150;
-	vector< TLorentzVector > p4MatchjjWOMatchBjetsHiggs_cut200;
-	vector< TLorentzVector > p4jWOMatchBjetsHiggs;
-	vector< TLorentzVector > p4jWOMatchBjetsHiggs_cut50;
-	vector< TLorentzVector > p4jWOMatchBjetsHiggs_cut100;
-	vector< TLorentzVector > p4jWOMatchBjetsHiggs_cut150;
-	vector< TLorentzVector > p4jWOMatchBjetsHiggs_cut200;
-	vector< double > scalarsumMatchjjWOMatchBjetsHiggspt;
-	vector< double > scalarsumMatchjjWOMatchBjetsHiggspt_cut50;
-	vector< double > scalarsumMatchjjWOMatchBjetsHiggspt_cut100;
-	vector< double > scalarsumMatchjjWOMatchBjetsHiggspt_cut150;
-	vector< double > scalarsumMatchjjWOMatchBjetsHiggspt_cut200;
-
-	if ( p4MatchTruthAlljets.size() > 5 && p4MatchB1Higgs.size() == 2 && p4MatchB2Higgs.size() == 2 ){
-		for(unsigned int iii = 0; iii < p4MatchTruthAlljets.size(); ++iii) {
-
-			////// Step 2 - dijet mass vs sum pt of jets
-			for(unsigned int iij = 0; iij < p4MatchTruthAlljets.size(); ++iij) {
-				if ( iii==iij ) continue;
-				TLorentzVector p4jjHiggs = p4MatchTruthAlljets[iii] + p4MatchTruthAlljets[iij];
-				double sumjjHiggspt = p4MatchTruthAlljets[iii].Pt() + p4MatchTruthAlljets[iij].Pt();
-				h_matchjjHiggs_masspt->Fill( sumjjHiggspt, p4jjHiggs.M() );
-			}
-			
-			////// Step 3 - dijet mass vs sum pt of jets without bs from step 1
-			//cout << "1 " << iii << " " << p4MatchTruthAlljets[iii].Pt() << endl;
-			if ( p4MatchBjetsHiggsSmallMassDiff.size() == 4 ){
-				if ( ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff[0] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff[1] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff[2] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff[3] ) )continue;
-				//cout << "3 " << iii << " " << p4MatchTruthAlljets[iii].Pt() << endl;
-				p4jWOMatchBjetsHiggs.push_back( p4MatchTruthAlljets[iii] );
-			}
-
-			if ( p4MatchBjetsHiggsSmallMassDiff_cut50.size() == 4 ){
-				if ( ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff_cut50[0] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff_cut50[1] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff_cut50[2] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff_cut50[3] ) )continue;
-				p4jWOMatchBjetsHiggs_cut50.push_back( p4MatchTruthAlljets[iii] );
-			}
-
-			if ( p4MatchBjetsHiggsSmallMassDiff_cut100.size() == 4 ){
-				if ( ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff_cut100[0] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff_cut100[1] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff_cut100[2] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff_cut100[3] ) )continue;
-				p4jWOMatchBjetsHiggs_cut100.push_back( p4MatchTruthAlljets[iii] );
-			}
-
-			if ( p4MatchBjetsHiggsSmallMassDiff_cut150.size() == 4 ){
-				if ( ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff_cut150[0] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff_cut150[1] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff_cut150[2] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff_cut150[3] ) )continue;
-				p4jWOMatchBjetsHiggs_cut150.push_back( p4MatchTruthAlljets[iii] );
-			}
-
-			if ( p4MatchBjetsHiggsSmallMassDiff_cut200.size() == 4 ){
-				if ( ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff_cut200[0] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff_cut200[1] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff_cut200[2] ) || ( p4MatchTruthAlljets[iii] == p4MatchBjetsHiggsSmallMassDiff_cut200[3] ) )continue;
-				p4jWOMatchBjetsHiggs_cut200.push_back( p4MatchTruthAlljets[iii] );
-			}
-		}
-	}
-			
-	for(unsigned int iim = 0; iim < p4jWOMatchBjetsHiggs.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWOMatchBjetsHiggs.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWOMatchBjetsHiggs[iin].Pt() << endl;
-			TLorentzVector tmpp4MatchjjWOMatchBjetsHiggs = p4jWOMatchBjetsHiggs[iim] + p4jWOMatchBjetsHiggs[iin];
-			double sumMatchjjWOMatchBjetsHiggspt = p4jWOMatchBjetsHiggs[iim].Pt() + p4jWOMatchBjetsHiggs[iin].Pt();
-			p4MatchjjWOMatchBjetsHiggs.push_back( tmpp4MatchjjWOMatchBjetsHiggs );
-			scalarsumMatchjjWOMatchBjetsHiggspt.push_back( sumMatchjjWOMatchBjetsHiggspt );
-			h_matchjjWOMatchBjetsHiggs_masspt->Fill( sumMatchjjWOMatchBjetsHiggspt, tmpp4MatchjjWOMatchBjetsHiggs.M() );
-			h_massmatchjjWOMatchBjetsHiggs->Fill( tmpp4MatchjjWOMatchBjetsHiggs.M() );
-		}
-	}
-
-	for(unsigned int iim = 0; iim < p4jWOMatchBjetsHiggs_cut50.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWOMatchBjetsHiggs_cut50.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWOMatchBjetsHiggs_cut50[iin].Pt() << endl;
-			TLorentzVector tmpp4MatchjjWOMatchBjetsHiggs_cut50 = p4jWOMatchBjetsHiggs_cut50[iim] + p4jWOMatchBjetsHiggs_cut50[iin];
-			double sumMatchjjWOMatchBjetsHiggspt_cut50 = p4jWOMatchBjetsHiggs_cut50[iim].Pt() + p4jWOMatchBjetsHiggs_cut50[iin].Pt();
-			p4MatchjjWOMatchBjetsHiggs_cut50.push_back( tmpp4MatchjjWOMatchBjetsHiggs_cut50 );
-			scalarsumMatchjjWOMatchBjetsHiggspt_cut50.push_back( sumMatchjjWOMatchBjetsHiggspt_cut50 );
-			h_matchjjWOMatchBjetsHiggs_masspt_cut50->Fill( sumMatchjjWOMatchBjetsHiggspt_cut50, tmpp4MatchjjWOMatchBjetsHiggs_cut50.M() );
-			h_massmatchjjWOMatchBjetsHiggs_cut50->Fill( tmpp4MatchjjWOMatchBjetsHiggs_cut50.M() );
-		}
-	}
-
-	for(unsigned int iim = 0; iim < p4jWOMatchBjetsHiggs_cut100.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWOMatchBjetsHiggs_cut100.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWOMatchBjetsHiggs_cut100[iin].Pt() << endl;
-			TLorentzVector tmpp4MatchjjWOMatchBjetsHiggs_cut100 = p4jWOMatchBjetsHiggs_cut100[iim] + p4jWOMatchBjetsHiggs_cut100[iin];
-			double sumMatchjjWOMatchBjetsHiggspt_cut100 = p4jWOMatchBjetsHiggs_cut100[iim].Pt() + p4jWOMatchBjetsHiggs_cut100[iin].Pt();
-			p4MatchjjWOMatchBjetsHiggs_cut100.push_back( tmpp4MatchjjWOMatchBjetsHiggs_cut100 );
-			scalarsumMatchjjWOMatchBjetsHiggspt_cut100.push_back( sumMatchjjWOMatchBjetsHiggspt_cut100 );
-			h_matchjjWOMatchBjetsHiggs_masspt_cut100->Fill( sumMatchjjWOMatchBjetsHiggspt_cut100, tmpp4MatchjjWOMatchBjetsHiggs_cut100.M() );
-			h_massmatchjjWOMatchBjetsHiggs_cut100->Fill( tmpp4MatchjjWOMatchBjetsHiggs_cut100.M() );
-		}
-	}
-
-	for(unsigned int iim = 0; iim < p4jWOMatchBjetsHiggs_cut150.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWOMatchBjetsHiggs_cut150.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWOMatchBjetsHiggs_cut150[iin].Pt() << endl;
-			TLorentzVector tmpp4MatchjjWOMatchBjetsHiggs_cut150 = p4jWOMatchBjetsHiggs_cut150[iim] + p4jWOMatchBjetsHiggs_cut150[iin];
-			double sumMatchjjWOMatchBjetsHiggspt_cut150 = p4jWOMatchBjetsHiggs_cut150[iim].Pt() + p4jWOMatchBjetsHiggs_cut150[iin].Pt();
-			p4MatchjjWOMatchBjetsHiggs_cut150.push_back( tmpp4MatchjjWOMatchBjetsHiggs_cut150 );
-			scalarsumMatchjjWOMatchBjetsHiggspt_cut150.push_back( sumMatchjjWOMatchBjetsHiggspt_cut150 );
-			h_matchjjWOMatchBjetsHiggs_masspt_cut150->Fill( sumMatchjjWOMatchBjetsHiggspt_cut150, tmpp4MatchjjWOMatchBjetsHiggs_cut150.M() );
-			h_massmatchjjWOMatchBjetsHiggs_cut150->Fill( tmpp4MatchjjWOMatchBjetsHiggs_cut150.M() );
-		}
-	}
-
-	for(unsigned int iim = 0; iim < p4jWOMatchBjetsHiggs_cut200.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWOMatchBjetsHiggs_cut200.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWOMatchBjetsHiggs_cut200[iin].Pt() << endl;
-			TLorentzVector tmpp4MatchjjWOMatchBjetsHiggs_cut200 = p4jWOMatchBjetsHiggs_cut200[iim] + p4jWOMatchBjetsHiggs_cut200[iin];
-			double sumMatchjjWOMatchBjetsHiggspt_cut200 = p4jWOMatchBjetsHiggs_cut200[iim].Pt() + p4jWOMatchBjetsHiggs_cut200[iin].Pt();
-			p4MatchjjWOMatchBjetsHiggs_cut200.push_back( tmpp4MatchjjWOMatchBjetsHiggs_cut200 );
-			scalarsumMatchjjWOMatchBjetsHiggspt_cut200.push_back( sumMatchjjWOMatchBjetsHiggspt_cut200 );
-			h_matchjjWOMatchBjetsHiggs_masspt_cut200->Fill( sumMatchjjWOMatchBjetsHiggspt_cut200, tmpp4MatchjjWOMatchBjetsHiggs_cut200.M() );
-			h_massmatchjjWOMatchBjetsHiggs_cut200->Fill( tmpp4MatchjjWOMatchBjetsHiggs_cut200.M() );
-		}
-	}
-	///////////////////////////////////////////////////////////////////////
 
 
 	///////// RECO jets + Btagging CSVM
-	vector< TLorentzVector > p4jjWORecoBjetsCSVM;
-	vector< TLorentzVector > p4jjWORecoBjetsCSVM_cut50;
-	vector< TLorentzVector > p4jjWORecoBjetsCSVM_cut100;
-	vector< TLorentzVector > p4jjWORecoBjetsCSVM_cut150;
-	vector< TLorentzVector > p4jjWORecoBjetsCSVM_cut200;
-	vector< TLorentzVector > p4jWORecoBjetsCSVM;
-	vector< TLorentzVector > p4jWORecoBjetsCSVM_cut50;
-	vector< TLorentzVector > p4jWORecoBjetsCSVM_cut100;
-	vector< TLorentzVector > p4jWORecoBjetsCSVM_cut150;
-	vector< TLorentzVector > p4jWORecoBjetsCSVM_cut200;
-	vector< double > scalarsumjjWORecoBjetsCSVMpt;
-	vector< double > scalarsumjjWORecoBjetsCSVMpt_cut50;
-	vector< double > scalarsumjjWORecoBjetsCSVMpt_cut100;
-	vector< double > scalarsumjjWORecoBjetsCSVMpt_cut150;
-	vector< double > scalarsumjjWORecoBjetsCSVMpt_cut200;
+	vector< TLorentzVector > p4jetsWORecoJetsCSVM;
+	vector< TLorentzVector > p4bWORecoBjetsCSVM;
+	vector< TLorentzVector > p4jetsWORecoBjetsCSVM;
+	vector< TLorentzVector > p4jetsWORecoBjetsCSVM_1cut50;
+	vector< TLorentzVector > p4jetsWORecoBjetsCSVM_1cut100;
+	vector< TLorentzVector > p4jetsWORecoBjetsCSVM_1cut150;
+	vector< TLorentzVector > p4jetsWORecoBjetsCSVM_1cut200;
 
 	if ( p4RecoJets.size() > 5 && p4RecoBjetsCSVM.size() > 3 ){
+
+		////// Step 2 - dijet mass vs sum pt of jets
 		for(unsigned int iii = 0; iii < p4RecoJets.size(); ++iii) {
 
-			////// Step 2 - dijet mass vs sum pt of jets
+			//cout << " 3 " << massRecoBjetsCSVM[0] << " " << massRecoBjetsCSVM[1] << endl;
+			//if ( massRecoBjetsCSVM[0] < 160 && massRecoBjetsCSVM[0] > 90 ) continue;
+			//if ( massRecoBjetsCSVM[1] < 160 && massRecoBjetsCSVM[1] > 90 ) continue;
+			//if ( massRecoBjetsCSVM[0] > 130 || massRecoBjetsCSVM[0] < 120 ) continue;
+			//if ( massRecoBjetsCSVM[1] > 130 || massRecoBjetsCSVM[1] < 120 ) continue;
+			//cout << " 4 " << massRecoBjetsCSVM[0] << " " << massRecoBjetsCSVM[1] << endl;
+
+			//cout << " 0 " << iii <<  " " << p4RecoJets[iii].Pt() << endl;
 			for(unsigned int iij = 0; iij < p4RecoJets.size(); ++iij) {
-				if ( iii==iij ) continue;
-				TLorentzVector p4RecoBtagJetsjj = p4RecoJets[iii] + p4RecoJets[iij];
-				double sumRecoBtagJetsjjpt = p4RecoJets[iii].Pt() + p4RecoJets[iij].Pt();
-				h_RecoBtagJetsjj_masspt->Fill( sumRecoBtagJetsjjpt, p4RecoBtagJetsjj.M() );
+				if ( iii >= iij ) continue;
+				TLorentzVector p4RecoBtagJetsdijet = p4RecoJets[iii] + p4RecoJets[iij];
+				double sumRecoBtagJetsdijetpt = p4RecoJets[iii].Pt() + p4RecoJets[iij].Pt();
+				//cout << " 1 " << iii << " " << iij << " " << p4RecoBtagJetsdijet.M() << endl;
+				h_RecoBtagJetsdijet_masspt->Fill( sumRecoBtagJetsdijetpt, p4RecoBtagJetsdijet.M() );
 			}
 			
 			////// Step 3 - dijet mass vs sum pt of jets without bs from step 1
-			if ( p4RecoBjetsCSVM_SmallMassDiff.size() == 4 ){
-				if ( ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff[0] ) || ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff[1] ) || ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff[2] ) || ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff[3] ) )continue;
-				p4jWORecoBjetsCSVM.push_back( p4RecoJets[iii] );
-			}
-
-			if ( p4RecoBjetsCSVM_SmallMassDiff_cut50.size() == 4 ){
-				if ( ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff_cut50[0] ) || ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff_cut50[1] ) || ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff_cut50[2] ) || ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff_cut50[3] ) )continue;
-				p4jWORecoBjetsCSVM_cut50.push_back( p4RecoJets[iii] );
-			}
-
-			if ( p4RecoBjetsCSVM_SmallMassDiff_cut100.size() == 4 ){
-				if ( ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff_cut100[0] ) || ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff_cut100[1] ) || ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff_cut100[2] ) || ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff_cut100[3] ) )continue;
-				p4jWORecoBjetsCSVM_cut100.push_back( p4RecoJets[iii] );
-			}
-
-			if ( p4RecoBjetsCSVM_SmallMassDiff_cut150.size() == 4 ){
-				if ( ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff_cut150[0] ) || ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff_cut150[1] ) || ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff_cut150[2] ) || ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff_cut150[3] ) )continue;
-				p4jWORecoBjetsCSVM_cut150.push_back( p4RecoJets[iii] );
-			}
-
-			if ( p4RecoBjetsCSVM_SmallMassDiff_cut200.size() == 4 ){
-				if ( ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff_cut200[0] ) || ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff_cut200[1] ) || ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff_cut200[2] ) || ( p4RecoJets[iii] == p4RecoBjetsCSVM_SmallMassDiff_cut200[3] ) )continue;
-				p4jWORecoBjetsCSVM_cut200.push_back( p4RecoJets[iii] );
-			}
+			//p4jetsWORecoJetsCSVM = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoBjetsCSVM );
+			//if ( p4RecoBjetsCSVM_SmallMassDiff.size() == 4 ) p4bWORecoBjetsCSVM = compare2VectorsTLorentzVectors( p4RecoBjetsCSVM, p4RecoBjetsCSVM_SmallMassDiff );
+			if ( p4RecoBjetsCSVM_SmallMassDiff.size() == 4 ) p4jetsWORecoBjetsCSVM = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoBjetsCSVM_SmallMassDiff );
+			if ( p4RecoBjetsCSVM_SmallMassDiff_1cut50.size() == 4 ) p4jetsWORecoBjetsCSVM_1cut50 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoBjetsCSVM_SmallMassDiff_1cut50 );
+			if ( p4RecoBjetsCSVM_SmallMassDiff_1cut100.size() == 4 ) p4jetsWORecoBjetsCSVM_1cut100 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoBjetsCSVM_SmallMassDiff_1cut100 );
+			if ( p4RecoBjetsCSVM_SmallMassDiff_1cut150.size() == 4 ) p4jetsWORecoBjetsCSVM_1cut150 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoBjetsCSVM_SmallMassDiff_1cut150 );
+			if ( p4RecoBjetsCSVM_SmallMassDiff_1cut200.size() == 4 ) p4jetsWORecoBjetsCSVM_1cut200 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoBjetsCSVM_SmallMassDiff_1cut200 );
 		}
 	}
 			
-	for(unsigned int iim = 0; iim < p4jWORecoBjetsCSVM.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWORecoBjetsCSVM.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWORecoBjetsCSVM[iin].Pt() << endl;
-			TLorentzVector tmpp4jjWORecoBjetsCSVM = p4jWORecoBjetsCSVM[iim] + p4jWORecoBjetsCSVM[iin];
-			double sumjjWORecoBjetsCSVMpt = p4jWORecoBjetsCSVM[iim].Pt() + p4jWORecoBjetsCSVM[iin].Pt();
-			p4jjWORecoBjetsCSVM.push_back( tmpp4jjWORecoBjetsCSVM );
-			scalarsumjjWORecoBjetsCSVMpt.push_back( sumjjWORecoBjetsCSVMpt );
-			h_jjWORecoBjetsCSVM_masspt->Fill( sumjjWORecoBjetsCSVMpt, tmpp4jjWORecoBjetsCSVM.M() );
-			h_massjjWORecoBjetsCSVM->Fill( tmpp4jjWORecoBjetsCSVM.M() );
+/*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////// TEST
+	for(unsigned int iim = 0; iim < p4jetsWORecoJetsCSVM.size(); ++iim) {
+		for(unsigned int iin = 0; iin < p4bWORecoBjetsCSVM.size(); ++iin) {
+			//cout << " 2 " << iim <<  " " << p4jetsWORecoJetsCSVM[iim].Pt() << " " << iin <<  " " << p4bWORecoBjetsCSVM[iin].Pt() << endl;
+			//if ( iim >= iin ) continue;
+			//cout << "5 " << iin << " " << p4jetsWORecoBjetsCSVM[iin].Pt() << endl;
+			TLorentzVector tmpp4dijetWORecoBjetsCSVM = p4jetsWORecoJetsCSVM[iim] + p4bWORecoBjetsCSVM[iin];
+			//cout << " 4 " << iim << " " << iin << " " << tmpp4dijetWORecoBjetsCSVM.M() << endl;
+
+			double sumptdijetWORecoBjetsCSVM = p4jetsWORecoJetsCSVM[iim].Pt() + p4bWORecoBjetsCSVM[iin].Pt();
+			p4dijetWORecoBjetsCSVM.push_back( tmpp4dijetWORecoBjetsCSVM );
+			scalarSumPtdijetWORecoBjetsCSVM.push_back( sumptdijetWORecoBjetsCSVM );
 		}
 	}
-
-	for(unsigned int iim = 0; iim < p4jWORecoBjetsCSVM_cut50.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWORecoBjetsCSVM_cut50.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWORecoBjetsCSVM_cut50[iin].Pt() << endl;
-			TLorentzVector tmpp4jjWORecoBjetsCSVM_cut50 = p4jWORecoBjetsCSVM_cut50[iim] + p4jWORecoBjetsCSVM_cut50[iin];
-			double sumjjWORecoBjetsCSVMpt_cut50 = p4jWORecoBjetsCSVM_cut50[iim].Pt() + p4jWORecoBjetsCSVM_cut50[iin].Pt();
-			p4jjWORecoBjetsCSVM_cut50.push_back( tmpp4jjWORecoBjetsCSVM_cut50 );
-			scalarsumjjWORecoBjetsCSVMpt_cut50.push_back( sumjjWORecoBjetsCSVMpt_cut50 );
-			h_jjWORecoBjetsCSVM_masspt_cut50->Fill( sumjjWORecoBjetsCSVMpt_cut50, tmpp4jjWORecoBjetsCSVM_cut50.M() );
-			h_massjjWORecoBjetsCSVM_cut50->Fill( tmpp4jjWORecoBjetsCSVM_cut50.M() );
+	if ( p4jetsWORecoJetsCSVM.size() > 1 && p4bWORecoBjetsCSVM.size() > 1){
+		double tmpMassDiff = 9999999;
+		Int_t bestMassIndex[4] = {-1, -1, -1, -1};
+		for(unsigned int ii = 0; ii < p4jetsWORecoJetsCSVM.size(); ++ii) {
+			for(unsigned int ij = 0; ij < p4bWORecoBjetsCSVM.size(); ++ij) {
+				for(unsigned int ik = 0; ik < p4jetsWORecoJetsCSVM.size(); ++ik) {
+					for(unsigned int il = 0; il < p4bWORecoBjetsCSVM.size(); ++il) {
+						if ( ii >= ik ) continue;
+						if ( ij >= il ) continue;
+						//cout << ii << " " << ij << " " << ik << " " << il << endl;
+						TLorentzVector candMassMatchBjets1 = p4jetsWORecoJetsCSVM[ii]+p4bWORecoBjetsCSVM[ij];
+						TLorentzVector candMassMatchBjets2 = p4jetsWORecoJetsCSVM[ik]+p4bWORecoBjetsCSVM[il];
+						double massDiff = abs( candMassMatchBjets1.M() - candMassMatchBjets2.M() );
+						if( tmpMassDiff > massDiff ){
+							tmpMassDiff = massDiff;
+							bestMassIndex[0] = ii;
+							bestMassIndex[1] = ij;
+							bestMassIndex[2] = ik;
+							bestMassIndex[3] = il;
+							//cout << ii << " " << ij << " " << ik << " " << il << " " << massDiff << " " << candMassMatchBjets1.M() << " " << candMassMatchBjets2.M() << endl;
+						}
+					}
+				}
+			}
 		}
+		TLorentzVector tmpMass1 = p4jetsWORecoJetsCSVM[bestMassIndex[0]] + p4bWORecoBjetsCSVM[bestMassIndex[1]];
+		TLorentzVector tmpMass2 = p4jetsWORecoJetsCSVM[bestMassIndex[2]] + p4bWORecoBjetsCSVM[bestMassIndex[3]];
+		h_massdijetWORecoBjetsCSVM->Fill( tmpMass1.M() );
+		h_massdijetWORecoBjetsCSVM->Fill( tmpMass2.M() );
+	}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWORecoBjetsCSVM;
+	vectorsjWORecoBjetsCSVM = s3Vectors( p4jetsWORecoBjetsCSVM );
+	vector< TLorentzVector > p4dijetWORecoBjetsCSVM = vectorsjWORecoBjetsCSVM.s3VectorTL;
+	vector< double > massdijetWORecoBjetsCSVM = vectorsjWORecoBjetsCSVM.s3Mass;
+	vector< double > scalarSumPtdijetWORecoBjetsCSVM = vectorsjWORecoBjetsCSVM.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massdijetWORecoBjetsCSVM.size(); ++iim) {
+		h_dijetWORecoBjetsCSVM_masspt->Fill( scalarSumPtdijetWORecoBjetsCSVM[iim], massdijetWORecoBjetsCSVM[iim] );
+		h_massdijetWORecoBjetsCSVM->Fill( massdijetWORecoBjetsCSVM[iim] );
+
+		///// Diagonal cuts
+		double iDiag=(double)iim*10.0+50.0;
+		/*if( p4jetsWORecoBjetsCSVM[iim] < ( scalarSumPtdijetWORecoBjetsCSVM[iim]-iDiag ) ) {
+		}*/
 	}
 
-	for(unsigned int iim = 0; iim < p4jWORecoBjetsCSVM_cut100.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWORecoBjetsCSVM_cut100.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWORecoBjetsCSVM_cut100[iin].Pt() << endl;
-			TLorentzVector tmpp4jjWORecoBjetsCSVM_cut100 = p4jWORecoBjetsCSVM_cut100[iim] + p4jWORecoBjetsCSVM_cut100[iin];
-			double sumjjWORecoBjetsCSVMpt_cut100 = p4jWORecoBjetsCSVM_cut100[iim].Pt() + p4jWORecoBjetsCSVM_cut100[iin].Pt();
-			p4jjWORecoBjetsCSVM_cut100.push_back( tmpp4jjWORecoBjetsCSVM_cut100 );
-			scalarsumjjWORecoBjetsCSVMpt_cut100.push_back( sumjjWORecoBjetsCSVMpt_cut100 );
-			h_jjWORecoBjetsCSVM_masspt_cut100->Fill( sumjjWORecoBjetsCSVMpt_cut100, tmpp4jjWORecoBjetsCSVM_cut100.M() );
-			h_massjjWORecoBjetsCSVM_cut100->Fill( tmpp4jjWORecoBjetsCSVM_cut100.M() );
-		}
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWORecoBjetsCSVM_1cut50;
+	vectorsjWORecoBjetsCSVM_1cut50 = s3Vectors( p4jetsWORecoBjetsCSVM_1cut50 );
+	vector< TLorentzVector > p4dijetWORecoBjetsCSVM_1cut50 = vectorsjWORecoBjetsCSVM_1cut50.s3VectorTL;
+	vector< double > massdijetWORecoBjetsCSVM_1cut50 = vectorsjWORecoBjetsCSVM_1cut50.s3Mass;
+	vector< double > scalarSumPtdijetWORecoBjetsCSVM_1cut50 = vectorsjWORecoBjetsCSVM_1cut50.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massdijetWORecoBjetsCSVM_1cut50.size(); ++iim) {
+		h_dijetWORecoBjetsCSVM_masspt_1cut50->Fill( scalarSumPtdijetWORecoBjetsCSVM_1cut50[iim], massdijetWORecoBjetsCSVM_1cut50[iim] );
+		h_massdijetWORecoBjetsCSVM_1cut50->Fill( massdijetWORecoBjetsCSVM_1cut50[iim] );
+
 	}
 
-	for(unsigned int iim = 0; iim < p4jWORecoBjetsCSVM_cut150.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWORecoBjetsCSVM_cut150.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWORecoBjetsCSVM_cut150[iin].Pt() << endl;
-			TLorentzVector tmpp4jjWORecoBjetsCSVM_cut150 = p4jWORecoBjetsCSVM_cut150[iim] + p4jWORecoBjetsCSVM_cut150[iin];
-			double sumjjWORecoBjetsCSVMpt_cut150 = p4jWORecoBjetsCSVM_cut150[iim].Pt() + p4jWORecoBjetsCSVM_cut150[iin].Pt();
-			p4jjWORecoBjetsCSVM_cut150.push_back( tmpp4jjWORecoBjetsCSVM_cut150 );
-			scalarsumjjWORecoBjetsCSVMpt_cut150.push_back( sumjjWORecoBjetsCSVMpt_cut150 );
-			h_jjWORecoBjetsCSVM_masspt_cut150->Fill( sumjjWORecoBjetsCSVMpt_cut150, tmpp4jjWORecoBjetsCSVM_cut150.M() );
-			h_massjjWORecoBjetsCSVM_cut150->Fill( tmpp4jjWORecoBjetsCSVM_cut150.M() );
-		}
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWORecoBjetsCSVM_1cut100;
+	vectorsjWORecoBjetsCSVM_1cut100 = s3Vectors( p4jetsWORecoBjetsCSVM_1cut100 );
+	vector< TLorentzVector > p4dijetWORecoBjetsCSVM_1cut100 = vectorsjWORecoBjetsCSVM_1cut100.s3VectorTL;
+	vector< double > massdijetWORecoBjetsCSVM_1cut100 = vectorsjWORecoBjetsCSVM_1cut100.s3Mass;
+	vector< double > scalarSumPtdijetWORecoBjetsCSVM_1cut100 = vectorsjWORecoBjetsCSVM_1cut100.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massdijetWORecoBjetsCSVM_1cut100.size(); ++iim) {
+		h_dijetWORecoBjetsCSVM_masspt_1cut100->Fill( scalarSumPtdijetWORecoBjetsCSVM_1cut100[iim], massdijetWORecoBjetsCSVM_1cut100[iim] );
+		h_massdijetWORecoBjetsCSVM_1cut100->Fill( massdijetWORecoBjetsCSVM_1cut100[iim] );
+
 	}
 
-	for(unsigned int iim = 0; iim < p4jWORecoBjetsCSVM_cut200.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWORecoBjetsCSVM_cut200.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWORecoBjetsCSVM_cut200[iin].Pt() << endl;
-			TLorentzVector tmpp4jjWORecoBjetsCSVM_cut200 = p4jWORecoBjetsCSVM_cut200[iim] + p4jWORecoBjetsCSVM_cut200[iin];
-			double sumjjWORecoBjetsCSVMpt_cut200 = p4jWORecoBjetsCSVM_cut200[iim].Pt() + p4jWORecoBjetsCSVM_cut200[iin].Pt();
-			p4jjWORecoBjetsCSVM_cut200.push_back( tmpp4jjWORecoBjetsCSVM_cut200 );
-			scalarsumjjWORecoBjetsCSVMpt_cut200.push_back( sumjjWORecoBjetsCSVMpt_cut200 );
-			h_jjWORecoBjetsCSVM_masspt_cut200->Fill( sumjjWORecoBjetsCSVMpt_cut200, tmpp4jjWORecoBjetsCSVM_cut200.M() );
-			h_massjjWORecoBjetsCSVM_cut200->Fill( tmpp4jjWORecoBjetsCSVM_cut200.M() );
-		}
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWORecoBjetsCSVM_1cut150;
+	vectorsjWORecoBjetsCSVM_1cut150 = s3Vectors( p4jetsWORecoBjetsCSVM_1cut150 );
+	vector< TLorentzVector > p4dijetWORecoBjetsCSVM_1cut150 = vectorsjWORecoBjetsCSVM_1cut150.s3VectorTL;
+	vector< double > massdijetWORecoBjetsCSVM_1cut150 = vectorsjWORecoBjetsCSVM_1cut150.s3Mass;
+	vector< double > scalarSumPtdijetWORecoBjetsCSVM_1cut150 = vectorsjWORecoBjetsCSVM_1cut150.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massdijetWORecoBjetsCSVM_1cut150.size(); ++iim) {
+		h_dijetWORecoBjetsCSVM_masspt_1cut150->Fill( scalarSumPtdijetWORecoBjetsCSVM_1cut150[iim], massdijetWORecoBjetsCSVM_1cut150[iim] );
+		h_massdijetWORecoBjetsCSVM_1cut150->Fill( massdijetWORecoBjetsCSVM_1cut150[iim] );
+
+	}
+
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWORecoBjetsCSVM_1cut200;
+	vectorsjWORecoBjetsCSVM_1cut200 = s3Vectors( p4jetsWORecoBjetsCSVM_1cut200 );
+	vector< TLorentzVector > p4dijetWORecoBjetsCSVM_1cut200 = vectorsjWORecoBjetsCSVM_1cut200.s3VectorTL;
+	vector< double > massdijetWORecoBjetsCSVM_1cut200 = vectorsjWORecoBjetsCSVM_1cut200.s3Mass;
+	vector< double > scalarSumPtdijetWORecoBjetsCSVM_1cut200 = vectorsjWORecoBjetsCSVM_1cut200.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massdijetWORecoBjetsCSVM_1cut200.size(); ++iim) {
+		h_dijetWORecoBjetsCSVM_masspt_1cut200->Fill( scalarSumPtdijetWORecoBjetsCSVM_1cut200[iim], massdijetWORecoBjetsCSVM_1cut200[iim] );
+		h_massdijetWORecoBjetsCSVM_1cut200->Fill( massdijetWORecoBjetsCSVM_1cut200[iim] );
+
 	}
 	/////////////////////////////////////////////////////
 
 	///////// RECO jets + PartonFlavor + Btagging CSVM
-	vector< TLorentzVector > p4jjWORecoPartonFlavorBjetsCSVM;
-	vector< TLorentzVector > p4jjWORecoPartonFlavorBjetsCSVM_cut50;
-	vector< TLorentzVector > p4jjWORecoPartonFlavorBjetsCSVM_cut100;
-	vector< TLorentzVector > p4jjWORecoPartonFlavorBjetsCSVM_cut150;
-	vector< TLorentzVector > p4jjWORecoPartonFlavorBjetsCSVM_cut200;
-	vector< TLorentzVector > p4jWORecoPartonFlavorBjetsCSVM;
-	vector< TLorentzVector > p4jWORecoPartonFlavorBjetsCSVM_cut50;
-	vector< TLorentzVector > p4jWORecoPartonFlavorBjetsCSVM_cut100;
-	vector< TLorentzVector > p4jWORecoPartonFlavorBjetsCSVM_cut150;
-	vector< TLorentzVector > p4jWORecoPartonFlavorBjetsCSVM_cut200;
-	vector< double > scalarsumjjWORecoPartonFlavorBjetsCSVMpt;
-	vector< double > scalarsumjjWORecoPartonFlavorBjetsCSVMpt_cut50;
-	vector< double > scalarsumjjWORecoPartonFlavorBjetsCSVMpt_cut100;
-	vector< double > scalarsumjjWORecoPartonFlavorBjetsCSVMpt_cut150;
-	vector< double > scalarsumjjWORecoPartonFlavorBjetsCSVMpt_cut200;
+	vector< TLorentzVector > p4jetsWORecoPartonFlavorBjetsCSVM;
+	vector< TLorentzVector > p4jetsWORecoPartonFlavorBjetsCSVM_1cut50;
+	vector< TLorentzVector > p4jetsWORecoPartonFlavorBjetsCSVM_1cut100;
+	vector< TLorentzVector > p4jetsWORecoPartonFlavorBjetsCSVM_1cut150;
+	vector< TLorentzVector > p4jetsWORecoPartonFlavorBjetsCSVM_1cut200;
 
 	if ( p4RecoJets.size() > 5 && p4RecoPartonFlavorBjetsCSVM.size() > 3 ){
 		for(unsigned int iii = 0; iii < p4RecoJets.size(); ++iii) {
 
 			////// Step 2 - dijet mass vs sum pt of jets
 			for(unsigned int iij = 0; iij < p4RecoJets.size(); ++iij) {
-				if ( iii==iij ) continue;
-				TLorentzVector p4RecoPartonFlavorBtagJetsjj = p4RecoJets[iii] + p4RecoJets[iij];
-				double sumRecoPartonFlavorBtagJetsjjpt = p4RecoJets[iii].Pt() + p4RecoJets[iij].Pt();
-				h_RecoPartonFlavorBtagJetsjj_masspt->Fill( sumRecoPartonFlavorBtagJetsjjpt, p4RecoPartonFlavorBtagJetsjj.M() );
+				if ( iii>=iij ) continue;
+				TLorentzVector p4RecoPartonFlavorBtagJetsdijet = p4RecoJets[iii] + p4RecoJets[iij];
+				double sumRecoPartonFlavorBtagJetsdijetpt = p4RecoJets[iii].Pt() + p4RecoJets[iij].Pt();
+				h_RecoPartonFlavorBtagJetsdijet_masspt->Fill( sumRecoPartonFlavorBtagJetsdijetpt, p4RecoPartonFlavorBtagJetsdijet.M() );
 			}
 			
 			////// Step 3 - dijet mass vs sum pt of jets without bs from step 1
-			if ( p4RecoPartonFlavorBjetsCSVM_SmallMassDiff.size() == 4 ){
-				if ( ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff[0] ) || ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff[1] ) || ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff[2] ) || ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff[3] ) )continue;
-				p4jWORecoPartonFlavorBjetsCSVM.push_back( p4RecoJets[iii] );
-			}
-
-			if ( p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut50.size() == 4 ){
-				if ( ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut50[0] ) || ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut50[1] ) || ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut50[2] ) || ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut50[3] ) )continue;
-				p4jWORecoPartonFlavorBjetsCSVM_cut50.push_back( p4RecoJets[iii] );
-			}
-
-			if ( p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut100.size() == 4 ){
-				if ( ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut100[0] ) || ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut100[1] ) || ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut100[2] ) || ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut100[3] ) )continue;
-				p4jWORecoPartonFlavorBjetsCSVM_cut100.push_back( p4RecoJets[iii] );
-			}
-
-			if ( p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut150.size() == 4 ){
-				if ( ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut150[0] ) || ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut150[1] ) || ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut150[2] ) || ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut150[3] ) )continue;
-				p4jWORecoPartonFlavorBjetsCSVM_cut150.push_back( p4RecoJets[iii] );
-			}
-
-			if ( p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut200.size() == 4 ){
-				if ( ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut200[0] ) || ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut200[1] ) || ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut200[2] ) || ( p4RecoJets[iii] == p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cut200[3] ) )continue;
-				p4jWORecoPartonFlavorBjetsCSVM_cut200.push_back( p4RecoJets[iii] );
-			}
+			if ( p4RecoPartonFlavorBjetsCSVM_SmallMassDiff.size() == 4 ) p4jetsWORecoPartonFlavorBjetsCSVM = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoPartonFlavorBjetsCSVM_SmallMassDiff );
+			if ( p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_1cut50.size() == 4 ) p4jetsWORecoPartonFlavorBjetsCSVM_1cut50 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_1cut50 );
+			if ( p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_1cut100.size() == 4 ) p4jetsWORecoPartonFlavorBjetsCSVM_1cut100 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_1cut100 );
+			if ( p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_1cut150.size() == 4 ) p4jetsWORecoPartonFlavorBjetsCSVM_1cut150 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_1cut150 );
+			if ( p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_1cut200.size() == 4 ) p4jetsWORecoPartonFlavorBjetsCSVM_1cut200 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_1cut200 );
 		}
+	}
+
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWORecoPartonFlavorBjetsCSVM;
+	vectorsjWORecoPartonFlavorBjetsCSVM = s3Vectors( p4jetsWORecoPartonFlavorBjetsCSVM );
+	vector< TLorentzVector > p4dijetWORecoPartonFlavorBjetsCSVM = vectorsjWORecoPartonFlavorBjetsCSVM.s3VectorTL;
+	vector< double > massdijetWORecoPartonFlavorBjetsCSVM = vectorsjWORecoPartonFlavorBjetsCSVM.s3Mass;
+	vector< double > scalarSumPtdijetWORecoPartonFlavorBjetsCSVM = vectorsjWORecoPartonFlavorBjetsCSVM.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massdijetWORecoPartonFlavorBjetsCSVM.size(); ++iim) {
+		h_dijetWORecoPartonFlavorBjetsCSVM_masspt->Fill( scalarSumPtdijetWORecoPartonFlavorBjetsCSVM[iim], massdijetWORecoPartonFlavorBjetsCSVM[iim] );
+		h_massdijetWORecoPartonFlavorBjetsCSVM->Fill( massdijetWORecoPartonFlavorBjetsCSVM[iim] );
+
+		///// Diagonal cuts
+		double iDiag=(double)iim*10.0+50.0;
+		/*if( p4jetsWORecoPartonFlavorBjetsCSVM[iim] < ( scalarSumPtdijetWORecoPartonFlavorBjetsCSVM[iim]-iDiag ) ) {
+		}*/
+	}
+
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWORecoPartonFlavorBjetsCSVM_1cut50;
+	vectorsjWORecoPartonFlavorBjetsCSVM_1cut50 = s3Vectors( p4jetsWORecoPartonFlavorBjetsCSVM_1cut50 );
+	vector< TLorentzVector > p4dijetWORecoPartonFlavorBjetsCSVM_1cut50 = vectorsjWORecoPartonFlavorBjetsCSVM_1cut50.s3VectorTL;
+	vector< double > massdijetWORecoPartonFlavorBjetsCSVM_1cut50 = vectorsjWORecoPartonFlavorBjetsCSVM_1cut50.s3Mass;
+	vector< double > scalarSumPtdijetWORecoPartonFlavorBjetsCSVM_1cut50 = vectorsjWORecoPartonFlavorBjetsCSVM_1cut50.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massdijetWORecoPartonFlavorBjetsCSVM_1cut50.size(); ++iim) {
+		h_dijetWORecoPartonFlavorBjetsCSVM_masspt_1cut50->Fill( scalarSumPtdijetWORecoPartonFlavorBjetsCSVM_1cut50[iim], massdijetWORecoPartonFlavorBjetsCSVM_1cut50[iim] );
+		h_massdijetWORecoPartonFlavorBjetsCSVM_1cut50->Fill( massdijetWORecoPartonFlavorBjetsCSVM_1cut50[iim] );
+
+	}
+
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWORecoPartonFlavorBjetsCSVM_1cut100;
+	vectorsjWORecoPartonFlavorBjetsCSVM_1cut100 = s3Vectors( p4jetsWORecoPartonFlavorBjetsCSVM_1cut100 );
+	vector< TLorentzVector > p4dijetWORecoPartonFlavorBjetsCSVM_1cut100 = vectorsjWORecoPartonFlavorBjetsCSVM_1cut100.s3VectorTL;
+	vector< double > massdijetWORecoPartonFlavorBjetsCSVM_1cut100 = vectorsjWORecoPartonFlavorBjetsCSVM_1cut100.s3Mass;
+	vector< double > scalarSumPtdijetWORecoPartonFlavorBjetsCSVM_1cut100 = vectorsjWORecoPartonFlavorBjetsCSVM_1cut100.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massdijetWORecoPartonFlavorBjetsCSVM_1cut100.size(); ++iim) {
+		h_dijetWORecoPartonFlavorBjetsCSVM_masspt_1cut100->Fill( scalarSumPtdijetWORecoPartonFlavorBjetsCSVM_1cut100[iim], massdijetWORecoPartonFlavorBjetsCSVM_1cut100[iim] );
+		h_massdijetWORecoPartonFlavorBjetsCSVM_1cut100->Fill( massdijetWORecoPartonFlavorBjetsCSVM_1cut100[iim] );
+
+	}
+
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWORecoPartonFlavorBjetsCSVM_1cut150;
+	vectorsjWORecoPartonFlavorBjetsCSVM_1cut150 = s3Vectors( p4jetsWORecoPartonFlavorBjetsCSVM_1cut150 );
+	vector< TLorentzVector > p4dijetWORecoPartonFlavorBjetsCSVM_1cut150 = vectorsjWORecoPartonFlavorBjetsCSVM_1cut150.s3VectorTL;
+	vector< double > massdijetWORecoPartonFlavorBjetsCSVM_1cut150 = vectorsjWORecoPartonFlavorBjetsCSVM_1cut150.s3Mass;
+	vector< double > scalarSumPtdijetWORecoPartonFlavorBjetsCSVM_1cut150 = vectorsjWORecoPartonFlavorBjetsCSVM_1cut150.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massdijetWORecoPartonFlavorBjetsCSVM_1cut150.size(); ++iim) {
+		h_dijetWORecoPartonFlavorBjetsCSVM_masspt_1cut150->Fill( scalarSumPtdijetWORecoPartonFlavorBjetsCSVM_1cut150[iim], massdijetWORecoPartonFlavorBjetsCSVM_1cut150[iim] );
+		h_massdijetWORecoPartonFlavorBjetsCSVM_1cut150->Fill( massdijetWORecoPartonFlavorBjetsCSVM_1cut150[iim] );
+
+	}
+
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWORecoPartonFlavorBjetsCSVM_1cut200;
+	vectorsjWORecoPartonFlavorBjetsCSVM_1cut200 = s3Vectors( p4jetsWORecoPartonFlavorBjetsCSVM_1cut200 );
+	vector< TLorentzVector > p4dijetWORecoPartonFlavorBjetsCSVM_1cut200 = vectorsjWORecoPartonFlavorBjetsCSVM_1cut200.s3VectorTL;
+	vector< double > massdijetWORecoPartonFlavorBjetsCSVM_1cut200 = vectorsjWORecoPartonFlavorBjetsCSVM_1cut200.s3Mass;
+	vector< double > scalarSumPtdijetWORecoPartonFlavorBjetsCSVM_1cut200 = vectorsjWORecoPartonFlavorBjetsCSVM_1cut200.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massdijetWORecoPartonFlavorBjetsCSVM_1cut200.size(); ++iim) {
+		h_dijetWORecoPartonFlavorBjetsCSVM_masspt_1cut200->Fill( scalarSumPtdijetWORecoPartonFlavorBjetsCSVM_1cut200[iim], massdijetWORecoPartonFlavorBjetsCSVM_1cut200[iim] );
+		h_massdijetWORecoPartonFlavorBjetsCSVM_1cut200->Fill( massdijetWORecoPartonFlavorBjetsCSVM_1cut200[iim] );
+
 	}
 			
-	for(unsigned int iim = 0; iim < p4jWORecoPartonFlavorBjetsCSVM.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWORecoPartonFlavorBjetsCSVM.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWORecoPartonFlavorBjetsCSVM[iin].Pt() << endl;
-			TLorentzVector tmpp4jjWORecoPartonFlavorBjetsCSVM = p4jWORecoPartonFlavorBjetsCSVM[iim] + p4jWORecoPartonFlavorBjetsCSVM[iin];
-			double sumjjWORecoPartonFlavorBjetsCSVMpt = p4jWORecoPartonFlavorBjetsCSVM[iim].Pt() + p4jWORecoPartonFlavorBjetsCSVM[iin].Pt();
-			p4jjWORecoPartonFlavorBjetsCSVM.push_back( tmpp4jjWORecoPartonFlavorBjetsCSVM );
-			scalarsumjjWORecoPartonFlavorBjetsCSVMpt.push_back( sumjjWORecoPartonFlavorBjetsCSVMpt );
-			h_jjWORecoPartonFlavorBjetsCSVM_masspt->Fill( sumjjWORecoPartonFlavorBjetsCSVMpt, tmpp4jjWORecoPartonFlavorBjetsCSVM.M() );
-			h_massjjWORecoPartonFlavorBjetsCSVM->Fill( tmpp4jjWORecoPartonFlavorBjetsCSVM.M() );
-		}
-	}
-
-	for(unsigned int iim = 0; iim < p4jWORecoPartonFlavorBjetsCSVM_cut50.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWORecoPartonFlavorBjetsCSVM_cut50.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWORecoPartonFlavorBjetsCSVM_cut50[iin].Pt() << endl;
-			TLorentzVector tmpp4jjWORecoPartonFlavorBjetsCSVM_cut50 = p4jWORecoPartonFlavorBjetsCSVM_cut50[iim] + p4jWORecoPartonFlavorBjetsCSVM_cut50[iin];
-			double sumjjWORecoPartonFlavorBjetsCSVMpt_cut50 = p4jWORecoPartonFlavorBjetsCSVM_cut50[iim].Pt() + p4jWORecoPartonFlavorBjetsCSVM_cut50[iin].Pt();
-			p4jjWORecoPartonFlavorBjetsCSVM_cut50.push_back( tmpp4jjWORecoPartonFlavorBjetsCSVM_cut50 );
-			scalarsumjjWORecoPartonFlavorBjetsCSVMpt_cut50.push_back( sumjjWORecoPartonFlavorBjetsCSVMpt_cut50 );
-			h_jjWORecoPartonFlavorBjetsCSVM_masspt_cut50->Fill( sumjjWORecoPartonFlavorBjetsCSVMpt_cut50, tmpp4jjWORecoPartonFlavorBjetsCSVM_cut50.M() );
-			h_massjjWORecoPartonFlavorBjetsCSVM_cut50->Fill( tmpp4jjWORecoPartonFlavorBjetsCSVM_cut50.M() );
-		}
-	}
-
-	for(unsigned int iim = 0; iim < p4jWORecoPartonFlavorBjetsCSVM_cut100.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWORecoPartonFlavorBjetsCSVM_cut100.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWORecoPartonFlavorBjetsCSVM_cut100[iin].Pt() << endl;
-			TLorentzVector tmpp4jjWORecoPartonFlavorBjetsCSVM_cut100 = p4jWORecoPartonFlavorBjetsCSVM_cut100[iim] + p4jWORecoPartonFlavorBjetsCSVM_cut100[iin];
-			double sumjjWORecoPartonFlavorBjetsCSVMpt_cut100 = p4jWORecoPartonFlavorBjetsCSVM_cut100[iim].Pt() + p4jWORecoPartonFlavorBjetsCSVM_cut100[iin].Pt();
-			p4jjWORecoPartonFlavorBjetsCSVM_cut100.push_back( tmpp4jjWORecoPartonFlavorBjetsCSVM_cut100 );
-			scalarsumjjWORecoPartonFlavorBjetsCSVMpt_cut100.push_back( sumjjWORecoPartonFlavorBjetsCSVMpt_cut100 );
-			h_jjWORecoPartonFlavorBjetsCSVM_masspt_cut100->Fill( sumjjWORecoPartonFlavorBjetsCSVMpt_cut100, tmpp4jjWORecoPartonFlavorBjetsCSVM_cut100.M() );
-			h_massjjWORecoPartonFlavorBjetsCSVM_cut100->Fill( tmpp4jjWORecoPartonFlavorBjetsCSVM_cut100.M() );
-		}
-	}
-
-	for(unsigned int iim = 0; iim < p4jWORecoPartonFlavorBjetsCSVM_cut150.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWORecoPartonFlavorBjetsCSVM_cut150.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWORecoPartonFlavorBjetsCSVM_cut150[iin].Pt() << endl;
-			TLorentzVector tmpp4jjWORecoPartonFlavorBjetsCSVM_cut150 = p4jWORecoPartonFlavorBjetsCSVM_cut150[iim] + p4jWORecoPartonFlavorBjetsCSVM_cut150[iin];
-			double sumjjWORecoPartonFlavorBjetsCSVMpt_cut150 = p4jWORecoPartonFlavorBjetsCSVM_cut150[iim].Pt() + p4jWORecoPartonFlavorBjetsCSVM_cut150[iin].Pt();
-			p4jjWORecoPartonFlavorBjetsCSVM_cut150.push_back( tmpp4jjWORecoPartonFlavorBjetsCSVM_cut150 );
-			scalarsumjjWORecoPartonFlavorBjetsCSVMpt_cut150.push_back( sumjjWORecoPartonFlavorBjetsCSVMpt_cut150 );
-			h_jjWORecoPartonFlavorBjetsCSVM_masspt_cut150->Fill( sumjjWORecoPartonFlavorBjetsCSVMpt_cut150, tmpp4jjWORecoPartonFlavorBjetsCSVM_cut150.M() );
-			h_massjjWORecoPartonFlavorBjetsCSVM_cut150->Fill( tmpp4jjWORecoPartonFlavorBjetsCSVM_cut150.M() );
-		}
-	}
-
-	for(unsigned int iim = 0; iim < p4jWORecoPartonFlavorBjetsCSVM_cut200.size(); ++iim) {
-		for(unsigned int iin = 0; iin < p4jWORecoPartonFlavorBjetsCSVM_cut200.size(); ++iin) {
-			if ( iim == iin ) continue;
-			//cout << "5 " << iin << " " << p4jWORecoPartonFlavorBjetsCSVM_cut200[iin].Pt() << endl;
-			TLorentzVector tmpp4jjWORecoPartonFlavorBjetsCSVM_cut200 = p4jWORecoPartonFlavorBjetsCSVM_cut200[iim] + p4jWORecoPartonFlavorBjetsCSVM_cut200[iin];
-			double sumjjWORecoPartonFlavorBjetsCSVMpt_cut200 = p4jWORecoPartonFlavorBjetsCSVM_cut200[iim].Pt() + p4jWORecoPartonFlavorBjetsCSVM_cut200[iin].Pt();
-			p4jjWORecoPartonFlavorBjetsCSVM_cut200.push_back( tmpp4jjWORecoPartonFlavorBjetsCSVM_cut200 );
-			scalarsumjjWORecoPartonFlavorBjetsCSVMpt_cut200.push_back( sumjjWORecoPartonFlavorBjetsCSVMpt_cut200 );
-			h_jjWORecoPartonFlavorBjetsCSVM_masspt_cut200->Fill( sumjjWORecoPartonFlavorBjetsCSVMpt_cut200, tmpp4jjWORecoPartonFlavorBjetsCSVM_cut200.M() );
-			h_massjjWORecoPartonFlavorBjetsCSVM_cut200->Fill( tmpp4jjWORecoPartonFlavorBjetsCSVM_cut200.M() );
-		}
-	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	///// Match All jets
+	vector< TLorentzVector > p4jetsWOMatchBjets;
+	vector< TLorentzVector > p4jetsWOMatchBjets_1cut50;
+	vector< TLorentzVector > p4jetsWOMatchBjets_1cut100;
+	vector< TLorentzVector > p4jetsWOMatchBjets_1cut150;
+	vector< TLorentzVector > p4jetsWOMatchBjets_1cut200;
+
+	if ( p4MatchTruthAlljets.size() > 5 && p4MatchTruthBjets.size() > 3 ){
+		for(unsigned int iii = 0; iii < p4MatchTruthAlljets.size(); ++iii) {
+
+			//if ( massMatchBjets[0] > 130 || massMatchBjets[0] < 120 ) continue;
+			//if ( massMatchBjets[1] > 130 || massMatchBjets[1] < 120 ) continue;
+
+			////// Step 2 - dijet mass vs sum pt of jets
+			for(unsigned int iij = 0; iij < p4MatchTruthAlljets.size(); ++iij) {
+				if ( iii>=iij ) continue;
+				TLorentzVector p4dijet = p4MatchTruthAlljets[iii] + p4MatchTruthAlljets[iij];
+				double sumdijetpt = p4MatchTruthAlljets[iii].Pt() + p4MatchTruthAlljets[iij].Pt();
+				h_matchdijet_masspt->Fill( sumdijetpt, p4dijet.M() );
+			}
+			
+			////// Step 3 - dijet mass vs sum pt of jets without bs from step 1
+			//cout << " 0 " << iii << " " << p4MatchTruthAlljets[iii].Pt() << " " << p4MatchTruthAlljets.size() << endl;
+			if ( p4MatchBjetsSmallMassDiff.size() == 4 ) p4jetsWOMatchBjets = compare2VectorsTLorentzVectors( p4MatchTruthAlljets, p4MatchBjetsSmallMassDiff );
+			if ( p4MatchBjetsSmallMassDiff_1cut50.size() == 4 ) p4jetsWOMatchBjets_1cut50 = compare2VectorsTLorentzVectors( p4MatchTruthAlljets, p4MatchBjetsSmallMassDiff_1cut50 );
+			if ( p4MatchBjetsSmallMassDiff_1cut100.size() == 4 ) p4jetsWOMatchBjets_1cut100 = compare2VectorsTLorentzVectors( p4MatchTruthAlljets, p4MatchBjetsSmallMassDiff_1cut100 );
+			if ( p4MatchBjetsSmallMassDiff_1cut150.size() == 4 ) p4jetsWOMatchBjets_1cut150 = compare2VectorsTLorentzVectors( p4MatchTruthAlljets, p4MatchBjetsSmallMassDiff_1cut150 );
+			if ( p4MatchBjetsSmallMassDiff_1cut200.size() == 4 ) p4jetsWOMatchBjets_1cut200 = compare2VectorsTLorentzVectors( p4MatchTruthAlljets, p4MatchBjetsSmallMassDiff_1cut200 );
+		}
+	//cout << " 10 " << p4jetsWOMatchBjets.size() << " " << p4jetsWOMatchBjets_1cut50.size() << " " << p4jetsWOMatchBjets_1cut100.size() << " " << p4jetsWOMatchBjets_1cut150.size() << " " << p4jetsWOMatchBjets_1cut200.size() << " " << endl;
+			
+	}
+
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWOMatchBjets;
+	vectorsjWOMatchBjets = s3Vectors( p4jetsWOMatchBjets );
+	vector< TLorentzVector > p4matchdijetWOMatchBjets = vectorsjWOMatchBjets.s3VectorTL;
+	vector< double > massmatchdijetWOMatchBjets = vectorsjWOMatchBjets.s3Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjets = vectorsjWOMatchBjets.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massmatchdijetWOMatchBjets.size(); ++iim) {
+		h_matchdijetWOMatchBjets_masspt->Fill( scalarSumPtmatchdijetWOMatchBjets[iim], massmatchdijetWOMatchBjets[iim] );
+		h_massmatchdijetWOMatchBjets->Fill( massmatchdijetWOMatchBjets[iim] );
+
+		///// Diagonal cuts
+		double iDiag=(double)iim*10.0+50.0;
+		/*if( p4jetsWOMatchBjets[iim] < ( scalarSumPtmatchdijetWOMatchBjets[iim]-iDiag ) ) {
+		}*/
+	}
+
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWOMatchBjets_1cut50;
+	vectorsjWOMatchBjets_1cut50 = s3Vectors( p4jetsWOMatchBjets_1cut50 );
+	vector< TLorentzVector > p4matchdijetWOMatchBjets_1cut50 = vectorsjWOMatchBjets_1cut50.s3VectorTL;
+	vector< double > massmatchdijetWOMatchBjets_1cut50 = vectorsjWOMatchBjets_1cut50.s3Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjets_1cut50 = vectorsjWOMatchBjets_1cut50.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massmatchdijetWOMatchBjets_1cut50.size(); ++iim) {
+		h_matchdijetWOMatchBjets_masspt_1cut50->Fill( scalarSumPtmatchdijetWOMatchBjets_1cut50[iim], massmatchdijetWOMatchBjets_1cut50[iim] );
+		h_massmatchdijetWOMatchBjets_1cut50->Fill( massmatchdijetWOMatchBjets_1cut50[iim] );
+
+	}
+
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWOMatchBjets_1cut100;
+	vectorsjWOMatchBjets_1cut100 = s3Vectors( p4jetsWOMatchBjets_1cut100 );
+	vector< TLorentzVector > p4matchdijetWOMatchBjets_1cut100 = vectorsjWOMatchBjets_1cut100.s3VectorTL;
+	vector< double > massmatchdijetWOMatchBjets_1cut100 = vectorsjWOMatchBjets_1cut100.s3Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjets_1cut100 = vectorsjWOMatchBjets_1cut100.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massmatchdijetWOMatchBjets_1cut100.size(); ++iim) {
+		h_matchdijetWOMatchBjets_masspt_1cut100->Fill( scalarSumPtmatchdijetWOMatchBjets_1cut100[iim], massmatchdijetWOMatchBjets_1cut100[iim] );
+		h_massmatchdijetWOMatchBjets_1cut100->Fill( massmatchdijetWOMatchBjets_1cut100[iim] );
+	}
+
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWOMatchBjets_1cut150;
+	vectorsjWOMatchBjets_1cut150 = s3Vectors( p4jetsWOMatchBjets_1cut150 );
+	vector< TLorentzVector > p4matchdijetWOMatchBjets_1cut150 = vectorsjWOMatchBjets_1cut150.s3VectorTL;
+	vector< double > massmatchdijetWOMatchBjets_1cut150 = vectorsjWOMatchBjets_1cut150.s3Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjets_1cut150 = vectorsjWOMatchBjets_1cut150.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massmatchdijetWOMatchBjets_1cut150.size(); ++iim) {
+		h_matchdijetWOMatchBjets_masspt_1cut150->Fill( scalarSumPtmatchdijetWOMatchBjets_1cut150[iim], massmatchdijetWOMatchBjets_1cut150[iim] );
+		h_massmatchdijetWOMatchBjets_1cut150->Fill( massmatchdijetWOMatchBjets_1cut150[iim] );
+
+	}
+
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWOMatchBjets_1cut200;
+	vectorsjWOMatchBjets_1cut200 = s3Vectors( p4jetsWOMatchBjets_1cut200 );
+	vector< TLorentzVector > p4matchdijetWOMatchBjets_1cut200 = vectorsjWOMatchBjets_1cut200.s3VectorTL;
+	vector< double > massmatchdijetWOMatchBjets_1cut200 = vectorsjWOMatchBjets_1cut200.s3Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjets_1cut200 = vectorsjWOMatchBjets_1cut200.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massmatchdijetWOMatchBjets_1cut200.size(); ++iim) {
+		h_matchdijetWOMatchBjets_masspt_1cut200->Fill( scalarSumPtmatchdijetWOMatchBjets_1cut200[iim], massmatchdijetWOMatchBjets_1cut200[iim] );
+		h_massmatchdijetWOMatchBjets_1cut200->Fill( massmatchdijetWOMatchBjets_1cut200[iim] );
+
+	}
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+	///// Match jets from Higgs
+	vector< TLorentzVector > p4jetsWOMatchBjetsHiggs;
+	vector< TLorentzVector > p4jetsWOMatchBjetsHiggs_1cut50;
+	vector< TLorentzVector > p4jetsWOMatchBjetsHiggs_1cut100;
+	vector< TLorentzVector > p4jetsWOMatchBjetsHiggs_1cut150;
+	vector< TLorentzVector > p4jetsWOMatchBjetsHiggs_1cut200;
+
+	if ( p4MatchTruthAlljets.size() > 5 && p4MatchB1Higgs.size() == 2 && p4MatchB2Higgs.size() == 2 ){
+		for(unsigned int iii = 0; iii < p4MatchTruthAlljets.size(); ++iii) {
+
+			////// Step 2 - dijet mass vs sum pt of jets
+			for(unsigned int iij = 0; iij < p4MatchTruthAlljets.size(); ++iij) {
+				if ( iii>=iij ) continue;
+				TLorentzVector p4dijetHiggs = p4MatchTruthAlljets[iii] + p4MatchTruthAlljets[iij];
+				double sumdijetHiggspt = p4MatchTruthAlljets[iii].Pt() + p4MatchTruthAlljets[iij].Pt();
+				h_matchdijetHiggs_masspt->Fill( sumdijetHiggspt, p4dijetHiggs.M() );
+			}
+			
+			////// Step 3 - dijet mass vs sum pt of jets without bs from step 1
+			if ( p4MatchBjetsHiggsSmallMassDiff.size() == 4 ) p4jetsWOMatchBjetsHiggs = compare2VectorsTLorentzVectors( p4MatchTruthAlljets, p4MatchBjetsHiggsSmallMassDiff );
+			if ( p4MatchBjetsHiggsSmallMassDiff_1cut50.size() == 4 ) p4jetsWOMatchBjetsHiggs_1cut50 = compare2VectorsTLorentzVectors( p4MatchTruthAlljets, p4MatchBjetsHiggsSmallMassDiff_1cut50 );
+			if ( p4MatchBjetsHiggsSmallMassDiff_1cut100.size() == 4 ) p4jetsWOMatchBjetsHiggs_1cut100 = compare2VectorsTLorentzVectors( p4MatchTruthAlljets, p4MatchBjetsHiggsSmallMassDiff_1cut100 );
+			if ( p4MatchBjetsHiggsSmallMassDiff_1cut150.size() == 4 ) p4jetsWOMatchBjetsHiggs_1cut150 = compare2VectorsTLorentzVectors( p4MatchTruthAlljets, p4MatchBjetsHiggsSmallMassDiff_1cut150 );
+			if ( p4MatchBjetsHiggsSmallMassDiff_1cut200.size() == 4 ) p4jetsWOMatchBjetsHiggs_1cut200 = compare2VectorsTLorentzVectors( p4MatchTruthAlljets, p4MatchBjetsHiggsSmallMassDiff_1cut200 );
+		}
+	}
+
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWOMatchBjetsHiggs;
+	vectorsjWOMatchBjetsHiggs = s3Vectors( p4jetsWOMatchBjetsHiggs );
+	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs = vectorsjWOMatchBjetsHiggs.s3VectorTL;
+	vector< double > massmatchdijetWOMatchBjetsHiggs = vectorsjWOMatchBjetsHiggs.s3Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjetsHiggs = vectorsjWOMatchBjetsHiggs.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massmatchdijetWOMatchBjetsHiggs.size(); ++iim) {
+		h_matchdijetWOMatchBjetsHiggs_masspt->Fill( scalarSumPtmatchdijetWOMatchBjetsHiggs[iim], massmatchdijetWOMatchBjetsHiggs[iim] );
+		h_massmatchdijetWOMatchBjetsHiggs->Fill( massmatchdijetWOMatchBjetsHiggs[iim] );
+
+		///// Diagonal cuts
+		double iDiag=(double)iim*10.0+50.0;
+		/*if( p4jetsWOMatchBjetsHiggs[iim] < ( scalarSumPtmatchdijetWOMatchBjetsHiggs[iim]-iDiag ) ) {
+		}*/
+	}
+
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWOMatchBjetsHiggs_1cut50;
+	vectorsjWOMatchBjetsHiggs_1cut50 = s3Vectors( p4jetsWOMatchBjetsHiggs_1cut50 );
+	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs_1cut50 = vectorsjWOMatchBjetsHiggs_1cut50.s3VectorTL;
+	vector< double > massmatchdijetWOMatchBjetsHiggs_1cut50 = vectorsjWOMatchBjetsHiggs_1cut50.s3Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjetsHiggs_1cut50 = vectorsjWOMatchBjetsHiggs_1cut50.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massmatchdijetWOMatchBjetsHiggs_1cut50.size(); ++iim) {
+		h_matchdijetWOMatchBjetsHiggs_masspt_1cut50->Fill( scalarSumPtmatchdijetWOMatchBjetsHiggs_1cut50[iim], massmatchdijetWOMatchBjetsHiggs_1cut50[iim] );
+		h_massmatchdijetWOMatchBjetsHiggs_1cut50->Fill( massmatchdijetWOMatchBjetsHiggs_1cut50[iim] );
+
+	}
+
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWOMatchBjetsHiggs_1cut100;
+	vectorsjWOMatchBjetsHiggs_1cut100 = s3Vectors( p4jetsWOMatchBjetsHiggs_1cut100 );
+	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs_1cut100 = vectorsjWOMatchBjetsHiggs_1cut100.s3VectorTL;
+	vector< double > massmatchdijetWOMatchBjetsHiggs_1cut100 = vectorsjWOMatchBjetsHiggs_1cut100.s3Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjetsHiggs_1cut100 = vectorsjWOMatchBjetsHiggs_1cut100.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massmatchdijetWOMatchBjetsHiggs_1cut100.size(); ++iim) {
+		h_matchdijetWOMatchBjetsHiggs_masspt_1cut100->Fill( scalarSumPtmatchdijetWOMatchBjetsHiggs_1cut100[iim], massmatchdijetWOMatchBjetsHiggs_1cut100[iim] );
+		h_massmatchdijetWOMatchBjetsHiggs_1cut100->Fill( massmatchdijetWOMatchBjetsHiggs_1cut100[iim] );
+	}
+
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWOMatchBjetsHiggs_1cut150;
+	vectorsjWOMatchBjetsHiggs_1cut150 = s3Vectors( p4jetsWOMatchBjetsHiggs_1cut150 );
+	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs_1cut150 = vectorsjWOMatchBjetsHiggs_1cut150.s3VectorTL;
+	vector< double > massmatchdijetWOMatchBjetsHiggs_1cut150 = vectorsjWOMatchBjetsHiggs_1cut150.s3Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjetsHiggs_1cut150 = vectorsjWOMatchBjetsHiggs_1cut150.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massmatchdijetWOMatchBjetsHiggs_1cut150.size(); ++iim) {
+		h_matchdijetWOMatchBjetsHiggs_masspt_1cut150->Fill( scalarSumPtmatchdijetWOMatchBjetsHiggs_1cut150[iim], massmatchdijetWOMatchBjetsHiggs_1cut150[iim] );
+		h_massmatchdijetWOMatchBjetsHiggs_1cut150->Fill( massmatchdijetWOMatchBjetsHiggs_1cut150[iim] );
+
+	}
+
+	//// Structure function s3Vectors
+	s3VecMassSumPt vectorsjWOMatchBjetsHiggs_1cut200;
+	vectorsjWOMatchBjetsHiggs_1cut200 = s3Vectors( p4jetsWOMatchBjetsHiggs_1cut200 );
+	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs_1cut200 = vectorsjWOMatchBjetsHiggs_1cut200.s3VectorTL;
+	vector< double > massmatchdijetWOMatchBjetsHiggs_1cut200 = vectorsjWOMatchBjetsHiggs_1cut200.s3Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjetsHiggs_1cut200 = vectorsjWOMatchBjetsHiggs_1cut200.s3ScalarPt;
+
+	for(unsigned int iim = 0; iim < massmatchdijetWOMatchBjetsHiggs_1cut200.size(); ++iim) {
+		h_matchdijetWOMatchBjetsHiggs_masspt_1cut200->Fill( scalarSumPtmatchdijetWOMatchBjetsHiggs_1cut200[iim], massmatchdijetWOMatchBjetsHiggs_1cut200[iim] );
+		h_massmatchdijetWOMatchBjetsHiggs_1cut200->Fill( massmatchdijetWOMatchBjetsHiggs_1cut200[iim] );
+
+	}
+			
+	///////////////////////////////////////////////////////////////////////
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 	////////////////////////////////////////////////////////////////
 	//////           STEP 4                                    /////
-	//////  Mass of MatchBjets from 1 and jj from 3 vs sum pt of MatchBjetsjj  /////
+	//////  Mass of MatchBjets from 1 and dijet from 3 vs sum pt of MatchBjetsdijet  /////
 	////////////////////////////////////////////////////////////////
 	
 	/*////// Reco Jets
 	for(unsigned int iiii = 0; iiii < p4RecoMatchBjetsSmallMassDiff.size(); ++iiii) {
 		for(unsigned int iiij = 0; iiij < p4RecoMatchBjetsSmallMassDiff.size(); ++iiij) {
 			if ( iiii == iiij ) continue;
-			for(unsigned int iijj = 0; iijj < p4recojWOMatchBjets.size(); ++iijj) {
-				for(unsigned int ijjj = 0; ijjj < p4recojWOMatchBjets.size(); ++ijjj) {
-					if ( iijj == ijjj ) continue;
-					TLorentzVector p4recoMatchBjetsjjMass = p4RecoMatchBjetsSmallMassDiff[iiii] + p4RecoMatchBjetsSmallMassDiff[iiij] + p4recojWOMatchBjets[iijj] + p4recojWOMatchBjets[ijjj];
-					double sumrecoMatchBjetsjjPt = p4RecoMatchBjetsSmallMassDiff[iiii].Pt() + p4RecoMatchBjetsSmallMassDiff[iiij].Pt() + p4recojWOMatchBjets[iijj].Pt() + p4recojWOMatchBjets[ijjj].Pt();
-					h_recoMatchBjetsjj_masspt->Fill( p4recoMatchBjetsjjMass.M(), sumrecoMatchBjetsjjPt );
+			for(unsigned int iidijet = 0; iidijet < p4recojWOMatchBjets.size(); ++iidijet) {
+				for(unsigned int idijetj = 0; idijetj < p4recojWOMatchBjets.size(); ++idijetj) {
+					if ( iidijet == idijetj ) continue;
+					TLorentzVector p4recoMatchBjetsdijetMass = p4RecoMatchBjetsSmallMassDiff[iiii] + p4RecoMatchBjetsSmallMassDiff[iiij] + p4recojWOMatchBjets[iidijet] + p4recojWOMatchBjets[idijetj];
+					double sumrecoMatchBjetsdijetPt = p4RecoMatchBjetsSmallMassDiff[iiii].Pt() + p4RecoMatchBjetsSmallMassDiff[iiij].Pt() + p4recojWOMatchBjets[iidijet].Pt() + p4recojWOMatchBjets[idijetj].Pt();
+					h_recoMatchBjetsdijet_masspt->Fill( p4recoMatchBjetsdijetMass.M(), sumrecoMatchBjetsdijetPt );
 				}
 			}
 		}
@@ -1532,12 +1607,12 @@ void MyAnalyzer::Analysis( vector< TLorentzVector > p4GenTruthB1Higgs, vector< T
 	for(unsigned int iiii = 0; iiii < p4MatchBjetsSmallMassDiff.size(); ++iiii) {
 		for(unsigned int iiij = 0; iiij < p4MatchBjetsSmallMassDiff.size(); ++iiij) {
 			if ( iiii == iiij ) continue;
-			for(unsigned int iijj = 0; iijj < p4jWOMatchBjets.size(); ++iijj) {
-				for(unsigned int ijjj = 0; ijjj < p4jWOMatchBjets.size(); ++ijjj) {
-					if ( iijj == ijjj ) continue;
-					TLorentzVector p4MatchBjetsjjMass = p4MatchBjetsSmallMassDiff[iiii] + p4MatchBjetsSmallMassDiff[iiij] + p4jWOMatchBjets[iijj] + p4jWOMatchBjets[ijjj];
-					double sumMatchBjetsjjPt = p4MatchBjetsSmallMassDiff[iiii].Pt() + p4MatchBjetsSmallMassDiff[iiij].Pt() + p4jWOMatchBjets[iijj].Pt() + p4jWOMatchBjets[ijjj].Pt();
-					h_MatchBjetsjj_masspt->Fill( p4MatchBjetsjjMass.M(), sumMatchBjetsjjPt );
+			for(unsigned int iidijet = 0; iidijet < p4jetsWOMatchBjets.size(); ++iidijet) {
+				for(unsigned int idijetj = 0; idijetj < p4jetsWOMatchBjets.size(); ++idijetj) {
+					if ( iidijet == idijetj ) continue;
+					TLorentzVector p4MatchBjetsdijetMass = p4MatchBjetsSmallMassDiff[iiii] + p4MatchBjetsSmallMassDiff[iiij] + p4jetsWOMatchBjets[iidijet] + p4jetsWOMatchBjets[idijetj];
+					double sumMatchBjetsdijetPt = p4MatchBjetsSmallMassDiff[iiii].Pt() + p4MatchBjetsSmallMassDiff[iiij].Pt() + p4jetsWOMatchBjets[iidijet].Pt() + p4jetsWOMatchBjets[idijetj].Pt();
+					h_MatchBjetsdijet_masspt->Fill( p4MatchBjetsdijetMass.M(), sumMatchBjetsdijetPt );
 				}
 			}
 		}
@@ -1547,19 +1622,19 @@ void MyAnalyzer::Analysis( vector< TLorentzVector > p4GenTruthB1Higgs, vector< T
 
 	////////////////////////////////////////////////////////////////
 	//////           STEP 5                                    /////
-	//////  Smallest mass MatchBjetsjj                                 /////
+	//////  Smallest mass MatchBjetsdijet                                 /////
 	////////////////////////////////////////////////////////////////
 	
 	/*////// Reco Jets
-	for(unsigned int jjjj = 0; jjjj < p4RecoMatchBjetsSmallMassDiff.size()-3; ++jjjj) {
-		for(unsigned int jjjk = 1; jjjk < p4RecoMatchBjetsSmallMassDiff.size()-2; ++jjjk) {
-			if ( jjjj == jjjk ) continue;
-			for(unsigned int iijj = 0; iijj < p4recojWOMatchBjets.size(); ++iijj) {
-				for(unsigned int ijjj = 0; ijjj < p4recojWOMatchBjets.size(); ++ijjj) {
-					if ( iijj == ijjj ) continue;
-					TLorentzVector p4recoMatchBjetsjjMass = p4RecoMatchBjetsSmallMassDiff[iiii] + p4RecoMatchBjetsSmallMassDiff[iiij] + p4recojWOMatchBjets[iijj] + p4recojWOMatchBjets[ijjj];
-					double sumrecoMatchBjetsjjPt = p4RecoMatchBjetsSmallMassDiff[iiii].Pt() + p4RecoMatchBjetsSmallMassDiff[iiij].Pt() + p4recojWOMatchBjets[iijj].Pt() + p4recojWOMatchBjets[ijjj].Pt();
-					h_massrecoMatchBjetsjj->Fill( p4recoMatchBjetsjjMass.M(), sumrecoMatchBjetsjjPt );
+	for(unsigned int dijetdijet = 0; dijetdijet < p4RecoMatchBjetsSmallMassDiff.size()-3; ++dijetdijet) {
+		for(unsigned int dijetjk = 1; dijetjk < p4RecoMatchBjetsSmallMassDiff.size()-2; ++dijetjk) {
+			if ( dijetdijet == dijetjk ) continue;
+			for(unsigned int iidijet = 0; iidijet < p4recojWOMatchBjets.size(); ++iidijet) {
+				for(unsigned int idijetj = 0; idijetj < p4recojWOMatchBjets.size(); ++idijetj) {
+					if ( iidijet == idijetj ) continue;
+					TLorentzVector p4recoMatchBjetsdijetMass = p4RecoMatchBjetsSmallMassDiff[iiii] + p4RecoMatchBjetsSmallMassDiff[iiij] + p4recojWOMatchBjets[iidijet] + p4recojWOMatchBjets[idijetj];
+					double sumrecoMatchBjetsdijetPt = p4RecoMatchBjetsSmallMassDiff[iiii].Pt() + p4RecoMatchBjetsSmallMassDiff[iiij].Pt() + p4recojWOMatchBjets[iidijet].Pt() + p4recojWOMatchBjets[idijetj].Pt();
+					h_massrecoMatchBjetsdijet->Fill( p4recoMatchBjetsdijetMass.M(), sumrecoMatchBjetsdijetPt );
 				}
 			}
 		}
