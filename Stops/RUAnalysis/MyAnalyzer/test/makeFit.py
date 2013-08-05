@@ -85,6 +85,41 @@ h_PreFitP41.Fit(P4GausFit,"RQ","",FitStart,FitEnd);
 h_PreFitP41.Fit(P4GausFit,"RQ","",FitStart,FitEnd);
 h_PreFitP41.Fit(P4GausFit,"RQ","",FitStart,FitEnd);
 
+########### Calculate Acceptance?
+CombGausP4 = TF1("CombGausP4","gaus", 0, 2000)
+CombP4 = TF1("CombP4","[0]*pow(1-x/8000.0,[1])/pow(x/8000.0,[2]+[3]*log(x/8000.))", 0, 1000)
+		
+CombP4.SetParameter(0,P4GausFit.GetParameter(0))
+CombP4.SetParameter(1,P4GausFit.GetParameter(1))
+CombP4.SetParameter(2,P4GausFit.GetParameter(2))
+CombP4.SetParameter(3,P4GausFit.GetParameter(3))
+		
+CombGausP4.SetParameter(0,P4GausFit.GetParameter(4))
+CombGausP4.SetParameter(1,P4GausFit.GetParameter(5))
+CombGausP4.SetParameter(2,P4GausFit.GetParameter(6))
+		
+CombGausP4.SetParError(0,P4GausFit.GetParError(4))
+CombGausP4.SetParError(1,P4GausFit.GetParError(5))
+CombGausP4.SetParError(2,P4GausFit.GetParError(6))
+		
+#CombGausP4.SetLineColor(6)
+#CombGausP4.SetName(("Gaus_P4"+to_string(mass[m])+"_"+to_string(pT6V)).c_str())
+#CombP4.SetLineColor(1)
+#CombP4.SetName(("P4_"+to_string(mass[m])+"_"+to_string(pT6V)).c_str())
+#string bfolder
+#fnew1.cd()
+#h_CombFitP4.Write()
+#CombGausP4.Write()
+#CombP4.Write()
+		
+SigP4 = CombGausP4.Integral(0,1000)
+FullSigP4 = h_PreFitP41.Integral(0,1000)
+GaussIntegral = SigP4/10/100000 
+FullIntegral = FullSigP4/100000
+print 'Mass: ', st1mass, ' Gaus Integral: ', GaussIntegral , sqrt(2*3.14)*CombGausP4.GetParameter(2)*CombGausP4.GetParameter(0)/10/100000 
+print 'Full integral ', FullIntegral 
+print 'Percentage ', GaussIntegral*100/FullIntegral
+
 ######### Plotting Histograms
 c1 = TCanvas('c1', 'c1',  10, 10, 750, 500 )
 h_PreFitP40.Draw()
