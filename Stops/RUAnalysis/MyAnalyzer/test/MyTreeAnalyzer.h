@@ -49,6 +49,7 @@ private:
    void			ParseInput();
    TString		fMyOpt;
    TString		fSample;
+   Int_t		fSt1;
    TH1F			*h1test;
    map< string, TH1*> basicPlots;
    map< string, TH1*> step1plots1D;
@@ -306,6 +307,7 @@ public :
 
    MyTreeAnalyzer(TTree * /*tree*/ =0) : h1test(0),fChain(0),fFile(0),fProofFile(0) {
 	   fSample = "";
+	   fSt1 = 0;
    }
    virtual ~MyTreeAnalyzer() { }
    virtual Int_t   Version() const { return 2; }
