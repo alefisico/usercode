@@ -27,6 +27,7 @@ print "Input files: ", input1
 outputDir = "/uscms_data/d3/algomez/files/Stops/Results/Plots/"
 
 nRebin = 10
+eventsGenerated = 100000
 
 ######## Fit Functions
 P4PreFit0 = TF1("P4PreFit", "[0]*pow(1-x/8000.0,[1])/pow(x/8000.0,[2]+[3]*log(x/8000.))",0,1000);
@@ -41,8 +42,9 @@ h_PreFitP40 = tmp_h_Reco_WOStop1.Clone('tmp_'+histo+'_WOStop1')
 h_PreFitGauss = tmp_h_Match.Clone("tmp_Stop1_Match")
 h_PreFitP41 = tmp_h_Reco.Clone(histo)
 
-#h_PreFitP4.Scale(1)   ### I guess I have to scale to unity to compare to MC
-#h_PreFitGauss.Scale(1) 
+h_PreFitP40.Scale(1)   ### I guess I have to scale to unity to compare to MC
+h_PreFitGauss.Scale(1) 
+h_PreFitP41.Scale(1)   ### I guess I have to scale to unity to compare to MC
 
 ############## Pre-Fitting combinations
 FitStart0= h_PreFitP40.GetMaximumBin()*nRebin-40			#### 50 Claudia's parameter
@@ -86,7 +88,7 @@ h_PreFitP41.Fit(P4GausFit,"RQ","",FitStart,FitEnd);
 h_PreFitP41.Fit(P4GausFit,"RQ","",FitStart,FitEnd);
 
 ########### Calculate Acceptance?
-CombGausP4 = TF1("CombGausP4","gaus", 0, 2000)
+CombGausP4 = TF1("CombGausP4","gaus", 0, 1000)
 CombP4 = TF1("CombP4","[0]*pow(1-x/8000.0,[1])/pow(x/8000.0,[2]+[3]*log(x/8000.))", 0, 1000)
 		
 CombP4.SetParameter(0,P4GausFit.GetParameter(0))
@@ -114,25 +116,26 @@ CombGausP4.SetParError(2,P4GausFit.GetParError(6))
 		
 SigP4 = CombGausP4.Integral(0,1000)
 FullSigP4 = h_PreFitP41.Integral(0,1000)
-GaussIntegral = SigP4/10/100000 
-FullIntegral = FullSigP4/100000
-print 'Mass: ', st1mass, ' Gaus Integral: ', GaussIntegral , sqrt(2*3.14)*CombGausP4.GetParameter(2)*CombGausP4.GetParameter(0)/10/100000 
+GaussIntegral = SigP4/nRebin/eventsGenerated 
+FullIntegral = FullSigP4/eventsGenerated
+print 'Sample: ', decay+"_"+str(st2mass)+"_"+str(st1mass), ' Gaus Integral: ', GaussIntegral , 'Acceptance: ', sqrt(2*3.14)*CombGausP4.GetParameter(2)*CombGausP4.GetParameter(0)/nRebin/eventsGenerated 
+#print CombGausP4.GetParameter(0) , 1/CombGausP4.GetParameter(0), CombGausP4.GetParameter(2), 1/(sqrt(2*3.14)*CombGausP4.GetParameter(2))
 print 'Full integral ', FullIntegral 
-print 'Percentage ', GaussIntegral*100/FullIntegral
+print 'Gauss/Full', GaussIntegral*100/FullIntegral
 
 ######### Plotting Histograms
 c1 = TCanvas('c1', 'c1',  10, 10, 750, 500 )
 h_PreFitP40.Draw()
-c1.SaveAs(outputDir+histo+decay+"_WOStop1_FitP40.pdf")
+c1.SaveAs(outputDir+histo+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_WOStop1_FitP40.pdf")
 c1.Close()
 
 c2 = TCanvas('c2', 'c2',  10, 10, 750, 500 )
 h_PreFitGauss.Draw()
-c2.SaveAs(outputDir+"MatchStop1"+decay+"_Gaus.pdf")
+c2.SaveAs(outputDir+"MatchStop1"+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_Gaus.pdf")
 c2.Close()
 
 c3 = TCanvas('c3', 'c3',  10, 10, 750, 500 )
 h_PreFitP41.Draw()
-c3.SaveAs(outputDir+histo+decay+"_FitP4Gauss.pdf")
+c3.SaveAs(outputDir+histo+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_FitP4Gauss.pdf")
 c3.Close()
 
