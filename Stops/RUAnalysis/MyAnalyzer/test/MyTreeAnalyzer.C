@@ -266,6 +266,19 @@ void MyTreeAnalyzer::SlaveBegin(TTree * /*tree*/)
 	basicPlots["recoBjets_eta"] = new TH1D("recoBjets_eta" , "Reco Bjets #eta", nbinEta , minEta, maxEta );
 	basicPlots["recoBjets_phi"] = new TH1D("recoBjets_phi" , "Reco Bjets #phi", nbinEta , minEta, maxEta );
 
+	basicPlots["recoJets_num_Step1"] = new TH1D("recoJets_num_Step1" , "Number of Reco Jets after Step1", nbinNum , minNum, maxNum );
+	basicPlots["recoBjets_num_Step1"] = new TH1D("recoBjets_num_Step1" , "Number of Reco Bjets after Step1", nbinNum , minNum, maxNum );
+	basicPlots["recoJets_num_Step3"] = new TH1D("recoJets_num_Step3" , "Number of Reco Jets after Step3", nbinNum , minNum, maxNum );
+	basicPlots["recoBjets_num_Step3"] = new TH1D("recoBjets_num_Step3" , "Number of Reco Bjets after Step3", nbinNum , minNum, maxNum );
+	basicPlots["recoJets_num_Step3_diag50"] = new TH1D("recoJets_num_Step3_diag50" , "Number of Reco Jets after Step3_diag50", nbinNum , minNum, maxNum );
+	basicPlots["recoBjets_num_Step3_diag50"] = new TH1D("recoBjets_num_Step3_diag50" , "Number of Reco Bjets after Step3_diag50", nbinNum , minNum, maxNum );
+	basicPlots["recoJets_num_Step3_diag100"] = new TH1D("recoJets_num_Step3_diag100" , "Number of Reco Jets after Step3_diag100", nbinNum , minNum, maxNum );
+	basicPlots["recoBjets_num_Step3_diag100"] = new TH1D("recoBjets_num_Step3_diag100" , "Number of Reco Bjets after Step3_diag100", nbinNum , minNum, maxNum );
+	basicPlots["recoJets_num_Step3_diag150"] = new TH1D("recoJets_num_Step3_diag150" , "Number of Reco Jets after Step3_diag150", nbinNum , minNum, maxNum );
+	basicPlots["recoBjets_num_Step3_diag150"] = new TH1D("recoBjets_num_Step3_diag150" , "Number of Reco Bjets after Step3_diag150", nbinNum , minNum, maxNum );
+	basicPlots["recoJets_num_Step3_diag200"] = new TH1D("recoJets_num_Step3_diag200" , "Number of Reco Jets after Step3_diag200", nbinNum , minNum, maxNum );
+	basicPlots["recoBjets_num_Step3_diag200"] = new TH1D("recoBjets_num_Step3_diag200" , "Number of Reco Bjets after Step3_diag200", nbinNum , minNum, maxNum );
+
 	//////////////////////////////// Step1 Plots 1D
 	// Reco Bjets
 	step1plots1D["massRecoBjetsCSVM"] = new TH1D("massRecoBjetsCSVM" , "Mass of RecoBjetsCSVM" , nbinPt, minPt, maxPt );
@@ -479,6 +492,12 @@ void MyTreeAnalyzer::SlaveBegin(TTree * /*tree*/)
 	fCutLabels.push_back("Processed");
 	fCutLabels.push_back("Simple");
 	fCutLabels.push_back("4jetTrigger");
+	fCutLabels.push_back("Step1");
+	fCutLabels.push_back("Step3");
+	fCutLabels.push_back("Step3_diag50");
+	fCutLabels.push_back("Step3_diag100");
+	fCutLabels.push_back("Step3_diag150");
+	fCutLabels.push_back("Step3_diag200");
 
 	hcutflow = new TH1D("cutflow","cut flow", fCutLabels.size(), 0.5, fCutLabels.size() +0.5 );
 
@@ -523,6 +542,7 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 	std::vector< TLorentzVector > p4RecoJets;
 	std::vector< TLorentzVector > p4RecoBjetsCSVM;
 	std::vector< TLorentzVector > p4RecoPartonFlavorBjetsCSVM;
+	std::vector< double > dummyCounter1;
 
 	///////////////////////////////////////////////////
 	/////////// Store TLorentzVecots RECO jets and bjets
@@ -532,11 +552,11 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 
 		h1test->Fill( jet_PF_pt[i] );
 		if ( jet_PF_pt[i] < 20.0 || fabs( jet_PF_eta[i] ) > 3.0) continue;
-		cutmap["Simple"] += nEvents;
+		dummyCounter1.push_back( jet_PF_pt[i] );
+
 		//if ( nPFJets > 5 ){
 			//if ( jet_PF_pt[3] < 80.0 || jet_PF_pt[5] < 60.0 ) continue;	/// 6jet Trigger
 			if ( jet_PF_pt[3] < 80 ) continue;				/// dijet trigger
-			cutmap["4jetTrigger"] += nEvents;
 
 			TLorentzVector p4Jets;
 			p4Jets.SetPxPyPzE( jet_PF_px[i], jet_PF_py[i], jet_PF_pz[i], jet_PF_e[i] );
@@ -552,6 +572,9 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 
 		//}
 	}
+
+	if ( dummyCounter1.size() > 0 ) cutmap["Simple"] += nEvents;
+	if ( p4RecoJets.size() > 0 ) cutmap["4jetTrigger"] += nEvents;
 
 	///////////////////////////////////////////////////////
 	//   Basic Plots RECO Level                          //
@@ -588,6 +611,13 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 	//////  Best combination of bjets with smallest delta Mass  ////////
 	////////////////////////////////////////////////////////////////////
 
+	//////// Dummy counter
+	if ( p4RecoBjetsCSVM.size() > 3 ){
+	       cutmap["Step1"] += nEvents;
+	       basicPlots["recoJets_num_Step1"]->Fill( p4RecoJets.size() );	
+	       basicPlots["recoBjets_num_Step1"]->Fill( p4RecoBjetsCSVM.size() );	
+	}
+
 	////////////////////////////  RecoBjets with Btagging
 	
 	//// Structure function smallMassDiff
@@ -614,6 +644,7 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 		step1plots2D["PtRecoBjetsCSVM"]->Fill( ptRecoBjetsCSVM[tii], massRecoBjetsCSVM[tii] );
 		step1plots2D["scalarPtRecoBjetsCSVM"]->Fill( scalarPtRecoBjetsCSVM[tii], massRecoBjetsCSVM[tii] );
 
+		////////////// Mass Window Cut - NO Included - Test Only
 		//cout << " 1 " << massRecoBjetsCSVM[0] << " " << massRecoBjetsCSVM[1] << endl;
 		//	if ( massRecoBjetsCSVM[0] < 130 && massRecoBjetsCSVM[0] > 120 ) continue;
 		//	if ( massRecoBjetsCSVM[1] < 130 && massRecoBjetsCSVM[1] > 120 ) continue;
@@ -622,8 +653,9 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 		//if ( massRecoBjetsCSVM[0] < 130 ) continue;
 		//if ( massRecoBjetsCSVM[1] > 120 ) continue;
 		//cout << " 2 " << massRecoBjetsCSVM[0] << " " << massRecoBjetsCSVM[1] << endl;
+		////////////////////////////////////////////////////////////////////////////////////////
 
-		///// Diagonal cuts
+		/*//// Diagonal cuts
 		double iDiag=(double)tii*10.0+50.0;
 		if( massRecoBjetsCSVM[tii] < ( scalarPtRecoBjetsCSVM[tii]-iDiag ) ) {
 			step1plots1D["massRecoBjetsCSVM_cutDiagHiggsbb50"]->Fill( massRecoBjetsCSVM[tii] );
@@ -658,7 +690,7 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 			step1plots2D["scalarPtRecoBjetsCSVM_cutDiagHiggsbb200"]->Fill( scalarPtRecoBjetsCSVM[tii], massRecoBjetsCSVM[tii] );
 			if (tii==0) step1plots2D["avgPtRecoBjetsCSVM_cutDiagHiggsbb200"]->Fill( avgPtRecoBjetsCSVM, avgMassRecoBjetsCSVM );
 			p4RecoBjetsCSVM_SmallMassDiff_cutDiagHiggsbb200 = p4RecoBjetsCSVM_SmallMassDiff;
-		}
+		}*/
 
 	} 
 	//////////////////////////////////////////////////////////
@@ -688,7 +720,7 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 		step1plots2D["scalarPtRecoPartonFlavorBjetsCSVM"]->Fill( scalarPtRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
 		if (tiii==0) step1plots2D["avgPtRecoPartonFlavorBjetsCSVM"]->Fill( avgPtRecoPartonFlavorBjetsCSVM, avgMassRecoPartonFlavorBjetsCSVM );
 
-		///// Diagonal cuts
+		/*//// Diagonal cuts
 		double iDiag=(double)tiii*10.0+50.0;
 		if( massRecoPartonFlavorBjetsCSVM[tiii] < ( scalarPtRecoPartonFlavorBjetsCSVM[tiii]-iDiag ) ) {
 			step1plots1D["massRecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50"]->Fill( massRecoPartonFlavorBjetsCSVM[tiii] );
@@ -723,7 +755,7 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 			step1plots2D["scalarPtRecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200"]->Fill( scalarPtRecoPartonFlavorBjetsCSVM[tiii], massRecoPartonFlavorBjetsCSVM[tiii] );
 			if (tiii==0) step1plots2D["avgPtRecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200"]->Fill( avgPtRecoPartonFlavorBjetsCSVM, avgMassRecoPartonFlavorBjetsCSVM );
 			p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cutDiagHiggsbb200 = p4RecoPartonFlavorBjetsCSVM_SmallMassDiff;
-		}
+		}*/
 
 	} 
 	//////////////////////////////////////////////////////////
@@ -748,6 +780,10 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 
 	if ( p4RecoJets.size() > 5 && p4RecoBjetsCSVM.size() > 3 ){
 
+		cutmap["Step3"] += nEvents;
+		basicPlots["recoJets_num_Step3"]->Fill( p4RecoJets.size() );	
+		basicPlots["recoBjets_num_Step3"]->Fill( p4RecoBjetsCSVM.size() );	
+
 		////// Step 2 - dijet mass vs sum pt of jets
 		for(unsigned int iii = 0; iii < p4RecoJets.size(); ++iii) {
 
@@ -768,13 +804,13 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 			}
 			
 			////// Step 3 - dijet mass vs sum pt of jets without bs from step 1
-			p4jetsWORecoJetsCSVM = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoBjetsCSVM );
-			if ( p4RecoBjetsCSVM_SmallMassDiff.size() == 4 ) p4bWORecoBjetsCSVM = compare2VectorsTLorentzVectors( p4RecoBjetsCSVM, p4RecoBjetsCSVM_SmallMassDiff );
+			//p4jetsWORecoJetsCSVM = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoBjetsCSVM );
+			//if ( p4RecoBjetsCSVM_SmallMassDiff.size() == 4 ) p4bWORecoBjetsCSVM = compare2VectorsTLorentzVectors( p4RecoBjetsCSVM, p4RecoBjetsCSVM_SmallMassDiff );
 			if ( p4RecoBjetsCSVM_SmallMassDiff.size() == 4 ) p4jetsWORecoBjetsCSVM = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoBjetsCSVM_SmallMassDiff );
-			if ( p4RecoBjetsCSVM_SmallMassDiff_cutDiagHiggsbb50.size() == 4 ) p4jetsWORecoBjetsCSVM_cutDiagHiggsbb50 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoBjetsCSVM_SmallMassDiff_cutDiagHiggsbb50 );
+			/*if ( p4RecoBjetsCSVM_SmallMassDiff_cutDiagHiggsbb50.size() == 4 ) p4jetsWORecoBjetsCSVM_cutDiagHiggsbb50 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoBjetsCSVM_SmallMassDiff_cutDiagHiggsbb50 );
 			if ( p4RecoBjetsCSVM_SmallMassDiff_cutDiagHiggsbb100.size() == 4 ) p4jetsWORecoBjetsCSVM_cutDiagHiggsbb100 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoBjetsCSVM_SmallMassDiff_cutDiagHiggsbb100 );
 			if ( p4RecoBjetsCSVM_SmallMassDiff_cutDiagHiggsbb150.size() == 4 ) p4jetsWORecoBjetsCSVM_cutDiagHiggsbb150 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoBjetsCSVM_SmallMassDiff_cutDiagHiggsbb150 );
-			if ( p4RecoBjetsCSVM_SmallMassDiff_cutDiagHiggsbb200.size() == 4 ) p4jetsWORecoBjetsCSVM_cutDiagHiggsbb200 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoBjetsCSVM_SmallMassDiff_cutDiagHiggsbb200 );
+			if ( p4RecoBjetsCSVM_SmallMassDiff_cutDiagHiggsbb200.size() == 4 ) p4jetsWORecoBjetsCSVM_cutDiagHiggsbb200 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoBjetsCSVM_SmallMassDiff_cutDiagHiggsbb200 ); */
 		}
 	}
 			
@@ -839,7 +875,32 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 
 	}
 
-	/////////////////////// STEP 3 - cutDiagHiggsbb50 
+	//////// Check number of bjets and events
+	if ( p4jetWORecoBjetsCSVM_cutDiagStop1jj50.size() > 0 ){
+	       cutmap["Step3_diag50"] += nEvents;
+	       basicPlots["recoJets_num_Step3_diag50"]->Fill( p4RecoJets.size() );	
+	       basicPlots["recoBjets_num_Step3_diag50"]->Fill( p4RecoBjetsCSVM.size() );	
+	}
+	if ( p4jetWORecoBjetsCSVM_cutDiagStop1jj100.size() > 0 ){
+	       cutmap["Step3_diag100"] += nEvents;
+	       basicPlots["recoJets_num_Step3_diag100"]->Fill( p4RecoJets.size() );	
+	       basicPlots["recoBjets_num_Step3_diag100"]->Fill( p4RecoBjetsCSVM.size() );	
+	}
+	if ( p4jetWORecoBjetsCSVM_cutDiagStop1jj150.size() > 0 ){
+	       cutmap["Step3_diag150"] += nEvents;
+	       basicPlots["recoJets_num_Step3_diag150"]->Fill( p4RecoJets.size() );	
+	       basicPlots["recoBjets_num_Step3_diag150"]->Fill( p4RecoBjetsCSVM.size() );	
+	}
+	if ( p4jetWORecoBjetsCSVM_cutDiagStop1jj200.size() > 0 ){
+	       cutmap["Step3_diag200"] += nEvents;
+	       basicPlots["recoJets_num_Step3_diag200"]->Fill( p4RecoJets.size() );	
+	       basicPlots["recoBjets_num_Step3_diag200"]->Fill( p4RecoBjetsCSVM.size() );	
+	}
+
+
+
+
+	/*////////////////////// STEP 3 - cutDiagHiggsbb50 
 	s3VecMassSumPt vectorsjWORecoBjetsCSVM_cutDiagHiggsbb50;
 	vectorsjWORecoBjetsCSVM_cutDiagHiggsbb50 = s3Vectors( p4jetsWORecoBjetsCSVM_cutDiagHiggsbb50 );
 	std::vector< TLorentzVector > p4dijetWORecoBjetsCSVM_cutDiagHiggsbb50 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb50.s3VectorTL;
@@ -1050,10 +1111,10 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 			
 			////// Step 3 - dijet mass vs sum pt of jets without bs from step 1
 			if ( p4RecoPartonFlavorBjetsCSVM_SmallMassDiff.size() == 4 ) p4jetsWORecoPartonFlavorBjetsCSVM = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoPartonFlavorBjetsCSVM_SmallMassDiff );
-			if ( p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cutDiagHiggsbb50.size() == 4 ) p4jetsWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cutDiagHiggsbb50 );
+			/*if ( p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cutDiagHiggsbb50.size() == 4 ) p4jetsWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cutDiagHiggsbb50 );
 			if ( p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cutDiagHiggsbb100.size() == 4 ) p4jetsWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cutDiagHiggsbb100 );
 			if ( p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cutDiagHiggsbb150.size() == 4 ) p4jetsWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cutDiagHiggsbb150 );
-			if ( p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cutDiagHiggsbb200.size() == 4 ) p4jetsWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cutDiagHiggsbb200 );
+			if ( p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cutDiagHiggsbb200.size() == 4 ) p4jetsWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200 = compare2VectorsTLorentzVectors( p4RecoJets, p4RecoPartonFlavorBjetsCSVM_SmallMassDiff_cutDiagHiggsbb200 ); */
 		}
 	}
 
@@ -1106,7 +1167,7 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 
 	}
 
-	/////////////////////// STEP 3 - cutDiagHiggsbb50 
+	/*////////////////////// STEP 3 - cutDiagHiggsbb50 
 	s3VecMassSumPt vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50;
 	vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50 = s3Vectors( p4jetsWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50 );
 	std::vector< TLorentzVector > p4dijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50.s3VectorTL;
