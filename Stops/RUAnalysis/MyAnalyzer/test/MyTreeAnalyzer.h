@@ -51,6 +51,7 @@ private:
    TString		fSample;
    Int_t		fSt1;
    TH1F			*h1test;
+   TH1D			*hcutflow;
    map< string, TH1*> basicPlots;
    map< string, TH1*> step1plots1D;
    map< string, TH2*> step1plots2D;
@@ -58,6 +59,7 @@ private:
    map< string, TH2*> step2plots2D;
    map< string, TH1*> step3plots1D;
    map< string, TH2*> step3plots2D;
+   vector< string > fCutLabels;
      
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
@@ -304,6 +306,7 @@ public :
 
    TFile            *fFile;
    TProofOutputFile *fProofFile; // For optimized merging of the ntuple
+   map< string, double > cutmap;
 
    MyTreeAnalyzer(TTree * /*tree*/ =0) : h1test(0),fChain(0),fFile(0),fProofFile(0) {
 	   fSample = "";

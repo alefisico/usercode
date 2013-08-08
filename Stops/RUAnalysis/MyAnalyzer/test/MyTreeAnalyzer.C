@@ -38,6 +38,8 @@ void MyTreeAnalyzer::ParseInput(){
 		
 		TString tmp = fMyOpt;
 		tmp = tmp.Remove(0,fMyOpt.Index("sample")+7);
+		if (!fMyOpt.Contains("data") || !fMyOpt.Contains("HT")) tmp = tmp.Remove(23,8);
+		//cout << tmp << endl;
 		fSample = tmp;
 		//if (fdoJECunc && fdoJECup==true) fSample += "_JECUP";
 		//if (fdoJECunc && fdoJECup==false) fSample += "_JECDOWN";
@@ -227,12 +229,12 @@ void MyTreeAnalyzer::SlaveBegin(TTree * /*tree*/)
 		return;
 	}*//////////////////////////////////////////////////////////////////////
 
-	//TString dir = "file:/cms/gomez/Stops/Results/";				// Hexfarm
-	TString dir = "file:/uscms_data/d3/algomez/files/Stops/Results/";	// LPC
+	TString dir = "file:/cms/gomez/Stops/Results/";				// Hexfarm
+	//TString dir = "file:/uscms_data/d3/algomez/files/Stops/Results/";	// LPC
 	TString tmpfilename;
-	if ( fSample != "" ) tmpfilename = fSample+"_plots.root";
+	//if ( fSample != "" ) tmpfilename = fSample+"_plots.root";
 	//if ( fSample != "" ) tmpfilename = fSample+"_4jet80_6jet60_plots.root";
-	//if ( fSample != "" ) tmpfilename = fSample+"_4jet80_plots.root";
+	if ( fSample != "" ) tmpfilename = fSample+"_4jet80_plots.root";
 	else tmpfilename = "results.root";
 	fFile = new TFile(dir+tmpfilename,"RECREATE");
 
@@ -277,6 +279,7 @@ void MyTreeAnalyzer::SlaveBegin(TTree * /*tree*/)
 	step1plots1D["avgMassRecoBjetsCSVM_cutDiagHiggsbb150"] = new TH1D("avgMassRecoBjetsCSVM_cutDiagHiggsbb150" , "Average Mass of RecoBjetsCSVM" , nbinPt, minPt, maxPt );
 	step1plots1D["avgMassRecoBjetsCSVM_cutDiagHiggsbb200"] = new TH1D("avgMassRecoBjetsCSVM_cutDiagHiggsbb200" , "Average Mass of RecoBjetsCSVM" , nbinPt, minPt, maxPt );
 
+
 	// Reco Bjets + Parton Flavor
 	step1plots1D["massRecoPartonFlavorBjetsCSVM"] = new TH1D("massRecoPartonFlavorBjetsCSVM" , "Mass of RecoPartonFlavorBjetsCSVM" , nbinPt, minPt, maxPt );
 	step1plots1D["massRecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50"] = new TH1D("massRecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50" , "Mass of RecoPartonFlavorBjetsCSVM" , nbinPt, minPt, maxPt );
@@ -315,6 +318,7 @@ void MyTreeAnalyzer::SlaveBegin(TTree * /*tree*/)
 	step1plots2D["avgPtRecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150"] = new TH2D("avgPtRecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150" , "Average Mass of RecoPartonFlavorBjetsCSVM vs scalar #sum p_{T}^{RecoPartonFlavorBjetsCSVM}" , nbinPt, minPt, maxPt, nbinPt, minPt, maxPt );
 	step1plots2D["avgPtRecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200"] = new TH2D("avgPtRecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200" , "Average Mass of RecoPartonFlavorBjetsCSVM vs scalar #sum p_{T}^{RecoPartonFlavorBjetsCSVM}" , nbinPt, minPt, maxPt, nbinPt, minPt, maxPt );
 	step1plots2D["PtRecoPartonFlavorBjetsCSVM"] = new TH2D("PtRecoPartonFlavorBjetsCSVM" , "Mass of RecoPartonFlavorBjetsCSVM vs #sum p_{T}^{RecoPartonFlavorBjetsCSVM}" , nbinPt, minPt, maxPt, nbinPt, minPt, maxPt ); 
+
 
 	////// Step 2 plots 2D
 	step2plots2D["recoDijet_masspt"] = new TH2D("recoDijet_masspt" , "Mass of dijet vs scalar #sum p_{T}^{dijet}" , nbinPt, minPt, maxPt, nbinPt, minPt, maxPt );
@@ -455,16 +459,32 @@ void MyTreeAnalyzer::SlaveBegin(TTree * /*tree*/)
 	map<string,TH1* > allhistos1D = basicPlots;
 	allhistos1D.insert( step1plots1D.begin(), step1plots1D.end() );
 	allhistos1D.insert( step3plots1D.begin(), step3plots1D.end() );
-	map<string,TH1* > allhistos2D = basicPlots;
-	allhistos2D.insert( step1plots2D.begin(), step1plots2D.end() );
+	map<string,TH2* > allhistos2D = step1plots2D;
 	allhistos2D.insert( step2plots2D.begin(), step2plots2D.end() );
 	allhistos2D.insert( step3plots2D.begin(), step3plots2D.end() );
 
-	/*for ( std::map<string,TH1* >::const_iterator imap=allhistos.begin(); imap!=allhistos.end(); ++imap ) {
+	for ( std::map<string,TH1* >::const_iterator imap=allhistos1D.begin(); imap!=allhistos1D.end(); ++imap ) {
 		TH1 *temp = imap->second;
 		temp->Sumw2();
-		temp->SetXTitle( temp->GetTitle() );
-	}*/
+		//temp->SetXTitle( temp->GetTitle() );
+	}
+
+	for ( std::map<string,TH2* >::const_iterator imap=allhistos2D.begin(); imap!=allhistos2D.end(); ++imap ) {
+		TH2 *temp = imap->second;
+		temp->Sumw2();
+		//temp->SetXTitle( temp->GetTitle() );
+	}
+
+
+	fCutLabels.push_back("Processed");
+	fCutLabels.push_back("Simple");
+	fCutLabels.push_back("4jetTrigger");
+
+	hcutflow = new TH1D("cutflow","cut flow", fCutLabels.size(), 0.5, fCutLabels.size() +0.5 );
+
+	for ( vector<string>::const_iterator ivec= fCutLabels.begin(); ivec!=fCutLabels.end(); ++ivec) {
+		cutmap[ *ivec ] = 0;
+	}
 
 }
 
@@ -496,6 +516,9 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 
 	if ( entry % 2000 == 0 ) cout<< "process entry " << entry << endl;
 
+	Double_t nEvents = 1.;
+	cutmap["Processed"] += nEvents;
+
 	/// TLorentzVectors
 	std::vector< TLorentzVector > p4RecoJets;
 	std::vector< TLorentzVector > p4RecoBjetsCSVM;
@@ -509,10 +532,11 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 
 		h1test->Fill( jet_PF_pt[i] );
 		if ( jet_PF_pt[i] < 20.0 || fabs( jet_PF_eta[i] ) > 3.0) continue;
-
+		cutmap["Simple"] += nEvents;
 		//if ( nPFJets > 5 ){
 			//if ( jet_PF_pt[3] < 80.0 || jet_PF_pt[5] < 60.0 ) continue;	/// 6jet Trigger
-			//if ( jet_PF_pt[3] < 80 ) continue;				/// dijet trigger
+			if ( jet_PF_pt[3] < 80 ) continue;				/// dijet trigger
+			cutmap["4jetTrigger"] += nEvents;
 
 			TLorentzVector p4Jets;
 			p4Jets.SetPxPyPzE( jet_PF_px[i], jet_PF_py[i], jet_PF_pz[i], jet_PF_e[i] );
@@ -1284,11 +1308,18 @@ void MyTreeAnalyzer::SlaveTerminate()
    // have been processed. When running with PROOF SlaveTerminate() is called
    // on each slave server.
 	
+	int ibin = 1;
+	for ( vector<string>::const_iterator ivec= fCutLabels.begin(); ivec != fCutLabels.end(); ++ivec ) {
+		hcutflow->SetBinContent( ibin, cutmap[ *ivec ] );
+		ibin++;
+	}
+
 	if (fFile) {
 		TDirectory *savedir = gDirectory;
 		if(h1test->GetEntries() > 0){
 			fFile->cd();
 			h1test->Write();
+			hcutflow->Write();
 			fFile->mkdir("basicPlots");
 			fFile->cd("basicPlots");
 			for ( std::map<string,TH1* >::const_iterator imap=basicPlots.begin(); imap!=basicPlots.end(); ++imap ) {
@@ -1342,7 +1373,7 @@ void MyTreeAnalyzer::SlaveTerminate()
 
 
 		h1test->SetDirectory(0);
-		//hcutflow->SetDirectory(0);
+		hcutflow->SetDirectory(0);
 		//MyStoreTree->GetStoreTree()->SetDirectory(0);
 		gDirectory = savedir;
 		fFile->Close();
