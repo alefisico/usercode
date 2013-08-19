@@ -54,11 +54,11 @@ for line in mcScaleFile:
 		HT1000_InfnEvents = float(line.split()[1])
 	if "st2XS"+str(st2mass1) == line.split()[0]:
 		signalXS = float(line.split()[1])
-	if decay1+"_"+str(st2mass1)+"_"+str(st1mass1) == line.split()[0]: 
-		signalnEvents = float(line.split()[1])
+	#if decay1+"_"+str(st2mass1)+"_"+str(st1mass1) == line.split()[0]: 
+	#	signalnEvents = float(line.split()[1])
 
 
-weightSignal = 20000 * signalXS/signalnEvents
+weightSignal = 20000 * signalXS/100000
 weightHT250_500 = 20000 * HT250_500XS/HT250_500nEvents
 weightHT500_1000 = 20000 * HT500_1000XS/HT500_1000nEvents
 weightHT1000_Inf = 20000 * HT1000_InfXS/HT1000_InfnEvents
@@ -75,7 +75,7 @@ weightHT1000_Inf = 20000 * HT1000_InfXS/HT1000_InfnEvents
 def plot_cuts(folder,hist1,label1, label2) :
 
 	gROOT.Reset()
-	gStyle.SetPadRightMargin(0.2);
+	#gStyle.SetPadRightMargin(0.2);
 
 	#h1 = f1.Get(options.dir + hist1)
 	h1 = f1.Get(folder+'/' + hist1)
@@ -86,7 +86,7 @@ def plot_cuts(folder,hist1,label1, label2) :
 	h1clone = h1.Clone("h1")
 	h2clone = h2.Clone("h2")
 	h3clone = h3.Clone("h3")
-	h4clone = h4.Clone("h3")
+	h4clone = h4.Clone("h4")
 
   	hs = THStack( h1.GetName()+h2.GetName()+h3.GetName()+h4.GetName(), h1.GetTitle() )
 
@@ -117,9 +117,9 @@ def plot_cuts(folder,hist1,label1, label2) :
 	c = TCanvas('c_' + hist1, 'c_' + hist1,  10, 10, 750, 500 )
 	#c.SetLogy()
 	hs.Draw('nostack')
-	#hs.GetXaxis().SetTitle("Mass [GeV]")
+	hs.GetXaxis().SetTitle("Mass [GeV]")
 
-	legend=TLegend(0.83,0.4,0.98,0.8)
+	legend=TLegend(0.70,0.7,0.90,0.9)
 	legend.SetFillColor(0);
 	legend.AddEntry(h1clone,label1, "f")
 	legend.AddEntry(h4clone,label2, "f")

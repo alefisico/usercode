@@ -18,9 +18,9 @@ folder = str ( sys.argv[5] )
 #hist2 = str ( sys.argv[5] )
 #print "Options: ", sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
 
-input1 = "/cms/gomez/Stops/Results/st2_h_bb_st1_"+decay1+"_"+str(st2mass1)+"_"+str(st1mass1)+"_plots.root"
+input1 = "/uscms_data/d3/algomez/files/Stops/Results/st2_h_bb_st1_"+decay1+"_"+str(st2mass1)+"_"+str(st1mass1)+"_4jet80_plots.root"
 
-outputDir = "/cms/gomez/Stops/Results/Plots/"
+outputDir = "/uscms_data/d3/algomez/files/Stops/Results/Plots/"
 
 #print "Input files: ", input1
 
@@ -31,19 +31,15 @@ leg = []
 
 f1 = TFile(input1)
 
-
 mcScaleFile = open("MCScaleFactors.txt")
 for line in mcScaleFile:
 	line = line.rstrip()
 	if "st2XS"+str(st2mass1) == line.split()[0]:
 		#print line.split()[1]
 		XSsample = float(line.split()[1])
-	if decay1+"_"+str(st2mass1)+"_"+str(st1mass1) == line.split()[0]:
-		#print line.split()[1]
-		nEvents = float(line.split()[1])
 
 #weight = nEvents/XSsample
-weight = 20000 * XSsample/nEvents
+weight = 20000 * XSsample/10000
 print "ScaleFactor for st2_h_bb_st1_"+decay1+"_"+str(st2mass1)+"_"+str(st1mass1) , weight
 
 ###########################
@@ -68,7 +64,8 @@ def plot_cuts(folder,hist1,label1) :
 	hs.Add( h1clone, 'hist' )
 
 	c = TCanvas('c_' + hist1, 'c_' + hist1,  10, 10, 750, 500 )
-	#c.SetLogy()
+	c.SetLogy()
+	c.SetGrid()
 	hs.Draw('nostack')
 	#hs.GetXaxis().SetTitle("Mass [GeV]")
 
