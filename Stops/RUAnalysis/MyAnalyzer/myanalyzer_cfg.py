@@ -1,8 +1,8 @@
 import FWCore.ParameterSet.Config as cms
 import glob,sys
 
-st1mass = int (sys.argv[2])
-st2mass = int (sys.argv[3])
+st1mass = (sys.argv[2])
+st2mass = (sys.argv[3])
 decay = sys.argv[4]
 numEvents = int (sys.argv[5])
 print sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
@@ -15,7 +15,7 @@ this_fin_nocfi = [i if i.startswith('file:') else 'file:' + i for i in suffix_li
 #this_fout0 = "ntuples/ntpl_"+str(index)+"_Allplots.root"
 #this_fout1 = "ntuples/ntpl_"+str(index)+"_Alltree.root"
 
-outputs = "/cms/gomez/Stops/Results/st2_h_bb_st1_"+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_plots.root"
+outputs = "/cms/gomez/Stops/Results/st2_h_bb_st1_"+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_preNtuplesPlots.root"
 #this_fout1 = "/cms/gomez/Stops/Ntuples/st2_h_bb_st1_"+process+"_"+str(st2mass)+"_"+str(st1mass)+"/st2_h_bb_st1_"+process+"_"+str(st2mass)+"_"+str(st1mass)+"_tree.root"
 
 
