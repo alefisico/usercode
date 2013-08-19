@@ -59,6 +59,8 @@ private:
    map< string, TH2*> step2plots2D;
    map< string, TH1*> step3plots1D;
    map< string, TH2*> step3plots2D;
+   map< string, TH2*> step4plots2D;
+   map< string, TH1*> step4plots1D;
    vector< string > fCutLabels;
      
 public :
