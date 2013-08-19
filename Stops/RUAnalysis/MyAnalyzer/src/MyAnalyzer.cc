@@ -120,13 +120,14 @@ vector< TLorentzVector > compare2TLVReturnNoEqual( vector< TLorentzVector > vec1
 vector< TLorentzVector > compare2TLVReturnEqual( vector< TLorentzVector > vec1, vector< TLorentzVector > vec2 ){	//// vec2 has 2 TLV
 
 	vector< TLorentzVector > diffVec;
-
-	for(unsigned int i = 0; i < vec1.size(); ++i) {
-		//cout << vec1[i].Pt() << endl; 
-		//cout << vec2[0].Pt() << " " << vec2[1].Pt() << endl; 
-		if ( ( vec1[i].Pt() != vec2[0].Pt() ) || ( vec1[i].Pt() != vec2[1].Pt() ) ) continue;
-		//cout << vec2[0].Pt() << " " << vec2[1].Pt() << endl; 
-		diffVec.push_back( vec1[i] );
+	if ( vec2.size() > 0 ) {
+		for(unsigned int i = 0; i < vec1.size(); ++i) {
+			//cout << vec1[i].Pt() << endl; 
+			//cout << vec2[0].Pt() << " " << vec2[1].Pt() << endl; 
+			if ( ( vec1[i].Pt() != vec2[0].Pt() ) && ( vec1[i].Pt() != vec2[1].Pt() ) ) continue;
+			//cout << vec2[0].Pt() << " " << vec2[1].Pt() << endl; 
+			diffVec.push_back( vec1[i] );
+		}
 	}
 	return diffVec;
 }
@@ -134,7 +135,7 @@ vector< TLorentzVector > compare2TLVReturnEqual( vector< TLorentzVector > vec1, 
 
 ///////////////////////////////////////////////////////////////////////////////////
 /////// Function Step3 (dijet mass from one vector)
-s3VecMassSumPt s3Vectors( vector< TLorentzVector > p4Store ){
+s2VecMassSumPt s2Vectors( vector< TLorentzVector > p4Store ){
 
 	vector< TLorentzVector > p4Vec;
 	vector< double > massVec;
@@ -151,10 +152,10 @@ s3VecMassSumPt s3Vectors( vector< TLorentzVector > p4Store ){
 			scalarSumPtVec.push_back( sumpt );
 		}
 	}
-	s3VecMassSumPt tmpVectors;
-	tmpVectors.s3VectorTL = p4Vec;
-	tmpVectors.s3Mass = massVec;
-	tmpVectors.s3ScalarPt = scalarSumPtVec;
+	s2VecMassSumPt tmpVectors;
+	tmpVectors.s2VectorTL = p4Vec;
+	tmpVectors.s2Mass = massVec;
+	tmpVectors.s2ScalarPt = scalarSumPtVec;
 
 
 	return tmpVectors;
@@ -218,6 +219,7 @@ MyAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	vector< TLorentzVector > p4GenTruthJ2Stop1; 
 	vector< TLorentzVector > p4GenTruthJetsStop1;
 	vector< TLorentzVector > p4GenTruthBjetsStop1;
+	vector< TLorentzVector > p4GenTruthJetsStop2;
 
 	vector< TLorentzVector > p4RecoJets;
 	vector< TLorentzVector > p4tmpRecoJets;
@@ -230,6 +232,8 @@ MyAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	vector< TLorentzVector > p4MatchB2Higgs;
 	vector< TLorentzVector > p4MatchJ1Stop1;
 	vector< TLorentzVector > p4MatchJ2Stop1;
+	vector< TLorentzVector > p4MatchJ1Stop2;
+	vector< TLorentzVector > p4MatchJ2Stop2;
 	vector< TLorentzVector > p4MatchTruthAlljets;
 	vector< TLorentzVector > p4MatchTruthJets;
 	vector< TLorentzVector > p4MatchTruthBjets;
@@ -331,8 +335,44 @@ MyAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		std::sort(p4GenTruthBjetsHiggs.begin(), p4GenTruthBjetsHiggs.end(), ComparePt);
 		std::sort(p4GenTruthJetsStop1.begin(), p4GenTruthJetsStop1.end(), ComparePt);
 	}
+
+	///// Store components of Stop2
+	if ( p4GenTruthB1Higgs.size() == 2 && p4GenTruthB2Higgs.size() == 2 && p4GenTruthJ1Stop1.size() == 2 && p4GenTruthJ2Stop1.size() == 2  ){
+		TLorentzVector cand1Stop2 = p4GenTruthB1Higgs[0] + p4GenTruthB1Higgs[1] + p4GenTruthJ1Stop1[0] + p4GenTruthJ1Stop1[1];
+		TLorentzVector cand2Stop2 = p4GenTruthB1Higgs[0] + p4GenTruthB1Higgs[1] + p4GenTruthJ2Stop1[0] + p4GenTruthJ2Stop1[1];
+		TLorentzVector cand3Stop2 = p4GenTruthB2Higgs[0] + p4GenTruthB2Higgs[1] + p4GenTruthJ1Stop1[0] + p4GenTruthJ1Stop1[1];
+		TLorentzVector cand4Stop2 = p4GenTruthB2Higgs[0] + p4GenTruthB2Higgs[1] + p4GenTruthJ2Stop1[0] + p4GenTruthJ2Stop1[1];
+
+		//cout << cand1Stop2.M() << " " << cand2Stop2.M() << " " << cand3Stop2.M() << " " << cand4Stop2.M() << endl;
+
+		if ( abs( cand1Stop2.M() - stop2Mass) < 1 ){
+			p4GenTruthJetsStop2.push_back( p4GenTruthB1Higgs[0] );
+			p4GenTruthJetsStop2.push_back( p4GenTruthB1Higgs[1] );
+			p4GenTruthJetsStop2.push_back( p4GenTruthJ1Stop1[0] );
+			p4GenTruthJetsStop2.push_back( p4GenTruthJ1Stop1[1] );
+		}
+		if ( abs( cand2Stop2.M() - stop2Mass) < 1 ){
+			p4GenTruthJetsStop2.push_back( p4GenTruthB1Higgs[0] );
+			p4GenTruthJetsStop2.push_back( p4GenTruthB1Higgs[1] );
+			p4GenTruthJetsStop2.push_back( p4GenTruthJ2Stop1[0] );
+			p4GenTruthJetsStop2.push_back( p4GenTruthJ2Stop1[1] );
+		}
+		if ( abs( cand3Stop2.M() - stop2Mass) < 1 ){
+			p4GenTruthJetsStop2.push_back( p4GenTruthB2Higgs[0] );
+			p4GenTruthJetsStop2.push_back( p4GenTruthB2Higgs[1] );
+			p4GenTruthJetsStop2.push_back( p4GenTruthJ1Stop1[0] );
+			p4GenTruthJetsStop2.push_back( p4GenTruthJ1Stop1[1] );
+		}
+	        if ( abs( cand4Stop2.M() - stop2Mass) < 1 ){
+			p4GenTruthJetsStop2.push_back( p4GenTruthB2Higgs[0] );
+			p4GenTruthJetsStop2.push_back( p4GenTruthB2Higgs[1] );
+			p4GenTruthJetsStop2.push_back( p4GenTruthJ2Stop1[0] );
+			p4GenTruthJetsStop2.push_back( p4GenTruthJ2Stop1[1] );
+		} 
+	}
 	//cout << p4GenTruthB1Higgs.size() << " "  << p4GenTruthB2Higgs.size() << endl;
 	//cout << p4GenTruthAlljets[0].Pt() << " "  << p4GenTruthBjets[0].Pt() << " "  << p4GenTruthJets[0].Pt() << endl;
+	//cout << p4GenTruthJetsStop2.size() <<  endl;
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -468,6 +508,27 @@ MyAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		}
 		/////////////////////////////////////////////////////////////////
 
+		//////////////////// Matching with bjets from Stop2
+		if( p4GenTruthJetsStop2.size() == 4 ) {
+			double deltaRJ1Stop2 = 999999;
+			for(unsigned int i = 0; i < 4; ++i) {
+				double tmpdeltaRJ1Stop2 = p4GenTruthJetsStop2[i].DeltaR( p4Jets );
+				if ( tmpdeltaRJ1Stop2 < deltaRJ1Stop2 ) deltaRJ1Stop2 = tmpdeltaRJ1Stop2;
+			}
+			h_MatchJ1Stop2_deltaR->Fill( deltaRJ1Stop2 );
+			if ( deltaRJ1Stop2 < 0.4 ) p4MatchJ1Stop2.push_back( p4Jets );   
+		}
+		if( p4GenTruthJetsStop2.size() == 8 ) {
+			double deltaRJ2Stop2 = 999999;
+			for(unsigned int i = 4; i < p4GenTruthJetsStop2.size(); ++i) {
+				double tmpdeltaRJ2Stop2 = p4GenTruthJetsStop2[i].DeltaR( p4Jets );
+				if ( tmpdeltaRJ2Stop2 < deltaRJ2Stop2 ) deltaRJ2Stop2 = tmpdeltaRJ2Stop2;
+			}
+			h_MatchJ2Stop2_deltaR->Fill( deltaRJ2Stop2 );
+			if ( deltaRJ2Stop2 < 0.4 ) p4MatchJ2Stop2.push_back( p4Jets );   
+		}
+		/////////////////////////////////////////////////////////////////
+
 		//////////////////// Matching with genParticles
 		// All Jets 
 		double deltaRTruthAlljets = 99999;
@@ -522,8 +583,8 @@ MyAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	}
 
 	// Plot Reconstructed Mass/particles plots
-	BasicPlots( p4GenTruthAlljets, p4GenTruthJets, p4GenTruthBjets, p4GenTruthBjetsHiggs, p4GenTruthB1Higgs, p4GenTruthB2Higgs,  p4GenTruthJ1Stop1, p4GenTruthJ2Stop1, p4GenTruthJetsStop1, p4GenTruthBjetsStop1, p4MatchTruthJets,  p4MatchTruthBjets, p4MatchB1Higgs, p4MatchB2Higgs, p4MatchJ1Stop1, p4MatchJ2Stop1, p4RecoJets, p4RecoBjetsCSVM );
-	Analysis( p4GenTruthB1Higgs, p4GenTruthB2Higgs, p4GenTruthJ1Stop1, p4GenTruthJ2Stop1, p4RecoJets, p4RecoBjetsCSVM, p4RecoPartonFlavorBjetsCSVM, p4MatchTruthBjets, p4MatchB1Higgs,  p4MatchB2Higgs, p4MatchJ1Stop1,  p4MatchJ2Stop1, p4MatchTruthAlljets);
+	BasicPlots( p4GenTruthAlljets, p4GenTruthJets, p4GenTruthBjets, p4GenTruthBjetsHiggs, p4GenTruthB1Higgs, p4GenTruthB2Higgs,  p4GenTruthJ1Stop1, p4GenTruthJ2Stop1, p4GenTruthJetsStop1, p4GenTruthBjetsStop1, p4MatchTruthJets,  p4MatchTruthBjets, p4MatchB1Higgs, p4MatchB2Higgs, p4MatchJ1Stop1, p4MatchJ2Stop1, p4MatchJ1Stop2, p4MatchJ2Stop2, p4RecoJets, p4RecoBjetsCSVM );
+	Analysis( p4GenTruthB1Higgs, p4GenTruthB2Higgs, p4GenTruthJ1Stop1, p4GenTruthJ2Stop1, p4RecoJets, p4RecoBjetsCSVM, p4RecoPartonFlavorBjetsCSVM, p4MatchTruthBjets, p4MatchB1Higgs,  p4MatchB2Higgs, p4MatchJ1Stop1,  p4MatchJ2Stop1, p4MatchJ1Stop2,  p4MatchJ2Stop2, p4MatchTruthAlljets);
 
 
 }
@@ -546,7 +607,7 @@ MyAnalyzer::endJob()
 //////////////////////////////////////////////////////////////////////
 ///////           General Basic Plots                          ///////
 //////////////////////////////////////////////////////////////////////
-void MyAnalyzer::BasicPlots( vector< TLorentzVector > p4GenTruthAlljets, vector< TLorentzVector > p4GenTruthJets, vector< TLorentzVector > p4GenTruthBjets, vector< TLorentzVector > p4GenTruthBjetsHiggs, vector< TLorentzVector > p4GenTruthB1Higgs, vector< TLorentzVector > p4GenTruthB2Higgs, vector< TLorentzVector > p4GenTruthJ1Stop1, vector< TLorentzVector > p4GenTruthJ2Stop1, vector< TLorentzVector > p4GenTruthJetsStop1, vector< TLorentzVector > p4GenTruthBjetsStop1, vector< TLorentzVector > p4MatchTruthJets,  vector< TLorentzVector > p4MatchTruthBjets, vector< TLorentzVector > p4MatchB1Higgs, vector< TLorentzVector > p4MatchB2Higgs, vector< TLorentzVector > p4MatchJ1Stop1, vector< TLorentzVector > p4MatchJ2Stop1,  vector< TLorentzVector > p4RecoJets, vector< TLorentzVector > p4RecoBjetsCSVM ){
+void MyAnalyzer::BasicPlots( vector< TLorentzVector > p4GenTruthAlljets, vector< TLorentzVector > p4GenTruthJets, vector< TLorentzVector > p4GenTruthBjets, vector< TLorentzVector > p4GenTruthBjetsHiggs, vector< TLorentzVector > p4GenTruthB1Higgs, vector< TLorentzVector > p4GenTruthB2Higgs, vector< TLorentzVector > p4GenTruthJ1Stop1, vector< TLorentzVector > p4GenTruthJ2Stop1, vector< TLorentzVector > p4GenTruthJetsStop1, vector< TLorentzVector > p4GenTruthBjetsStop1, vector< TLorentzVector > p4MatchTruthJets,  vector< TLorentzVector > p4MatchTruthBjets, vector< TLorentzVector > p4MatchB1Higgs, vector< TLorentzVector > p4MatchB2Higgs, vector< TLorentzVector > p4MatchJ1Stop1, vector< TLorentzVector > p4MatchJ2Stop1, vector< TLorentzVector > p4MatchJ1Stop2, vector< TLorentzVector > p4MatchJ2Stop2,  vector< TLorentzVector > p4RecoJets, vector< TLorentzVector > p4RecoBjetsCSVM ){
 
 	///////////////////////////////////////////////////////
 	//   Basic Plots RECO Level                          //
@@ -830,7 +891,7 @@ void MyAnalyzer::BasicPlots( vector< TLorentzVector > p4GenTruthAlljets, vector<
 		h_stop21_mass->Fill( p4GenTruthStop2[0].M() );
 		h_stop21_pt->Fill( p4GenTruthStop2[0].Pt() );	
 		h_stop21_eta->Fill( p4GenTruthStop2[0].Eta() );	
-		// Plots for softer Stop2
+		// Plots for softer Stop2 
 		if ( p4GenTruthStop2.size() > 1 ){
 		       	h_stop22_mass->Fill( p4GenTruthStop2[1].M() );
 		       	h_stop22_pt->Fill( p4GenTruthStop2[1].Pt() );
@@ -838,13 +899,27 @@ void MyAnalyzer::BasicPlots( vector< TLorentzVector > p4GenTruthAlljets, vector<
 		}
 	}
 	//////////////////////////////////////////////////// */
+	
+	/// Reco Match Stop2
+	if ( p4MatchJ1Stop2.size() > 1 ){
+		TLorentzVector MatchStop2Mass = p4MatchJ1Stop2[0] + p4MatchJ1Stop2[1] + p4MatchJ1Stop2[2] + p4MatchJ1Stop2[3] ;
+		h_matchJetsStop2_mass->Fill( MatchStop2Mass.M() );	
+	}	
+	h_matchJetsStop2_num->Fill( p4MatchJ1Stop2.size() );	
+	if ( p4MatchJ2Stop2.size() > 1 ){
+		TLorentzVector MatchStop2Mass = p4MatchJ2Stop2[0] + p4MatchJ2Stop2[1] + p4MatchJ2Stop2[2] + p4MatchJ2Stop2[3];
+		h_matchJetsStop2_mass->Fill( MatchStop2Mass.M() );	
+	}	
+	h_matchJetsStop2_num->Fill( p4MatchJ2Stop2.size() );	
+
+	/////////////////////////////////////////////////
 }
 
 
 //////////////////////////////////////////////////////////////////////
 ///////           ANALYSIS                                     ///////
 //////////////////////////////////////////////////////////////////////
-void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< TLorentzVector > p4GenTruthB2Higgs, vector< TLorentzVector > p4GenTruthJ1Stop1, vector< TLorentzVector > p4GenTruthJ2Stop1, vector< TLorentzVector > p4RecoJets, vector< TLorentzVector > p4RecoBjetsCSVM, vector< TLorentzVector > p4RecoPartonFlavorBjetsCSVM, vector< TLorentzVector > p4MatchTruthBjets,  vector< TLorentzVector > p4MatchB1Higgs, vector< TLorentzVector > p4MatchB2Higgs,  vector< TLorentzVector > p4MatchJ1Stop1, vector< TLorentzVector > p4MatchJ2Stop1, vector< TLorentzVector > p4MatchTruthAlljets){
+void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< TLorentzVector > p4GenTruthB2Higgs, vector< TLorentzVector > p4GenTruthJ1Stop1, vector< TLorentzVector > p4GenTruthJ2Stop1, vector< TLorentzVector > p4RecoJets, vector< TLorentzVector > p4RecoBjetsCSVM, vector< TLorentzVector > p4RecoPartonFlavorBjetsCSVM, vector< TLorentzVector > p4MatchTruthBjets,  vector< TLorentzVector > p4MatchB1Higgs, vector< TLorentzVector > p4MatchB2Higgs,  vector< TLorentzVector > p4MatchJ1Stop1, vector< TLorentzVector > p4MatchJ2Stop1, vector< TLorentzVector > p4MatchJ1Stop2, vector< TLorentzVector > p4MatchJ2Stop2, vector< TLorentzVector > p4MatchTruthAlljets){
 
 	////////////////////////////////////////////////////////////////////
 	//////       STEP 1                                         ////////
@@ -1187,13 +1262,12 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 
 
 	///////////////////////////////////////
-	/////////// STEP 2 - 3 ////////////////
+	/////////// STEP 2     ////////////////
 	/////// Mass dijet vs sum pt dijet //////////
 	///////////////////////////////////////
 
 	/////////// TLorentzVector for Match Stop1
 	vector< TLorentzVector > p4MatchStop1;
-
 	if ( p4MatchJ1Stop1.size() > 1 ){
 		TLorentzVector tmpJ1Stop1 = p4MatchJ1Stop1[0] + p4MatchJ1Stop1[1];
 		p4MatchStop1.push_back( tmpJ1Stop1 );
@@ -1204,8 +1278,8 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 	}
 
 	///////// RECO jets + Btagging CSVM
-	vector< TLorentzVector > p4jetsWORecoJetsCSVM;
-	vector< TLorentzVector > p4bWORecoBjetsCSVM;
+	//vector< TLorentzVector > p4jetsWORecoJetsCSVM;
+	//vector< TLorentzVector > p4bWORecoBjetsCSVM;
 	vector< TLorentzVector > p4jetsWORecoBjetsCSVM;
 	vector< TLorentzVector > p4jetsWORecoBjetsCSVM_cutDiagHiggsbb50;
 	vector< TLorentzVector > p4jetsWORecoBjetsCSVM_cutDiagHiggsbb100;
@@ -1234,8 +1308,8 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 			}
 			
 			////// Step 3 - dijet mass vs sum pt of jets without bs from step 1
-			p4jetsWORecoJetsCSVM = compare2TLVReturnNoEqual( p4RecoJets, p4RecoBjetsCSVM );
-			if ( p4RecoBjetsCSVM_SmallMassDiff.size() == 4 ) p4bWORecoBjetsCSVM = compare2TLVReturnNoEqual( p4RecoBjetsCSVM, p4RecoBjetsCSVM_SmallMassDiff );
+			//p4jetsWORecoJetsCSVM = compare2TLVReturnNoEqual( p4RecoJets, p4RecoBjetsCSVM );
+			//if ( p4RecoBjetsCSVM_SmallMassDiff.size() == 4 ) p4bWORecoBjetsCSVM = compare2TLVReturnNoEqual( p4RecoBjetsCSVM, p4RecoBjetsCSVM_SmallMassDiff );
 			if ( p4RecoBjetsCSVM_SmallMassDiff.size() == 4 ) p4jetsWORecoBjetsCSVM = compare2TLVReturnNoEqual( p4RecoJets, p4RecoBjetsCSVM_SmallMassDiff );
 			if ( p4RecoBjetsCSVM_SmallMassDiff_cutDiagHiggsbb50.size() == 4 ) p4jetsWORecoBjetsCSVM_cutDiagHiggsbb50 = compare2TLVReturnNoEqual( p4RecoJets, p4RecoBjetsCSVM_SmallMassDiff_cutDiagHiggsbb50 );
 			if ( p4RecoBjetsCSVM_SmallMassDiff_cutDiagHiggsbb100.size() == 4 ) p4jetsWORecoBjetsCSVM_cutDiagHiggsbb100 = compare2TLVReturnNoEqual( p4RecoJets, p4RecoBjetsCSVM_SmallMassDiff_cutDiagHiggsbb100 );
@@ -1244,13 +1318,13 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 		}
 	}
 			
-	/////////////////////// STEP 3 - NO cutDiagHiggsbb 
-	//// Structure function s3Vectors
-	s3VecMassSumPt vectorsjWORecoBjetsCSVM;
-	vectorsjWORecoBjetsCSVM = s3Vectors( p4jetsWORecoBjetsCSVM );
-	vector< TLorentzVector > p4dijetWORecoBjetsCSVM = vectorsjWORecoBjetsCSVM.s3VectorTL;
-	vector< double > massdijetWORecoBjetsCSVM = vectorsjWORecoBjetsCSVM.s3Mass;
-	vector< double > scalarSumPtdijetWORecoBjetsCSVM = vectorsjWORecoBjetsCSVM.s3ScalarPt;
+	/////////////////////// STEP 2 - NO cutDiagHiggsbb 
+	//// Structure function s2Vectors
+	s2VecMassSumPt vectorsjWORecoBjetsCSVM;
+	vectorsjWORecoBjetsCSVM = s2Vectors( p4jetsWORecoBjetsCSVM );
+	vector< TLorentzVector > p4dijetWORecoBjetsCSVM = vectorsjWORecoBjetsCSVM.s2VectorTL;
+	vector< double > massdijetWORecoBjetsCSVM = vectorsjWORecoBjetsCSVM.s2Mass;
+	vector< double > scalarSumPtdijetWORecoBjetsCSVM = vectorsjWORecoBjetsCSVM.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4dijetWORecoBjetsCSVM_cutDiagStop1jj50;
@@ -1260,17 +1334,16 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 
 	vector< double > scalarSumPtdijetWORecoBjetsCSVM_cutDiagStop1jj50;
 	vector< double > scalarSumPtdijetWORecoBjetsCSVM_cutDiagStop1jj100;
+
 	//// TLorentzVectors for Stop1
 	vector< TLorentzVector > p4jetsStop1WORecoBjetsCSVM;
+	vector< TLorentzVector > p4jetsStop1WORecoBjetsCSVM_cutDiagStop1jj50;
+	vector< TLorentzVector > p4jetsStop1WORecoBjetsCSVM_cutDiagStop1jj100;
 
 	for(unsigned int iim = 0; iim < massdijetWORecoBjetsCSVM.size(); ++iim) {
 		h_dijetWORecoBjetsCSVM_masspt->Fill( scalarSumPtdijetWORecoBjetsCSVM[iim], massdijetWORecoBjetsCSVM[iim] );
 		h_massdijetWORecoBjetsCSVM->Fill( massdijetWORecoBjetsCSVM[iim] );
 		
-		//cout << p4MatchJ1Stop1.size() << " " << p4MatchJ2Stop1.size() << endl;
-		if ( p4MatchStop1.size() > 1 ) p4jetsStop1WORecoBjetsCSVM = compare2TLVReturnEqual( p4dijetWORecoBjetsCSVM, p4MatchJ1Stop1 );
-		//cout << p4jetsStop1WORecoBjetsCSVM.size() << endl;
-
 		///// Diagonal cuts
 		double iDiag=(double)iim*10.0+50.0;
 		if( massdijetWORecoBjetsCSVM[iim] < ( scalarSumPtdijetWORecoBjetsCSVM[iim]-iDiag ) ) {
@@ -1305,12 +1378,35 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 
 	}
 
-	/////////////////////// STEP 3 - cutDiagHiggsbb50 
-	s3VecMassSumPt vectorsjWORecoBjetsCSVM_cutDiagHiggsbb50;
-	vectorsjWORecoBjetsCSVM_cutDiagHiggsbb50 = s3Vectors( p4jetsWORecoBjetsCSVM_cutDiagHiggsbb50 );
-	vector< TLorentzVector > p4dijetWORecoBjetsCSVM_cutDiagHiggsbb50 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb50.s3VectorTL;
-	vector< double > massdijetWORecoBjetsCSVM_cutDiagHiggsbb50 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb50.s3Mass;
-	vector< double > scalarSumPtdijetWORecoBjetsCSVM_cutDiagHiggsbb50 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb50.s3ScalarPt;
+	/////////////////////////// Count the number of correct DIjet for Stop1 in ALL combinations
+	//cout << p4MatchJ1Stop1.size() << " " << p4MatchJ2Stop1.size() << endl;
+	//if ( p4dijetWORecoBjetsCSVM.size() > 0 && p4MatchStop1.size() > 0 ) p4jetsStop1WORecoBjetsCSVM = compare2TLVReturnEqual( p4dijetWORecoBjetsCSVM, p4MatchStop1 );
+	if ( p4dijetWORecoBjetsCSVM.size() > 0 ) {
+		p4jetsStop1WORecoBjetsCSVM = compare2TLVReturnEqual( p4dijetWORecoBjetsCSVM, p4MatchStop1 );
+		h_jetsStop1WORecoBjetsCSVM_num->Fill( p4jetsStop1WORecoBjetsCSVM.size() );
+		h_jetsStop1WORecoBjetsCSVMvsAnyDijetWORecoBjetsCSVM_num->Fill( p4dijetWORecoBjetsCSVM.size(), p4jetsStop1WORecoBjetsCSVM.size() );
+		//cout << p4jetsStop1WORecoBjetsCSVM.size() << endl;
+	}
+
+	if ( p4dijetWORecoBjetsCSVM_cutDiagStop1jj50.size() > 0 ) {
+	       p4jetsStop1WORecoBjetsCSVM_cutDiagStop1jj50 = compare2TLVReturnEqual( p4dijetWORecoBjetsCSVM_cutDiagStop1jj50, p4MatchStop1 );
+	       h_jetsStop1WORecoBjetsCSVM_cutDiagStop1jj50_num->Fill( p4jetsStop1WORecoBjetsCSVM_cutDiagStop1jj50.size() );
+	       h_jetsStop1WORecoBjetsCSVMvsAnyDijetWORecoBjetsCSVM_cutDiagStop1jj50_num->Fill( p4dijetWORecoBjetsCSVM_cutDiagStop1jj50.size(),p4jetsStop1WORecoBjetsCSVM_cutDiagStop1jj50.size() );
+	}
+
+	if ( p4dijetWORecoBjetsCSVM_cutDiagStop1jj100.size() > 0 ) {
+	       p4jetsStop1WORecoBjetsCSVM_cutDiagStop1jj100 = compare2TLVReturnEqual( p4dijetWORecoBjetsCSVM_cutDiagStop1jj100, p4MatchStop1 );
+	       h_jetsStop1WORecoBjetsCSVM_cutDiagStop1jj100_num->Fill( p4jetsStop1WORecoBjetsCSVM_cutDiagStop1jj100.size() );
+	       h_jetsStop1WORecoBjetsCSVMvsAnyDijetWORecoBjetsCSVM_cutDiagStop1jj100_num->Fill( p4dijetWORecoBjetsCSVM_cutDiagStop1jj100.size(), p4jetsStop1WORecoBjetsCSVM_cutDiagStop1jj100.size() );
+	}
+	
+
+	/////////////////////// STEP 2 - cutDiagHiggsbb50 
+	s2VecMassSumPt vectorsjWORecoBjetsCSVM_cutDiagHiggsbb50;
+	vectorsjWORecoBjetsCSVM_cutDiagHiggsbb50 = s2Vectors( p4jetsWORecoBjetsCSVM_cutDiagHiggsbb50 );
+	vector< TLorentzVector > p4dijetWORecoBjetsCSVM_cutDiagHiggsbb50 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb50.s2VectorTL;
+	vector< double > massdijetWORecoBjetsCSVM_cutDiagHiggsbb50 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb50.s2Mass;
+	vector< double > scalarSumPtdijetWORecoBjetsCSVM_cutDiagHiggsbb50 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb50.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4dijetWORecoBjetsCSVM_cutDiagHiggsbb50_cutDiagStop1jj50;
@@ -1353,12 +1449,12 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 
 	}
 
-	/////////////////////// STEP 3 - cutDiagHiggsbb100 
-	s3VecMassSumPt vectorsjWORecoBjetsCSVM_cutDiagHiggsbb100;
-	vectorsjWORecoBjetsCSVM_cutDiagHiggsbb100 = s3Vectors( p4jetsWORecoBjetsCSVM_cutDiagHiggsbb100 );
-	vector< TLorentzVector > p4dijetWORecoBjetsCSVM_cutDiagHiggsbb100 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb100.s3VectorTL;
-	vector< double > massdijetWORecoBjetsCSVM_cutDiagHiggsbb100 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb100.s3Mass;
-	vector< double > scalarSumPtdijetWORecoBjetsCSVM_cutDiagHiggsbb100 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb100.s3ScalarPt;
+	/////////////////////// STEP 2 - cutDiagHiggsbb100 
+	s2VecMassSumPt vectorsjWORecoBjetsCSVM_cutDiagHiggsbb100;
+	vectorsjWORecoBjetsCSVM_cutDiagHiggsbb100 = s2Vectors( p4jetsWORecoBjetsCSVM_cutDiagHiggsbb100 );
+	vector< TLorentzVector > p4dijetWORecoBjetsCSVM_cutDiagHiggsbb100 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb100.s2VectorTL;
+	vector< double > massdijetWORecoBjetsCSVM_cutDiagHiggsbb100 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb100.s2Mass;
+	vector< double > scalarSumPtdijetWORecoBjetsCSVM_cutDiagHiggsbb100 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb100.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4dijetWORecoBjetsCSVM_cutDiagHiggsbb100_cutDiagStop1jj50;
@@ -1401,12 +1497,12 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 
 	}
 
-	/////////////////////// STEP 3 - cutDiagHiggsbb150 
-	s3VecMassSumPt vectorsjWORecoBjetsCSVM_cutDiagHiggsbb150;
-	vectorsjWORecoBjetsCSVM_cutDiagHiggsbb150 = s3Vectors( p4jetsWORecoBjetsCSVM_cutDiagHiggsbb150 );
-	vector< TLorentzVector > p4dijetWORecoBjetsCSVM_cutDiagHiggsbb150 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb150.s3VectorTL;
-	vector< double > massdijetWORecoBjetsCSVM_cutDiagHiggsbb150 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb150.s3Mass;
-	vector< double > scalarSumPtdijetWORecoBjetsCSVM_cutDiagHiggsbb150 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb150.s3ScalarPt;
+	/////////////////////// STEP 2 - cutDiagHiggsbb150 
+	s2VecMassSumPt vectorsjWORecoBjetsCSVM_cutDiagHiggsbb150;
+	vectorsjWORecoBjetsCSVM_cutDiagHiggsbb150 = s2Vectors( p4jetsWORecoBjetsCSVM_cutDiagHiggsbb150 );
+	vector< TLorentzVector > p4dijetWORecoBjetsCSVM_cutDiagHiggsbb150 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb150.s2VectorTL;
+	vector< double > massdijetWORecoBjetsCSVM_cutDiagHiggsbb150 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb150.s2Mass;
+	vector< double > scalarSumPtdijetWORecoBjetsCSVM_cutDiagHiggsbb150 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb150.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4dijetWORecoBjetsCSVM_cutDiagHiggsbb150_cutDiagStop1jj50;
@@ -1448,12 +1544,12 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 		}
 	}
 
-	/////////////////////// STEP 3 - cutDiagHiggsbb200 
-	s3VecMassSumPt vectorsjWORecoBjetsCSVM_cutDiagHiggsbb200;
-	vectorsjWORecoBjetsCSVM_cutDiagHiggsbb200 = s3Vectors( p4jetsWORecoBjetsCSVM_cutDiagHiggsbb200 );
-	vector< TLorentzVector > p4dijetWORecoBjetsCSVM_cutDiagHiggsbb200 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb200.s3VectorTL;
-	vector< double > massdijetWORecoBjetsCSVM_cutDiagHiggsbb200 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb200.s3Mass;
-	vector< double > scalarSumPtdijetWORecoBjetsCSVM_cutDiagHiggsbb200 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb200.s3ScalarPt;
+	/////////////////////// STEP 2 - cutDiagHiggsbb200 
+	s2VecMassSumPt vectorsjWORecoBjetsCSVM_cutDiagHiggsbb200;
+	vectorsjWORecoBjetsCSVM_cutDiagHiggsbb200 = s2Vectors( p4jetsWORecoBjetsCSVM_cutDiagHiggsbb200 );
+	vector< TLorentzVector > p4dijetWORecoBjetsCSVM_cutDiagHiggsbb200 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb200.s2VectorTL;
+	vector< double > massdijetWORecoBjetsCSVM_cutDiagHiggsbb200 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb200.s2Mass;
+	vector< double > scalarSumPtdijetWORecoBjetsCSVM_cutDiagHiggsbb200 = vectorsjWORecoBjetsCSVM_cutDiagHiggsbb200.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4dijetWORecoBjetsCSVM_cutDiagHiggsbb200_cutDiagStop1jj50;
@@ -1523,13 +1619,13 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 		}
 	}
 
-	/////////////////////// STEP 3 - NO cutDiagHiggsbb 
-	//// Structure function s3Vectors
-	s3VecMassSumPt vectorsjWORecoPartonFlavorBjetsCSVM;
-	vectorsjWORecoPartonFlavorBjetsCSVM = s3Vectors( p4jetsWORecoPartonFlavorBjetsCSVM );
-	vector< TLorentzVector > p4dijetWORecoPartonFlavorBjetsCSVM = vectorsjWORecoPartonFlavorBjetsCSVM.s3VectorTL;
-	vector< double > massdijetWORecoPartonFlavorBjetsCSVM = vectorsjWORecoPartonFlavorBjetsCSVM.s3Mass;
-	vector< double > scalarSumPtdijetWORecoPartonFlavorBjetsCSVM = vectorsjWORecoPartonFlavorBjetsCSVM.s3ScalarPt;
+	/////////////////////// STEP 2 - NO cutDiagHiggsbb 
+	//// Structure function s2Vectors
+	s2VecMassSumPt vectorsjWORecoPartonFlavorBjetsCSVM;
+	vectorsjWORecoPartonFlavorBjetsCSVM = s2Vectors( p4jetsWORecoPartonFlavorBjetsCSVM );
+	vector< TLorentzVector > p4dijetWORecoPartonFlavorBjetsCSVM = vectorsjWORecoPartonFlavorBjetsCSVM.s2VectorTL;
+	vector< double > massdijetWORecoPartonFlavorBjetsCSVM = vectorsjWORecoPartonFlavorBjetsCSVM.s2Mass;
+	vector< double > scalarSumPtdijetWORecoPartonFlavorBjetsCSVM = vectorsjWORecoPartonFlavorBjetsCSVM.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4jetWORecoPartonFlavorBjetsCSVM_cutDiagStop1jj50;
@@ -1572,12 +1668,12 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 
 	}
 
-	/////////////////////// STEP 3 - cutDiagHiggsbb50 
-	s3VecMassSumPt vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50;
-	vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50 = s3Vectors( p4jetsWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50 );
-	vector< TLorentzVector > p4dijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50.s3VectorTL;
-	vector< double > massdijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50.s3Mass;
-	vector< double > scalarSumPtdijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50.s3ScalarPt;
+	/////////////////////// STEP 2 - cutDiagHiggsbb50 
+	s2VecMassSumPt vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50;
+	vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50 = s2Vectors( p4jetsWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50 );
+	vector< TLorentzVector > p4dijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50.s2VectorTL;
+	vector< double > massdijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50.s2Mass;
+	vector< double > scalarSumPtdijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4jetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb50_cutDiagStop1jj50;
@@ -1620,12 +1716,12 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 
 	}
 
-	/////////////////////// STEP 3 - cutDiagHiggsbb100 
-	s3VecMassSumPt vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100;
-	vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100 = s3Vectors( p4jetsWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100 );
-	vector< TLorentzVector > p4dijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100.s3VectorTL;
-	vector< double > massdijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100.s3Mass;
-	vector< double > scalarSumPtdijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100.s3ScalarPt;
+	/////////////////////// STEP 2 - cutDiagHiggsbb100 
+	s2VecMassSumPt vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100;
+	vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100 = s2Vectors( p4jetsWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100 );
+	vector< TLorentzVector > p4dijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100.s2VectorTL;
+	vector< double > massdijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100.s2Mass;
+	vector< double > scalarSumPtdijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4jetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb100_cutDiagStop1jj50;
@@ -1668,12 +1764,12 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 
 	}
 
-	/////////////////////// STEP 3 - cutDiagHiggsbb150 
-	s3VecMassSumPt vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150;
-	vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150 = s3Vectors( p4jetsWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150 );
-	vector< TLorentzVector > p4dijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150.s3VectorTL;
-	vector< double > massdijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150.s3Mass;
-	vector< double > scalarSumPtdijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150.s3ScalarPt;
+	/////////////////////// STEP 2 - cutDiagHiggsbb150 
+	s2VecMassSumPt vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150;
+	vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150 = s2Vectors( p4jetsWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150 );
+	vector< TLorentzVector > p4dijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150.s2VectorTL;
+	vector< double > massdijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150.s2Mass;
+	vector< double > scalarSumPtdijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4jetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb150_cutDiagStop1jj50;
@@ -1715,12 +1811,12 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 		}
 	}
 
-	/////////////////////// STEP 3 - cutDiagHiggsbb200 
-	s3VecMassSumPt vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200;
-	vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200 = s3Vectors( p4jetsWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200 );
-	vector< TLorentzVector > p4dijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200.s3VectorTL;
-	vector< double > massdijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200.s3Mass;
-	vector< double > scalarSumPtdijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200.s3ScalarPt;
+	/////////////////////// STEP 2 - cutDiagHiggsbb200 
+	s2VecMassSumPt vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200;
+	vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200 = s2Vectors( p4jetsWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200 );
+	vector< TLorentzVector > p4dijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200.s2VectorTL;
+	vector< double > massdijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200.s2Mass;
+	vector< double > scalarSumPtdijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200 = vectorsjWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4jetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200_cutDiagStop1jj50;
@@ -1797,13 +1893,13 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 			
 	}
 
-	/////////////////////// STEP 3 - NO cutDiagHiggsbb 
-	//// Structure function s3Vectors
-	s3VecMassSumPt vectorsjWOMatchBjets;
-	vectorsjWOMatchBjets = s3Vectors( p4jetsWOMatchBjets );
-	vector< TLorentzVector > p4matchdijetWOMatchBjets = vectorsjWOMatchBjets.s3VectorTL;
-	vector< double > massmatchdijetWOMatchBjets = vectorsjWOMatchBjets.s3Mass;
-	vector< double > scalarSumPtmatchdijetWOMatchBjets = vectorsjWOMatchBjets.s3ScalarPt;
+	/////////////////////// STEP 2 - NO cutDiagHiggsbb 
+	//// Structure function s2Vectors
+	s2VecMassSumPt vectorsjWOMatchBjets;
+	vectorsjWOMatchBjets = s2Vectors( p4jetsWOMatchBjets );
+	vector< TLorentzVector > p4matchdijetWOMatchBjets = vectorsjWOMatchBjets.s2VectorTL;
+	vector< double > massmatchdijetWOMatchBjets = vectorsjWOMatchBjets.s2Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjets = vectorsjWOMatchBjets.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4matchdijetWOMatchBjets_cutDiagStop1jj50;
@@ -1851,12 +1947,12 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 
 	}
 
-	/////////////////////// STEP 3 - cutDiagHiggsbb50 
-	s3VecMassSumPt vectorsjWOMatchBjets_cutDiagHiggsbb50;
-	vectorsjWOMatchBjets_cutDiagHiggsbb50 = s3Vectors( p4jetsWOMatchBjets_cutDiagHiggsbb50 );
-	vector< TLorentzVector > p4matchdijetWOMatchBjets_cutDiagHiggsbb50 = vectorsjWOMatchBjets_cutDiagHiggsbb50.s3VectorTL;
-	vector< double > massmatchdijetWOMatchBjets_cutDiagHiggsbb50 = vectorsjWOMatchBjets_cutDiagHiggsbb50.s3Mass;
-	vector< double > scalarSumPtmatchdijetWOMatchBjets_cutDiagHiggsbb50 = vectorsjWOMatchBjets_cutDiagHiggsbb50.s3ScalarPt;
+	/////////////////////// STEP 2 - cutDiagHiggsbb50 
+	s2VecMassSumPt vectorsjWOMatchBjets_cutDiagHiggsbb50;
+	vectorsjWOMatchBjets_cutDiagHiggsbb50 = s2Vectors( p4jetsWOMatchBjets_cutDiagHiggsbb50 );
+	vector< TLorentzVector > p4matchdijetWOMatchBjets_cutDiagHiggsbb50 = vectorsjWOMatchBjets_cutDiagHiggsbb50.s2VectorTL;
+	vector< double > massmatchdijetWOMatchBjets_cutDiagHiggsbb50 = vectorsjWOMatchBjets_cutDiagHiggsbb50.s2Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjets_cutDiagHiggsbb50 = vectorsjWOMatchBjets_cutDiagHiggsbb50.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4matchdijetWOMatchBjets_cutDiagHiggsbb50_cutDiagStop1jj50;
@@ -1899,12 +1995,12 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 
 	}
 
-	/////////////////////// STEP 3 - cutDiagHiggsbb100 
-	s3VecMassSumPt vectorsjWOMatchBjets_cutDiagHiggsbb100;
-	vectorsjWOMatchBjets_cutDiagHiggsbb100 = s3Vectors( p4jetsWOMatchBjets_cutDiagHiggsbb100 );
-	vector< TLorentzVector > p4matchdijetWOMatchBjets_cutDiagHiggsbb100 = vectorsjWOMatchBjets_cutDiagHiggsbb100.s3VectorTL;
-	vector< double > massmatchdijetWOMatchBjets_cutDiagHiggsbb100 = vectorsjWOMatchBjets_cutDiagHiggsbb100.s3Mass;
-	vector< double > scalarSumPtmatchdijetWOMatchBjets_cutDiagHiggsbb100 = vectorsjWOMatchBjets_cutDiagHiggsbb100.s3ScalarPt;
+	/////////////////////// STEP 2 - cutDiagHiggsbb100 
+	s2VecMassSumPt vectorsjWOMatchBjets_cutDiagHiggsbb100;
+	vectorsjWOMatchBjets_cutDiagHiggsbb100 = s2Vectors( p4jetsWOMatchBjets_cutDiagHiggsbb100 );
+	vector< TLorentzVector > p4matchdijetWOMatchBjets_cutDiagHiggsbb100 = vectorsjWOMatchBjets_cutDiagHiggsbb100.s2VectorTL;
+	vector< double > massmatchdijetWOMatchBjets_cutDiagHiggsbb100 = vectorsjWOMatchBjets_cutDiagHiggsbb100.s2Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjets_cutDiagHiggsbb100 = vectorsjWOMatchBjets_cutDiagHiggsbb100.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4matchdijetWOMatchBjets_cutDiagHiggsbb100_cutDiagStop1jj50;
@@ -1947,12 +2043,12 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 
 	}
 
-	/////////////////////// STEP 3 - cutDiagHiggsbb150 
-	s3VecMassSumPt vectorsjWOMatchBjets_cutDiagHiggsbb150;
-	vectorsjWOMatchBjets_cutDiagHiggsbb150 = s3Vectors( p4jetsWOMatchBjets_cutDiagHiggsbb150 );
-	vector< TLorentzVector > p4matchdijetWOMatchBjets_cutDiagHiggsbb150 = vectorsjWOMatchBjets_cutDiagHiggsbb150.s3VectorTL;
-	vector< double > massmatchdijetWOMatchBjets_cutDiagHiggsbb150 = vectorsjWOMatchBjets_cutDiagHiggsbb150.s3Mass;
-	vector< double > scalarSumPtmatchdijetWOMatchBjets_cutDiagHiggsbb150 = vectorsjWOMatchBjets_cutDiagHiggsbb150.s3ScalarPt;
+	/////////////////////// STEP 2 - cutDiagHiggsbb150 
+	s2VecMassSumPt vectorsjWOMatchBjets_cutDiagHiggsbb150;
+	vectorsjWOMatchBjets_cutDiagHiggsbb150 = s2Vectors( p4jetsWOMatchBjets_cutDiagHiggsbb150 );
+	vector< TLorentzVector > p4matchdijetWOMatchBjets_cutDiagHiggsbb150 = vectorsjWOMatchBjets_cutDiagHiggsbb150.s2VectorTL;
+	vector< double > massmatchdijetWOMatchBjets_cutDiagHiggsbb150 = vectorsjWOMatchBjets_cutDiagHiggsbb150.s2Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjets_cutDiagHiggsbb150 = vectorsjWOMatchBjets_cutDiagHiggsbb150.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4matchdijetWOMatchBjets_cutDiagHiggsbb150_cutDiagStop1jj50;
@@ -1994,12 +2090,12 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 		}
 	}
 
-	/////////////////////// STEP 3 - cutDiagHiggsbb200 
-	s3VecMassSumPt vectorsjWOMatchBjets_cutDiagHiggsbb200;
-	vectorsjWOMatchBjets_cutDiagHiggsbb200 = s3Vectors( p4jetsWOMatchBjets_cutDiagHiggsbb200 );
-	vector< TLorentzVector > p4matchdijetWOMatchBjets_cutDiagHiggsbb200 = vectorsjWOMatchBjets_cutDiagHiggsbb200.s3VectorTL;
-	vector< double > massmatchdijetWOMatchBjets_cutDiagHiggsbb200 = vectorsjWOMatchBjets_cutDiagHiggsbb200.s3Mass;
-	vector< double > scalarSumPtmatchdijetWOMatchBjets_cutDiagHiggsbb200 = vectorsjWOMatchBjets_cutDiagHiggsbb200.s3ScalarPt;
+	/////////////////////// STEP 2 - cutDiagHiggsbb200 
+	s2VecMassSumPt vectorsjWOMatchBjets_cutDiagHiggsbb200;
+	vectorsjWOMatchBjets_cutDiagHiggsbb200 = s2Vectors( p4jetsWOMatchBjets_cutDiagHiggsbb200 );
+	vector< TLorentzVector > p4matchdijetWOMatchBjets_cutDiagHiggsbb200 = vectorsjWOMatchBjets_cutDiagHiggsbb200.s2VectorTL;
+	vector< double > massmatchdijetWOMatchBjets_cutDiagHiggsbb200 = vectorsjWOMatchBjets_cutDiagHiggsbb200.s2Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjets_cutDiagHiggsbb200 = vectorsjWOMatchBjets_cutDiagHiggsbb200.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4matchdijetWOMatchBjets_cutDiagHiggsbb200_cutDiagStop1jj50;
@@ -2071,13 +2167,13 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 		}
 	}
 
-	/////////////////////// STEP 3 - NO cutDiagHiggsbb 
-	//// Structure function s3Vectors
-	s3VecMassSumPt vectorsjWOMatchBjetsHiggs;
-	vectorsjWOMatchBjetsHiggs = s3Vectors( p4jetsWOMatchBjetsHiggs );
-	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs = vectorsjWOMatchBjetsHiggs.s3VectorTL;
-	vector< double > massmatchdijetWOMatchBjetsHiggs = vectorsjWOMatchBjetsHiggs.s3Mass;
-	vector< double > scalarSumPtmatchdijetWOMatchBjetsHiggs = vectorsjWOMatchBjetsHiggs.s3ScalarPt;
+	/////////////////////// STEP 2 - NO cutDiagHiggsbb 
+	//// Structure function s2Vectors
+	s2VecMassSumPt vectorsjWOMatchBjetsHiggs;
+	vectorsjWOMatchBjetsHiggs = s2Vectors( p4jetsWOMatchBjetsHiggs );
+	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs = vectorsjWOMatchBjetsHiggs.s2VectorTL;
+	vector< double > massmatchdijetWOMatchBjetsHiggs = vectorsjWOMatchBjetsHiggs.s2Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjetsHiggs = vectorsjWOMatchBjetsHiggs.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs_cutDiagStop1jj50;
@@ -2120,12 +2216,12 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 
 	}
 
-	/////////////////////// STEP 3 - cutDiagHiggsbb50 
-	s3VecMassSumPt vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb50;
-	vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb50 = s3Vectors( p4jetsWOMatchBjetsHiggs_cutDiagHiggsbb50 );
-	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs_cutDiagHiggsbb50 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb50.s3VectorTL;
-	vector< double > massmatchdijetWOMatchBjetsHiggs_cutDiagHiggsbb50 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb50.s3Mass;
-	vector< double > scalarSumPtmatchdijetWOMatchBjetsHiggs_cutDiagHiggsbb50 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb50.s3ScalarPt;
+	/////////////////////// STEP 2 - cutDiagHiggsbb50 
+	s2VecMassSumPt vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb50;
+	vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb50 = s2Vectors( p4jetsWOMatchBjetsHiggs_cutDiagHiggsbb50 );
+	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs_cutDiagHiggsbb50 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb50.s2VectorTL;
+	vector< double > massmatchdijetWOMatchBjetsHiggs_cutDiagHiggsbb50 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb50.s2Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjetsHiggs_cutDiagHiggsbb50 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb50.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs_cutDiagHiggsbb50_cutDiagStop1jj50;
@@ -2168,12 +2264,12 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 
 	}
 
-	/////////////////////// STEP 3 - cutDiagHiggsbb100 
-	s3VecMassSumPt vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb100;
-	vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb100 = s3Vectors( p4jetsWOMatchBjetsHiggs_cutDiagHiggsbb100 );
-	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs_cutDiagHiggsbb100 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb100.s3VectorTL;
-	vector< double > massmatchdijetWOMatchBjetsHiggs_cutDiagHiggsbb100 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb100.s3Mass;
-	vector< double > scalarSumPtmatchdijetWOMatchBjetsHiggs_cutDiagHiggsbb100 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb100.s3ScalarPt;
+	/////////////////////// STEP 2 - cutDiagHiggsbb100 
+	s2VecMassSumPt vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb100;
+	vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb100 = s2Vectors( p4jetsWOMatchBjetsHiggs_cutDiagHiggsbb100 );
+	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs_cutDiagHiggsbb100 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb100.s2VectorTL;
+	vector< double > massmatchdijetWOMatchBjetsHiggs_cutDiagHiggsbb100 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb100.s2Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjetsHiggs_cutDiagHiggsbb100 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb100.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs_cutDiagHiggsbb100_cutDiagStop1jj50;
@@ -2216,12 +2312,12 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 
 	}
 
-	/////////////////////// STEP 3 - cutDiagHiggsbb150 
-	s3VecMassSumPt vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb150;
-	vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb150 = s3Vectors( p4jetsWOMatchBjetsHiggs_cutDiagHiggsbb150 );
-	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs_cutDiagHiggsbb150 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb150.s3VectorTL;
-	vector< double > massmatchdijetWOMatchBjetsHiggs_cutDiagHiggsbb150 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb150.s3Mass;
-	vector< double > scalarSumPtmatchdijetWOMatchBjetsHiggs_cutDiagHiggsbb150 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb150.s3ScalarPt;
+	/////////////////////// STEP 2 - cutDiagHiggsbb150 
+	s2VecMassSumPt vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb150;
+	vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb150 = s2Vectors( p4jetsWOMatchBjetsHiggs_cutDiagHiggsbb150 );
+	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs_cutDiagHiggsbb150 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb150.s2VectorTL;
+	vector< double > massmatchdijetWOMatchBjetsHiggs_cutDiagHiggsbb150 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb150.s2Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjetsHiggs_cutDiagHiggsbb150 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb150.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs_cutDiagHiggsbb150_cutDiagStop1jj50;
@@ -2263,12 +2359,12 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 		}
 	}
 
-	/////////////////////// STEP 3 - cutDiagHiggsbb200 
-	s3VecMassSumPt vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb200;
-	vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb200 = s3Vectors( p4jetsWOMatchBjetsHiggs_cutDiagHiggsbb200 );
-	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs_cutDiagHiggsbb200 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb200.s3VectorTL;
-	vector< double > massmatchdijetWOMatchBjetsHiggs_cutDiagHiggsbb200 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb200.s3Mass;
-	vector< double > scalarSumPtmatchdijetWOMatchBjetsHiggs_cutDiagHiggsbb200 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb200.s3ScalarPt;
+	/////////////////////// STEP 2 - cutDiagHiggsbb200 
+	s2VecMassSumPt vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb200;
+	vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb200 = s2Vectors( p4jetsWOMatchBjetsHiggs_cutDiagHiggsbb200 );
+	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs_cutDiagHiggsbb200 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb200.s2VectorTL;
+	vector< double > massmatchdijetWOMatchBjetsHiggs_cutDiagHiggsbb200 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb200.s2Mass;
+	vector< double > scalarSumPtmatchdijetWOMatchBjetsHiggs_cutDiagHiggsbb200 = vectorsjWOMatchBjetsHiggs_cutDiagHiggsbb200.s2ScalarPt;
 
 	//// TLorentzVectors for cuts
 	vector< TLorentzVector > p4matchdijetWOMatchBjetsHiggs_cutDiagHiggsbb200_cutDiagStop1jj50;
@@ -2374,13 +2470,26 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 		h_tmpmassdijetWORecoBjetsCSVM->Fill( tmpMass1.M() );
 		h_tmpmassdijetWORecoBjetsCSVM->Fill( tmpMass2.M() );
 	}
+	h_matchJetsStop1_mass->Sumw2();
+	h_matchJetsStop1_num->Sumw2();
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 
 	////////////////////////////////////////////////////////////////
-	//////           STEP 4                                    /////
+	//////           STEP 3                                    /////
 	//////  Mass of MatchBjets from 1 and dijet from 3 vs sum pt of MatchBjetsdijet  /////
 	////////////////////////////////////////////////////////////////
+	
+	/////////// TLorentzVector for Match Stop1
+	vector< TLorentzVector > p4MatchStop2;
+	if ( p4MatchJ1Stop2.size() == 4 ){
+		TLorentzVector tmpJ1Stop2 = p4MatchJ1Stop2[0] + p4MatchJ1Stop2[1] + p4MatchJ1Stop2[2] + p4MatchJ1Stop2[3];
+		p4MatchStop2.push_back( tmpJ1Stop2 );
+	}
+	if ( p4MatchJ2Stop2.size() == 4 ){
+		TLorentzVector tmpJ2Stop2 = p4MatchJ2Stop2[0] + p4MatchJ2Stop2[1] + p4MatchJ2Stop2[2] + p4MatchJ2Stop2[3];
+		p4MatchStop2.push_back( tmpJ2Stop2 );
+	}
 	
 	/////// Reco Jets
 	// NO diagCutHiggs neither diagCutStop1
@@ -2509,6 +2618,13 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 		}
 	}
 
+	/////////////////////////// Count the number of correct 4jet for Stop2 in ALL combinations
+	vector< TLorentzVector > p4CorrectJetsStop2;
+	if ( p4RecoDiBjetDiJet.size() > 0 ) {
+		p4CorrectJetsStop2 = compare2TLVReturnEqual( p4RecoDiBjetDiJet, p4MatchStop2 );
+		h_CorrectJetsStop2_num->Fill( p4CorrectJetsStop2.size() );
+		h_CorrectJetsStop2vsAny4jet_num->Fill( p4RecoDiBjetDiJet.size(), p4CorrectJetsStop2.size() );
+	}
 
 	/////// Match Jets
 	// NO diagCutHiggs neither diagCutStop1
@@ -2657,7 +2773,7 @@ void MyAnalyzer::Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< 
 	
 
 	////////////////////////////////////////////////////////////////
-	//////           STEP 5                                    /////
+	//////           STEP 4                                    /////
 	//////  Smallest mass MatchBjetsdijet                                 /////
 	////////////////////////////////////////////////////////////////
 	

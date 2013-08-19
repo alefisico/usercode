@@ -147,8 +147,8 @@ class MyAnalyzer : public edm::EDAnalyzer {
 
       // ----------member data ---------------------------
 
-	void BasicPlots( vector< TLorentzVector > p4GenTruthAlljets, vector< TLorentzVector > p4GenTruthJets, vector< TLorentzVector > p4GenTruthBjets, vector< TLorentzVector > p4GenTruthBjetsHiggs, vector< TLorentzVector > p4GenTruthB1Higgs, vector< TLorentzVector > p4GenTruthB2Higgs, vector< TLorentzVector > p4GenTruthJ1Stop1, vector< TLorentzVector > p4GenTruthJ2Stop1, vector< TLorentzVector > p4GenTruthJetsStop1, vector< TLorentzVector > p4GenTruthBjetsStop1, vector< TLorentzVector > p4MatchTruthJets,  vector< TLorentzVector > p4MatchTruthBjets, vector< TLorentzVector > p4MatchB1Higgs, vector< TLorentzVector > p4MatchB2Higgs, vector< TLorentzVector > p4MatchJ1Stop1, vector< TLorentzVector > p4MatchJ2Stop1,  vector< TLorentzVector > p4RecoJets, vector< TLorentzVector > p4RecoBjetsCSVM );
-	void Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< TLorentzVector > p4GenTruthB2Higgs, vector< TLorentzVector > p4GenTruthJ1Stop1, vector< TLorentzVector > p4GenTruthJ2Stop1, vector< TLorentzVector > p4RecoJets, vector< TLorentzVector > p4RecoBjetsCSVM, vector< TLorentzVector > p4RecoPartonFlavorBjetsCSVM, vector< TLorentzVector > p4MatchTruthBjets,  vector< TLorentzVector > p4MatchB1Higgs, vector< TLorentzVector > p4MatchB2Higgs,  vector< TLorentzVector > p4MatchJ1Stop1, vector< TLorentzVector > p4MatchJ2Stop1, vector< TLorentzVector > p4MatchTruthAlljets);
+	void BasicPlots( vector< TLorentzVector > p4GenTruthAlljets, vector< TLorentzVector > p4GenTruthJets, vector< TLorentzVector > p4GenTruthBjets, vector< TLorentzVector > p4GenTruthBjetsHiggs, vector< TLorentzVector > p4GenTruthB1Higgs, vector< TLorentzVector > p4GenTruthB2Higgs, vector< TLorentzVector > p4GenTruthJ1Stop1, vector< TLorentzVector > p4GenTruthJ2Stop1, vector< TLorentzVector > p4GenTruthJetsStop1, vector< TLorentzVector > p4GenTruthBjetsStop1, vector< TLorentzVector > p4MatchTruthJets,  vector< TLorentzVector > p4MatchTruthBjets, vector< TLorentzVector > p4MatchB1Higgs, vector< TLorentzVector > p4MatchB2Higgs, vector< TLorentzVector > p4MatchJ1Stop1, vector< TLorentzVector > p4MatchJ2Stop1, vector< TLorentzVector > p4MatchJ1Stop2, vector< TLorentzVector > p4MatchJ2Stop2,  vector< TLorentzVector > p4RecoJets, vector< TLorentzVector > p4RecoBjetsCSVM );
+	void Analysis(  vector< TLorentzVector > p4GenTruthB1Higgs, vector< TLorentzVector > p4GenTruthB2Higgs, vector< TLorentzVector > p4GenTruthJ1Stop1, vector< TLorentzVector > p4GenTruthJ2Stop1, vector< TLorentzVector > p4RecoJets, vector< TLorentzVector > p4RecoBjetsCSVM, vector< TLorentzVector > p4RecoPartonFlavorBjetsCSVM, vector< TLorentzVector > p4MatchTruthBjets,  vector< TLorentzVector > p4MatchB1Higgs, vector< TLorentzVector > p4MatchB2Higgs,  vector< TLorentzVector > p4MatchJ1Stop1, vector< TLorentzVector > p4MatchJ2Stop1, vector< TLorentzVector > p4MatchJ1Stop2, vector< TLorentzVector > p4MatchJ2Stop2, vector< TLorentzVector > p4MatchTruthAlljets);
 
 	// Input definitions
 	edm::InputTag Gensrc;
@@ -166,6 +166,8 @@ class MyAnalyzer : public edm::EDAnalyzer {
 	TH1D * h_MatchB2Higgs_deltaR;
 	TH1D * h_MatchJ1Stop1_deltaR;
 	TH1D * h_MatchJ2Stop1_deltaR;
+	TH1D * h_MatchJ1Stop2_deltaR;
+	TH1D * h_MatchJ2Stop2_deltaR;
 
 	// Bjets Histos
 	TH1D * h_genTruthBjets_num;
@@ -249,6 +251,8 @@ class MyAnalyzer : public edm::EDAnalyzer {
 	TH1D * h_stop1_cosDeltaPhi;
 	TH1D * h_matchJetsStop1_mass;
 	TH1D * h_matchJetsStop1_num;
+	TH1D * h_matchJetsStop2_mass;
+	TH1D * h_matchJetsStop2_num;
 
 
 	///// Stop2 histos
@@ -563,6 +567,11 @@ class MyAnalyzer : public edm::EDAnalyzer {
 	TH1D * h_massdijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200_cutDiagStop1jj200;
 
 	TH1D * h_jetsStop1WORecoBjetsCSVM_num;
+	TH2D * h_jetsStop1WORecoBjetsCSVMvsAnyDijetWORecoBjetsCSVM_num;
+	TH1D * h_jetsStop1WORecoBjetsCSVM_cutDiagStop1jj50_num;
+	TH2D * h_jetsStop1WORecoBjetsCSVMvsAnyDijetWORecoBjetsCSVM_cutDiagStop1jj50_num;
+	TH1D * h_jetsStop1WORecoBjetsCSVM_cutDiagStop1jj100_num;
+	TH2D * h_jetsStop1WORecoBjetsCSVMvsAnyDijetWORecoBjetsCSVM_cutDiagStop1jj100_num;
 
 	TH1D * h_tmpmassdijetWORecoBjetsCSVM;
 	TH1D * h_tmpmassmatchdijetWOMatchBjets;
@@ -588,6 +597,8 @@ class MyAnalyzer : public edm::EDAnalyzer {
 	TH1D * h_massRecoDiBjetDiJet_cutDiagStop1jj100_cutDiagStop2bbjj50;
 	TH2D * h_recoDiBjetDiJet_cutDiagStop1jj100_cutDiagStop2bbjj100_masspt;
 	TH1D * h_massRecoDiBjetDiJet_cutDiagStop1jj100_cutDiagStop2bbjj100;
+	TH1D * h_CorrectJetsStop2_num;
+	TH2D * h_CorrectJetsStop2vsAny4jet_num;
 
 	TH2D * h_matchDiBjetDiJet_masspt;
 	TH1D * h_massMatchDiBjetDiJet;
@@ -639,12 +650,12 @@ typedef struct {
 } smallMassDiffVectors;
 
 typedef struct {
-	vector< TLorentzVector > s3VectorTL;
-	vector< double > s3Mass;
-	vector< double > s3ScalarPt;
+	vector< TLorentzVector > s2VectorTL;
+	vector< double > s2Mass;
+	vector< double > s2ScalarPt;
 	//double avgMass;
 	//double avgPt;
-} s3VecMassSumPt;
+} s2VecMassSumPt;
 
 
 // Comparison function for jet list. Want highest pt first
@@ -666,8 +677,8 @@ MyAnalyzer::MyAnalyzer(const edm::ParameterSet& iConfig){
 	_jetCorrectionService = iConfig.getUntrackedParameter<string> ("jetCorrectionService", "ak5PFL1L2L3");
 	Gensrc = iConfig.getParameter<edm::InputTag>( "Gensrc" );
 	st1decay = iConfig.getUntrackedParameter<string>("st1decay", "bj");
-	stop1Mass = iConfig.getUntrackedParameter<double>( "st1Mass", 100 );
-	stop2Mass = iConfig.getUntrackedParameter<double>( "st2Mass", 250 );
+	stop1Mass = iConfig.getParameter<double>( "stop1Mass" );
+	stop2Mass = iConfig.getParameter<double>( "stop2Mass" );
 
    //now do what ever initialization is needed
 	edm::Service<TFileService> fs;						// Output File 
@@ -701,6 +712,8 @@ MyAnalyzer::MyAnalyzer(const edm::ParameterSet& iConfig){
 	h_MatchB2Higgs_deltaR = basicPlots.make<TH1D>("matchB2Higgs_deltaR" , "#Delta R (RecoBjets, Higgs 2 Bjets)" , nbinDeltaR, minDeltaR, maxDeltaR );
 	h_MatchJ1Stop1_deltaR = basicPlots.make<TH1D>("matchJ1Stop1_deltaR" , "#Delta R (RecoBjets, Stop1 1 Jets)" , nbinDeltaR, minDeltaR, maxDeltaR );
 	h_MatchJ2Stop1_deltaR = basicPlots.make<TH1D>("matchJ2Stop1_deltaR" , "#Delta R (RecoBjets, Stop1 2 Jets)" , nbinDeltaR, minDeltaR, maxDeltaR );
+	h_MatchJ1Stop2_deltaR = basicPlots.make<TH1D>("matchJ1Stop2_deltaR" , "#Delta R (RecoBjets, Stop2 1 Jets)" , nbinDeltaR, minDeltaR, maxDeltaR );
+	h_MatchJ2Stop2_deltaR = basicPlots.make<TH1D>("matchJ2Stop2_deltaR" , "#Delta R (RecoBjets, Stop2 2 Jets)" , nbinDeltaR, minDeltaR, maxDeltaR );
 
 	h_MatchTruthAlljets_deltaR->Sumw2();
 	h_MatchTruthJets_deltaR->Sumw2();
@@ -709,6 +722,8 @@ MyAnalyzer::MyAnalyzer(const edm::ParameterSet& iConfig){
 	h_MatchB2Higgs_deltaR->Sumw2();
 	h_MatchJ1Stop1_deltaR->Sumw2();
 	h_MatchJ2Stop1_deltaR->Sumw2();
+	h_MatchJ1Stop2_deltaR->Sumw2();
+	h_MatchJ2Stop2_deltaR->Sumw2();
 
 	//// Bjets histos
 	h_genTruthBjets_num = genTruthPlots.make<TH1D>("genTruthBjets_num" , "Number of GenTruth bJets" , nbinNum, minNum, maxNum );
@@ -854,6 +869,8 @@ MyAnalyzer::MyAnalyzer(const edm::ParameterSet& iConfig){
 	h_stop1_cosDeltaPhi = genTruthPlots.make<TH1D>("stop1_cosDeltaPhi" , "cos [#Delta #phi (st1_{1}, st1_{2})]" , nbincosDelta, mincosDelta, maxcosDelta );
 	h_matchJetsStop1_mass = basicPlots.make<TH1D>("matchJetsStop1_mass" , "Match Stop1 Mass" , nbinPt, minPt, maxPt );
 	h_matchJetsStop1_num = basicPlots.make<TH1D>("matchJetsStop1_num" , "Number Match Stop1" , nbinNum, minNum, maxNum );
+	h_matchJetsStop2_mass = basicPlots.make<TH1D>("matchJetsStop2_mass" , "Match Stop2 Mass" , nbinPt, minPt, maxPt );
+	h_matchJetsStop2_num = basicPlots.make<TH1D>("matchJetsStop2_num" , "Number Match Stop2" , nbinNum, minNum, maxNum );
 
 	h_genTruthJetsStop1_mass->Sumw2();
 	h_genTruthJetsStop1_num->Sumw2();
@@ -871,6 +888,8 @@ MyAnalyzer::MyAnalyzer(const edm::ParameterSet& iConfig){
 	h_stop1_cosDeltaPhi->Sumw2();
 	h_matchJetsStop1_mass->Sumw2();
 	h_matchJetsStop1_num->Sumw2();
+	h_matchJetsStop2_mass->Sumw2();
+	h_matchJetsStop2_num->Sumw2();
 
 	//// Stop2 histos
 	h_stop21_mass = genTruthPlots.make<TH1D>("stop21_mass" , "1st Stop2 Mass" , nbinPt, minPt, maxPt );
@@ -1578,9 +1597,19 @@ MyAnalyzer::MyAnalyzer(const edm::ParameterSet& iConfig){
 	h_massdijetWORecoPartonFlavorBjetsCSVM_cutDiagHiggsbb200_cutDiagStop1jj200->Sumw2();
 
 
-	h_jetsStop1WORecoBjetsCSVM_num = analysisPlots.make<TH1D>("jetsStop1WORecoBjetsCSVM_num" , "Num of Reco dijet from Stop1" , nbinNum, minNum, maxNum ); 
+	h_jetsStop1WORecoBjetsCSVM_num = analysisPlots.make<TH1D>("jetsStop1WORecoBjetsCSVM_num" , "Num of Reco dijet from Stop1" , 4, -0.5, 3.5 ); 
+	h_jetsStop1WORecoBjetsCSVMvsAnyDijetWORecoBjetsCSVM_num = analysisPlots.make<TH2D>("jetsStop1WORecoBjetsCSVMvsAnyDijetWORecoBjetsCSVM_num" , "Num of Reco dijet from Stop1 vs Num of Any dijet WO Bjets from Higgs" , 30, -0.5, 29.5, 4, -0.5, 3.5 ); 
+	h_jetsStop1WORecoBjetsCSVM_cutDiagStop1jj50_num = analysisPlots.make<TH1D>("jetsStop1WORecoBjetsCSVM_cutDiagStop1jj50_num" , "Num of Reco dijet from Stop1" , 4, -0.5, 3.5 ); 
+	h_jetsStop1WORecoBjetsCSVMvsAnyDijetWORecoBjetsCSVM_cutDiagStop1jj50_num = analysisPlots.make<TH2D>("jetsStop1WORecoBjetsCSVMvsAnyDijetWORecoBjetsCSVM_cutDiagStop1jj50_num" , "Num of Reco dijet from Stop1 vs Num of Any dijet WO Bjets from Higgs" , 30, -0.5, 29.5, 4, -0.5, 3.5 ); 
+	h_jetsStop1WORecoBjetsCSVM_cutDiagStop1jj100_num = analysisPlots.make<TH1D>("jetsStop1WORecoBjetsCSVM_cutDiagStop1jj100_num" , "Num of Reco dijet from Stop1" , 4, -0.5, 3.5 ); 
+	h_jetsStop1WORecoBjetsCSVMvsAnyDijetWORecoBjetsCSVM_cutDiagStop1jj100_num = analysisPlots.make<TH2D>("jetsStop1WORecoBjetsCSVMvsAnyDijetWORecoBjetsCSVM_cutDiagStop1jj100_num" , "Num of Reco dijet from Stop1 vs Num of Any dijet WO Bjets from Higgs" , 30, -0.5, 29.5, 4, -0.5, 3.5 ); 
 
 	h_jetsStop1WORecoBjetsCSVM_num->Sumw2();
+	h_jetsStop1WORecoBjetsCSVMvsAnyDijetWORecoBjetsCSVM_num->Sumw2();
+	h_jetsStop1WORecoBjetsCSVM_cutDiagStop1jj50_num->Sumw2();
+	h_jetsStop1WORecoBjetsCSVMvsAnyDijetWORecoBjetsCSVM_cutDiagStop1jj50_num->Sumw2();
+	h_jetsStop1WORecoBjetsCSVM_cutDiagStop1jj100_num->Sumw2();
+	h_jetsStop1WORecoBjetsCSVMvsAnyDijetWORecoBjetsCSVM_cutDiagStop1jj100_num->Sumw2();
 
 	h_tmpmassdijetWORecoBjetsCSVM = analysisPlots.make<TH1D>("tmpmassdijetWORecoBjetsCSVM" , "Mass of dijet w/o RecoBjetsCSVM" , nbinPt, minPt, maxPt );
 	h_tmpmassmatchdijetWOMatchBjets = analysisPlots.make<TH1D>("tmpmassmatchdijetWOMatchBjets" , "Mass of dijet w/o Match Bjets" , nbinPt, minPt, maxPt );
@@ -1636,6 +1665,12 @@ MyAnalyzer::MyAnalyzer(const edm::ParameterSet& iConfig){
 	h_massRecoDiBjetDiJet_cutDiagStop1jj100_cutDiagStop2bbjj50->Sumw2();
 	h_recoDiBjetDiJet_cutDiagStop1jj100_cutDiagStop2bbjj100_masspt->Sumw2();
 	h_massRecoDiBjetDiJet_cutDiagStop1jj100_cutDiagStop2bbjj100->Sumw2();
+
+	h_CorrectJetsStop2_num = analysisPlots.make<TH1D>("CorrectJetsStop2_num" , "Num of Reco 4jets from Stop2" , 4, -0.5, 3.5 ); 
+	h_CorrectJetsStop2vsAny4jet_num = analysisPlots.make<TH2D>("CorrectJetsStop2vsAny4jet_num" , "Num of Reco 4jets from Stop2 vs Num of any 4jet" , 30, -0.5, 29.5, 4, -0.5, 3.5 ); 
+
+	h_CorrectJetsStop2_num->Sumw2();
+	h_CorrectJetsStop2vsAny4jet_num->Sumw2();
 
 	//// Match Jets
 	h_matchDiBjetDiJet_masspt = analysisPlots.make<TH2D>("matchDiBjetDiJet_masspt" , "Mass of Match (diBjets + diJets) vs scalar #sum p_{T}^{diBjets + diJets}" , nbinPt, minPt, maxPt, nbinPt, minPt, maxPt );
