@@ -348,12 +348,20 @@ typedef struct {
 } smallMassDiffVectors;
 
 typedef struct {
-	std::vector< TLorentzVector > s3VectorTL;
+	std::vector< TLorentzVector > s2VectorTL;
+	std::vector< double > s2Mass;
+	std::vector< double > s2ScalarPt;
+	//double avgMass;
+	//double avgPt;
+} s2VecMassSumPt;
+
+typedef struct {
+	std::vector< TLorentzVector > s3TLV;
 	std::vector< double > s3Mass;
 	std::vector< double > s3ScalarPt;
 	//double avgMass;
 	//double avgPt;
-} s3VecMassSumPt;
+} s3Vectors;
 
 
 // Comparison function for jet list. Want highest pt first
