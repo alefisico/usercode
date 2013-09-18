@@ -12,20 +12,33 @@ import glob,sys
 
 gROOT.Reset()
 gStyle.SetOptStat()
+gStyle.SetStatY(0.9)
+gStyle.SetStatX(0.9)
+gStyle.SetStatW(0.20)
+gStyle.SetStatH(0.20) 
 
-hist1 = str ( sys.argv[1] )
-folder = str ( sys.argv[2] )
-#hist2 = str ( sys.argv[5] )
-#print "Options: ", sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+trigger = str ( sys.argv[1] )
+scale = int ( sys.argv[2] )
+#logscale = int ( sys.argv[4] )
+histos = { 'massRecoBjetsCSVM':'step1plots1D', 
+		'avgMassRecoBjetsCSVM':'step1plots1D', 
+		'massdijetWORecoBjetsCSVM':'step2plots1D',
+		'massdijetWORecoBjetsCSVM_cutDiagStop1jj50':'step2plots1D',
+		'massdijetWORecoBjetsCSVM_cutDiagStop1jj100':'step2plots1D',
+		'massdijetWORecoBjetsCSVM_cutDiagStop1jj150':'step2plots1D',
+		'massRecoDiBjetDiJet':'step3plots1D',
+		'massRecoDiBjetDiJet_cutDiagStop1jj50':'step3plots1D',
+		'massRecoDiBjetDiJet_cutDiagStop1jj100':'step3plots1D',
+		'massRecoDiBjetDiJet_cutDiagStop2bbjj50':'step3plots1D',
+		'massRecoDiBjetDiJet_cutDiagStop2bbjj100':'step3plots1D',
+		'massRecoDiBjetDiJetSmallestDeltaM':'step4plots1D'
+		}
 
-#input1 = "/cms/gomez/Stops/Results/HT250-500_plots.root"
-#input2 = "/cms/gomez/Stops/Results/HT500-1000_plots.root"
-#input3 = "/cms/gomez/Stops/Results/HT1000-Inf_plots.root"
-
-input1 = "/uscms_data/d3/algomez/files/Stops/Results/HT250-500_4jet80_plots.root"
-input2 = "/uscms_data/d3/algomez/files/Stops/Results/HT500-1000_4jet80_plots.root"
-input3 = "/uscms_data/d3/algomez/files/Stops/Results/HT1000-Inf_4jet80_plots.root"
 outputDir = "/uscms_data/d3/algomez/files/Stops/Results/Plots/"
+
+input3 = "/uscms_data/d3/algomez/files/Stops/Results/HT250-500_"+trigger+"_plots.root"
+input2 = "/uscms_data/d3/algomez/files/Stops/Results/HT500-1000_"+trigger+"_plots.root"
+input1 = "/uscms_data/d3/algomez/files/Stops/Results/HT1000-Inf_"+trigger+"_plots.root"
 
 #print "Input files: ", input1
 
@@ -49,36 +62,63 @@ for line in mcScaleFile:
 	if "HT1000-InfnEvents" == line.split()[0]: 
 		HT1000_InfnEvents = float(line.split()[1])
 
-weightHT250_500 = 20000*HT250_500XS/HT250_500nEvents
-weightHT500_1000 = 20000*HT500_1000XS/HT500_1000nEvents
-weightHT1000_Inf = 20000*HT1000_InfXS/HT1000_InfnEvents
-print "ScaleFactor for HT250_500: ", weightHT250_500
-print "ScaleFactor for HT500-1000: ", weightHT500_1000
-print "ScaleFactor for HT1000-Inf: ", weightHT1000_Inf
+if ( scale == 1 ):
+	weightHT250_500 = 1
+	weightHT500_1000 = 1
+	weightHT1000_Inf = 1
+else:
+	weightHT250_500 = 19500*HT250_500XS/HT250_500nEvents
+	weightHT500_1000 = 19500*HT500_1000XS/HT500_1000nEvents
+	weightHT1000_Inf = 19500*HT1000_InfXS/HT1000_InfnEvents
+#print "ScaleFactor for HT250_500: ", weightHT250_500
+#print "ScaleFactor for HT500-1000: ", weightHT500_1000
+#print "ScaleFactor for HT1000-Inf: ", weightHT1000_Inf
 
-h1 = f1.Get(folder+'/' + hist1)
-h2 = f2.Get(folder+'/' + hist1)
-h3 = f3.Get(folder+'/' + hist1)
+for hist1, folder in histos.iteritems():
+	h1 = f1.Get(folder+'/' + hist1)
+	h2 = f2.Get(folder+'/' + hist1)
+	h3 = f3.Get(folder+'/' + hist1)
+	
+	h1clone = h1.Clone(hist1)
+	h2clone = h2.Clone(hist1)
+	#h3clone = h3.Clone(hist1)
+	
+	#h3clone.Scale( weightHT250_500 )
+	h2clone.Scale( weightHT500_1000 )
+	h1clone.Scale( weightHT1000_Inf )
+	
+	h1clone.Add( h2clone )
+	#h1clone.Add( h3clone )
+	
+	c = TCanvas('c_' + hist1, 'c_' + hist1,  10, 10, 750, 500 )
+	#if (logscale ==1): c.SetLogy()
+	#c.SetGrid()
+	h1clone.Draw()
+	h1clone.SetTitle("")
+	h1clone.GetXaxis().SetTitle("Invariant Mass [GeV]")
+	if "avg" in hist1: h1clone.GetYaxis().SetTitle("Events / 10 GeV")
+	elif "DiJet" in hist1: h1clone.GetYaxis().SetTitle("QuadJet / 10 GeV")
+	else: h1clone.GetYaxis().SetTitle("Dijet / 10 GeV")
+	h1clone.GetYaxis().SetTitleOffset(1.2)
+	
+	textBox=TLatex()
+	textBox.SetNDC()
+	textBox.SetTextSize(0.05) 
+	textBox.SetTextColor(50)
+	textBox.DrawText(0.10,0.91,"CMS Preliminary Simulation")
+	
+	textBox1=TLatex()
+	textBox1.SetNDC()
+	textBox1.SetTextSize(0.04) 
+	textBox1.SetTextColor(50)
+	textBox1.DrawText(0.58,0.85,"QCD MC")
+	
+	if ( scale!=1 ) :
+		textBox2=TLatex()
+		textBox2.SetNDC()
+		textBox2.SetTextSize(0.04) 
+		textBox2.DrawText(0.51,0.75,"Scale to 19.5/fb")
+	
+	if ( scale == 1 ): c.SaveAs(outputDir + hist1 + "_QCD_"+trigger+".pdf")
+	else: c.SaveAs(outputDir + hist1 + "_QCD_"+trigger+"_scale.pdf")
 
-h1clone = h1.Clone(hist1)
-h2clone = h2.Clone(hist1)
-h3clone = h3.Clone(hist1)
-
-h1clone.Scale( weightHT250_500 )
-h2clone.Scale( weightHT500_1000 )
-h3clone.Scale( weightHT1000_Inf )
-
-h1clone.Add( h2clone )
-h1clone.Add( h3clone )
-
-c = TCanvas('c_' + hist1, 'c_' + hist1,  10, 10, 750, 500 )
-c.SetLogy()
-c.SetGrid()
-h1clone.Draw()
-h1clone.GetXaxis().SetTitle("Mass [GeV]")
-#h1clone.GetYaxis().SetTitle("Dijet/10 GeV")
-#h1clone.GetYaxis().SetTitle("Events/10 GeV")
-#h1clone.GetYaxis().SetTitle("Events")
-h1clone.GetYaxis().SetTitleOffset(1.0);
-
-c.SaveAs(outputDir + hist1 + "_QCD_4jet80.pdf")

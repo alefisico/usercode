@@ -8,23 +8,29 @@ gStyle.SetOptStat(0)
 trigger = str ( sys.argv[1] )
 scale = int ( sys.argv[2] )
 #logscale = int ( sys.argv[4] )
-histos = { 'massRecoBjetsCSVM':'step1plots1D', 
-		'avgMassRecoBjetsCSVM':'step1plots1D', 
-		'massdijetWORecoBjetsCSVM':'step2plots1D',
-		'massdijetWORecoBjetsCSVM_cutDiagStop1jj50':'step2plots1D',
-		'massdijetWORecoBjetsCSVM_cutDiagStop1jj100':'step2plots1D',
-		'massdijetWORecoBjetsCSVM_cutDiagStop1jj150':'step2plots1D',
-		'massRecoDiBjetDiJet':'step3plots1D',
-		'massRecoDiBjetDiJet_cutDiagStop1jj50':'step3plots1D',
-		'massRecoDiBjetDiJet_cutDiagStop1jj100':'step3plots1D',
-		'massRecoDiBjetDiJet_cutDiagStop2bbjj0':'step3plots1D',
-		'massRecoDiBjetDiJet_cutDiagStop2bbjj10':'step3plots1D',
-		'massRecoDiBjetDiJet_cutDiagStop2bbjj20':'step3plots1D',
-		'massRecoDiBjetDiJet_cutDiagStop2bbjj30':'step3plots1D',
-		'massRecoDiBjetDiJet_cutDiagStop2bbjj40':'step3plots1D',
-		'massRecoDiBjetDiJet_cutDiagStop2bbjj50':'step3plots1D',
-		'massRecoDiBjetDiJet_cutDiagStop2bbjj100':'step3plots1D',
-		'massRecoDiBjetDiJetSmallestDeltaM':'step4plots1D'
+histos = { 'recoBjets_num':'basicPlots',
+		'recoJets_pt':'basicPlots',
+		'recoJets_1pt':'basicPlots',
+		'recoJets_2pt':'basicPlots',
+		'recoJets_HT':'basicPlots',
+#		'recoBjets_num_Step1':'basicPlots',
+#		'massRecoBjetsCSVM':'step1plots1D', 
+#		'avgMassRecoBjetsCSVM':'step1plots1D', 
+#		'massdijetWORecoBjetsCSVM':'step2plots1D',
+#		'massdijetWORecoBjetsCSVM_cutDiagStop1jj50':'step2plots1D',
+#		'massdijetWORecoBjetsCSVM_cutDiagStop1jj100':'step2plots1D',
+#		'massdijetWORecoBjetsCSVM_cutDiagStop1jj150':'step2plots1D',
+#		'massRecoDiBjetDiJet':'step3plots1D',
+#		'massRecoDiBjetDiJet_cutDiagStop1jj50':'step3plots1D',
+#		'massRecoDiBjetDiJet_cutDiagStop1jj100':'step3plots1D',
+#		'massRecoDiBjetDiJet_cutDiagStop2bbjj0':'step3plots1D',
+#		'massRecoDiBjetDiJet_cutDiagStop2bbjj10':'step3plots1D',
+#		'massRecoDiBjetDiJet_cutDiagStop2bbjj20':'step3plots1D',
+#		'massRecoDiBjetDiJet_cutDiagStop2bbjj30':'step3plots1D',
+#		'massRecoDiBjetDiJet_cutDiagStop2bbjj40':'step3plots1D',
+#		'massRecoDiBjetDiJet_cutDiagStop2bbjj50':'step3plots1D',
+#		'massRecoDiBjetDiJet_cutDiagStop2bbjj100':'step3plots1D',
+#		'massRecoDiBjetDiJetSmallestDeltaM':'step4plots1D'
 		}
 
 input3 = "/uscms_data/d3/algomez/files/Stops/Results/HT250-500_4jet80_6jet60_plots.root"
@@ -61,33 +67,30 @@ outputDir = "/uscms_data/d3/algomez/files/Stops/Results/Plots/"
 #weightHT500_1000 = 19500 * HT500_1000XS/HT500_1000nEvents
 #weightHT1000_Inf = 19500 * HT1000_InfXS/HT1000_InfnEvents
 
-kfactor = 1
-#weightHT250_500 = 19500 * 276000/17021377
+kfactor = 1.1  ### 1.2 WOHT250
+#kfactor = 1.0
+weightHT250_500 = kfactor * 19500 * 276000/17021377
 weightHT500_1000 = kfactor * 19500 * 8426/28122500
 weightHT1000_Inf = kfactor * 19500 * 204/13795394
 
-#weightHT250_500 = 5 
-#weightHT500_1000 = 5.84
-#weightHT1000_Inf = 3.28
-
 f1 = TFile(input1)
 f2 = TFile(input2)
-#f3 = TFile(input3)
+f3 = TFile(input3)
 f4 = TFile(input4)
 
 for hist1, folder in histos.iteritems():
 	h1 = f1.Get(folder+'/' + hist1)
 	h2 = f2.Get(folder+'/' + hist1)
-	#h3 = f3.Get(folder+'/' + hist1)
+	h3 = f3.Get(folder+'/' + hist1)
 	h4 = f4.Get(folder+'/' + hist1)
 	
 	h1clone = h1.Clone("h1")
 	h2clone = h2.Clone("h2")
-	#h3clone = h3.Clone("h3")
+	h3clone = h3.Clone("h3")
 	h4clone = h4.Clone("h4")
 	
 	  
-	#h3clone.Scale( weightHT250_500 )
+	h3clone.Scale( weightHT250_500 )
 	h2clone.Scale( weightHT500_1000 )
 	h1clone.Scale( weightHT1000_Inf )
 	
@@ -104,19 +107,25 @@ for hist1, folder in histos.iteritems():
 	h4clone.SetLineWidth(2)
 	
 	c = TCanvas('c_' + hist1, 'c_' + hist1,  10, 10, 750, 500 )
-	#c.SetLogy()
+	if 'num' in hist1: c.SetLogy()
 	if ( scale == 1 ) :
 		h4clone.SetTitle("")
-		h4clone.GetXaxis().SetTitle("Invariant Mass [GeV]")
+		if 'pt' in hist1: h4clone.GetXaxis().SetTitle("p_T [GeV]")
+		elif 'num' in hist1: h4clone.GetXaxis().SetTitle("Number of Jets")
+		else: h4clone.GetXaxis().SetTitle("Invariant Mass [GeV]")
 		h4clone.GetYaxis().SetTitle("Normalized")
 		h4clone.GetYaxis().SetTitleOffset(1.2)
 		h4clone.DrawNormalized("hist")
 		h1clone.DrawNormalized("histsame")
 	else: 
 		h4clone.SetTitle("")
-		h4clone.GetXaxis().SetTitle("Invariant Mass [GeV]")
+		if 'pt' in hist1: h4clone.GetXaxis().SetTitle("p_T [GeV]")
+		elif 'num' in hist1: h4clone.GetXaxis().SetTitle("Number of Jets")
+		else: h4clone.GetXaxis().SetTitle("Invariant Mass [GeV]")
 		if "avg" in hist1: h4clone.GetYaxis().SetTitle("Events / 10 GeV")
 		elif "DiJet" in hist1: h4clone.GetYaxis().SetTitle("QuadJet / 10 GeV")
+		elif "pt" in hist1: h4clone.GetYaxis().SetTitle("Events / 10 GeV")
+		elif "num" in hist1: h4clone.GetYaxis().SetTitle("Events / 10 GeV")
 		else: h4clone.GetYaxis().SetTitle("Dijet / 10 GeV")
 		h4clone.GetYaxis().SetTitleOffset(1.2)
 		h4clone.Draw("hist")

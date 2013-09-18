@@ -10,42 +10,73 @@
 from ROOT import *
 import glob,sys
 
-st1mass1 = int (sys.argv[1])
-st2mass1 = int (sys.argv[2])
-decay1 = sys.argv[3]
-hist1 = str ( sys.argv[4] )
-#hist2 = str ( sys.argv[5] )
-#print "Options: ", sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+gROOT.Reset()
+gStyle.SetOptStat()
+gStyle.SetStatY(0.9)
+gStyle.SetStatX(0.9)
+gStyle.SetStatW(0.20)
+gStyle.SetStatH(0.20) 
 
-#input1 = "/cms/gomez/Stops/Results/st2_h_bb_st1_"+decay1+"_"+str(st2mass1)+"_"+str(st1mass1)+"_plots_v7.root"
-input1 = "/cms/gomez/Stops/Results/st2_h_bb_st1_"+decay1+"_"+str(st2mass1)+"_"+str(st1mass1)+"_plots_v7_120-130.root"
-outputDir = "/cms/gomez/Stops/Results/Plots/"
+trigger = str ( sys.argv[1] )
+
+samples = [ 'jj_250_100',
+		'jj_350_100', 'jj_350_200', 
+		'jj_450_100', 'jj_450_200', 'jj_450_300',
+		'jj_550_100', 'jj_550_200', 'jj_550_300', 'jj_550_400',
+		'jj_650_100', 'jj_650_200', 'jj_650_300', 'jj_650_400', 'jj_650_500',
+		'jj_750_100', 'jj_750_200', 'jj_750_300', 'jj_750_400', 'jj_750_500'
+		]
+
+histos = { 'recoDiBjetDiJet_masspt':'step3plots2D',
+		'recoDiBjetDiJet_cutDiagStop1jj50_masspt':'step3plots2D',
+		'recoDiBjetDiJet_cutDiagStop1jj100_masspt':'step3plots2D',
+		'recoDiBjetDiJet_cutDiagStop2bbjj50_masspt':'step3plots2D',
+		'recoDiBjetDiJet_cutDiagStop2bbjj100_masspt':'step3plots2D',
+		'dijetWORecoBjetsCSVM_masspt':'step2plots2D',
+		'dijetWORecoBjetsCSVM_masspt_cutDiagStop1jj50':'step2plots2D'
+		}
 
 
-f1 = TFile(input1)
+outputDir = "/uscms_data/d3/algomez/files/Stops/Results/Plots/"
 
-###########################
-# PLOTTING FUNCTION
-#   plot("histogram1","histogram2","Title;XaxisLabel;YaxisLabel","histo1legendEntry","histo2legendEntry","OutputFileName.png")
-
-def plot_cuts(hist1) :
-
-	gROOT.Reset()
-	#gStyle.SetPadRightMargin(0.2);
-
-	h1 = f1.Get('plots/AnalysisPlots/' + hist1)
-
-	c = TCanvas('c_' + hist1, 'c_' + hist1,  10, 10, 750, 500 )
-	c.SetLogz()
-
-	h1.Draw("colz")
-	h1.GetXaxis().SetTitle('scalar #sum Pt [GeV]')
-	h1.GetYaxis().SetTitle('Mass [GeV]')
+for masspoint in samples:
 	
+	if '250' in masspoint: XSample = 5.57596 
+	if '350' in masspoint: XSample = 0.807323
+	if '450' in masspoint: XSample = 0.169668
+	if '550' in masspoint: XSample = 0.0452067
+	if '650' in masspoint: XSample = 0.0139566
+	if '750' in masspoint: XSample = 0.00480639
+	signalweight = 19500 * XSample/10000
 
-	c.SaveAs(outputDir + hist1 + "_120-130_" + decay1 + "_" + str(st2mass1) + "_" +str(st1mass1) + ".pdf")
-	return
+	input1 = "/uscms_data/d3/algomez/files/Stops/Results/st2_h_bb_st1_"+masspoint+"_"+trigger+"_plots.root"
 
-
-plot_cuts( hist1 )
-#plot( hist1, hist2 )
+	f1 = TFile(input1)
+	
+	for hist1, folder in histos.iteritems():
+	
+		h1 = f1.Get(folder+'/' + hist1)
+		
+		c = TCanvas('c_' + hist1, 'c_' + hist1,  10, 10, 750, 500 )
+		c.SetLogz()
+		
+		h1.Draw("colz")
+		h1.SetTitle("")
+		h1.GetXaxis().SetTitle('scalar #sum Pt [GeV]')
+		h1.GetYaxis().SetTitle('Invariant Mass [GeV]')
+		h1.GetYaxis().SetTitleOffset(1.2)
+			
+		textBox=TLatex()
+		textBox.SetNDC()
+		textBox.SetTextSize(0.05) 
+		textBox.SetTextColor(50)
+		textBox.DrawText(0.10,0.91,"CMS Preliminary Simulation")
+		
+		textBox1=TLatex()
+		textBox1.SetNDC()
+		textBox1.SetTextSize(0.04) 
+		textBox1.SetTextColor(50)
+		textBox1.DrawText(0.49,0.85,"Signal "+masspoint)
+		
+		c.SaveAs(outputDir + hist1 + "_" + masspoint + "_" + trigger + ".pdf")
+		del c

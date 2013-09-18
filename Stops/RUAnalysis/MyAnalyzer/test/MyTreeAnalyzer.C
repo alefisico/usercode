@@ -300,11 +300,17 @@ void MyTreeAnalyzer::SlaveBegin(TTree * /*tree*/)
 	double minEta = -5.0;
 	double maxEta = 5.0;
 
+	int bigNbinPt = 200;
+	double bigMinPt = 0;
+	double bigMaxPt = 2000;
+
 	/////////////////////////////// Basic Plots
 	h1test = new TH1F( "h1test", "jet p_{T}", nbinPt, minPt, maxPt );
 	basicPlots["recoJets_num"] = new TH1D("recoJets_num" , "Number of Reco Jets", nbinNum , minNum, maxNum );
 	basicPlots["recoJets_pt"] = new TH1D("recoJets_pt" , "Reco Jets p_{T}", nbinPt , minPt, maxPt );
-	basicPlots["recoJets_sumpt"] = new TH1D("recoJets_sumpt" , "#sum Reco Jets p_{T}", nbinPt , minPt, maxPt );
+	basicPlots["recoJets_1pt"] = new TH1D("recoJets_1pt" , "Leading Jet p_{T}", nbinPt , minPt, maxPt );
+	basicPlots["recoJets_2pt"] = new TH1D("recoJets_2pt" , "Second Leading Jet p_{T}", nbinPt , minPt, maxPt );
+	basicPlots["recoJets_HT"] = new TH1D("recoJets_HT" , "H_{T}", bigNbinPt , bigMinPt, bigMaxPt );
 	basicPlots["recoJets_eta"] = new TH1D("recoJets_eta" , "Reco Jets #eta", nbinEta , minEta, maxEta );
 	basicPlots["recoJets_phi"] = new TH1D("recoJets_phi" , "Reco Jets #phi", nbinEta , minEta, maxEta );
 	basicPlots["recoBjets_num"] = new TH1D("recoBjets_num" , "Number of Reco Bjets", nbinNum , minNum, maxNum );
@@ -327,6 +333,29 @@ void MyTreeAnalyzer::SlaveBegin(TTree * /*tree*/)
 	basicPlots["recoBjets_num_Step2_diag200"] = new TH1D("recoBjets_num_Step2_diag200" , "Number of Reco Bjets after Step2_diag200", nbinNum , minNum, maxNum );
 
 	//////////////////////////////// Step1 Plots 1D
+	// Reco Jets (TEST)
+	step1plots1D["massRecoJetsHiggsCandWOBjets"] = new TH1D("massRecoJetsHiggsCandWOBjets" , "Mass of RecoJetsHiggsCandWOBjets" , nbinPt, minPt, maxPt );
+	step1plots1D["avgMassRecoJetsHiggsCandWOBjets"] = new TH1D("avgMassRecoJetsHiggsCandWOBjets" , "Average Mass of RecoJetsHiggsCandWOBjets" , nbinPt, minPt, maxPt );
+	step1plots2D["scalarPtRecoJetsHiggsCandWOBjets"] = new TH2D("scalarPtRecoJetsHiggsCandWOBjets" , "Mass of RecoJetsHiggsCandWOBjets vs scalar #sum p_{T}^{RecoJetsHiggsCandWOBjets}" , nbinPt, minPt, maxPt, nbinPt, minPt, maxPt );
+	step1plots2D["avgPtRecoJetsHiggsCandWOBjets"] = new TH2D("avgPtRecoJetsHiggsCandWOBjets" , "Average Mass of RecoJetsHiggsCandWOBjets vs scalar #sum p_{T}^{RecoJetsHiggsCandWOBjets}" , nbinPt, minPt, maxPt, nbinPt, minPt, maxPt );
+	step1plots1D["massRecoJetsHiggsCandW1Bjets"] = new TH1D("massRecoJetsHiggsCandW1Bjets" , "Mass of RecoJetsHiggsCandW1Bjets" , nbinPt, minPt, maxPt );
+	step1plots1D["avgMassRecoJetsHiggsCandW1Bjets"] = new TH1D("avgMassRecoJetsHiggsCandW1Bjets" , "Average Mass of RecoJetsHiggsCandW1Bjets" , nbinPt, minPt, maxPt );
+	step1plots2D["scalarPtRecoJetsHiggsCandW1Bjets"] = new TH2D("scalarPtRecoJetsHiggsCandW1Bjets" , "Mass of RecoJetsHiggsCandW1Bjets vs scalar #sum p_{T}^{RecoJetsHiggsCandW1Bjets}" , nbinPt, minPt, maxPt, nbinPt, minPt, maxPt );
+	step1plots2D["avgPtRecoJetsHiggsCandW1Bjets"] = new TH2D("avgPtRecoJetsHiggsCandW1Bjets" , "Average Mass of RecoJetsHiggsCandW1Bjets vs scalar #sum p_{T}^{RecoJetsHiggsCandW1Bjets}" , nbinPt, minPt, maxPt, nbinPt, minPt, maxPt );
+	step1plots1D["massRecoJetsHiggsCandW2Bjets"] = new TH1D("massRecoJetsHiggsCandW2Bjets" , "Mass of RecoJetsHiggsCandW2Bjets" , nbinPt, minPt, maxPt );
+	step1plots1D["avgMassRecoJetsHiggsCandW2Bjets"] = new TH1D("avgMassRecoJetsHiggsCandW2Bjets" , "Average Mass of RecoJetsHiggsCandW2Bjets" , nbinPt, minPt, maxPt );
+	step1plots2D["scalarPtRecoJetsHiggsCandW2Bjets"] = new TH2D("scalarPtRecoJetsHiggsCandW2Bjets" , "Mass of RecoJetsHiggsCandW2Bjets vs scalar #sum p_{T}^{RecoJetsHiggsCandW2Bjets}" , nbinPt, minPt, maxPt, nbinPt, minPt, maxPt );
+	step1plots2D["avgPtRecoJetsHiggsCandW2Bjets"] = new TH2D("avgPtRecoJetsHiggsCandW2Bjets" , "Average Mass of RecoJetsHiggsCandW2Bjets vs scalar #sum p_{T}^{RecoJetsHiggsCandW2Bjets}" , nbinPt, minPt, maxPt, nbinPt, minPt, maxPt );
+	step1plots1D["massRecoJetsHiggsCandW3Bjets"] = new TH1D("massRecoJetsHiggsCandW3Bjets" , "Mass of RecoJetsHiggsCandW3Bjets" , nbinPt, minPt, maxPt );
+	step1plots1D["avgMassRecoJetsHiggsCandW3Bjets"] = new TH1D("avgMassRecoJetsHiggsCandW3Bjets" , "Average Mass of RecoJetsHiggsCandW3Bjets" , nbinPt, minPt, maxPt );
+	step1plots2D["scalarPtRecoJetsHiggsCandW3Bjets"] = new TH2D("scalarPtRecoJetsHiggsCandW3Bjets" , "Mass of RecoJetsHiggsCandW3Bjets vs scalar #sum p_{T}^{RecoJetsHiggsCandW3Bjets}" , nbinPt, minPt, maxPt, nbinPt, minPt, maxPt );
+	step1plots2D["avgPtRecoJetsHiggsCandW3Bjets"] = new TH2D("avgPtRecoJetsHiggsCandW3Bjets" , "Average Mass of RecoJetsHiggsCandW3Bjets vs scalar #sum p_{T}^{RecoJetsHiggsCandW3Bjets}" , nbinPt, minPt, maxPt, nbinPt, minPt, maxPt );
+	step1plots1D["massRecoJetsHiggsCandW4Bjets"] = new TH1D("massRecoJetsHiggsCandW4Bjets" , "Mass of RecoJetsHiggsCandW4Bjets" , nbinPt, minPt, maxPt );
+	step1plots1D["avgMassRecoJetsHiggsCandW4Bjets"] = new TH1D("avgMassRecoJetsHiggsCandW4Bjets" , "Average Mass of RecoJetsHiggsCandW4Bjets" , nbinPt, minPt, maxPt );
+	step1plots2D["scalarPtRecoJetsHiggsCandW4Bjets"] = new TH2D("scalarPtRecoJetsHiggsCandW4Bjets" , "Mass of RecoJetsHiggsCandW4Bjets vs scalar #sum p_{T}^{RecoJetsHiggsCandW4Bjets}" , nbinPt, minPt, maxPt, nbinPt, minPt, maxPt );
+	step1plots2D["avgPtRecoJetsHiggsCandW4Bjets"] = new TH2D("avgPtRecoJetsHiggsCandW4Bjets" , "Average Mass of RecoJetsHiggsCandW4Bjets vs scalar #sum p_{T}^{RecoJetsHiggsCandW4Bjets}" , nbinPt, minPt, maxPt, nbinPt, minPt, maxPt );
+	
+
 	// Reco Bjets
 	step1plots1D["massRecoBjetsCSVM"] = new TH1D("massRecoBjetsCSVM" , "Mass of RecoBjetsCSVM" , nbinPt, minPt, maxPt );
 	step1plots1D["massRecoBjetsCSVM_cutDiagHiggsbb50"] = new TH1D("massRecoBjetsCSVM_cutDiagHiggsbb50" , "Mass of RecoBjetsCSVM" , nbinPt, minPt, maxPt );
@@ -531,13 +560,11 @@ void MyTreeAnalyzer::SlaveBegin(TTree * /*tree*/)
 
 
 	///// STEP 3
-	int bigNbinPt = 200;
-	double bigMinPt = 0;
-	double bigMaxPt = 2000;
 	// Reco Jets
 	step3plots2D["recoDiBjetDiJet_masspt"] = new TH2D("recoDiBjetDiJet_masspt" , "Mass of RECO (diBjets + diJets) vs scalar #sum p_{T}^{diBjets + diJets}" , bigNbinPt, bigMinPt, bigMaxPt, bigNbinPt, bigMinPt, bigMaxPt );
 	step3plots2D["recoDiBjetDiJet_MassPt"] = new TH2D("recoDiBjetDiJet_MassPt" , "Mass of RECO (diBjets + diJets) vs scalar #sum p_{T}^{diBjets + diJets}" , bigNbinPt, bigMinPt, bigMaxPt, bigNbinPt, bigMinPt, bigMaxPt );
 	step3plots1D["massRecoDiBjetDiJet"] = new TH1D("massRecoDiBjetDiJet" , "Mass of RECO (diBjet + diJet)" , bigNbinPt, bigMinPt, bigMaxPt );
+	step3plots2D["recoDiBjetDiJet_cutDiagStop2bbjj0_masspt"] = new TH2D("recoDiBjetDiJet_cutDiagStop2bbjj0_masspt" , "Mass of RECO (diBjets + diJets) vs scalar #sum p_{T}^{diBjets + diJets}" , bigNbinPt, bigMinPt, bigMaxPt, bigNbinPt, bigMinPt, bigMaxPt );
 	step3plots2D["recoDiBjetDiJet_cutDiagStop2bbjj10_masspt"] = new TH2D("recoDiBjetDiJet_cutDiagStop2bbjj10_masspt" , "Mass of RECO (diBjets + diJets) vs scalar #sum p_{T}^{diBjets + diJets}" , bigNbinPt, bigMinPt, bigMaxPt, bigNbinPt, bigMinPt, bigMaxPt );
 	step3plots2D["recoDiBjetDiJet_cutDiagStop2bbjj20_masspt"] = new TH2D("recoDiBjetDiJet_cutDiagStop2bbjj20_masspt" , "Mass of RECO (diBjets + diJets) vs scalar #sum p_{T}^{diBjets + diJets}" , bigNbinPt, bigMinPt, bigMaxPt, bigNbinPt, bigMinPt, bigMaxPt );
 	step3plots2D["recoDiBjetDiJet_cutDiagStop2bbjj30_masspt"] = new TH2D("recoDiBjetDiJet_cutDiagStop2bbjj30_masspt" , "Mass of RECO (diBjets + diJets) vs scalar #sum p_{T}^{diBjets + diJets}" , bigNbinPt, bigMinPt, bigMaxPt, bigNbinPt, bigMinPt, bigMaxPt );
@@ -547,6 +574,7 @@ void MyTreeAnalyzer::SlaveBegin(TTree * /*tree*/)
 	step3plots2D["recoDiBjetDiJet_cutDiagStop2bbjj70_masspt"] = new TH2D("recoDiBjetDiJet_cutDiagStop2bbjj70_masspt" , "Mass of RECO (diBjets + diJets) vs scalar #sum p_{T}^{diBjets + diJets}" , bigNbinPt, bigMinPt, bigMaxPt, bigNbinPt, bigMinPt, bigMaxPt );
 	step3plots2D["recoDiBjetDiJet_cutDiagStop2bbjj80_masspt"] = new TH2D("recoDiBjetDiJet_cutDiagStop2bbjj80_masspt" , "Mass of RECO (diBjets + diJets) vs scalar #sum p_{T}^{diBjets + diJets}" , bigNbinPt, bigMinPt, bigMaxPt, bigNbinPt, bigMinPt, bigMaxPt );
 	step3plots2D["recoDiBjetDiJet_cutDiagStop2bbjj90_masspt"] = new TH2D("recoDiBjetDiJet_cutDiagStop2bbjj90_masspt" , "Mass of RECO (diBjets + diJets) vs scalar #sum p_{T}^{diBjets + diJets}" , bigNbinPt, bigMinPt, bigMaxPt, bigNbinPt, bigMinPt, bigMaxPt );
+	step3plots1D["massRecoDiBjetDiJet_cutDiagStop2bbjj0"] = new TH1D("massRecoDiBjetDiJet_cutDiagStop2bbjj0" , "Mass of RECO (diBjet + diJet)" , bigNbinPt, bigMinPt, bigMaxPt );
 	step3plots1D["massRecoDiBjetDiJet_cutDiagStop2bbjj10"] = new TH1D("massRecoDiBjetDiJet_cutDiagStop2bbjj10" , "Mass of RECO (diBjet + diJet)" , bigNbinPt, bigMinPt, bigMaxPt );
 	step3plots1D["massRecoDiBjetDiJet_cutDiagStop2bbjj20"] = new TH1D("massRecoDiBjetDiJet_cutDiagStop2bbjj20" , "Mass of RECO (diBjet + diJet)" , bigNbinPt, bigMinPt, bigMaxPt );
 	step3plots1D["massRecoDiBjetDiJet_cutDiagStop2bbjj30"] = new TH1D("massRecoDiBjetDiJet_cutDiagStop2bbjj30" , "Mass of RECO (diBjet + diJet)" , bigNbinPt, bigMinPt, bigMaxPt );
@@ -698,7 +726,11 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 
 			//bool isTagged = false;
 			//CSVL > 0.244, CSVM > 0.679, CSVT > 0.898, JPM > 
-			if (bdiscCSV_PF[i] > 0.679 ) p4RecoBjetsCSVM.push_back( p4Jets );
+			//if (!fSample.Contains("HT")){
+				if (bdiscCSV_PF[i] > 0.679 ) p4RecoBjetsCSVM.push_back( p4Jets );
+			//} else {
+			//	if (bdiscCSV_PF[i] > -999 ) p4RecoBjetsCSVM.push_back( p4Jets );
+			//}
 			/*if ( abs( jet_PF_PartonFlav[i] ) = 5 ) continue;
 			if ( bdiscCSV_PF < 0.679  ) continue;
 			p4RecoPartonFlavorBjetsCSVM.push_back( p4Jets );
@@ -722,7 +754,9 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 		basicPlots["recoJets_eta"]->Fill( p4RecoJets[j].Eta() );
 		basicPlots["recoJets_phi"]->Fill(p4RecoJets[j].Phi());
 	} 
-	basicPlots["recoJets_sumpt"]->Fill( sumRecoJetsPt );	
+	if ( p4RecoJets.size() > 0 ) basicPlots["recoJets_1pt"]->Fill( p4RecoJets[0].Pt() );	
+	if ( p4RecoJets.size() > 1 ) basicPlots["recoJets_2pt"]->Fill( p4RecoJets[1].Pt() );	
+	basicPlots["recoJets_HT"]->Fill( sumRecoJetsPt );	
 	basicPlots["recoJets_num"]->Fill( p4RecoJets.size() );	
 
 	//////// Basic plots for bs 
@@ -752,6 +786,114 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 	       basicPlots["recoBjets_num_Step1"]->Fill( p4RecoBjetsCSVM.size() );	
 	}
 
+	///////////////// NO Bjets requierement
+	//// Structure function smallMassDiff
+	smallMassDiffVectors RecoJetsHiggsCandWOBjets_Vectors;
+	RecoJetsHiggsCandWOBjets_Vectors = smallMassDiff( p4RecoJets );
+	std::vector< double > massRecoJetsHiggsCandWOBjets = RecoJetsHiggsCandWOBjets_Vectors.mass;
+	std::vector< double > ptRecoJetsHiggsCandWOBjets = RecoJetsHiggsCandWOBjets_Vectors.pt;
+	std::vector< double > scalarPtRecoJetsHiggsCandWOBjets = RecoJetsHiggsCandWOBjets_Vectors.scalarPt;
+	std::vector< TLorentzVector > p4RecoJetsHiggsCandWOBjets_SmallMassDiff = RecoJetsHiggsCandWOBjets_Vectors.p4SmallMassDiff;
+	double avgMassRecoJetsHiggsCandWOBjets = RecoJetsHiggsCandWOBjets_Vectors.avgMass;
+	double avgPtRecoJetsHiggsCandWOBjets = RecoJetsHiggsCandWOBjets_Vectors.avgPt;
+
+	for(unsigned int tii = 0; tii < massRecoJetsHiggsCandWOBjets.size(); ++tii) {
+		///// Simple plots
+		step1plots1D["massRecoJetsHiggsCandWOBjets"]->Fill( massRecoJetsHiggsCandWOBjets[tii] );
+		if (tii==0) step1plots1D["avgMassRecoJetsHiggsCandWOBjets"]->Fill( avgMassRecoJetsHiggsCandWOBjets );
+		if (tii==0) step1plots2D["avgPtRecoJetsHiggsCandWOBjets"]->Fill( avgPtRecoJetsHiggsCandWOBjets, avgMassRecoJetsHiggsCandWOBjets );
+		step1plots2D["scalarPtRecoJetsHiggsCandWOBjets"]->Fill( scalarPtRecoJetsHiggsCandWOBjets[tii], massRecoJetsHiggsCandWOBjets[tii] );
+	}
+	//////////////////////////////////////////////////////////////////////////////////
+
+	///////////////// 1Bjets requierement
+	//// Structure function smallMassDiff
+	if ( p4RecoBjetsCSVM.size() > 0 ){
+		smallMassDiffVectors RecoJetsHiggsCandW1Bjets_Vectors;
+		RecoJetsHiggsCandW1Bjets_Vectors = smallMassDiff( p4RecoJets );
+		std::vector< double > massRecoJetsHiggsCandW1Bjets = RecoJetsHiggsCandW1Bjets_Vectors.mass;
+		std::vector< double > ptRecoJetsHiggsCandW1Bjets = RecoJetsHiggsCandW1Bjets_Vectors.pt;
+		std::vector< double > scalarPtRecoJetsHiggsCandW1Bjets = RecoJetsHiggsCandW1Bjets_Vectors.scalarPt;
+		std::vector< TLorentzVector > p4RecoJetsHiggsCandW1Bjets_SmallMassDiff = RecoJetsHiggsCandW1Bjets_Vectors.p4SmallMassDiff;
+		double avgMassRecoJetsHiggsCandW1Bjets = RecoJetsHiggsCandW1Bjets_Vectors.avgMass;
+		double avgPtRecoJetsHiggsCandW1Bjets = RecoJetsHiggsCandW1Bjets_Vectors.avgPt;
+
+		for(unsigned int tii = 0; tii < massRecoJetsHiggsCandW1Bjets.size(); ++tii) {
+			///// Simple plots
+			step1plots1D["massRecoJetsHiggsCandW1Bjets"]->Fill( massRecoJetsHiggsCandW1Bjets[tii] );
+			if (tii==0) step1plots1D["avgMassRecoJetsHiggsCandW1Bjets"]->Fill( avgMassRecoJetsHiggsCandW1Bjets );
+			if (tii==0) step1plots2D["avgPtRecoJetsHiggsCandW1Bjets"]->Fill( avgPtRecoJetsHiggsCandW1Bjets, avgMassRecoJetsHiggsCandW1Bjets );
+			step1plots2D["scalarPtRecoJetsHiggsCandW1Bjets"]->Fill( scalarPtRecoJetsHiggsCandW1Bjets[tii], massRecoJetsHiggsCandW1Bjets[tii] );
+		}
+	}
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	///////////////// 2Bjets requierement
+	//// Structure function smallMassDiff
+	if ( p4RecoBjetsCSVM.size() > 1 ){
+		smallMassDiffVectors RecoJetsHiggsCandW2Bjets_Vectors;
+		RecoJetsHiggsCandW2Bjets_Vectors = smallMassDiff( p4RecoJets );
+		std::vector< double > massRecoJetsHiggsCandW2Bjets = RecoJetsHiggsCandW2Bjets_Vectors.mass;
+		std::vector< double > ptRecoJetsHiggsCandW2Bjets = RecoJetsHiggsCandW2Bjets_Vectors.pt;
+		std::vector< double > scalarPtRecoJetsHiggsCandW2Bjets = RecoJetsHiggsCandW2Bjets_Vectors.scalarPt;
+		std::vector< TLorentzVector > p4RecoJetsHiggsCandW2Bjets_SmallMassDiff = RecoJetsHiggsCandW2Bjets_Vectors.p4SmallMassDiff;
+		double avgMassRecoJetsHiggsCandW2Bjets = RecoJetsHiggsCandW2Bjets_Vectors.avgMass;
+		double avgPtRecoJetsHiggsCandW2Bjets = RecoJetsHiggsCandW2Bjets_Vectors.avgPt;
+
+		for(unsigned int tii = 0; tii < massRecoJetsHiggsCandW2Bjets.size(); ++tii) {
+			///// Simple plots
+			step1plots1D["massRecoJetsHiggsCandW2Bjets"]->Fill( massRecoJetsHiggsCandW2Bjets[tii] );
+			if (tii==0) step1plots1D["avgMassRecoJetsHiggsCandW2Bjets"]->Fill( avgMassRecoJetsHiggsCandW2Bjets );
+			if (tii==0) step1plots2D["avgPtRecoJetsHiggsCandW2Bjets"]->Fill( avgPtRecoJetsHiggsCandW2Bjets, avgMassRecoJetsHiggsCandW2Bjets );
+			step1plots2D["scalarPtRecoJetsHiggsCandW2Bjets"]->Fill( scalarPtRecoJetsHiggsCandW2Bjets[tii], massRecoJetsHiggsCandW2Bjets[tii] );
+		}
+	}
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	///////////////// 3Bjets requierement
+	//// Structure function smallMassDiff
+	if ( p4RecoBjetsCSVM.size() > 2 ){
+		smallMassDiffVectors RecoJetsHiggsCandW3Bjets_Vectors;
+		RecoJetsHiggsCandW3Bjets_Vectors = smallMassDiff( p4RecoJets );
+		std::vector< double > massRecoJetsHiggsCandW3Bjets = RecoJetsHiggsCandW3Bjets_Vectors.mass;
+		std::vector< double > ptRecoJetsHiggsCandW3Bjets = RecoJetsHiggsCandW3Bjets_Vectors.pt;
+		std::vector< double > scalarPtRecoJetsHiggsCandW3Bjets = RecoJetsHiggsCandW3Bjets_Vectors.scalarPt;
+		std::vector< TLorentzVector > p4RecoJetsHiggsCandW3Bjets_SmallMassDiff = RecoJetsHiggsCandW3Bjets_Vectors.p4SmallMassDiff;
+		double avgMassRecoJetsHiggsCandW3Bjets = RecoJetsHiggsCandW3Bjets_Vectors.avgMass;
+		double avgPtRecoJetsHiggsCandW3Bjets = RecoJetsHiggsCandW3Bjets_Vectors.avgPt;
+
+		for(unsigned int tii = 0; tii < massRecoJetsHiggsCandW3Bjets.size(); ++tii) {
+			///// Simple plots
+			step1plots1D["massRecoJetsHiggsCandW3Bjets"]->Fill( massRecoJetsHiggsCandW3Bjets[tii] );
+			if (tii==0) step1plots1D["avgMassRecoJetsHiggsCandW3Bjets"]->Fill( avgMassRecoJetsHiggsCandW3Bjets );
+			if (tii==0) step1plots2D["avgPtRecoJetsHiggsCandW3Bjets"]->Fill( avgPtRecoJetsHiggsCandW3Bjets, avgMassRecoJetsHiggsCandW3Bjets );
+			step1plots2D["scalarPtRecoJetsHiggsCandW3Bjets"]->Fill( scalarPtRecoJetsHiggsCandW3Bjets[tii], massRecoJetsHiggsCandW3Bjets[tii] );
+		}
+	}
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	///////////////// 4Bjets requierement
+	//// Structure function smallMassDiff
+	if ( p4RecoBjetsCSVM.size() > 3 ){
+		smallMassDiffVectors RecoJetsHiggsCandW4Bjets_Vectors;
+		RecoJetsHiggsCandW4Bjets_Vectors = smallMassDiff( p4RecoJets );
+		std::vector< double > massRecoJetsHiggsCandW4Bjets = RecoJetsHiggsCandW4Bjets_Vectors.mass;
+		std::vector< double > ptRecoJetsHiggsCandW4Bjets = RecoJetsHiggsCandW4Bjets_Vectors.pt;
+		std::vector< double > scalarPtRecoJetsHiggsCandW4Bjets = RecoJetsHiggsCandW4Bjets_Vectors.scalarPt;
+		std::vector< TLorentzVector > p4RecoJetsHiggsCandW4Bjets_SmallMassDiff = RecoJetsHiggsCandW4Bjets_Vectors.p4SmallMassDiff;
+		double avgMassRecoJetsHiggsCandW4Bjets = RecoJetsHiggsCandW4Bjets_Vectors.avgMass;
+		double avgPtRecoJetsHiggsCandW4Bjets = RecoJetsHiggsCandW4Bjets_Vectors.avgPt;
+
+		for(unsigned int tii = 0; tii < massRecoJetsHiggsCandW4Bjets.size(); ++tii) {
+			///// Simple plots
+			step1plots1D["massRecoJetsHiggsCandW4Bjets"]->Fill( massRecoJetsHiggsCandW4Bjets[tii] );
+			if (tii==0) step1plots1D["avgMassRecoJetsHiggsCandW4Bjets"]->Fill( avgMassRecoJetsHiggsCandW4Bjets );
+			if (tii==0) step1plots2D["avgPtRecoJetsHiggsCandW4Bjets"]->Fill( avgPtRecoJetsHiggsCandW4Bjets, avgMassRecoJetsHiggsCandW4Bjets );
+			step1plots2D["scalarPtRecoJetsHiggsCandW4Bjets"]->Fill( scalarPtRecoJetsHiggsCandW4Bjets[tii], massRecoJetsHiggsCandW4Bjets[tii] );
+		}
+	}
+	//////////////////////////////////////////////////////////////////////////////////
+	
 	////////////////////////////  RecoBjets with Btagging
 	
 	//// Structure function smallMassDiff
@@ -1616,6 +1758,11 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 		step3plots2D["recoDiBjetDiJet_MassPt"]->Fill( p4RecoDiBjetDiJet[aa].Pt(), p4RecoDiBjetDiJet[aa].M() );
 		step3plots1D["massRecoDiBjetDiJet"]->Fill( massRecoDiBjetDiJet[aa] );
 
+		double zDiag2=(double)aa*10.0;
+		if( massRecoDiBjetDiJet[aa] < ( scalarSumPtRecoDiBjetDiJet[aa]-zDiag2 ) ) {
+			step3plots2D["recoDiBjetDiJet_cutDiagStop2bbjj0_masspt"]->Fill( scalarSumPtRecoDiBjetDiJet[aa], massRecoDiBjetDiJet[aa] );
+			step3plots1D["massRecoDiBjetDiJet_cutDiagStop2bbjj0"]->Fill( massRecoDiBjetDiJet[aa] );
+		}
 		double iDiag2=(double)aa*10.0+10.0;
 		if( massRecoDiBjetDiJet[aa] < ( scalarSumPtRecoDiBjetDiJet[aa]-iDiag2 ) ) {
 			step3plots2D["recoDiBjetDiJet_cutDiagStop2bbjj10_masspt"]->Fill( scalarSumPtRecoDiBjetDiJet[aa], massRecoDiBjetDiJet[aa] );
