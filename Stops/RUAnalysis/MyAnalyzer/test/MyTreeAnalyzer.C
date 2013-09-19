@@ -53,6 +53,19 @@ void MyTreeAnalyzer::ParseInput(){
 		tmp = tmp.Remove(0,fMyOpt.Index("sample="+fSample+"st1")+36);
 		fSt1 = tmp.Atoi();
 	}
+
+	if ( fSample.Contains("250")) { st2mass = 250; weight = 19500 * 5.57596/100000; }
+	if ( fSample.Contains("350")) { st2mass = 350; weight = 19500 * 0.807323/100000; }
+	if ( fSample.Contains("450")) { st2mass = 450; weight = 19500 * 0.169668/100000; }
+	if ( fSample.Contains("550")) { st2mass = 550; weight = 19500 * 0.0452067/100000; }
+	if ( fSample.Contains("650")) { st2mass = 650; weight = 19500 * 0.0139566/100000; }
+	if ( fSample.Contains("750")) { st2mass = 750; weight = 19500 * 0.00480639/100000; }
+	if ( fSample.Contains("data")) { weight = 1; }
+	if ( fSample.Contains("HT250")) { weight = 19500 * 276000/17021377; }
+	if ( fSample.Contains("HT500")) { weight = 19500 * 8426/28122500; }
+	if ( fSample.Contains("HT1000")) { weight = 19500 * 204/13795394; }
+
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -284,6 +297,7 @@ void MyTreeAnalyzer::SlaveBegin(TTree * /*tree*/)
 	//if ( fSample != "" ) tmpfilename = fSample+"_4jet120_plots.root";
 	else tmpfilename = "results.root";
 	fFile = new TFile(dir+tmpfilename,"RECREATE");
+
 
 	//////////////////////////////////////////
 	/////////create histograms    ////////////
@@ -689,6 +703,7 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 
 	int st1mass;
 	if ( fSt1 != 0 ) st1mass = fSt1;
+	//cout << st2mass << " " << weight << endl;
 
 	//..Just read the full event
 	fChain->GetTree()->GetEntry(entry);
@@ -2043,10 +2058,28 @@ void MyTreeAnalyzer::SlaveTerminate()
 				//else cout << "Warning: empty histogram " << temp->GetName() << " will not be written to file." << endl;
 			}
 			fFile->cd();
+			fFile->mkdir("scaleBasicPlots");
+			fFile->cd("scaleBasicPlots");
+			for ( std::map<string,TH1* >::const_iterator imap=basicPlots.begin(); imap!=basicPlots.end(); ++imap ) {
+				TH1 *temp = imap->second;
+				temp->Scale( weight );
+				if ( temp->GetEntries() > 0 ) temp->Write();
+				//else cout << "Warning: empty histogram " << temp->GetName() << " will not be written to file." << endl;
+			}
+			fFile->cd();
 			fFile->mkdir("step1plots1D");
 			fFile->cd("step1plots1D");
 			for ( std::map<string,TH1* >::const_iterator imap=step1plots1D.begin(); imap!=step1plots1D.end(); ++imap ) {
 				TH1 *temp = imap->second;
+				if ( temp->GetEntries() > 0 ) temp->Write();
+				//else cout << "Warning: empty histogram " << temp->GetName() << " will not be written to file." << endl;
+			}
+			fFile->cd();
+			fFile->mkdir("scaleStep1plots1D");
+			fFile->cd("scaleStep1plots1D");
+			for ( std::map<string,TH1* >::const_iterator imap=step1plots1D.begin(); imap!=step1plots1D.end(); ++imap ) {
+				TH1 *temp = imap->second;
+				temp->Scale( weight );
 				if ( temp->GetEntries() > 0 ) temp->Write();
 				//else cout << "Warning: empty histogram " << temp->GetName() << " will not be written to file." << endl;
 			}
@@ -2067,6 +2100,15 @@ void MyTreeAnalyzer::SlaveTerminate()
 				//else cout << "Warning: empty histogram " << temp->GetName() << " will not be written to file." << endl;
 			}
 			fFile->cd();
+			fFile->mkdir("scaleStep2plots1D");
+			fFile->cd("scaleStep2plots1D");
+			for ( std::map<string,TH1* >::const_iterator imap=step2plots1D.begin(); imap!=step2plots1D.end(); ++imap ) {
+				TH1 *temp = imap->second;
+				temp->Scale( weight );
+				if ( temp->GetEntries() > 0 ) temp->Write();
+				//else cout << "Warning: empty histogram " << temp->GetName() << " will not be written to file." << endl;
+			}
+			fFile->cd();
 			fFile->mkdir("step2plots2D");
 			fFile->cd("step2plots2D");
 			for ( std::map<string,TH2* >::const_iterator imap=step2plots2D.begin(); imap!=step2plots2D.end(); ++imap ) {
@@ -2083,6 +2125,15 @@ void MyTreeAnalyzer::SlaveTerminate()
 				//else cout << "Warning: empty histogram " << temp->GetName() << " will not be written to file." << endl;
 			}
 			fFile->cd();
+			fFile->mkdir("scaleStep3plots1D");
+			fFile->cd("scaleStep3plots1D");
+			for ( std::map<string,TH1* >::const_iterator imap=step3plots1D.begin(); imap!=step3plots1D.end(); ++imap ) {
+				TH1 *temp = imap->second;
+				temp->Scale( weight );
+				if ( temp->GetEntries() > 0 ) temp->Write();
+				//else cout << "Warning: empty histogram " << temp->GetName() << " will not be written to file." << endl;
+			}
+			fFile->cd();
 			fFile->mkdir("step3plots2D");
 			fFile->cd("step3plots2D");
 			for ( std::map<string,TH2* >::const_iterator imap=step3plots2D.begin(); imap!=step3plots2D.end(); ++imap ) {
@@ -2095,6 +2146,15 @@ void MyTreeAnalyzer::SlaveTerminate()
 			fFile->cd("step4plots1D");
 			for ( std::map<string,TH1* >::const_iterator imap=step4plots1D.begin(); imap!=step4plots1D.end(); ++imap ) {
 				TH1 *temp = imap->second;
+				if ( temp->GetEntries() > 0 ) temp->Write();
+				//else cout << "Warning: empty histogram " << temp->GetName() << " will not be written to file." << endl;
+			}
+			fFile->cd();
+			fFile->mkdir("scaleStep4plots1D");
+			fFile->cd("scaleStep4plots1D");
+			for ( std::map<string,TH1* >::const_iterator imap=step4plots1D.begin(); imap!=step4plots1D.end(); ++imap ) {
+				TH1 *temp = imap->second;
+				temp->Scale( weight );
 				if ( temp->GetEntries() > 0 ) temp->Write();
 				//else cout << "Warning: empty histogram " << temp->GetName() << " will not be written to file." << endl;
 			}
