@@ -33,6 +33,9 @@ histos = {# 'recoBjets_num':'basicPlots',
 #		'massRecoDiBjetDiJet_cutDiagStop1jj50':'step3plots1D',
 #		'massRecoDiBjetDiJet_cutDiagStop1jj100':'step3plots1D',
 		'massRecoDiBjetDiJet_cutDiagStop2bbjj0':'step3plots1D',
+		'avgMassHiggsCandidate_cutDiagStop2bbjj0':'step3plots1D',
+		'massHiggsCandidate_cutDiagStop2bbjj0':'step3plots1D',
+		'massStop1Candidate_cutDiagStop2bbjj0':'step3plots1D',
 #		'massRecoDiBjetDiJet_cutDiagStop2bbjj10':'step3plots1D',
 #		'massRecoDiBjetDiJet_cutDiagStop2bbjj20':'step3plots1D',
 #		'massRecoDiBjetDiJet_cutDiagStop2bbjj30':'step3plots1D',
@@ -110,35 +113,41 @@ for st2mass in sample:
 		if ( st2mass > 500 ): h4clone = h4.Clone("h4")
 		if ( st2mass > 600 ): h5clone = h5.Clone("h5")
 		
-		h1clone.SetLineColor(1)
-		if ( st2mass > 300 ): h2clone.SetLineColor(2)
-		if ( st2mass > 400 ): h3clone.SetLineColor(3)
+		h0clone.SetLineColor(1)
+		h1clone.SetLineColor(7)
+		if ( st2mass > 300 ): h2clone.SetLineColor(6)
+		if ( st2mass > 400 ): h3clone.SetLineColor(5)
 		if ( st2mass > 500 ): h4clone.SetLineColor(4)
-		if ( st2mass > 600 ): h5clone.SetLineColor(5)
-		h1clone.SetLineWidth(2)
-		if ( st2mass > 300 ): h2clone.SetLineWidth(2)
-		if ( st2mass > 400 ): h3clone.SetLineWidth(2)
-		if ( st2mass > 500 ): h4clone.SetLineWidth(2)
-		if ( st2mass > 600 ): h5clone.SetLineWidth(2)
-		
+		if ( st2mass > 600 ): h5clone.SetLineColor(3)
+		h0clone.SetLineWidth(2)
 		
 		
 		c = TCanvas('c_' + hist1, 'c_' + hist1,  10, 10, 750, 500 )
 		#c.SetLogy()
-		h0clone.SetTitle("")
-		if 'pt' in hist1: h0clone.GetXaxis().SetTitle("p_T [GeV]")
-		elif 'num' in hist1: h0clone.GetXaxis().SetTitle("Number of Jets")
-		else: h0clone.GetXaxis().SetTitle("Invariant Mass [GeV]")
-		h0clone.GetYaxis().SetTitle("Normalized")
-		h0clone.DrawNormalized("hist")
-		h1clone.DrawNormalized("histsame")
+		h1clone.SetTitle("")
+		if 'pt' in hist1: h1clone.GetXaxis().SetTitle("p_T [GeV]")
+		elif 'num' in hist1: h1clone.GetXaxis().SetTitle("Number of Jets")
+		elif "avgMass" in hist1: h1clone.GetXaxis().SetTitle("Average of Higgs Candidates Mass [GeV]")
+		elif "massHiggs" in hist1: h1clone.GetXaxis().SetTitle("Higgs Candidates Mass (diBjet) [GeV]")
+		elif "massRecoBjets" in hist1: h1clone.GetXaxis().SetTitle("Higgs Candidates Mass (diBjet) [GeV]")
+		elif "massStop1" in hist1: h1clone.GetXaxis().SetTitle("Lighter Stop Candidates Mass (dijet) [GeV]")
+		elif "massdijet" in hist1: h1clone.GetXaxis().SetTitle("Lighter Stop Candidates Mass (dijet) [GeV]")
+		elif "massStop1" in hist1: h1clone.GetXaxis().SetTitle("Heavier Stop Candidates Mass (quadjet) [GeV]")
+		elif "massRecoDiBjet" in hist1: h1clone.GetXaxis().SetTitle("Heavier Stop Candidates Mass (quadjet) [GeV]")
+		else: h1clone.GetXaxis().SetTitle("Invariant Mass [GeV]")
+		h1clone.GetYaxis().SetTitle("Normalized")
+		h1clone.GetYaxis().SetTitleOffset(1.2)
+		if 'avg' in hist1: h1clone.SetMaximum( h0clone.GetMaximum()*10)
+		h1clone.DrawNormalized("hist")
+		h0clone.DrawNormalized("histsame")
 		if ( st2mass > 300 ): h2clone.DrawNormalized("histsame")
 		if ( st2mass > 400 ): h3clone.DrawNormalized("histsame")
 		if ( st2mass > 500 ): h4clone.DrawNormalized("histsame")
 		if ( st2mass > 600 ): h5clone.DrawNormalized("histsame")
 		
-		legend=TLegend(0.70,0.7,0.90,0.9)
+		legend=TLegend(0.70,0.7,0.89,0.89)
 		legend.SetFillColor(0);
+		legend.SetBorderSize(0);
 		legend.AddEntry(h0clone,"DATA", "l")
 		legend.AddEntry(h1clone, "jj_"+str(st2mass)+"_100", "l")
 		if ( st2mass > 300 ): legend.AddEntry(h2clone, "jj_"+str(st2mass)+"_200", "l")
@@ -153,6 +162,27 @@ for st2mass in sample:
 		textBox.SetTextColor(50)
 		textBox.DrawText(0.10,0.91,"CMS Preliminary")
 	
+		textBox3=TLatex()
+		textBox3.SetNDC()
+		textBox3.SetTextSize(0.04) 
+		textBox3.DrawLatex(0.72,0.65,"4^{th} jet > 80 GeV ")
+		
+		textBox4=TLatex()
+		textBox4.SetNDC()
+		textBox4.SetTextSize(0.04) 
+		textBox4.DrawLatex(0.72,0.60,"6^{th} jet > 60 GeV ")
+	
+		textBox4=TLatex()
+		textBox4.SetNDC()
+		textBox4.SetTextSize(0.04) 
+		textBox4.DrawLatex(0.72,0.55,"#geq 4 bjets")
+	
+		if "cutDiag" in hist1:
+			textBox5=TLatex()
+			textBox5.SetNDC()
+			textBox5.SetTextSize(0.04) 
+			textBox5.DrawLatex(0.72,0.50,"#Delta = 0 GeV")
+
 		c.SaveAs(outputDir + hist1 + "_DATA_QCD_Signal_"+str(st2mass)+"_DiffStop1_"+trigger+"_Normalized.pdf")
 		del c
 	
@@ -172,17 +202,13 @@ for st2mass in sample:
 		if ( st2mass > 500 ): h4clone = h4.Clone("h4")
 		if ( st2mass > 600 ): h5clone = h5.Clone("h5")
 		
-		h1clone.SetLineColor(1)
-		if ( st2mass > 300 ): h2clone.SetLineColor(2)
-		if ( st2mass > 400 ): h3clone.SetLineColor(3)
+		h0clone.SetLineColor(1)
+		h1clone.SetLineColor(7)
+		if ( st2mass > 300 ): h2clone.SetLineColor(6)
+		if ( st2mass > 400 ): h3clone.SetLineColor(5)
 		if ( st2mass > 500 ): h4clone.SetLineColor(4)
-		if ( st2mass > 600 ): h5clone.SetLineColor(5)
-		h1clone.SetLineWidth(2)
-		if ( st2mass > 300 ): h2clone.SetLineWidth(2)
-		if ( st2mass > 400 ): h3clone.SetLineWidth(2)
-		if ( st2mass > 500 ): h4clone.SetLineWidth(2)
-		if ( st2mass > 600 ): h5clone.SetLineWidth(2)
-		
+		if ( st2mass > 600 ): h5clone.SetLineColor(3)
+		h0clone.SetLineWidth(2)
 		
 		
 		c = TCanvas('c_' + hist2, 'c_' + hist2,  10, 10, 750, 500 )
@@ -190,6 +216,13 @@ for st2mass in sample:
 		h0clone.SetTitle("")
 		if 'pt' in hist2: h0clone.GetXaxis().SetTitle("p_T [GeV]")
 		elif 'num' in hist2: h0clone.GetXaxis().SetTitle("Number of Jets")
+		elif "avgMass" in hist2: h0clone.GetXaxis().SetTitle("Average of Higgs Candidates Mass [GeV]")
+		elif "massHiggs" in hist2: h0clone.GetXaxis().SetTitle("Higgs Candidates Mass (diBjet) [GeV]")
+		elif "massRecoBjets" in hist2: h0clone.GetXaxis().SetTitle("Higgs Candidates Mass (diBjet) [GeV]")
+		elif "massStop1" in hist2: h0clone.GetXaxis().SetTitle("Lighter Stop Candidates Mass (dijet) [GeV]")
+		elif "massdijet" in hist2: h0clone.GetXaxis().SetTitle("Lighter Stop Candidates Mass (dijet) [GeV]")
+		elif "massStop1" in hist2: h0clone.GetXaxis().SetTitle("Heavier Stop Candidates Mass (quadjet) [GeV]")
+		elif "massRecoDiBjet" in hist2: h0clone.GetXaxis().SetTitle("Heavier Stop Candidates Mass (quadjet) [GeV]")
 		else: h0clone.GetXaxis().SetTitle("Invariant Mass [GeV]")
 		if "avg" in hist2: h0clone.GetYaxis().SetTitle("Events / 10 GeV")
 		elif "DiJet" in hist2: h0clone.GetYaxis().SetTitle("QuadJet / 10 GeV")
@@ -204,8 +237,9 @@ for st2mass in sample:
 		if ( st2mass > 500 ): h4clone.Draw("histsame")
 		if ( st2mass > 600 ): h5clone.Draw("histsame")
 		
-		legend=TLegend(0.70,0.7,0.90,0.9)
+		legend=TLegend(0.70,0.7,0.89,0.89)
 		legend.SetFillColor(0);
+		legend.SetBorderSize(0);
 		legend.AddEntry(h0clone,"DATA", "l")
 		legend.AddEntry(h1clone, "jj_"+str(st2mass)+"_100", "l")
 		if ( st2mass > 300 ): legend.AddEntry(h2clone, "jj_"+str(st2mass)+"_200", "l")
@@ -218,14 +252,35 @@ for st2mass in sample:
 		textBox.SetNDC()
 		textBox.SetTextSize(0.05) 
 		textBox.SetTextColor(50)
-		textBox.DrawText(0.10,0.91,"CMS Preliminary")
+		textBox.DrawLatex(0.10,0.91,"CMS Preliminary 19.5 fb^{-1} at #sqrt{s} = 8 TeV")
 	
 		textBox2=TLatex()
 		textBox2.SetNDC()
 		textBox2.SetTextSize(0.04) 
 		textBox2.SetTextColor(50)
-		textBox2.DrawText(0.50,0.65,"QCD and Signal Scale to 19.5/fb")
+		textBox2.DrawLatex(0.30,0.85,"QCD and Signal Scale to 19.5 fb^{-1}")
+
+		textBox3=TLatex()
+		textBox3.SetNDC()
+		textBox3.SetTextSize(0.04) 
+		textBox3.DrawLatex(0.72,0.65,"4^{th} jet > 80 GeV ")
+		
+		textBox4=TLatex()
+		textBox4.SetNDC()
+		textBox4.SetTextSize(0.04) 
+		textBox4.DrawLatex(0.72,0.60,"6^{th} jet > 60 GeV ")
 	
+		textBox4=TLatex()
+		textBox4.SetNDC()
+		textBox4.SetTextSize(0.04) 
+		textBox4.DrawLatex(0.72,0.55,"#geq 4 bjets")
+	
+		if "cutDiag" in hist2:
+			textBox5=TLatex()
+			textBox5.SetNDC()
+			textBox5.SetTextSize(0.04) 
+			textBox5.DrawLatex(0.72,0.50,"#Delta = 0 GeV")
+		
 		c.SaveAs(outputDir + hist2 + "_DATA_QCD_Signal_"+str(st2mass)+"_DiffStop1_"+trigger+".pdf")
 		del c
 	
