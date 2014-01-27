@@ -1,0 +1,27 @@
+imax 1 channels
+jmax 1 backgrounds
+kmax 0 systematics
+-------------------------------
+shapes * * workspace_jj_450_200.root myWS:$PROCESS 
+-------------------------------
+bin           1
+observation  -1
+-------------------------------
+bin           1          1
+process       0          1
+process     signal   bkg
+rate        13.3287   1554.9802
+-------------------------------
+# lumi    lnN     1.045         -     
+# GausSigma  param       45.1220       5.7784  
+# GausMean  param       1000.0000       10.0000  
+# SigNormFit   lnN    1.0600       - 
+# SigNormPDF   lnN    1.0300       - 
+# SigNormJES   lnN    1.0400       - 
+# SigNormPU   lnN    1.0300        - 
+# SigNormISR   lnN    1.1000        - 
+# SigNormBtag   lnN    1.0000       - -
+# b  param       78.8566       33.5562
+# c  param       -8.4161       10.6159
+# d  param       -0.8140       1.5043
+# BkgNorm    lnN     -       2.0000    
