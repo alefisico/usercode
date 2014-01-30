@@ -1,37 +1,27 @@
 import FWCore.ParameterSet.Config as cms
-import string
-import os,sys
+import glob,sys
 
-index = int (sys.argv[5])
 st1mass = int (sys.argv[2])
 st2mass = int (sys.argv[3])
 process = sys.argv[4]
-suffix_list=[]
-output_list=[]
-dir_list=[]
-print sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
-
-suffix_list = os.popen("ls -1 /eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_"+process+"_"+str(st2mass)+"_"+str(st1mass)+"/*root").readlines()
-#suffix_list = os.popen("ls -1 /uscms/home/algomez/work/CMSSW_5_3_3/src/RUAnalysis/Ntupler/submit/*root").readlines()
+JES = sys.argv[5]
+print sys.argv[2], sys.argv[3], sys.argv[4]
 
 
-# newInd=index % 8
-# this_fin_nocfi  = "file:"+suffix_list[newInd]
-this_fin_nocfi  = [
-		"file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_"+process+"_"+str(st2mass)+"_"+str(st1mass)+"/st2_h_bb_st1_"+process+"_"+str(st2mass)+"_"+str(st1mass)+"_tlbsm_53x_v2_mc_1.root",
-		"file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_"+process+"_"+str(st2mass)+"_"+str(st1mass)+"/st2_h_bb_st1_"+process+"_"+str(st2mass)+"_"+str(st1mass)+"_tlbsm_53x_v2_mc_2.root",
-		"file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_"+process+"_"+str(st2mass)+"_"+str(st1mass)+"/st2_h_bb_st1_"+process+"_"+str(st2mass)+"_"+str(st1mass)+"_tlbsm_53x_v2_mc_3.root",
-		"file:/eos/uscms/store/user/algomez/Stops/PATTuples/st2_h_bb_st1_"+process+"_"+str(st2mass)+"_"+str(st1mass)+"/st2_h_bb_st1_"+process+"_"+str(st2mass)+"_"+str(st1mass)+"_tlbsm_53x_v2_mc_4.root"
-		]
-
+suffix_list = glob.glob('/cms/gomez/Stops/PATTuples/st2_h_bb_st1_'+process+'_'+str(st2mass)+'_'+str(st1mass)+'/*root')
+this_fin_nocfi = [i if i.startswith('file:') else 'file:' + i for i in suffix_list]
 
 # this_fout0 = "/cms/clseitz/ThreeJet/RUNtuple/Nov6ReRun_JES/Stealth/StealthSbottomTo3b_MSb_"+str(mass)+"/tealthSbottomTo3b_MSb_"+str(mass)+"_FullSimSummer12_TLBSM53xv5_"+str(newInd)+"_JESnone_plots.root"
 # this_fout1 = "/cms/clseitz/ThreeJet/RUNtuple/Nov6ReRun_JES/Stealth/StealthSbottomTo3b_MSb_"+str(mass)+"/tealthSbottomTo3b_MSb_"+str(mass)+"_FullSimSummer12_TLBSM53xv5_"+str(newInd)+"_JESnone_tree.root"
 #this_fout0 = "ntuples/ntpl_"+str(index)+"_Allplots.root"
 #this_fout1 = "ntuples/ntpl_"+str(index)+"_Alltree.root"
 
-this_fout0 = "/uscms_data/d3/algomez/files/stops/Ntuples/st2_h_bb_st1_"+process+"_"+str(st2mass)+"_"+str(st1mass)+"_plots.root"
-this_fout1 = "/uscms_data/d3/algomez/files/stops/Ntuples/st2_h_bb_st1_"+process+"_"+str(st2mass)+"_"+str(st1mass)+"_tree.root"
+if not JES:
+	this_fout0 = "/cms/gomez/Stops/Ntuples/st2_h_bb_st1_"+process+"_"+str(st2mass)+"_"+str(st1mass)+"_plots.root"
+	this_fout1 = "/cms/gomez/Stops/Ntuples/st2_h_bb_st1_"+process+"_"+str(st2mass)+"_"+str(st1mass)+"_tree.root"
+else:
+	this_fout0 = "/cms/gomez/Stops/Ntuples/st2_h_bb_st1_"+process+"_"+str(st2mass)+"_"+str(st1mass)+"_jes"+JES+"_plots.root"
+	this_fout1 = "/cms/gomez/Stops/Ntuples/st2_h_bb_st1_"+process+"_"+str(st2mass)+"_"+str(st1mass)+"_jes"+JES+"_tree.root"
 
 
 print this_fin_nocfi
@@ -83,10 +73,13 @@ process.source = cms.Source("PoolSource",
 ##)
 
 process.data2 = cms.EDAnalyzer('Ntupler',
+		stop1Mass = cms.double(st1mass),
+		stop2Mass = cms.double(st2mass),
 		sumPtMin       = cms.untracked.double(0.0),
 		debug          = cms.untracked.bool(False),
 		NtuplePlots = cms.untracked.string(this_fout0),
 		NtupleTree= cms.untracked.string(this_fout1),
+		Gensrc = cms.InputTag("genParticles"),
 		#PatJetType     = cms.untracked.vstring('goodPatJetsCA8PF'),
 		#PatJetType     = cms.untracked.vstring('goodPatJetsPFlow'),
 		#PatJetType     = cms.untracked.vstring('goodPatJetsCA8PF'),
@@ -105,30 +98,37 @@ process.data2 = cms.EDAnalyzer('Ntupler',
 		NjetsMax       = cms.untracked.int32(1000),
 		jetptcut       = cms.untracked.double(20),
 		etacut         = cms.untracked.double(3.),
-		jecAdj = cms.untracked.string('none'), # Can also be "up" or "down
+		#jecAdj = cms.untracked.string('none'), # Can also be "up" or "down
+		jecAdj = cms.untracked.string(JES), # Can also be "up" or "down
 		jetCorrectionService = cms.untracked.string(jetcorrserv),
 
-		#selection trigger
-		#Qua60_Di20
-		#TriggerNamesSel = cms.untracked.vstring('HLT_QuadJet60_DiJet20_v1','HLT_QuadJet60_DiJet20_v2','HLT_QuadJet60_DiJet20_v3','HLT_QuadJet60_DiJet20_v4',
-		#'HLT_QuadJet60_DiJet20_v5','HLT_QuadJet60_DiJet20_v6','HLT_QuadJet60_DiJet20_v7'),
-		#Quad70
-		#TriggerNamesSel = cms.untracked.vstring('HLT_QuadJet80_v1','HLT_QuadJet80_v2','HLT_QuadJet80_v3','HLT_QuadJet80_v4',
-		#'HLT_QuadJet80_v5','HLT_QuadJet80_v6','HLT_QuadJet80_v7'),
-		TriggerNamesSel = cms.untracked.vstring('HLT_SixJet45_v1','HLT_SixJet45_v2','HLT_SixJet45_v3','HLT_SixJet45_v4'),
-		
-		#base trigger
-		#TriggerNamesBase = cms.untracked.vstring('HLT_QuadJet50_v9','HLT_QuadJet50_v8'),
-		#,'HLT_QuadJet50_v3','HLT_QuadJet50_v4',
-		#'HLT_QuadJet50_v5','HLT_QuadJet50_v6','HLT_QuadJet50_v7'),
-		#TriggerNamesBase = cms.untracked.vstring('HLT_QuadJet70_v1','HLT_QuadJet70_v2','HLT_QuadJet70_v3','HLT_QuadJet70_v4',
-		#'HLT_QuadJet70_v5','HLT_QuadJet70_v6','HLT_QuadJet70_v7'),
-		TriggerNamesBase = cms.untracked.vstring('HLT_SixJet35_v1','HLT_SixJet35_v2','HLT_SixJet35_v3','HLT_SixJet35_v4'),
-		#JSON file 900/pb May18
-		#JSONFilename = cms.untracked.string('/home/clseitz/MyCMS/RU/CMSSW_5_2_2/src/RUAnalysis/Ntupler/submit/Cert_190456-194076_8TeV_PromptReco_Collisions12_JSON.txt'),
-		#JSON File 2.42/fb Jun01
-		JSONFilename = cms.untracked.string('/home/clseitz/MyCMS/RU/CMSSW_5_2_2/src/RUAnalysis/Ntupler/submit/Cert_190456-195016_8TeV_PromptReco_Collisions12_JSON.txt'),
-		)
+	#selection trigger
+	#Qua60_Di20
+	TriggerNamesSel = cms.untracked.vstring('HLT_QuadJet60_DiJet20_v1','HLT_QuadJet60_DiJet20_v2','HLT_QuadJet60_DiJet20_v3',
+		'HLT_QuadJet60_DiJet20_v4','HLT_QuadJet60_DiJet20_v5','HLT_QuadJet60_DiJet20_v6',
+		'HLT_QuadJet60_DiJet20_v7','HLT_QuadJet60_DiJet20_v8','HLT_QuadJet60_DiJet20_v9'),
+	#Quad70
+	#TriggerNamesSel = cms.untracked.vstring('HLT_QuadJet80_v1','HLT_QuadJet80_v2','HLT_QuadJet80_v3','HLT_QuadJet80_v4',
+	#'HLT_QuadJet80_v5','HLT_QuadJet80_v6','HLT_QuadJet80_v7'),
+
+	#TriggerNamesSel = cms.untracked.vstring('HLT_SixJet45_v1','HLT_SixJet45_v2','HLT_SixJet45_v3','HLT_SixJet45_v4'),
+                               
+	#base trigger
+	#TriggerNamesBase = cms.untracked.vstring('HLT_QuadJet50_v9','HLT_QuadJet50_v8'),
+	#,'HLT_QuadJet50_v3','HLT_QuadJet50_v4',
+	# 'HLT_QuadJet50_v5','HLT_QuadJet50_v6','HLT_QuadJet50_v7'),
+	TriggerNamesBase = cms.untracked.vstring('HLT_QuadJet70_v1','HLT_QuadJet70_v2','HLT_QuadJet70_v3','HLT_QuadJet70_v4',
+		'HLT_QuadJet70_v5','HLT_QuadJet70_v6','HLT_QuadJet70_v7'),
+	#TriggerNamesBase = cms.untracked.vstring('HLT_SixJet35_v1','HLT_SixJet35_v2','HLT_SixJet35_v3','HLT_SixJet35_v4'),
+
+	#JSON file 900/pb May18
+	#JSONFilename = cms.untracked.string('/home/clseitz/MyCMS/RU/CMSSW_5_2_2/src/RUAnalysis/Ntupler/submit/Cert_190456-194076_8TeV_PromptReco_Collisions12_JSON.txt'),
+	#JSON File 2.42/fb Jun01
+	#JSONFilename = cms.untracked.string('/home/clseitz/MyCMS/RU/CMSSW_5_2_2/src/RUAnalysis/Ntupler/submit/Cert_190456-195016_8TeV_PromptReco_Collisions12_JSON.txt'),
+
+	#JSON 8/fb
+	JSONFilename = cms.untracked.string('/home/clseitz/MyCMS/RU/CMSSW_5_2_2/src/RUAnalysis/Ntupler/JSON/Cert_190456-200601_8TeV_PromptReco_Collisions12_JSON.txt'),
+	)
 
 
 process.p = cms.Path(process.data2)
