@@ -49,7 +49,7 @@ private:
    void			ParseInput();
    TString		fMyOpt;
    TString		fSample;
-   Int_t		fSt1;
+   Int_t		st1mass;
    TH1F			*h1test;
    TH1D			*hcutflow;
    map< string, TH1*> basicPlots;
@@ -310,11 +310,11 @@ public :
    TProofOutputFile *fProofFile; // For optimized merging of the ntuple
    map< string, double > cutmap;
    Int_t           st2mass;
-   double          weight;
+   long            weight;
 
    MyTreeAnalyzer(TTree * /*tree*/ =0) : h1test(0),fChain(0),fFile(0),fProofFile(0) {
 	   fSample = "";
-	   fSt1 = 0;
+	   st1mass = 0;
    }
    virtual ~MyTreeAnalyzer() { }
    virtual Int_t   Version() const { return 2; }
@@ -322,8 +322,8 @@ public :
    virtual void    SlaveBegin(TTree *tree);
    virtual void    Init(TTree *tree);
    virtual Bool_t  Notify();
-   virtual Bool_t  Process(Long64_t entry);
-   virtual Int_t   GetEntry(Long64_t entry, Int_t getall = 0) { return fChain ? fChain->GetTree()->GetEntry(entry, getall) : 0; }
+   virtual Bool_t  Process(Long64_t Entry);
+   virtual Int_t   GetEntry(Long64_t Entry, Int_t getall = 0) { return fChain ? fChain->GetTree()->GetEntry(Entry, getall) : 0; }
    virtual void    SetOption(const char *option) { fOption = option; }
    virtual void    SetObject(TObject *obj) { fObject = obj; }
    virtual void    SetInputList(TList *input) { fInput = input; }

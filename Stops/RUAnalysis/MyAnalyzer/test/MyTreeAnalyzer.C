@@ -38,20 +38,13 @@ void MyTreeAnalyzer::ParseInput(){
 		
 		TString tmp = fMyOpt;
 		tmp = tmp.Remove(0,fMyOpt.Index("sample")+7);
-		if (!fMyOpt.Contains("data") || !fMyOpt.Contains("HT")) tmp = tmp.Remove(23,8);
-		//cout << tmp << endl;
+		//if (!fMyOpt.Contains("data") || !fMyOpt.Contains("HT")) tmp = tmp.Remove(29,8);
+		//cout << ">>>>>>>>>>>>>>>>>" << tmp << endl;
 		fSample = tmp;
 		//if (fdoJECunc && fdoJECup==true) fSample += "_JECUP";
 		//if (fdoJECunc && fdoJECup==false) fSample += "_JECDOWN";
 		//if (fMyOpt.Contains("PUUP")) fSample += "_PUUP";
 		//if (fMyOpt.Contains("PUDOWN")) fSample += "_PUDOWN";
-	}
-
-	if (fMyOpt.Contains("st1")){
-		
-		TString tmp = fMyOpt;
-		tmp = tmp.Remove(0,fMyOpt.Index("sample="+fSample+"st1")+36);
-		fSt1 = tmp.Atoi();
 	}
 
 	if ( fSample.Contains("250")) { st2mass = 250; weight = 19500 * 5.57596/100000; }
@@ -61,10 +54,15 @@ void MyTreeAnalyzer::ParseInput(){
 	if ( fSample.Contains("650")) { st2mass = 650; weight = 19500 * 0.0139566/100000; }
 	if ( fSample.Contains("750")) { st2mass = 750; weight = 19500 * 0.00480639/100000; }
 	if ( fSample.Contains("data")) { weight = 1; }
-	if ( fSample.Contains("HT250")) { weight = 19500 * 276000/17021377; }
+	//if ( fSample.Contains("HT250")) { weight = 19500 * 276000/17021377; }
 	if ( fSample.Contains("HT500")) { weight = 19500 * 8426/28122500; }
 	if ( fSample.Contains("HT1000")) { weight = 19500 * 204/13795394; }
 
+	if ( fSample.Contains("100")) st1mass = 100; 
+	if ( fSample.Contains("200")) st1mass = 200; 
+	if ( fSample.Contains("300")) st1mass = 300; 
+	if ( fSample.Contains("400")) st1mass = 400; 
+	if ( fSample.Contains("500")) st1mass = 500; 
 
 }
 
@@ -253,9 +251,9 @@ void MyTreeAnalyzer::SlaveBegin(TTree * /*tree*/)
    // When running with PROOF SlaveBegin() is called on each slave server.
    // The tree argument is deprecated (on PROOF 0 is passed).
 
-	TString option = GetOption();
-	fMyOpt = option;
-	ParseInput();
+	//TString option = GetOption();
+	//fMyOpt = option;
+	//ParseInput();
 		
 	///////////////// TEST PROOF
 	/*/ We may be creating a dataset or a merge file: check it
@@ -288,14 +286,17 @@ void MyTreeAnalyzer::SlaveBegin(TTree * /*tree*/)
 		return;
 	}*//////////////////////////////////////////////////////////////////////
 
-	//TString dir = "file:/cms/gomez/Stops/Results/";				// Hexfarm
-	TString dir = "file:/uscms_data/d3/algomez/files/Stops/Results/";	// LPC
+	TString dir = "file:/cms/gomez/Stops/Results/";				// Hexfarm
+	//TString dir = "file:/uscms_data/d3/algomez/files/Stops/Results/";	// LPC
 	TString tmpfilename;
 	//if ( fSample != "" ) tmpfilename = fSample+"_plots.root";
 	if ( fSample != "" ) tmpfilename = fSample+"_4jet80_6jet60_plots.root";
+	//else if ( fJES == "jesup" ) tmpfilename = fSample+"jesup_4jet80_6jet60_plots.root";
+	//else if ( fJES == "jesdown" ) tmpfilename = fSample+"jesdown_4jet80_6jet60_plots.root";
 	//if ( fSample != "" ) tmpfilename = fSample+"_4jet80_plots.root";
 	//if ( fSample != "" ) tmpfilename = fSample+"_4jet120_plots.root";
 	else tmpfilename = "results.root";
+	cout << "|----- Saving into the file: " << tmpfilename << endl;
 	fFile = new TFile(dir+tmpfilename,"RECREATE");
 
 
@@ -324,6 +325,8 @@ void MyTreeAnalyzer::SlaveBegin(TTree * /*tree*/)
 	basicPlots["recoJets_pt"] = new TH1D("recoJets_pt" , "Reco Jets p_{T}", nbinPt , minPt, maxPt );
 	basicPlots["recoJets_1pt"] = new TH1D("recoJets_1pt" , "Leading Jet p_{T}", nbinPt , minPt, maxPt );
 	basicPlots["recoJets_2pt"] = new TH1D("recoJets_2pt" , "Second Leading Jet p_{T}", nbinPt , minPt, maxPt );
+	basicPlots["recoJets_4pt"] = new TH1D("recoJets_4pt" , "4th Leading Jet p_{T}", nbinPt , minPt, maxPt );
+	basicPlots["recoJets_6pt"] = new TH1D("recoJets_6pt" , "6th Leading Jet p_{T}", nbinPt , minPt, maxPt );
 	basicPlots["recoJets_HT"] = new TH1D("recoJets_HT" , "H_{T}", bigNbinPt , bigMinPt, bigMaxPt );
 	basicPlots["recoJets_eta"] = new TH1D("recoJets_eta" , "Reco Jets #eta", nbinEta , minEta, maxEta );
 	basicPlots["recoJets_phi"] = new TH1D("recoJets_phi" , "Reco Jets #phi", nbinEta , minEta, maxEta );
@@ -632,6 +635,25 @@ void MyTreeAnalyzer::SlaveBegin(TTree * /*tree*/)
 	step3plots1D["massRecoDiBjetDiJet_cutDiagStop1jj100_cutDiagStop2bbjj100"] = new TH1D("massRecoDiBjetDiJet_cutDiagStop1jj100_cutDiagStop2bbjj100" , "Mass of RECO (diBjet + diJet)" , bigNbinPt, bigMinPt, bigMaxPt );
 
 
+	//////////// RESOLUTION BINNING PLOTS
+	Double_t dijetMassBins[39] = {1, 3, 6, 10, 16, 23, 31, 40, 50, 61, 74, 88, 103, 119, 137, 156, 176, 197, 220, 244, 270, 296, 325, 354, 386, 419, 453, 489, 526, 565, 606, 649, 693, 740, 788, 838, 890, 944, 1000};
+	step2plots1D["massdijetWORecoBjetsCSVM_resoBasedBin"] = step2plots1D["massdijetWORecoBjetsCSVM"]->Rebin(38, "massdijetWORecoBjetsCSVM_resoBasedBin", dijetMassBins);
+
+	Double_t quadjetMassBins[32] = {30, 60, 90, 120, 150, 180, 210, 250, 290, 330, 370, 410, 460, 510, 560, 610, 670, 730, 790, 860, 930, 1000, 1080, 1160, 1240, 1330, 1420, 1520, 1620, 1730, 1840, 2000};
+	step3plots1D["massRecoDiBjetDiJet_resoBasedBin"] = step3plots1D["massRecoDiBjetDiJet"]->Rebin(31, "massRecoDiBjetDiJet_resoBasedBin", quadjetMassBins);
+	step3plots1D["massRecoDiBjetDiJet_cutDiagStop2bbjj0_resoBasedBin"] = step3plots1D["massRecoDiBjetDiJet_cutDiagStop2bbjj0"]->Rebin(31, "massRecoDiBjetDiJet_cutDiagStop2bbjj0_resoBasedBin", quadjetMassBins);
+	step3plots1D["massRecoDiBjetDiJet_cutDiagStop2bbjj10_resoBasedBin"] = step3plots1D["massRecoDiBjetDiJet_cutDiagStop2bbjj10"]->Rebin(31, "massRecoDiBjetDiJet_cutDiagStop2bbjj10_resoBasedBin", quadjetMassBins);
+	step3plots1D["massRecoDiBjetDiJet_cutDiagStop2bbjj20_resoBasedBin"] = step3plots1D["massRecoDiBjetDiJet_cutDiagStop2bbjj20"]->Rebin(31, "massRecoDiBjetDiJet_cutDiagStop2bbjj20_resoBasedBin", quadjetMassBins);
+
+	////////////////// Plots after all cuts
+	step3plots1D["avgMassHiggsCandidate_cutDiagStop2bbjj0"] = new TH1D("avgMassHiggsCandidate_cutDiagStop2bbjj0" , "Average Mass of Higgs Candidates" , nbinPt, minPt, maxPt );
+	step3plots1D["avgMassHiggsCandidate_cutDiagStop2bbjj0_resoBasedBin"] = step1plots1D["avgMassRecoBjetsCSVM"]->Rebin(38, "avgMassHiggsCandidate_cutDiagStop2bbjj0_resoBasedBin", dijetMassBins);
+	step3plots1D["massHiggsCandidate_cutDiagStop2bbjj0"] = new TH1D("massHiggsCandidate_cutDiagStop2bbjj0" , "Mass of Higgs Candidates" , nbinPt, minPt, maxPt );
+	step3plots1D["massStop1Candidate_cutDiagStop2bbjj0"] = new TH1D("massStop1Candidate_cutDiagStop2bbjj0" , "Mass of Stop1 Candidates" , nbinPt, minPt, maxPt );
+	step3plots1D["massStop1Candidate_cutDiagStop2bbjj0_resoBasedBin"] = step2plots1D["massdijetWORecoBjetsCSVM"]->Rebin(38, "massStop1Candidate_cutDiagStop2bbjj0_resoBasedBin", dijetMassBins);
+
+
+
 	///// STEP 4
 	step4plots2D["recoDiBjetDiJetSmallestDeltaM_masspt"] = new TH2D("recoDiBjetDiJetSmallestDeltaM_masspt" , "Mass of RECO (diBjets + diJets) vs scalar #sum p_{T}^{diBjets + diJets} SmallestDeltaM" , bigNbinPt, bigMinPt, bigMaxPt, bigNbinPt, bigMinPt, bigMaxPt );
 	step4plots1D["massRecoDiBjetDiJetSmallestDeltaM"] = new TH1D("massRecoDiBjetDiJetSmallestDeltaM" , "Mass of RECO (diBjet + diJet) SmallestDeltaM" , bigNbinPt, bigMinPt, bigMaxPt );
@@ -669,9 +691,7 @@ void MyTreeAnalyzer::SlaveBegin(TTree * /*tree*/)
 	fCutLabels.push_back("Step2_diag150");
 	fCutLabels.push_back("Step2_diag200");
 	fCutLabels.push_back("Step3");
-	fCutLabels.push_back("Step3_diagStop150");
-	fCutLabels.push_back("Step3_diagStop1100");
-	fCutLabels.push_back("Step4");
+	fCutLabels.push_back("Step3_diagStop2_0");
 
 	hcutflow = new TH1D("cutflow","cut flow", fCutLabels.size(), 0.5, fCutLabels.size() +0.5 );
 
@@ -681,7 +701,7 @@ void MyTreeAnalyzer::SlaveBegin(TTree * /*tree*/)
 
 }
 
-Bool_t MyTreeAnalyzer::Process(Long64_t entry)
+Bool_t MyTreeAnalyzer::Process(Long64_t Entry)
 {
    // The Process() function is called for each entry in the tree (or possibly
    // keyed object in the case of PROOF) to be processed. The entry argument
@@ -701,14 +721,13 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
    //
    // The return value is currently not used.
 
-	int st1mass;
-	if ( fSt1 != 0 ) st1mass = fSt1;
 	//cout << st2mass << " " << weight << endl;
+	//cout << " 0 " << endl;
 
 	//..Just read the full event
-	fChain->GetTree()->GetEntry(entry);
+	fChain->GetTree()->GetEntry(Entry);
 
-	if ( entry % 2000 == 0 ) cout<< "process entry " << entry << endl;
+	if ( Entry % 2000 == 0 ) cout<< "process Entry " << Entry << endl;
 
 	Double_t nEvents = 1.;
 	cutmap["Processed"] += nEvents;
@@ -757,6 +776,7 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 	if ( dummyCounter1.size() > 0 ) cutmap["Simple"] += nEvents;
 	if ( p4RecoJets.size() > 0 ) cutmap["4jetTrigger"] += nEvents;
 
+	//cout << " 1 " << endl;
 	///////////////////////////////////////////////////////
 	//   Basic Plots RECO Level                          //
 	///////////////////////////////////////////////////////
@@ -771,6 +791,8 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 	} 
 	if ( p4RecoJets.size() > 0 ) basicPlots["recoJets_1pt"]->Fill( p4RecoJets[0].Pt() );	
 	if ( p4RecoJets.size() > 1 ) basicPlots["recoJets_2pt"]->Fill( p4RecoJets[1].Pt() );	
+	if ( p4RecoJets.size() > 3 ) basicPlots["recoJets_4pt"]->Fill( p4RecoJets[3].Pt() );	
+	if ( p4RecoJets.size() > 4 ) basicPlots["recoJets_6pt"]->Fill( p4RecoJets[4].Pt() );	
 	basicPlots["recoJets_HT"]->Fill( sumRecoJetsPt );	
 	basicPlots["recoJets_num"]->Fill( p4RecoJets.size() );	
 
@@ -789,6 +811,7 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 	//////////////////////////////////////////////////////////
 
 
+	//cout << " 2 " << endl;
 	////////////////////////////////////////////////////////////////////
 	//////       STEP 1                                         ////////
 	//////  Best combination of bjets with smallest delta Mass  ////////
@@ -1051,6 +1074,7 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 	} 
 	//////////////////////////////////////////////////////////
 
+	//cout << " 3 " << endl;
 	///////////////////////////////////////
 	/////////// STEP 2  ////////////////
 	/////// Mass dijet vs sum pt dijet //////////
@@ -1144,6 +1168,7 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 	for(unsigned int iim = 0; iim < massdijetWORecoBjetsCSVM.size(); ++iim) {
 		step2plots2D["dijetWORecoBjetsCSVM_masspt"]->Fill( scalarSumPtdijetWORecoBjetsCSVM[iim], massdijetWORecoBjetsCSVM[iim] );
 		step2plots1D["massdijetWORecoBjetsCSVM"]->Fill( massdijetWORecoBjetsCSVM[iim] );
+		step2plots1D["massdijetWORecoBjetsCSVM_resoBasedBin"]->Fill( massdijetWORecoBjetsCSVM[iim] );
 		if ( massdijetWORecoBjetsCSVM[iim] < minStop1 ||  massdijetWORecoBjetsCSVM[iim] > maxStop1) {
 			step2plots1D["massdijetWORecoBjetsCSVM_WOStop1"]->Fill( massdijetWORecoBjetsCSVM[iim] );
 		}
@@ -1741,6 +1766,7 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 			
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
+	//cout << " 4 " << endl;
 	////////////////////////////////////////////////////////////////
 	//////           STEP 3                                    /////
 	//////  Mass of MatchBjets from 1 and dijet from 3 vs sum pt of MatchBjetsdijet  /////
@@ -1768,25 +1794,32 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 	vector< double > massRecoDiBjetDiJet = vectorsStep3.s3Mass;
 	vector< double > scalarSumPtRecoDiBjetDiJet = vectorsStep3.s3ScalarPt;
 
+	int dummyCounter = 0;
+
 	for(unsigned int aa = 0; aa < p4RecoDiBjetDiJet.size(); ++aa) {
 		step3plots2D["recoDiBjetDiJet_masspt"]->Fill( scalarSumPtRecoDiBjetDiJet[aa], massRecoDiBjetDiJet[aa] );
-		step3plots2D["recoDiBjetDiJet_MassPt"]->Fill( p4RecoDiBjetDiJet[aa].Pt(), p4RecoDiBjetDiJet[aa].M() );
+		//step3plots2D["recoDiBjetDiJet_MassPt"]->Fill( p4RecoDiBjetDiJet[aa].Pt(), p4RecoDiBjetDiJet[aa].M() );
 		step3plots1D["massRecoDiBjetDiJet"]->Fill( massRecoDiBjetDiJet[aa] );
+		step3plots1D["massRecoDiBjetDiJet_resoBasedBin"]->Fill( massRecoDiBjetDiJet[aa] );
 
 		double zDiag2=(double)aa*10.0;
 		if( massRecoDiBjetDiJet[aa] < ( scalarSumPtRecoDiBjetDiJet[aa]-zDiag2 ) ) {
 			step3plots2D["recoDiBjetDiJet_cutDiagStop2bbjj0_masspt"]->Fill( scalarSumPtRecoDiBjetDiJet[aa], massRecoDiBjetDiJet[aa] );
 			step3plots1D["massRecoDiBjetDiJet_cutDiagStop2bbjj0"]->Fill( massRecoDiBjetDiJet[aa] );
+			step3plots1D["massRecoDiBjetDiJet_cutDiagStop2bbjj0_resoBasedBin"]->Fill( massRecoDiBjetDiJet[aa] );
+			dummyCounter++;
 		}
 		double iDiag2=(double)aa*10.0+10.0;
 		if( massRecoDiBjetDiJet[aa] < ( scalarSumPtRecoDiBjetDiJet[aa]-iDiag2 ) ) {
 			step3plots2D["recoDiBjetDiJet_cutDiagStop2bbjj10_masspt"]->Fill( scalarSumPtRecoDiBjetDiJet[aa], massRecoDiBjetDiJet[aa] );
 			step3plots1D["massRecoDiBjetDiJet_cutDiagStop2bbjj10"]->Fill( massRecoDiBjetDiJet[aa] );
+			step3plots1D["massRecoDiBjetDiJet_cutDiagStop2bbjj10_resoBasedBin"]->Fill( massRecoDiBjetDiJet[aa] );
 		}
 		double iiDiag2=(double)aa*10.0+20.0;
 		if( massRecoDiBjetDiJet[aa] < ( scalarSumPtRecoDiBjetDiJet[aa]-iiDiag2 ) ) {
 			step3plots2D["recoDiBjetDiJet_cutDiagStop2bbjj20_masspt"]->Fill( scalarSumPtRecoDiBjetDiJet[aa], massRecoDiBjetDiJet[aa] );
 			step3plots1D["massRecoDiBjetDiJet_cutDiagStop2bbjj20"]->Fill( massRecoDiBjetDiJet[aa] );
+			step3plots1D["massRecoDiBjetDiJet_cutDiagStop2bbjj20_resoBasedBin"]->Fill( massRecoDiBjetDiJet[aa] );
 		}
 		double iiiDiag2=(double)aa*10.0+30.0;
 		if( massRecoDiBjetDiJet[aa] < ( scalarSumPtRecoDiBjetDiJet[aa]-iiiDiag2 ) ) {
@@ -1831,8 +1864,22 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 	}
 
 	if ( p4RecoDiBjetDiJet.size() > 0 ) cutmap["Step3"] += nEvents;
+	if ( dummyCounter > 0 ) {
+		cutmap["Step3_diagStop2_0"] += nEvents;
+		step3plots1D["avgMassHiggsCandidate_cutDiagStop2bbjj0"]->Fill( avgMassRecoBjetsCSVM );
+		step3plots1D["avgMassHiggsCandidate_cutDiagStop2bbjj0_resoBasedBin"]->Fill( avgMassRecoBjetsCSVM );
+		step3plots1D["massHiggsCandidate_cutDiagStop2bbjj0"]->Fill( massRecoBjetsCSVM[0] );
+		step3plots1D["massHiggsCandidate_cutDiagStop2bbjj0"]->Fill( massRecoBjetsCSVM[1] );
+		for(unsigned int iim = 0; iim < massdijetWORecoBjetsCSVM.size(); ++iim) {
+			step3plots1D["massStop1Candidate_cutDiagStop2bbjj0"]->Fill( massdijetWORecoBjetsCSVM[iim] );
+			step3plots1D["massStop1Candidate_cutDiagStop2bbjj0_resoBasedBin"]->Fill( massdijetWORecoBjetsCSVM[iim] );
+		}
+	}
 
-	// NO diagCutHiggs, diagCutStop1jj10
+
+
+
+	/*/ NO diagCutHiggs, diagCutStop1jj10
 	//// Structure function s2Vectors
 	s3Vectors vectorsStep3_cutDiagStop1jj10;
 	vectorsStep3_cutDiagStop1jj10 = step3Vectors( p4dijetWORecoBjetsCSVM_cutDiagStop1jj10, p4RecoBjetsCSVM_SmallMassDiff, scalarSumPtdijetWORecoBjetsCSVM_cutDiagStop1jj10 );
@@ -1945,15 +1992,15 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 	vector< double > scalarSumPtRecoDiBjetDiJet_cutDiagStop1jj50 = vectorsStep3_cutDiagStop1jj50.s3ScalarPt;
 
 	//// TLorentzVectors for cuts
-	/*vector< TLorentzVector > p4RecoDiBjetDiJet_cutDiagStop1jj50_cutDiagStop2bbjj50;
+	vector< TLorentzVector > p4RecoDiBjetDiJet_cutDiagStop1jj50_cutDiagStop2bbjj50;
 	vector< TLorentzVector > p4RecoDiBjetDiJet_cutDiagStop1jj50_cutDiagStop2bbjj100;
-	vector< TLorentzVector > p4RecoDiBjetDiJet_cutDiagStop1jj50_cutDiagStop2bbjj150;*/
+	vector< TLorentzVector > p4RecoDiBjetDiJet_cutDiagStop1jj50_cutDiagStop2bbjj150;
 
 	for(unsigned int aa = 0; aa < p4RecoDiBjetDiJet_cutDiagStop1jj50.size(); ++aa) {
 		step3plots2D["recoDiBjetDiJet_cutDiagStop1jj50_masspt"]->Fill( scalarSumPtRecoDiBjetDiJet_cutDiagStop1jj50[aa], massRecoDiBjetDiJet_cutDiagStop1jj50[aa] );
 		step3plots1D["massRecoDiBjetDiJet_cutDiagStop1jj50"]->Fill( massRecoDiBjetDiJet_cutDiagStop1jj50[aa] );
 
-		/*double iDiag=(double)aa*10.0+50.0;
+		double iDiag=(double)aa*10.0+50.0;
 		if( massRecoDiBjetDiJet_cutDiagStop1jj50[aa] < ( scalarSumPtRecoDiBjetDiJet_cutDiagStop1jj50[aa]-iDiag ) ) {
 			step3plots2D["recoDiBjetDiJet_cutDiagStop1jj50_cutDiagStop2bbjj50_masspt"]->Fill( scalarSumPtRecoDiBjetDiJet_cutDiagStop1jj50[aa], massRecoDiBjetDiJet_cutDiagStop1jj50[aa] );
 			step3plots1D["massRecoDiBjetDiJet_cutDiagStop1jj50_cutDiagStop2bbjj50"]->Fill( massRecoDiBjetDiJet_cutDiagStop1jj50[aa] );
@@ -1963,7 +2010,7 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 		if( massRecoDiBjetDiJet_cutDiagStop1jj50[aa] < ( scalarSumPtRecoDiBjetDiJet_cutDiagStop1jj50[aa]-iiDiag ) ) {
 			step3plots2D["recoDiBjetDiJet_cutDiagStop1jj50_cutDiagStop2bbjj100_masspt"]->Fill( scalarSumPtRecoDiBjetDiJet_cutDiagStop1jj50[aa], massRecoDiBjetDiJet_cutDiagStop1jj50[aa] );
 			step3plots1D["massRecoDiBjetDiJet_cutDiagStop1jj50_cutDiagStop2bbjj100"]->Fill( massRecoDiBjetDiJet_cutDiagStop1jj50[aa] );
-		}*/
+		}
 	}
 
 	if ( p4RecoDiBjetDiJet_cutDiagStop1jj50.size() > 0 ) cutmap["Step3_diagStop150"] += nEvents;
@@ -1993,8 +2040,9 @@ Bool_t MyTreeAnalyzer::Process(Long64_t entry)
 		}
 	}
 
-	if ( p4RecoDiBjetDiJet_cutDiagStop1jj100.size() > 0 ) cutmap["Step3_diagStop1100"] += nEvents;
+	if ( p4RecoDiBjetDiJet_cutDiagStop1jj100.size() > 0 ) cutmap["Step3_diagStop1100"] += nEvents;*/
 
+	//cout << " 5 " << endl;
 	////////////////////////////////////////////////////////////////
 	//////           STEP 4                                    /////
 	//////  Smallest mass MatchBjetsdijet                                 /////
