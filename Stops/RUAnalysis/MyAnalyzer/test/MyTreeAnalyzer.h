@@ -365,6 +365,10 @@ typedef struct {
 	//double avgPt;
 } s3Vectors;
 
+typedef struct {
+	TLorentzVector TL;
+	bool Btagged;
+} jetInfo;
 
 // Comparison function for jet list. Want highest pt first
 bool ComparePt(TLorentzVector a, TLorentzVector b) { return a.Pt() > b.Pt(); }

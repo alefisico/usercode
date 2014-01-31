@@ -296,6 +296,7 @@ void MyTreeAnalyzer::SlaveBegin(TTree * /*tree*/)
 	//if ( fSample != "" ) tmpfilename = fSample+"_4jet80_plots.root";
 	//if ( fSample != "" ) tmpfilename = fSample+"_4jet120_plots.root";
 	else tmpfilename = "results.root";
+	//tmpfilename = "results.root";
 	cout << "|----- Saving into the file: " << tmpfilename << endl;
 	fFile = new TFile(dir+tmpfilename,"RECREATE");
 
@@ -742,39 +743,49 @@ Bool_t MyTreeAnalyzer::Process(Long64_t Entry)
 	/////////// Store TLorentzVecots RECO jets and bjets
 	//////////////////////////////////////////////////
 
+	//cout << "New Event" << endl;
+	vector < jetInfo > preselJetsArray;
 	for (int i=0; i<nPFJets; i++){
 
 		h1test->Fill( jet_PF_pt[i] );
 		if ( jet_PF_pt[i] < 35.0 || fabs( jet_PF_eta[i] ) > 2.5) continue;
 		dummyCounter1.push_back( jet_PF_pt[i] );
+		//cout << "1 " <<jet_PF_pt[i] << endl;
 
-		//if ( nPFJets > 5 ){
-			//if ( jet_PF_pt[3] < 60.0 ) continue;				/// 6jet Trigger
-			if ( jet_PF_pt[3] < 80.0 || jet_PF_pt[5] < 60.0 ) continue;				/// 6jet Trigger
-			//if ( jet_PF_pt[3] < 80 ) continue;				/// dijet trigger
-			//if ( jet_PF_pt[3] < 120 ) continue;				/// dijet trigger
+		TLorentzVector p4Jets;
+		bool tmpBtag= false;
+		p4Jets.SetPxPyPzE( jet_PF_px[i], jet_PF_py[i], jet_PF_pz[i], jet_PF_e[i] );
+		//cout << "2 " << p4Jets.Pt() << endl;
+		if (bdiscCSV_PF[i] > 0.679 ) tmpBtag = true;
+		//cout << "3 " << tmpBtag << endl;
+		jetInfo preselJet;
+		preselJet.TL = p4Jets;
+		preselJet.Btagged = tmpBtag;
+		//cout << "4 " << preselJet.Btagged << endl;
 
-			TLorentzVector p4Jets;
-			p4Jets.SetPxPyPzE( jet_PF_px[i], jet_PF_py[i], jet_PF_pz[i], jet_PF_e[i] );
-			p4RecoJets.push_back( p4Jets );
+		preselJetsArray.push_back( preselJet );
+	}
 
-			//bool isTagged = false;
-			//CSVL > 0.244, CSVM > 0.679, CSVT > 0.898, JPM > 
-			//if (!fSample.Contains("HT")){
-				if (bdiscCSV_PF[i] > 0.679 ) p4RecoBjetsCSVM.push_back( p4Jets );
-			//} else {
-			//	if (bdiscCSV_PF[i] > -999 ) p4RecoBjetsCSVM.push_back( p4Jets );
-			//}
-			/*if ( abs( jet_PF_PartonFlav[i] ) = 5 ) continue;
-			if ( bdiscCSV_PF < 0.679  ) continue;
-			p4RecoPartonFlavorBjetsCSVM.push_back( p4Jets );
-			RecoBjetsCSVM.push_back( bdiscCSV_PF );*/
-
-		//}
+	//cout << "5 " << preselJetsArray.size() << endl;
+	if ( preselJetsArray.size() > 5 ) {
+		//cout << "6 " <<  preselJetsArray.size() << endl;
+		int dummyBtagcounter = 0;
+		for (unsigned int num=0; num< preselJetsArray.size(); num++){
+			if ( preselJetsArray[num].Btagged == true ) dummyBtagcounter++;
+		}
+		//cout << "7 " << dummyBtagcounter << endl;
+		if ( ( preselJetsArray[3].TL.Pt() > 80 )  && ( preselJetsArray[5].TL.Pt() > 60 ) && ( dummyBtagcounter > 3 ) ) {
+			//cout << "8 " << preselJetsArray[4].Btagged << endl;
+			for (unsigned int num2=0; num2< preselJetsArray.size(); num2++){
+				p4RecoJets.push_back( preselJetsArray[num2].TL );
+				if ( preselJetsArray[num2].Btagged == true ) p4RecoBjetsCSVM.push_back( preselJetsArray[num2].TL );
+			}
+		}
 	}
 
 	if ( dummyCounter1.size() > 0 ) cutmap["Simple"] += nEvents;
 	if ( p4RecoJets.size() > 0 ) cutmap["4jetTrigger"] += nEvents;
+	//cout << p4RecoJets.size() << endl;
 
 	//cout << " 1 " << endl;
 	///////////////////////////////////////////////////////
