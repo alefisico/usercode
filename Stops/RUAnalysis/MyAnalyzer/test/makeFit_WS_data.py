@@ -1,19 +1,23 @@
 #!/usr/bin/env python
 
-###################
-### Make Fitting
-###################
+#################################################################################################
+#################################################################################################
+### Script to	- Fit P4 to Data using Roofit,
+###		- Plot datafit, pull and residual histograms direct from RooFit
+###		- Plot datafit, pull and residual histograms for a resolution based binnning
+###		  based on RooFit results (if resoBin as argument)
+###		- Create workspace for RooStats and save pull and resid from RooFit
+### Alejandro Gomez Espinosa
+### gomez@physics.rutgers.edu
+#################################################################################################
+#################################################################################################
 
 from ROOT import *
 from ROOT import RooFit
 import glob,sys
 from array import array
-ROOT.gSystem.SetIncludePath('-I$ROOFITSYS/include')
 
 gROOT.Reset()
-#TVirtualFitter.SetMaxIterations(5000000000)		######### Trick to increase number of iterations
-
-#minuit = TMinuit(1)
 
 ##################################################
 #### Initial Parameters                       ####
