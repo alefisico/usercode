@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
-###################
-# plot_Compare2Histos.py
-# description: compares two histograms from one root file
-# instructions:
-#  python -i plot_Compare2Histos.py
-###################
+'''
+File: plot_CompareSignals_JES.py
+Author: Alejandro Gomez Espinosa
+Email: gomez@physics.rutgers.edu
+Description: Draw comparative plots for Jet Energy Scale Uncertainties.
+'''
 
 from ROOT import *
 import glob,sys
@@ -13,204 +13,163 @@ import glob,sys
 gROOT.Reset()
 gStyle.SetOptStat(0)
 
-trigger = '4jet80_6jet60' #str ( sys.argv[1] )
-st1mass = 200
-#logscale = int ( sys.argv[4] )
-sample = [ 450]#, 550, 650, 750]
+textBox=TLatex(0.10,0.91,"CMS Preliminary Simulation")
+textBox.SetNDC()
+textBox.SetTextSize(0.05) 
+textBox.SetTextColor(50)
 
-histos = {
-		'recoBjets_num':'basicPlots',
-		'recoJets_pt':'basicPlots',
-#		'recoJets_eta':'basicPlots',
-		'recoJets_1pt':'basicPlots',
-		'recoJets_4pt':'basicPlots',
-		'recoJets_6pt':'basicPlots',
-#		'recoJets_HT':'basicPlots',
-		'recoJets_num':'basicPlots',
-#		'recoBjets_num_Step1':'basicPlots',
-#		'massRecoBjetsCSVM':'step1plots1D', 
-#		'avgMassRecoBjetsCSVM':'step1plots1D', 
-#		'massdijetWORecoBjetsCSVM':'step2plots1D',
-#		'massdijetWORecoBjetsCSVM_cutDiagStop1jj50':'step2plots1D',
-#		'massdijetWORecoBjetsCSVM_cutDiagStop1jj100':'step2plots1D',
-#		'massdijetWORecoBjetsCSVM_cutDiagStop1jj150':'step2plots1D',
-#		'massRecoDiBjetDiJet':'step3plots1D',
-#		'massRecoDiBjetDiJet_cutDiagStop1jj50':'step3plots1D',
-#		'massRecoDiBjetDiJet_cutDiagStop1jj100':'step3plots1D',
+###############################################################
+### Draw comparative plots for JES                        #####
+###############################################################
+def plotJEScomp( st2mass, dir, outputDir, histos ):
+	"""docstring for plotJEScomp"""
 
-#		'avgMassHiggsCandidate_cutDiagStop2bbjj0':'step3plots1D',
-#		'avgMassHiggsCandidate_cutDiagStop2bbjj0_resoBasedBin':'step3plots1D',
-#		'massHiggsCandidate_cutDiagStop2bbjj0':'step3plots1D',
-#		'massStop1Candidate_cutDiagStop2bbjj0':'step3plots1D',
-#		'massStop1Candidate_cutDiagStop2bbjj0_resoBasedBin':'step3plots1D',
-#		'massRecoDiBjetDiJet_cutDiagStop2bbjj0':'step3plots1D',
-#		'massRecoDiBjetDiJet_cutDiagStop2bbjj0_resoBasedBin':'step3plots1D',
-
-#		'massRecoDiBjetDiJet_cutDiagStop2bbjj10':'step3plots1D',
-#		'massRecoDiBjetDiJet_cutDiagStop2bbjj20':'step3plots1D',
-#		'massRecoDiBjetDiJet_cutDiagStop2bbjj30':'step3plots1D',
-#		'massRecoDiBjetDiJet_cutDiagStop2bbjj40':'step3plots1D',
-#		'massRecoDiBjetDiJet_cutDiagStop2bbjj50':'step3plots1D',
-#		'massRecoDiBjetDiJet_cutDiagStop2bbjj100':'step3plots1D',
-#		'massRecoDiBjetDiJetSmallestDeltaM':'step4plots1D'
-		}
-
-scaledHistos = {# 'recoBjets_num':'scaleBasicPlots',
-#		'recoJets_pt':'scaleBasicPlots',
-#		'recoJets_1pt':'scaleBasicPlots',
-#		'recoJets_2pt':'scaleBasicPlots',
-#		'recoJets_HT':'scaleBasicPlots',
-#		'recoBjets_num_Step1':'scaleBasicPlots',
-#		'massRecoBjetsCSVM':'scaleStep1plots1D', 
-#		'avgMassRecoBjetsCSVM':'scaleStep1plots1D', 
-#		'massdijetWORecoBjetsCSVM':'scaleStep2plots1D',
-#		'massdijetWORecoBjetsCSVM_cutDiagStop1jj50':'scaleStep2plots1D',
-#		'massdijetWORecoBjetsCSVM_cutDiagStop1jj100':'scaleStep2plots1D',
-#		'massdijetWORecoBjetsCSVM_cutDiagStop1jj150':'scaleStep2plots1D',
-#		'massRecoDiBjetDiJet':'scaleStep3plots1D',
-#		'massRecoDiBjetDiJet_cutDiagStop1jj50':'scaleStep3plots1D',
-#		'massRecoDiBjetDiJet_cutDiagStop1jj100':'scaleStep3plots1D',
-		'avgMassHiggsCandidate_cutDiagStop2bbjj0':'scaleStep3plots1D',
-		'avgMassHiggsCandidate_cutDiagStop2bbjj0_resoBasedBin':'scaleStep3plots1D',
-		'massHiggsCandidate_cutDiagStop2bbjj0':'scaleStep3plots1D',
-		'massStop1Candidate_cutDiagStop2bbjj0':'scaleStep3plots1D',
-		'massStop1Candidate_cutDiagStop2bbjj0_resoBasedBin':'scaleStep3plots1D',
-		'massRecoDiBjetDiJet_cutDiagStop2bbjj0':'scaleStep3plots1D',
-		'massRecoDiBjetDiJet_cutDiagStop2bbjj0_resoBasedBin':'scaleStep3plots1D',
-#		'massRecoDiBjetDiJet_cutDiagStop2bbjj10':'scaleStep3plots1D',
-#		'massRecoDiBjetDiJet_cutDiagStop2bbjj20':'scaleStep3plots1D',
-#		'massRecoDiBjetDiJet_cutDiagStop2bbjj30':'scaleStep3plots1D',
-#		'massRecoDiBjetDiJet_cutDiagStop2bbjj40':'scaleStep3plots1D',
-#		'massRecoDiBjetDiJet_cutDiagStop2bbjj50':'scaleStep3plots1D',
-#		'massRecoDiBjetDiJet_cutDiagStop2bbjj100':'scaleStep3plots1D',
-#		'massRecoDiBjetDiJetSmallestDeltaM':'scaleStep4plots1D'
-		}
-
-
-outputDir = "/uscms_data/d3/algomez/files/Stops/Results/Plots/"
-
-for st2mass in sample:
-
-	input1 = "/uscms/home/algomez/nobackup/files/Stops/Results/st2_h_bb_st1_jj_"+str(st2mass)+"_"+str(st1mass)+"_"+trigger+"_plots.root"
-	input2 = "/uscms/home/algomez/nobackup/files/Stops/Results/st2_h_bb_st1_jj_"+str(st2mass)+"_"+str(st1mass)+"_jesup_"+trigger+"_plots.root"
-	input3 = "/uscms/home/algomez/nobackup/files/Stops/Results/st2_h_bb_st1_jj_"+str(st2mass)+"_"+str(st1mass)+"_jesdown_"+trigger+"_plots.root"
-
-	f1 = TFile(input1)
-	f2 = TFile(input2)
-	f3 = TFile(input3)
+	for mass in st2mass:
 	
-	for hist1, folder in histos.iteritems():
-		h1 = f1.Get(folder+'/' + hist1)
-		h2 = f2.Get(folder+'/' + hist1)
-		h3 = f3.Get(folder+'/' + hist1)
+		nominalNameFile = dir+"st2_h_bb_st1_jj_"+str(mass)+"_200_4jet80_6jet60_plots.root"
+		jesupNameFile = dir+"st2_h_bb_st1_jj_"+str(mass)+"_200_jesup_4jet80_6jet60_plots.root"
+		jesdownNameFile = dir+"st2_h_bb_st1_jj_"+str(mass)+"_200_jesdown_4jet80_6jet60_plots.root"
 	
-		h_Nominal = h1.Clone("h1")
-		h_JESUP = h2.Clone("h2")
-		h_JESDOWN = h3.Clone("h3")
-
-		h_Nominal.SetLineColor(1)
-		h_JESUP.SetLineColor(2)
-		h_JESDOWN.SetLineColor(4)
+		nominalFile = TFile(nominalNameFile)
+		jesupFile = TFile(jesupNameFile)
+		jesdownFile = TFile(jesdownNameFile)
 		
-#		h1max = h1.GetMaximum()
-#		h2max = 0
-#		h3max = 0
+		for histo, folder in histos.iteritems():
+			h_RawNominal = nominalFile.Get(folder+'/' + histo)
+			h_RawJesup = jesupFile.Get(folder+'/' + histo)
+			h_RawJesdown = jesdownFile.Get(folder+'/' + histo)
+		
+			h_Nominal = axisLabels( h_RawNominal.Clone(), histo )
+			h_JESUP = h_RawJesup.Clone()
+			h_JESDOWN = h_RawJesdown.Clone()
+	
+			h_Nominal.SetLineColor(1)
+			h_JESUP.SetLineColor(2)
+			h_JESDOWN.SetLineColor(4)
+
+			#### Calculate Ratio
+			#h_Ratio_UP, h_Ratio_DOWN = calcRatioCorrUnc( h_Nominal, h_JESUP, h_JESDOWN )	### fancy way to do it
+			h_Ratio_UP = h_JESUP.Clone()
+			h_Ratio_DOWN = h_JESDOWN.Clone()
+			h_Ratio_UP.Divide( h_Nominal )
+			h_Ratio_DOWN.Divide( h_Nominal )
+			####################################################
+
+			c = TCanvas('c_' + histo, 'c_' + histo,  10, 10, 750, 750 )
+			pad1 = TPad("pad1", "Diff",0,0.30,1.00,1.00,-1)
+			pad2 = TPad("pad2", "Ratio",0,0,1.00,0.33,-1);
+			pad2.Draw()
+			pad1.Draw()
+	
+			pad1.cd()
+			#pad1.SetLogy()
+			#pad1.SetLogx()
+			#h_Nominal.SetMaximum( totalMax*1.2 )
+			h_Nominal.Draw("histe")
+			h_JESUP.Draw("histesame")
+			h_JESDOWN.Draw("histesame")
+
+			textBox.Draw()
+			
+			legend=TLegend(0.70,0.7,0.90,0.9)
+			legend.SetFillColor(0);
+			legend.AddEntry(h_Nominal, "Nominal", "le")
+			legend.AddEntry(h_JESUP, "JES up", "le")
+			legend.AddEntry(h_JESDOWN, "JES down", "le")
+			legend.Draw()
+			
+			DrawLabels( histo, mass )
+	
+			pad2.cd()
+			#pad2.SetLogx()
+			h_Ratio_UP.SetTitle("")
+			h_Ratio_UP.GetYaxis().SetTitle("Ratio Systematic #frac{Up or Down}{Nominal}")
+			h_Ratio_UP.GetYaxis().SetLabelSize(0.06)
+			h_Ratio_UP.GetXaxis().SetLabelSize(0.08)
+			h_Ratio_UP.GetYaxis().SetTitleSize(0.06)
+			h_Ratio_UP.GetYaxis().SetTitleOffset(0.6)
+			h_Ratio_UP.SetMinimum(0.5)
+			h_Ratio_UP.SetMaximum(1.5)
+			h_Ratio_UP.SetLineColor(2)
+			h_Ratio_DOWN.SetLineColor(4)
+			h_Ratio_UP.Sumw2()
+			h_Ratio_UP.Draw("e")
+			h_Ratio_DOWN.Draw("esame")
+			
+			c.SaveAs(outputDir + histo + "_jj_" +str(mass)+ "_200_JES.pdf")
+			c.SaveAs(outputDir + histo + "_jj_" +str(mass)+ "_200_JES.png")
+			del c
+	
+######################## calculate max of several histos (in progress)
+#		h_RawNominalmax = h_RawNominal.GetMaximum()
+#		h_RawJesupmax = 0
+#		h_RawJesdownmax = 0
 #		h4max = 0
 #		h5max = 0
-#		if ( st2mass > 300 ): h2max = h2.GetMaximum()
-#		if ( st2mass > 400 ): h3max = h3.GetMaximum()
+#		if ( st2mass > 300 ): h_RawJesupmax = h_RawJesup.GetMaximum()
+#		if ( st2mass > 400 ): h_RawJesdownmax = h_RawJesdown.GetMaximum()
 #		if ( st2mass > 500 ): h4max = h4.GetMaximum()
 #		if ( st2mass > 600 ): h5max = h5.GetMaximum()
-#		totalMax = max( h1max, h2max, h3max, h4max, h5max )
-		
-		##################### Calculate Ratio
-		h_Ratio_UP = h1.Clone("h1")
-		h_Ratio_DOWN = h1.Clone("h1")
-		
-		for bin in range(0, 200):
-			h_Ratio_UP.SetBinContent(bin, 0.)
-			h_Ratio_UP.SetBinError(bin, 0.)
-			h_Ratio_DOWN.SetBinContent(bin, 0.)
-			h_Ratio_DOWN.SetBinError(bin, 0.)
+#		totalMax = max( h_RawNominalmax, h_RawJesupmax, h_RawJesdownmax, h4max, h5max )
+			
 
-		for ibin in range(1, h_Nominal.GetNbinsX()):
+###############################################################
+### Draw Axis Info                                        #####
+###############################################################
+def axisLabels( histo, histoName ):
+	"""docstring for axisLabels"""
 
-			nominalBin = h_Nominal.GetBinContent(ibin)
-			nominalBinErr = h_Nominal.GetBinError(ibin)
-			jesupBin = h_JESUP.GetBinContent(ibin)
-			jesupBinErr = h_JESUP.GetBinError(ibin)
-			jesdownBin = h_JESDOWN.GetBinContent(ibin)
-			jesdownBinErr = h_JESDOWN.GetBinError(ibin)
-			#print nominalBin, jesupBin, jesdownBin
+	histo.SetTitle("")
+	histo.GetYaxis().SetTitleOffset(1.3)
+	binSize = histo.GetXaxis().GetBinWidth(10)
+	if "avgMass" in histoName: 
+		histo.GetXaxis().SetTitle("Average of Higgs Candidates Mass [GeV]")
+		histo.GetYaxis().SetTitle("Events / "+str(binSize)+" GeV")
+		if "reso" in histoName: histo.GetYaxis().SetTitle("dN/dM_{bb} [GeV^{-1}]")
+	elif "massHiggs" in histoName: histo.GetXaxis().SetTitle("Higgs Candidates Mass (diBjet) [GeV]")
+	elif "massRecoBjets" in histoName: histo.GetXaxis().SetTitle("Higgs Candidates Mass (diBjet) [GeV]")
+	elif "massStop1" in histoName: 
+		histo.GetXaxis().SetTitle("Lighter Stop Candidates Mass (dijet) [GeV]")
+		histo.GetYaxis().SetTitle("Dijets / "+str(binSize)+" GeV")
+		if "reso" in histoName: histo.GetYaxis().SetTitle("dN/dM_{jj} [GeV^{-1}]")
+	elif "massdijet" in histoName: histo.GetXaxis().SetTitle("Lighter Stop Candidates Mass (dijet) [GeV]")
+	elif "massRecoDiBjet" in histoName: 
+		histo.GetXaxis().SetTitle("Heavier Stop Candidates Mass (quadruplets) [GeV]")
+		histo.GetYaxis().SetTitle("Quadruplets / "+str(binSize)+" GeV")
+		if "reso" in histoName: histo.GetYaxis().SetTitle("dN/dM_{bbjj} [GeV^{-1}]")
+	elif "Jets_num" in histoName: 
+		histo.GetXaxis().SetTitle("Number of Jets")
+		histo.GetXaxis().SetRange(2,15)
+		histo.GetYaxis().SetTitle("Events")
+	elif "Bjets_num" in histoName: 
+		histo.GetXaxis().SetTitle("Number of BJets")
+		histo.GetXaxis().SetRange(2,15)
+		histo.GetYaxis().SetTitle("Events")
+	elif "pt" in histoName: 
+		histo.GetXaxis().SetTitle("p_{T} [GeV]")
+		histo.GetYaxis().SetTitle("Events / "+str(binSize)+" GeV")
+	elif "eta" in histoName: 
+		histo.GetXaxis().SetTitle("#eta")
+		histo.GetYaxis().SetTitle("Events / "+str(binSize))
+	else: 
+		histo.GetXaxis().SetTitle("Invariant Mass [GeV]")
 
-			if (nominalBin != 0 ):
-				ratio_UP_Nom = jesupBin / nominalBin
-				ratio_DOWN_Nom = jesdownBin / nominalBin
-				h_Ratio_UP.SetBinContent(ibin, ratio_UP_Nom)
-				h_Ratio_DOWN.SetBinContent(ibin, ratio_DOWN_Nom)
-
-				### Errors (%Err = err1/val1 + err2/val2 )
-				if ( jesupBin !=0 ):
-					ErrPercen = (nominalBinErr/nominalBin) + (jesupBinErr/jesupBin)
-					ErrJesUp = ratio_UP_Nom*ErrPercen/100.0
-					h_Ratio_UP.SetBinError(ibin, ErrJesUp)
-				if (jesdownBin !=0 ):
-					ErrPercen = (nominalBinErr/nominalBin) + (jesdownBinErr/jesdownBin)
-					ErrJesDown = ratio_DOWN_Nom*ErrPercen/100.0
-					h_Ratio_DOWN.SetBinError(ibin, ErrJesDown)
-				#print ErrPercen, ErrJesUp
+	return histo
 
 
-		
-		c = TCanvas('c_' + hist1, 'c_' + hist1,  10, 10, 750, 750 )
-		pad1 = TPad("pad1", "Diff",0,0.30,1.00,1.00,-1)
-		pad2 = TPad("pad2", "Ratio",0,0,1.00,0.33,-1);
-		pad2.Draw()
-		pad1.Draw()
 
-		pad1.cd()
-		#c.SetLogy()
-		h_Nominal.SetTitle("")
-		if "avgMass" in hist1: 
-			h_Nominal.GetXaxis().SetTitle("Average of Higgs Candidates Mass [GeV]")
-			h_Nominal.GetYaxis().SetTitle("Events / 10 GeV")
-			if "reso" in hist1: h_Nominal.GetYaxis().SetTitle("dN/dM_{bb} [GeV^{-1}]")
-		elif "massHiggs" in hist1: h_Nominal.GetXaxis().SetTitle("Higgs Candidates Mass (diBjet) [GeV]")
-		elif "massRecoBjets" in hist1: h_Nominal.GetXaxis().SetTitle("Higgs Candidates Mass (diBjet) [GeV]")
-		elif "massStop1" in hist1: 
-			h_Nominal.GetXaxis().SetTitle("Lighter Stop Candidates Mass (dijet) [GeV]")
-			h_Nominal.GetYaxis().SetTitle("Dijets / 10 GeV")
-			if "reso" in hist1: h_Nominal.GetYaxis().SetTitle("dN/dM_{jj} [GeV^{-1}]")
-		elif "massdijet" in hist1: h_Nominal.GetXaxis().SetTitle("Lighter Stop Candidates Mass (dijet) [GeV]")
-		elif "massStop1" in hist1: h_Nominal.GetXaxis().SetTitle("Heavier Stop Candidates Mass (quadjet) [GeV]")
-		elif "massRecoDiBjet" in hist1: 
-			h_Nominal.GetXaxis().SetTitle("Heavier Stop Candidates Mass (quadjet) [GeV]")
-			h_Nominal.GetYaxis().SetTitle("Quadjets / 10 GeV")
-			if "reso" in hist1: h_Nominal.GetYaxis().SetTitle("dN/dM_{bbjj} [GeV^{-1}]")
-		else: h_Nominal.GetXaxis().SetTitle("Invariant Mass [GeV]")
-		#h_Nominal.SetMaximum( totalMax*1.2 )
-		h_Nominal.Draw("histe")
-		h_JESUP.Draw("esame")
-		h_JESDOWN.Draw("esame")
-		
-		legend=TLegend(0.70,0.7,0.90,0.9)
-		legend.SetFillColor(0);
-		legend.AddEntry(h_Nominal, "Nominal", "le")
-		legend.AddEntry(h_JESUP, "JES up", "le")
-		legend.AddEntry(h_JESDOWN, "JES down", "le")
-		legend.Draw()
-		  
-		textBox=TLatex()
-		textBox.SetNDC()
-		textBox.SetTextSize(0.05) 
-		textBox.SetTextColor(50)
-		textBox.DrawLatex(0.10,0.91,"CMS Preliminary Simulation")
-		
-		textBox1=TLatex()
-		textBox1.SetNDC()
-		textBox1.SetTextSize(0.04) 
-		textBox1.DrawText(0.70,0.65,"jj_"+str(st2mass)+"_"+str(st1mass))
-		
+###############################################################
+### Draw Labels                                           #####
+###############################################################
+def DrawLabels( histo, mass ):
+	"""docstring for DrawLabels"""
+
+	textBox1=TLatex()
+	textBox1.SetNDC()
+	textBox1.SetTextSize(0.04) 
+	textBox1.DrawText(0.70,0.65,"jj_"+str(mass)+"_200")
+	
+	if not 'checkJES' in histo:
 		textBox3=TLatex()
 		textBox3.SetNDC()
 		textBox3.SetTextSize(0.04) 
@@ -226,39 +185,111 @@ for st2mass in sample:
 		textBox4.SetTextSize(0.04) 
 		textBox4.DrawLatex(0.70,0.50,"#geq 4 bjets")
 	
-		if "cutDiag" in hist1:
+		if "cutDiag" in histo:
 			textBox2=TLatex()
 			textBox2.SetNDC()
 			textBox2.SetTextSize(0.04) 
 			textBox2.DrawLatex(0.70,0.45,"#Delta = 0 GeV")
+	else:
+		textBox3=TLatex()
+		textBox3.SetNDC()
+		textBox3.SetTextSize(0.04) 
+		textBox3.DrawLatex(0.70,0.60,"JES verification")
 
-		pad2.cd()
-		h_Ratio_UP.SetTitle("")
-#		if "avgMass" in hist1: 
-#			h_Ratio_UP.GetXaxis().SetTitle("Average of Higgs Candidates Mass [GeV]")
-#		elif "massHiggs" in hist1: h_Ratio_UP.GetXaxis().SetTitle("Higgs Candidates Mass (diBjet) [GeV]")
-#		elif "massRecoBjets" in hist1: h_Ratio_UP.GetXaxis().SetTitle("Higgs Candidates Mass (diBjet) [GeV]")
-#		elif "massStop1" in hist1: 
-#			h_Ratio_UP.GetXaxis().SetTitle("Lighter Stop Candidates Mass (dijet) [GeV]")
-#		elif "massdijet" in hist1: h_Ratio_UP.GetXaxis().SetTitle("Lighter Stop Candidates Mass (dijet) [GeV]")
-#		elif "massStop1" in hist1: h_Ratio_UP.GetXaxis().SetTitle("Heavier Stop Candidates Mass (quadjet) [GeV]")
-#		elif "massRecoDiBjet" in hist1: 
-#			h_Ratio_UP.GetXaxis().SetTitle("Heavier Stop Candidates Mass (quadjet) [GeV]")
-#		else: h_Ratio_UP.GetXaxis().SetTitle("Invariant Mass [GeV]")
-		h_Ratio_UP.GetYaxis().SetTitle("Ratio Systematic #frac{Up or Down}{Nominal}")
-		h_Ratio_UP.GetYaxis().SetLabelSize(0.08)
-		h_Ratio_UP.GetXaxis().SetLabelSize(0.08)
-		h_Ratio_UP.GetYaxis().SetTitleSize(0.06)
-		h_Ratio_UP.GetYaxis().SetTitleOffset(0.6)
-		#h_Ratio_UP.SetMarkerStyle(2)
-		#h_Ratio_DOWN.SetMarkerStyle(2)
-		h_Ratio_UP.SetLineColor(2)
-		h_Ratio_DOWN.SetLineColor(4)
-		#h_Ratio_UP.Sumw2()
-		h_Ratio_UP.Draw("e")
-		h_Ratio_DOWN.Draw("esame")
-		
-		c.SaveAs(outputDir + hist1 + "_jj_" +str(st2mass)+ "_" + str(st1mass)+ "_JES.pdf")
-		c.SaveAs(outputDir + hist1 + "_jj_" +str(st2mass)+ "_" + str(st1mass)+ "_JES.png")
-		del c
+		textBox4=TLatex()
+		textBox4.SetNDC()
+		textBox4.SetTextSize(0.04) 
+		if 'pt' in histo: textBox4.DrawLatex(0.70,0.55,"|#eta_{jet}| < 0.1")
+		elif 'eta' in histo: 
+			textBox4.DrawLatex(0.70,0.55,"90 GeV < p_{T}^{jet}| < 110 GeV")
+			
+
+###############################################################
+### Calculate the ratio between Up or Down/Nominal        #####
+### here, the uncertainties are correlated                #####
+### the actual formula to calculate this I didn't do it   #####
+###############################################################
+def calcRatioCorrUnc( hNominal, hUp, hDown ):
+	"""docstring for calcRatioCorrUnc"""
+
+	h_Ratio_UP = hNominal.Clone()
+	h_Ratio_DOWN = hNominal.Clone()
+	
+	for bin in range(0, 200):
+		h_Ratio_UP.SetBinContent(bin, 0.)
+		h_Ratio_UP.SetBinError(bin, 0.)
+		h_Ratio_DOWN.SetBinContent(bin, 0.)
+		h_Ratio_DOWN.SetBinError(bin, 0.)
+
+	for ibin in range(1, hNominal.GetNbinsX()):
+
+		nominalBin = hNominal.GetBinContent(ibin)
+		nominalBinErr = hNominal.GetBinError(ibin)
+		jesupBin = hUp.GetBinContent(ibin)
+		jesupBinErr = hUp.GetBinError(ibin)
+		jesdownBin = hDown.GetBinContent(ibin)
+		jesdownBinErr = hDown.GetBinError(ibin)
+		#print nominalBin, jesupBin, jesdownBin
+
+		if (nominalBin != 0 ):
+
+			ratio_UP_Nom = jesupBin / nominalBin
+			ratio_DOWN_Nom = jesdownBin / nominalBin
+			h_Ratio_UP.SetBinContent(ibin, ratio_UP_Nom)
+			h_Ratio_DOWN.SetBinContent(ibin, ratio_DOWN_Nom)
+
+			ErrNominal = nominalBinErr/nominalBin
+			if ( jesupBin !=0 ):
+				errSumUp = nominalBin + jesupBin
+				if (errSumUp > 0):
+					nominalProd = nominalBin * jesupBinErr
+					jesupProd = nominalBinErr * jesupBin
+					sum =  (nominalProd * nominalProd) + (jesupProd * jesupProd) - (1.8 * nominalProd * jesupProd)  #assume 90% correlation
+					if sum > 0: ErrJesUp = 4.0 * sqrt(sum) / (errSumUp * errSumUp);
+				h_Ratio_UP.SetBinError(ibin, ErrJesUp)
+			if (jesdownBin !=0 ):
+				errSumDown = nominalBin + jesupBin
+				if (errSumDown > 0):
+					nominalProd = nominalBin * jesdownBinErr
+					jesdownProd = nominalBinErr * jesdownBin
+					sum =  (nominalProd * nominalProd) + (jesdownProd * jesdownProd) - (1.8 * nominalProd * jesdownProd)  #assume 90% correlation
+					if sum > 0: ErrJesDown = 4.0 * sqrt(sum) / (errSumDown * errSumDown);
+				h_Ratio_DOWN.SetBinError(ibin, ErrJesDown)
+
+	return h_Ratio_UP, h_Ratio_DOWN
+			
+
+##################################################################
+if __name__ == '__main__':
+
+	st2mass = [ 450 ]#, 550, 650, 750]
+	inputDir = "/uscms_data/d3/algomez/files/Stops/Results/"
+	outputDir = "/uscms_data/d3/algomez/files/Stops/Results/Plots/"
+	
+	histos = { }
+	#histos['checkJES_recoJets_pt'] = 'basicPlots'
+	#histos['checkJES_recoJets_eta'] = 'basicPlots'
+	histos['recoBjets_num'] = 'basicPlots'
+	histos['recoJets_pt'] = 'basicPlots'
+	histos['recoJets_eta'] = 'basicPlots'
+	histos['recoJets_1pt'] = 'basicPlots'
+	histos['recoJets_4pt'] = 'basicPlots'
+	histos['recoJets_6pt'] = 'basicPlots'
+	histos['recoJets_HT'] = 'basicPlots'
+	histos['recoJets_num'] = 'basicPlots'
+	histos['avgMassHiggsCandidate_cutDiagStop2bbjj0'] = 'step3plots1D'
+	histos['avgMassHiggsCandidate_cutDiagStop2bbjj0_resoBasedBin'] = 'step3plots1D'
+	histos['massHiggsCandidate_cutDiagStop2bbjj0'] = 'step3plots1D'
+	histos['massStop1Candidate_cutDiagStop2bbjj0'] = 'step3plots1D'
+	histos['massStop1Candidate_cutDiagStop2bbjj0_resoBasedBin'] = 'step3plots1D'
+	histos['massRecoDiBjetDiJet_cutDiagStop2bbjj0'] = 'step3plots1D'
+	histos['massRecoDiBjetDiJet_cutDiagStop2bbjj0_resoBasedBin'] = 'step3plots1D'
+	
+	
+	plotJEScomp( st2mass, inputDir, outputDir, histos )
+
+################# Add Scale Plots
+#		'recoJets_pt':'scaleBasicPlots',
+#		'recoJets_1pt':'scaleBasicPlots',
+#		'recoJets_2pt':'scaleBasicPlots',
 	
