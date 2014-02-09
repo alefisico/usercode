@@ -337,6 +337,9 @@ void MyTreeAnalyzer::SlaveBegin(TTree * /*tree*/)
 	basicPlots["recoBjets_eta"] = new TH1D("recoBjets_eta" , "Reco Bjets #eta", nbinEta , minEta, maxEta );
 	basicPlots["recoBjets_phi"] = new TH1D("recoBjets_phi" , "Reco Bjets #phi", nbinEta , minEta, maxEta );
 
+	basicPlots["checkJES_pt"] = new TH1D("checkJES_recoJets_pt" , "Reco Jets p_{T}", nbinPt , minPt, maxPt );
+	basicPlots["checkJES_eta"] = new TH1D("checkJES_recoJets_eta" , "Reco Jets #eta", nbinEta , minEta, maxEta );
+
 	basicPlots["recoJets_num_Step1"] = new TH1D("recoJets_num_Step1" , "Number of Reco Jets after Step1", nbinNum , minNum, maxNum );
 	basicPlots["recoBjets_num_Step1"] = new TH1D("recoBjets_num_Step1" , "Number of Reco Bjets after Step1", nbinNum , minNum, maxNum );
 	basicPlots["recoJets_num_Step2"] = new TH1D("recoJets_num_Step2" , "Number of Reco Jets after Step2", nbinNum , minNum, maxNum );
@@ -748,6 +751,11 @@ Bool_t MyTreeAnalyzer::Process(Long64_t Entry)
 	for (int i=0; i<nPFJets; i++){
 
 		h1test->Fill( jet_PF_pt[i] );
+
+		////////////////// Verify JES implementation
+		if ( fabs( jet_PF_eta[i] < 0.1 ) ) basicPlots["checkJES_pt"]->Fill( jet_PF_pt[i] );	
+		if ( (jet_PF_pt[i] > 90 ) && ( jet_PF_pt[i] < 110 )  ) basicPlots["checkJES_eta"]->Fill( jet_PF_eta[i] );	
+
 		if ( jet_PF_pt[i] < 35.0 || fabs( jet_PF_eta[i] ) > 2.5) continue;
 		dummyCounter1.push_back( jet_PF_pt[i] );
 		//cout << "1 " <<jet_PF_pt[i] << endl;
