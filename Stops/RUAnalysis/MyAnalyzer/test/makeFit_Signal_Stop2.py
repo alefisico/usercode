@@ -20,15 +20,21 @@ TVirtualFitter.SetMaxIterations(5000000000000)		######### Trick to increase numb
 st1mass = int (sys.argv[1])
 st2mass = int (sys.argv[2])
 histo = str ( sys.argv[3] )
+jes = str ( sys.argv[4] )
 #folder = str ( sys.argv[5] )
 #print "Options: ", sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
 
 decay = 'jj'
 
 ####### Input files
-input1 = "/uscms_data/d3/algomez/files/Stops/Results/st2_h_bb_st1_"+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_4jet80_6jet60_preNtuplesPlots.root"
-input2 = "/uscms_data/d3/algomez/files/Stops/Results/st2_h_bb_st1_"+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_4jet80_6jet60_plots.root"
-inputFile1 = TFile(input1)
+if jes == 'no' :
+	#input1 = "/uscms_data/d3/algomez/files/Stops/Results/st2_h_bb_st1_"+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_4jet80_6jet60_preNtuplesPlots.root"
+	input2 = "/uscms_data/d3/algomez/files/Stops/Results/st2_h_bb_st1_"+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_4jet80_6jet60_plots.root"
+	output = histo+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_4jet80_6jet60"
+else:
+	input2 = "/uscms_data/d3/algomez/files/Stops/Results/st2_h_bb_st1_"+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_jes"+jes+"_4jet80_6jet60_plots.root"
+	output = histo+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_jes"+jes+"_4jet80_6jet60"
+#inputFile1 = TFile(input1)
 inputFile2 = TFile(input2)
 #print "Input files: ", input2
 outputDir = "/uscms_data/d3/algomez/files/Stops/Results/Plots/"
@@ -53,7 +59,7 @@ h_PreFitGauss = tmp_h_Reco.Clone(histo)
 #h_PreFitGauss = tmp_h_Match.Clone("tmp_Stop2_Match")
 
 ############## Pre-Fitting combinations
-if not "reso" in histo:
+if "reso" in histo:
 	if ( st2mass == 450 ): PreFitStart= h_PreFitP4.GetMaximumBin()*binSize+50  ### BEST for 450_200
 	elif ( st2mass == 350 ): PreFitStart= h_PreFitP4.GetMaximumBin()*binSize+50   #### BEST for 350_200
 	elif ( st2mass == 550 ): PreFitStart= h_PreFitP4.GetMaximumBin()*binSize+30   #### BEST for 550_200
@@ -66,46 +72,35 @@ if not "reso" in histo:
 else:
 	if ( st2mass == 550 ): 
 		PreFitStart = massBins[minBinValue[0]-3]		#### BEST for 650_200
-		print massBins[minBinValue[0]-3]
-		h_PreFitP4.SetBinContent(minBinValue[0]+1, 0)
-		h_PreFitP4.SetBinError(minBinValue[0]+1, 0)
-		h_PreFitP4.SetBinContent(minBinValue[0], 0)
-		h_PreFitP4.SetBinError(minBinValue[0], 0)
-		h_PreFitP4.SetBinContent(minBinValue[0]-1, 0)
-		h_PreFitP4.SetBinError(minBinValue[0]-1, 0)
-		h_PreFitP4.SetBinContent(minBinValue[0]-2, 0)
-		h_PreFitP4.SetBinError(minBinValue[0]-2, 0)
+		for i in range(-2,1):
+			h_PreFitP4.SetBinContent(minBinValue[0]+i, 0)
+			h_PreFitP4.SetBinError(minBinValue[0]+i, 0)
 		h_PreFitGauss.Fit(GausPreFit,"MRI","", massBins[minBinValue[0]-2], massBins[minBinValue[0]+2])
 	if ( st2mass == 650 ): 
 		PreFitStart = massBins[minBinValue[0]-7]		#### BEST for 650_200
-		print massBins[minBinValue[0]-3]
-		h_PreFitP4.SetBinContent(minBinValue[0]+2, 0)
-		h_PreFitP4.SetBinError(minBinValue[0]+2, 0)
-		h_PreFitP4.SetBinContent(minBinValue[0]+1, 0)
-		h_PreFitP4.SetBinError(minBinValue[0]+1, 0)
-		h_PreFitP4.SetBinContent(minBinValue[0], 0)
-		h_PreFitP4.SetBinError(minBinValue[0], 0)
-		h_PreFitP4.SetBinContent(minBinValue[0]-1, 0)
-		h_PreFitP4.SetBinError(minBinValue[0]-1, 0)
-		h_PreFitP4.SetBinContent(minBinValue[0]-2, 0)
-		h_PreFitP4.SetBinError(minBinValue[0]-2, 0)
-		h_PreFitP4.SetBinContent(minBinValue[0]-3, 0)
-		h_PreFitP4.SetBinError(minBinValue[0]-3, 0)
-		h_PreFitP4.SetBinContent(minBinValue[0]-4, 0)
-		h_PreFitP4.SetBinError(minBinValue[0]-4, 0)
-		h_PreFitGauss.Fit(GausPreFit,"MRI","", massBins[minBinValue[0]-2], massBins[minBinValue[0]+2])
+		#print massBins[minBinValue[0]-3]
+		for i in range(-10,10):
+			h_PreFitP4.SetBinContent(minBinValue[0]+i, 0)
+			h_PreFitP4.SetBinError(minBinValue[0]+i, 0)
+		#h_PreFitGauss.Fit(GausPreFit,"MRI","", massBins[minBinValue[0]-2], massBins[minBinValue[0]+2])
+		h_PreFitGauss.Fit(GausPreFit,"MRI","",st2mass-30,st2mass+30)
 	elif ( st2mass == 450 ): 
 		PreFitStart =  massBins[minBinValue[0]]  	#### BEST for 650_200
 		h_PreFitGauss.Fit(GausPreFit,"MRI","", massBins[minBinValue[0]-2], massBins[minBinValue[0]+1])
-	else: PreFitStart= massBins[minBinValue[0]-3] 
-	PreFitEnd  = 1500
-	#h_PreFitGauss.Fit(GausPreFit,"MRI","",st2mass-50,st2mass+50)
-	print massBins[minBinValue[0]-3], massBins[minBinValue[0]+2]
-	h_PreFitGauss.Fit(GausPreFit,"MRI","", massBins[minBinValue[0]-2], massBins[minBinValue[0]+2])
-	#PreFitEnd  = 1200
-	#P4PreFit.SetParameter(0,1)
+	else: 
+		PreFitStart = 400 #massBins[minBinValue[0]-3] 
+		for i in range(-15,10):
+			h_PreFitP4.SetBinContent(minBinValue[0]+i, 0)
+			h_PreFitP4.SetBinError(minBinValue[0]+i, 0)
+		#h_PreFitGauss.Fit(GausPreFit,"MRI","",st2mass-50,st2mass+50)
+		#print massBins[minBinValue[0]-3], massBins[minBinValue[0]+2]
+		#h_PreFitGauss.Fit(GausPreFit,"MRI","", massBins[minBinValue[0]-2], massBins[minBinValue[0]+2])
+		h_PreFitGauss.Fit(GausPreFit,"MRI","",st2mass-50,st2mass+50)
 
-if ( st2mass == 650): P4PreFit.SetParameter(0,1)
+#PreFitEnd  = 1200
+#P4PreFit.SetParameter(0,1)
+PreFitEnd  = 1500
+if ( st2mass >= 650): P4PreFit.SetParameter(0,1)
 h_PreFitP4.Fit(P4PreFit,"MRI","",PreFitStart,PreFitEnd)
 h_PreFitP4.Fit(P4PreFit,"MRI","",PreFitStart,PreFitEnd)
 
@@ -125,7 +120,7 @@ P4GausFit.SetParameter(5,GausPreFit.GetParameter(1));
 #P4GausFit.SetParLimits(5,GausPreFit.GetParameter(1)-30,GausPreFit.GetParameter(1)+30);
 if (st2mass == 650): P4GausFit.SetParLimits(5, massBins[minBinValue[0]-1]-30, massBins[minBinValue[0]]-10)
 elif (st2mass == 550): P4GausFit.SetParLimits(5, massBins[minBinValue[0]-1]-30, massBins[minBinValue[0]]+10)
-print massBins[minBinValue[0]], massBins[minBinValue[0]]-30, massBins[minBinValue[0]]+10
+#print massBins[minBinValue[0]], massBins[minBinValue[0]]-30, massBins[minBinValue[0]]+10
 #P4GausFit.SetParameter(5,st2mass);
 #
 P4GausFit.SetParameter(6,GausPreFit.GetParameter(2));
@@ -140,21 +135,23 @@ P4GausFit.SetParameter(6,GausPreFit.GetParameter(2));
 ##if ( h_P4GausFit.GetMaximumBin() > 150 ):
 ##	FitStart= h_P4GausFit.GetMaximumBin()*binSize-40
 ##else:
-if (st2mass == 350):
-	FitStart= 250
-	FitEnd = 1400
-elif (st2mass == 450):
-	FitStart= 290
-	FitEnd = 1620
-elif (st2mass == 550):
-	FitStart= 410
-	FitEnd = 1730
-elif (st2mass == 650):
-	FitStart= 510
-	FitEnd = 1730
-else:
-	FitStart= 510
-	FitEnd = 2000
+#if (st2mass == 350):
+#	FitStart= 250
+#	FitEnd = 1400
+#elif (st2mass == 450):
+#	FitStart= 290
+#	FitEnd = 1620
+#elif (st2mass == 550):
+#	FitStart= 410
+#	FitEnd = 1400
+#elif (st2mass == 650):
+#	FitStart= 400
+#	FitEnd = 1400
+#else:
+#	FitStart= 510
+#	FitStart= 510
+FitStart = 350
+FitEnd = 2000
 h_P4GausFit.Fit(P4GausFit,"MRI","",FitStart,FitEnd);
 h_P4GausFit.Fit(P4GausFit,"MRI","",FitStart,FitEnd);
 #print 'Standard Deviation of Fit: ', round((P4GausFit.GetChisquare()-P4GausFit.GetNDF())/sqrt(2*P4GausFit.GetNDF()),3)
@@ -196,59 +193,61 @@ GaussIntegral = SigP4/binSize/eventsGenerated
 #FullIntegral = FullSigP4/eventsGenerated
 Acceptance = sqrt(2*3.14)*GausOnly.GetParameter(2)*GausOnly.GetParameter(0)/binSize/eventsGenerated 
 #GaussYield = sqrt(2*3.14)*GausOnly.GetParameter(2)*GausOnly.GetParameter(0)/binSize
-##print 'Sample: ', decay+"_"+str(st2mass)+"_"+str(st1mass)
+print 'Sample: ', output
 print SigP4, GaussIntegral, binSize
 print 'Gaus Integral: ', round(GaussIntegral,5)
 print 'Gaus Acceptance: ', round(Acceptance, 5)
+print 'Gaus Mean: ', round(GausOnly.GetParameter(1),5)
+print 'Gaus Width: ', round(GausOnly.GetParameter(2),5)
 #, 'Gaus Yield: ', round(GaussYield, 2), ' Full Acceptance: ', round(FullIntegral, 5)
 ##print GausOnly.GetParameter(0) , 1/GausOnly.GetParameter(0), GausOnly.GetParameter(2), 1/(sqrt(2*3.14)*GausOnly.GetParameter(2))
 
 ################## Plotting Histograms
 #### Histo without Gaussian bins
-c1 = TCanvas('c1', 'c1',  10, 10, 750, 500 )
-h_PreFitP4.SetTitle("")
-h_PreFitP4.Draw()
-h_PreFitP4.GetXaxis().SetTitle("Heavier Stop Reconstruction Invariant Mass [GeV]")
-h_PreFitP4.GetYaxis().SetTitle("Quadjets")
-textBox=TLatex()
-textBox.SetNDC()
-textBox.SetTextSize(0.05) 
-textBox.SetTextColor(50)
-textBox.DrawLatex(0.10,0.91,"CMS Preliminary Simulation")
-textBox1=TLatex()
-textBox1.SetNDC()
-textBox1.SetTextColor(50)
-textBox1.SetTextSize(0.04) 
-textBox1.DrawText(0.50,0.85,decay+"_"+str(st2mass)+"_"+str(st1mass))
-c1.SaveAs(outputDir+histo+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_4jet80_WOStop2_FitP40.pdf")
-del c1
-
-####### Gaussian from Match
-c2 = TCanvas('c2', 'c2',  10, 10, 750, 500 )
-h_PreFitGauss.SetTitle("")
-h_PreFitGauss.Draw()
-h_PreFitGauss.GetXaxis().SetTitle("Invariant Mass [GeV]")
-h_PreFitGauss.GetYaxis().SetTitle("Quadjets / 10 GeV")
-textBox=TLatex()
-textBox.SetNDC()
-textBox.SetTextSize(0.05) 
-textBox.SetTextColor(50)
-textBox.DrawLatex(0.10,0.91,"CMS Preliminary Simulation")
-textBox1=TLatex()
-textBox1.SetNDC()
-textBox1.SetTextColor(50)
-textBox1.SetTextSize(0.04) 
-textBox1.DrawText(0.50,0.85,decay+"_"+str(st2mass)+"_"+str(st1mass))
-#c2.SaveAs(outputDir+"MatchStop1"+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_FitGaus.pdf")
-c2.SaveAs(outputDir+"MatchStop2"+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_4jet80_6jet60_FitGaus.pdf")
-#c2.SaveAs(outputDir+"MatchStop1"+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_4jet80_6jet60_FitGaus.pdf")
-del c2
+#c1 = TCanvas('c1', 'c1',  10, 10, 750, 500 )
+#h_PreFitP4.SetTitle("")
+#h_PreFitP4.Draw()
+#h_PreFitP4.GetXaxis().SetTitle("Heavier Stop Reconstruction Invariant Mass [GeV]")
+#h_PreFitP4.GetYaxis().SetTitle("Quadruplets")
+#textBox=TLatex()
+#textBox.SetNDC()
+#textBox.SetTextSize(0.05) 
+#textBox.SetTextColor(50)
+#textBox.DrawLatex(0.10,0.91,"CMS Preliminary Simulation")
+#textBox1=TLatex()
+#textBox1.SetNDC()
+#textBox1.SetTextColor(50)
+#textBox1.SetTextSize(0.04) 
+#textBox1.DrawText(0.50,0.85,decay+"_"+str(st2mass)+"_"+str(st1mass))
+#c1.SaveAs(outputDir+output+"_WOStop2_FitP40.pdf")
+#del c1
+#
+######## Gaussian from Match
+#c2 = TCanvas('c2', 'c2',  10, 10, 750, 500 )
+#h_PreFitGauss.SetTitle("")
+#h_PreFitGauss.Draw()
+#h_PreFitGauss.GetXaxis().SetTitle("Invariant Mass [GeV]")
+#h_PreFitGauss.GetYaxis().SetTitle("Quadruplets / 10 GeV")
+#textBox=TLatex()
+#textBox.SetNDC()
+#textBox.SetTextSize(0.05) 
+#textBox.SetTextColor(50)
+#textBox.DrawLatex(0.10,0.91,"CMS Preliminary Simulation")
+#textBox1=TLatex()
+#textBox1.SetNDC()
+#textBox1.SetTextColor(50)
+#textBox1.SetTextSize(0.04) 
+#textBox1.DrawText(0.50,0.85,decay+"_"+str(st2mass)+"_"+str(st1mass))
+##c2.SaveAs(outputDir+"MatchStop1"+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_FitGaus.pdf")
+#c2.SaveAs(outputDir+"MatchStop2"+output+"_FitGaus.pdf")
+##c2.SaveAs(outputDir+"MatchStop1"+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_4jet80_6jet60_FitGaus.pdf")
+#del c2
 
 ########### Real Fit
 c3 = TCanvas('c3', 'c3',  10, 10, 750, 500 )
 h_P4GausFit.GetXaxis().SetTitle("Heavier Stop Reconstruction Invariant Mass [GeV]")
-if not "resoBased" in histo: h_P4GausFit.GetYaxis().SetTitle("Quadjets / 10 GeV")
-else: h_P4GausFit.GetYaxis().SetTitle("Quadjets")
+if not "resoBased" in histo: h_P4GausFit.GetYaxis().SetTitle("Quadruplets / 10 GeV")
+else: h_P4GausFit.GetYaxis().SetTitle("Quadruplets")
 h_P4GausFit.GetYaxis().SetTitleOffset(1.2);
 h_P4GausFit.SetTitle("")
 #if ( st2mass == 450): h_P4GausFit.SetMaximum(1300)
@@ -299,5 +298,6 @@ if "cutDiag" in histo:
 
 #c3.SaveAs(outputDir+histo+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_FitP4Gauss.pdf")
 #c3.SaveAs(outputDir+histo+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_4jet80_FitP4Gauss.pdf")
-c3.SaveAs(outputDir+histo+decay+"_"+str(st2mass)+"_"+str(st1mass)+"_4jet80_6jet60_FitP4Gauss.pdf")
+c3.SaveAs(outputDir+output+"_FitP4Gauss_simpleRoot.pdf")
+c3.SaveAs(outputDir+output+"_FitP4Gauss_simpleRoot.png")
 del c3
