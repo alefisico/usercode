@@ -9,6 +9,14 @@ from ROOT import RooFit
 import glob,sys, datetime
 
 gROOT.Reset()
+gStyle.SetOptStat(0)
+gStyle.SetOptFit(1022)
+gStyle.SetStatY(0.9)
+gStyle.SetStatX(0.9)
+gStyle.SetStatW(0.12)
+gStyle.SetStatH(0.12) 
+
+#TVirtualFitter.SetMaxIterations(50000000)		######### Trick to increase number of iterations
 
 ##################################################
 #### Initial Parameters                       ####
@@ -16,8 +24,9 @@ gROOT.Reset()
 
 ####### Bin Info
 binSize = 10.0
+genEvents = 100000
 massBins = [0, 30, 60, 90, 120, 150, 180, 210, 250, 290, 330, 370, 410, 460, 510, 560, 610, 670, 730, 790, 860, 930, 1000, 1080, 1160, 1240, 1330, 1420, 1520, 1620, 1730, 1840, 2000]
-FitStart = 400
+FitStart = 300
 FitEnd = 2000
 Lumi = 19445
 #Mass = [      450,       550,       650,        750 ]
@@ -47,7 +56,7 @@ def fitP4toData(st2mass, histo, folder, file, outputDir, output, WSname, WSDir, 
 #	signal_Gaussian = RooDataHist("signal_Gauss", "signal_Gauss", quadrupletsGauss, h_Signal_Gaussian)
 #
 #	initGausMean = RooRealVar("initGausMean", "initGausMean", st2mass, st2mass-50,st2mass+50)
-#	initGausSigma = RooRealVar("initGausSigma", "initGausSigma", 25, -50, 50)
+#	initGausSigma = RooRealVar("initGausSigma", "initGausSigma", 25, -1000, 1000)
 #	initSignalGaus = RooGaussian("initSignal_pdf", "init gaussian pdf", xGauss, initGausMean, initGausSigma)
 #
 #	initSignalGaus.fitTo(signal_Gaussian, RooFit.Strategy(2))
@@ -62,68 +71,87 @@ def fitP4toData(st2mass, histo, folder, file, outputDir, output, WSname, WSDir, 
 	nSigBkg = h_Signal_P4.Integral(36,200)
 
 	# Background (P4 function)
-	initP1 = RooRealVar("initP1","initP1", 0,-1000,1000)
-	initP2 = RooRealVar("initP2","initP2", 0,-100,100)
-	initP3 = RooRealVar("initP3","initP3", 0,-100,100)
+	initP1 = RooRealVar("initP1","initP1", 0,-100000, 100000)
+	initP2 = RooRealVar("initP2","initP2", 0,-100000, 100000)
+	initP3 = RooRealVar("initP3","initP3", 0,-100000, 100000)
 	initBkgP4 = RooGenericPdf("initBkgP4","bkg pdf","pow(1-x/8000.0,initP1)/pow(x/8000.0,initP2+initP3*log(x/8000.))",RooArgList(x,initP1,initP2,initP3))
 
 	signal_P4 = RooDataHist("signal_P4", "signal_P4", quadruplets, h_Signal_P4)
 	numSigBkg = RooRealVar("numSigBkg","number of background events in signal", nSigBkg, 0, 2*nSigBkg)
 	exPdfSigBkgP4 = RooExtendPdf("sigBkg","background in signal PDF P4 fit", initBkgP4, numSigBkg) 
 
-	exPdfSigBkgP4.fitTo( signal_P4, RooFit.Strategy(2) )
+	exPdfSigBkgP4.fitTo( signal_P4 , RooFit.Strategy(2) )
 
 
 	############ Signal + Bkg Fit
-	P1 = RooRealVar("P1","P1", initP1.getValV(),-2*initP1.getValV(), 2*initP1.getValV())
-	P2 = RooRealVar("P2","P2", initP2.getValV(),-2*initP2.getValV(), 2*initP2.getValV())
-	P3 = RooRealVar("P3","P3", initP3.getValV(),-2*initP3.getValV(), 2*initP3.getValV())
+	#P1 = RooRealVar("P1","P1", initP1.getValV(), -100000, 10000 )
+	#P2 = RooRealVar("P2","P2", initP2.getValV(), -100000, 10000 )
+	#P3 = RooRealVar("P3","P3", initP3.getValV(), -100000, 10000 )
+	P1 = RooRealVar("P1","P1", initP1.getValV(), -100*initP1.getValV(), 100*initP1.getValV())
+	P2 = RooRealVar("P2","P2", initP2.getValV(), -10*initP2.getValV(), 10*initP2.getValV())
+	P3 = RooRealVar("P3","P3", initP3.getValV(), -10*initP3.getValV(), 10*initP3.getValV())
 	BkgP4 = RooGenericPdf("BkgP4","bkg pdf","pow(1-x/8000.0,P1)/pow(x/8000.0,P2+P3*log(x/8000.))",RooArgList(x,P1,P2,P3))
 
 
-	GausMean = RooRealVar("GausMean", "GausMean", st2mass, st2mass-30, st2mass+30)
-	GausSigma = RooRealVar("GausSigma", "GausSigma", 10, -100, 100 )#initGausSigma.getValV()-10, initGausSigma.getValV()+10)
+	GausMean = RooRealVar("GausMean", "GausMean", st2mass, st2mass-40, st2mass+40)
+	GausSigma = RooRealVar("GausSigma", "GausSigma", 10, 0, 1000 )
+	#GausSigma = RooRealVar("GausSigma", "GausSigma", initGausSigma.getValV(), initGausSigma.getValV()-10, initGausSigma.getValV()+10)
 	SignalGaus = RooGaussian("SignalGaus", " gaussian pdf", x , GausMean, GausSigma)
 
 	h_Signal = h_initSignal.Clone()
 	signal = RooDataHist("signal", "signal", quadruplets, h_Signal)
 	model = RooAddPdf("Sig+Bkg", "signal+bkgd", RooArgList( BkgP4, SignalGaus), RooArgList( numSigBkg, numSig ) )
-	fitRes = model.fitTo( signal , RooFit.Strategy(2), RooFit.Save() ) 	#### RooFitResults
+	#model.fitTo( signal , RooFit.Strategy(2), RooFit.Save(), RooFit.Optimize(0) ) 	#### RooFitResults
+	fitRes = model.fitTo( signal , RooFit.Strategy(0), RooFit.Minos(), RooFit.Save() ) 	#### RooFitResults
+	#fitRes = model.fitTo( signal , RooFit.Minos(False), RooFit.Hesse(False), RooFit.Save()  ) 	#### RooFitResults
+	print '##################################'
+	print '####     FIT RESULTS         #####'
+	print '##################################'
 	fitRes.Print() 		##### RooFitResults
+	print fitRes.status()
 
-	#### Just to Calculate Gaussian Amplitude (there must be a better way to do it)
-	print '################################################################# Calculating Gaussian Amplitude (without RooFit) '
-	h_AmpSignal = h_initSignal.Clone()
-	P4GausFit= TF1("P4GausFit", "[0]*pow(1-x/8000.0,[1])/pow(x/8000.0,[2]+[3]*log(x/8000.))+gaus(4)",300,1200);
-	P4GausFit.FixParameter( 1, P1.getValV() )
-	P4GausFit.FixParameter( 2, P2.getValV() )
-	P4GausFit.FixParameter( 3, P3.getValV() )
-	P4GausFit.FixParameter( 5, GausMean.getValV() )
-	P4GausFit.FixParameter( 6, GausSigma.getValV() )
-	h_AmpSignal.Fit(P4GausFit,"B","", 300, 2000)
+	#### Just to Calculate Gaussian Amplitude (there must be a better way to do it) and there is!!! :D
+	#print '################################################################# Calculating Gaussian Amplitude (without RooFit) '
+	#h_AmpSignal = h_initSignal.Clone()
+	#P4GausFit= TF1("P4GausFit", "[0]*pow(1-x/8000.0,[1])/pow(x/8000.0,[2]+[3]*log(x/8000.))+gaus(4)",300,1200);
+	#P4GausFit.FixParameter( 1, P1.getValV() )
+	#P4GausFit.FixParameter( 2, P2.getValV() )
+	#P4GausFit.FixParameter( 3, P3.getValV() )
+	#P4GausFit.FixParameter( 5, GausMean.getValV() )
+	#P4GausFit.FixParameter( 6, GausSigma.getValV() )
+	#h_AmpSignal.Fit(P4GausFit,"B","", 300, 2000)
+	#P4GausFit.SetParError( 2, p2 )
+	#P4GausFit.SetParError( 3, p3 )
+	#P4GausFit.SetParError( 5, g1 )
+	#P4GausFit.SetParError( 6, g2 )
+	#Acceptance = (TMath.Sqrt( 2*3.1416 )*( GausSigma.getValV() )*( P4GausFit.GetParameter(4) ) )/binSize/genEvents
+	#AccepErr = Acceptance * (TMath.Sqrt( TMath.Power( GausSigma.getError() / GausSigma.getValV(), 2) + TMath.Power( P4GausFit.GetParError(4) / P4GausFit.GetParameter(4), 2 ) + TMath.Power( TMath.Sqrt(genEvents) / genEvents, 2 ) )) 
+
 	print '#################################################################################################################'
-
-	Acceptance = TMath.Sqrt( 2*3.1416 )*( GausSigma.getValV() )*( P4GausFit.GetParameter(4) )
-	print ' Acceptance : ', Acceptance
+	Acceptance = numSig.getValV()/binSize/genEvents
+	AccepErr = Acceptance * (TMath.Sqrt( TMath.Power( numSig.getError() / numSig.getValV(), 2) + TMath.Power( TMath.Sqrt(genEvents) / genEvents, 2 ) )) 
+	print ' Acceptance : ', Acceptance, ' +/- ', AccepErr
 	
 	######################################## Workspace
 	if ( st2mass == 450 ): XS = listXS[0]
 	elif ( st2mass == 550 ): XS = listXS[1]
 	elif ( st2mass == 650 ): XS = listXS[2]
 	elif ( st2mass == 750 ): XS = listXS[3]
+
+	numSignal = XS*Acceptance*Lumi
 	if ( jes == 'nom' ):
 		#### Variables for Workspace
 	
 		signal = RooDataHist("massRecoDiBjetDiJet_cutDiagStop2bbjj","signal", quadruplets, h_initSignal)
 	
-		nSig = RooRealVar("nSig","number of signal events",XS*Acceptance*Lumi)
+		nSig = RooRealVar("nSig","number of signal events",numSignal)
 		finalGausMean = RooRealVar("finalGausMean","finalGausMean", st2mass)
 		finalGausSigma = RooRealVar("finalGausSigma","finalGausSigma", GausSigma.getValV(), -100,100)
 		finalSignalGaus = RooGaussian("finalSignal_pdf","gaussian PDF", x, finalGausMean, finalGausSigma)
 		exPdfSignalGaus = RooExtendPdf("signal", "extended signal PDF", finalSignalGaus, nSig)
 	
 		#### Create Workspace for RooFit              ####
-		pWs = RooWorkspace("myWS")
+		pWs = RooWorkspace("mySignalWS")
 		# import dataset into workspace
 		getattr(pWs,'import')(exPdfSignalGaus) # we call it this way because "import" is a reserved word in python
 		nSigDataCard = nSig.getVal()
@@ -132,44 +160,85 @@ def fitP4toData(st2mass, histo, folder, file, outputDir, output, WSname, WSDir, 
 		pWs.writeToFile(WSDir+WSname+'.root')
 
 	##### Save Info into file
-	saveInfo( WSDir, st2mass, XS, Acceptance, GausMean.getValV(), GausSigma.getValV(),  GausMean.getError(), GausSigma.getError(), jes  )
-#	##### Plots
-	h_rawSignal = h_initSignal.Clone()
-	plotSignalP4Gaus( mass, output, h_rawSignal, 
-			P4GausFit.GetParameter(0), P1.getValV(), P2.getValV(), P3.getValV(), 
-			P4GausFit.GetParameter(4), GausMean.getValV(), GausSigma.getValV()  )
-#	dataFrame = x.frame()
-#	signal.plotOn( dataFrame )
-#	model.plotOn( dataFrame )
-#	model.plotOn( dataFrame, RooFit.Components( 'SignalGaus' ), RooFit.LineStyle(kDashed))
-#	model.plotOn( dataFrame, RooFit.Components( 'BkgP4' ), RooFit.LineStyle(kDashed))
-#	#signal_P4.plotOn( dataFrame )
-#	#exPdfSigBkgP4.plotOn( dataFrame )
-#	cDataFitP4 = TCanvas("cDataFitP4","data hist",800,600)
-#	#dataFrame.Draw()
-#	#h_Signal_Gaussian.Draw()
-#	#hSignalIntegral.Draw()
-#	h_AmpSignal.Draw()
-#	cDataFitP4.SaveAs('test.pdf')
-#	print '#############', dataFrame.chiSquare()
+	saveInfo( WSDir, st2mass, XS, Acceptance, AccepErr, GausMean.getValV(), GausSigma.getValV(),  GausMean.getError(), GausSigma.getError(), jes, numSignal, 0 ) #P4GausFit.GetParameter(4) )
 
+	textBox=TLatex( 0.10,0.91,"CMS Preliminary 19.5 fb^{-1} at #sqrt{s} = 8 TeV")
+	textBox.SetNDC()
+	textBox.SetTextSize(0.05) 
+	textBox.SetTextColor(50)
+
+	dataFrame = x.frame()
+	signal.plotOn( dataFrame )
+	#resoBasedSignal.plotOn( dataFrame )
+	model.plotOn( dataFrame )
+	model.plotOn( dataFrame, RooFit.Components( 'SignalGaus' ), RooFit.LineStyle(kDashed), RooFit.LineColor(kGreen))
+	model.plotOn( dataFrame, RooFit.Components( 'BkgP4' ), RooFit.LineStyle(kDashed), RooFit.LineColor(kRed))
+	model.paramOn( dataFrame, RooFit.Layout(0.65,0.95,0.7) )
+	#signal.statOn( dataFrame )#, RooFit.Layout(0.65,0.95,0.7) )
+	dataFrame.getAttText().SetTextSize(0.0284)
+	dataFrame.getAttText().SetTextFont(42)
+	#signal_P4.plotOn( dataFrame )
+	#exPdfSigBkgP4.plotOn( dataFrame )
+	cDataFitP4 = TCanvas("cDataFitP4","data hist",800,600)
+	dataFrame.Draw()
+	cDataFitP4.SaveAs(outputDir+output+'_RooFit.pdf')
+	cDataFitP4.SaveAs(outputDir+output+'_RooFit.png')
+
+	hResidual = RooHist(dataFrame.residHist())
+	ResidualFrame = x.frame()
+	ResidualFrame.SetTitle("")
+	ResidualFrame.GetYaxis().SetTitle("Residuals / 10 GeV")
+	ResidualFrame.addPlotable(hResidual,"P")
+	cResidual = TCanvas("cResidual","Residual",800,600)
+	ResidualFrame.Draw()
+	textBox.Draw()
+	cResidual.SaveAs(outputDir+output+"_Residual_RooFit.pdf")
+	cResidual.SaveAs(outputDir+output+"_Residual_RooFit.png")
+	del cResidual
+
+	hPull = RooHist(dataFrame.pullHist())
+	PullFrame = x.frame()
+	PullFrame.SetTitle("")
+	PullFrame.GetYaxis().SetTitle("Pulls / 10 GeV")
+	PullFrame.addPlotable(hPull,"P")
+	cPull = TCanvas("cPull","Pull",800,600)
+	PullFrame.Draw()
+	textBox.Draw()
+	cPull.SaveAs(outputDir+output+"_Pull_RooFit.pdf")
+	cPull.SaveAs(outputDir+output+"_Pull_RooFit.png")
+	del cPull
+
+
+#	##### Wrong way to do Plots
+	#h_rawSignal = h_initSignal.Clone()
+	#plotSignalP4Gaus( mass, output, h_AmpSignal, 
+	#		P4GausFit.GetParameter(0), P1.getValV(), P2.getValV(), P3.getValV(), P4GausFit.GetParameter(4), GausMean.getValV(), GausSigma.getValV(), 
+	#		P4GausFit.GetParError(0), P1.getError(), P2.getError(), P3.getError(), P4GausFit.GetParError(4), GausMean.getError(), GausSigma.getError()  )
+	#
+	#h_Signal_resoBasedBin = inputFile.Get(folder+'/' + histo+'_resoBasedBin')
+	#plotSignalP4Gaus( mass, output+'_resoBasedBin', h_Signal_resoBasedBin, 
+	#		P4GausFit.GetParameter(0), P1.getValV(), P2.getValV(), P3.getValV(), P4GausFit.GetParameter(4), GausMean.getValV(), GausSigma.getValV(), 
+	#		P4GausFit.GetParError(0), P1.getError(), P2.getError(), P3.getError(), P4GausFit.GetParError(4), GausMean.getError(), GausSigma.getError()  )
 	print 'Well done'
 
 ##############################################################
 #### Save info in a file (not overwrite)                  ####
 ##############################################################
-def saveInfo( WSDir, st2mass , XS, Acceptance, GausMean, GausSigma, GausMeanErr, GausSigmaErr, jes ):
+def saveInfo( WSDir, st2mass , XS, Acceptance, AccepError, GausMean, GausSigma, GausMeanErr, GausSigmaErr, jes, nSignal, nomGaus ):
 	
 	try:
-		listName = [ '#Mass', 'XS', 'Acceptance', 'GausMean', 'GausSigma', 'GausMeanErr', 'GausSigmaErr', 'jes' ]
-		list = [ str(st2mass), str(XS), str(Acceptance), str(GausMean), str(GausSigma), str(GausMeanErr), str(GausSigmaErr), str(jes) ]
+		listName = [ '#Mass', 'XS', 'Acceptance', 'AccepError', 'GausMean', 'GausSigma', 'GausMeanErr', 'GausSigmaErr', 'jes', 'nSig', 'nomGaus' ]
+		list = [ str(st2mass), str(XS), str(Acceptance), str(AccepError), str(GausMean), str(GausSigma), str(GausMeanErr), str(GausSigmaErr), str(jes), str(nSignal), str(nomGaus) ]
 
-		with open( WSDir+"signalInfo.txt", "a") as myfile:
-			if ((st2mass == 450) and ( jes == 'nom') ): 
+		if ((st2mass == 450) and ( jes == 'nom') ): 
+			with open( WSDir+"signalInfo.txt", "w") as myfile:
 				myfile.write('#####################################  ')
 				myfile.write(datetime.datetime.now().ctime()+'\n') 	### fancy way to keep track of the date
-			myfile.write("\t".join(listName)+ '\n')
-			myfile.write("\t".join(list)+ '\n')
+				myfile.write("\t".join(listName)+ '\n')
+				myfile.write("\t".join(list)+ '\n')
+		else:
+			with open( WSDir+"signalInfo.txt", "a") as myfile:
+				myfile.write("\t".join(list)+ '\n')
 			
 	except IOError:
 		print 'File ', filename, 'does not exist.'
@@ -198,7 +267,10 @@ textBox2=TLatex(0.70,0.15,"#Delta = 0 GeV")
 textBox2.SetNDC()
 textBox2.SetTextSize(0.04) 
 
-def plotSignalP4Gaus( mass, output, histo, p0, p1, p2, p3, g0, g1, g2 ):
+###############################################################
+### Draw P4+Gaussian, P4 and Gaussian in histogram        #####
+###############################################################
+def plotSignalP4Gaus( mass, output, histo, p0, p1, p2, p3, g0, g1, g2, p0Err, p1Err, p2Err, p3Err, g0Err, g1Err, g2Err ):
 
 	signalP4Gaus= TF1("signalP4Gaus", "[0]*pow(1-x/8000.0,[1])/pow(x/8000.0,[2]+[3]*log(x/8000.))+gaus(4)",350,2000);
 	signalP4Gaus.SetParameter( 0, p0 )
@@ -208,6 +280,14 @@ def plotSignalP4Gaus( mass, output, histo, p0, p1, p2, p3, g0, g1, g2 ):
 	signalP4Gaus.SetParameter( 4, g0 )
 	signalP4Gaus.SetParameter( 5, g1 )
 	signalP4Gaus.SetParameter( 6, g2 )
+	signalP4Gaus.SetParError( 0, p0 )
+	signalP4Gaus.SetParError( 1, p1 )
+	signalP4Gaus.SetParError( 2, p2 )
+	signalP4Gaus.SetParError( 3, p3 )
+	signalP4Gaus.SetParError( 4, g0 )
+	signalP4Gaus.SetParError( 5, g1 )
+	signalP4Gaus.SetParError( 6, g2 )
+	if 'reso' in output: histo.Fit(signalP4Gaus,"B","", 300, 2000)
 
 	signalP4= TF1("signalP4", "[0]*pow(1-x/8000.0,[1])/pow(x/8000.0,[2]+[3]*log(x/8000.))",350,2000);
 	signalP4.SetParameter( 0, p0 )
@@ -221,13 +301,6 @@ def plotSignalP4Gaus( mass, output, histo, p0, p1, p2, p3, g0, g1, g2 ):
 	signalGaus.SetParameter( 1, g1 )
 	signalGaus.SetParameter( 2, g2 )
 	signalGaus.SetLineColor(3)
-
-	gStyle.SetOptStat(0)
-	gStyle.SetOptFit(1)
-	gStyle.SetStatY(0.9)
-	gStyle.SetStatX(0.9)
-	gStyle.SetStatW(0.12)
-	gStyle.SetStatH(0.12) 
 
 	histo.GetXaxis().SetTitle("Heavier Stop Reconstruction Invariant Mass [GeV]")
 	histo.GetYaxis().SetTitle("Quadruplets / 10 GeV")
@@ -248,20 +321,25 @@ def plotSignalP4Gaus( mass, output, histo, p0, p1, p2, p3, g0, g1, g2 ):
 	signalP4.Draw("same")
 	signalGaus.Draw("same")
 	signalP4Gaus.Draw("same")
+
 	textBox.Draw()
 	textBox2.Draw()
 	textBox3.Draw()
 	textBox4.Draw()
 	textBox5.Draw()
 	legend.Draw()
-	c3.SaveAs(outputDir+output+"_FitP4Gauss.pdf")
+	c3.SaveAs(outputDir+output+"_FitP4Gauss_RooFit.pdf")
+	c3.SaveAs(outputDir+output+"_FitP4Gauss_RooFit.png")
 
+#######################################################################
 if __name__ == '__main__':
 
 	###### Input parameters
 	st2mass = [ 450 , 550, 650, 750 ]
+	#st2mass = [ 750 ]
 	st1mass = 200
-	jes = [ 'nom', 'down', 'up']
+	jes = [ 'nom' , 'down', 'up']
+	#jes = [ 'up' ]
 	histo = 'massRecoDiBjetDiJet_cutDiagStop2bbjj0' 
 	folder = 'step3plots1D' 
 
