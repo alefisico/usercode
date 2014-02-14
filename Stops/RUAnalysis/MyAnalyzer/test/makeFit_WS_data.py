@@ -38,7 +38,7 @@ x = RooRealVar("x","Quadruplet Invariant Mass [GeV]",0.,2000.)
 #########################################################
 def fitP4toData(histo, folder, file, outputDir, WSname, WSDir):
 
-	#x.setRange(FitStart,FitEnd)
+	x.setRange(FitStart,FitEnd)
 	quadruplets = RooArgList( x )
 
 	##### Background (P4 function)
@@ -209,16 +209,16 @@ def plotResoBasedBin(file, h, folder, p1, p2, p3, p1Err, p2Err, p3Err, nBkg, nBk
 		
 	#for bin in range(11, len(massBins)-1):
 	for bin in range(0, len(massBins)-1):
-		#N = (h_Initial.GetBinContent(bin))
-		N = (hFit.GetBinContent(bin))
+		N = hFit.GetBinContent(bin)
+		errDiff = hFit.GetBinError(bin)
 		binMiddlepoint = (massBins[bin] + massBins[bin+1])/2
 		valIntegral = (P4Fit.Eval(binMiddlepoint))
 		##print binMiddlepoint, valIntegral, N
 		#print N, massBins[bin], massBins[bin+1], valIntegral, (massBins[bin] + massBins[bin+1])/2
 
 
-		errDiff = sqrt(N)
 		diff = (N - valIntegral)/ valIntegral
+		resError = diff * TMath.Sqrt( TMath.Power( P4Fit.GetParError(0) / P4Fit.GetParameter(0),2 ) + TMath.Power( p1Err/ p1, 2 )  + TMath.Power( p2Err/ p2, 2 )  + TMath.Power( p3Err/ p3, 2 ) )
 		#print N, errDiff
 		if (( massBins[bin] >= FitStart) and (N != 0) and ( massBins[bin] <= FitEnd) ):
 			pull = (N - valIntegral)/ errDiff
@@ -226,9 +226,8 @@ def plotResoBasedBin(file, h, folder, p1, p2, p3, p1Err, p2Err, p3Err, nBkg, nBk
 			hPull.SetBinContent(bin, pull)
 			hPull.SetBinError(bin, 1.0)
 	
-			#resError = diff * TMath.Sqrt( TMath.Power( P4Fit.GetParError(0) / P4Fit.GetParameter(0),2 ) + TMath.Power( p1Err/ p1, 2 )  + TMath.Power( p2Err/ p2, 2 )  + TMath.Power( p3Err/ p3, 2 ) )
 			hResidual.SetBinContent(bin, diff)
-			hResidual.SetBinError(bin, hFit.GetBinError(bin)/valIntegral )#resError )#errDiff/valIntegral)
+			hResidual.SetBinError(bin, resError )#errDiff/valIntegral )
 	############################################################################### 
 
 	##### Histo to save
@@ -255,8 +254,8 @@ def plotResoBasedBin(file, h, folder, p1, p2, p3, p1Err, p2Err, p3Err, nBkg, nBk
 	#hResidual.GetYaxis().SetTitleSize(0.1)
 	#hResidual.GetYaxis().SetTitleOffset(1.2)
 	hResidual.SetMarkerStyle(7)
-	hResidual.GetYaxis().SetLimits(-5,5)
-	hResidual.SetMaximum(1)
+	#hResidual.GetYaxis().SetLimits(-5,5)
+	#hResidual.SetMaximum(1)
 
 	######## Legends and text
 	legend=TLegend(0.25,0.15,0.45,0.25)
@@ -287,23 +286,29 @@ def plotResoBasedBin(file, h, folder, p1, p2, p3, p1Err, p2Err, p3Err, nBkg, nBk
 	line = TGraph(2, xline, yline)
 	line.SetLineColor(kRed)
 
-	hPull.GetXaxis().SetTitle("")
-	hPull.GetYaxis().SetLabelSize(0.08)
-	hPull.GetXaxis().SetLabelSize(0.08)
-	hPull.GetYaxis().SetTitleSize(0.06)
-	hPull.GetYaxis().SetTitleOffset(0.6)
-	hPull.Sumw2()
 
-	hResidual.GetXaxis().SetTitle("")
-	hResidual.GetYaxis().SetLabelSize(0.08)
-	hResidual.GetXaxis().SetLabelSize(0.08)
-	hResidual.GetYaxis().SetTitleSize(0.06)
-	hResidual.GetYaxis().SetTitleOffset(0.6)
-	hResidual.SetMaximum(3)
-	hResidual.SetMinimum(-2)
-	#hResidual.Sumw2()
 
 	######### Plotting Histograms
+	c2 = TCanvas('c2', 'c2',  10, 10, 750, 500 )
+	gStyle.SetOptStat(0)
+	hPull.Sumw2()
+	hPull.Draw("e")
+	line.Draw("L")
+	textBox.Draw("same")
+	c2.SaveAs(outputDir+histo+"_data_FitP4_Pull_RooFit.pdf")
+	c2.SaveAs(outputDir+histo+"_data_FitP4_Pull_RooFit.png")
+	del c2
+	
+	c3 = TCanvas('c3', 'c3',  10, 10, 750, 500 )
+	gStyle.SetOptStat(0)
+	#hResidual.Sumw2()
+	hResidual.Draw("e")
+	line.Draw("L")
+	textBox.Draw("same")
+	c3.SaveAs(outputDir+histo+"_data_FitP4_Residual_RooFit.pdf")
+	c3.SaveAs(outputDir+histo+"_data_FitP4_Residual_RooFit.png")
+	del c3
+	
 	c1 = TCanvas('c1', 'c1',  10, 10, 750, 1000 )
 	pad1 = TPad("pad1", "Fit",0,0.50,1.00,1.00,-1)
 	pad2 = TPad("pad2", "Pull",0,0.25,1.00,0.50,-1)
@@ -331,37 +336,31 @@ def plotResoBasedBin(file, h, folder, p1, p2, p3, p1Err, p2Err, p3Err, nBkg, nBk
 	
 	pad2.cd()
 	gStyle.SetOptStat(0)
+	hPull.GetXaxis().SetTitle("")
+	hPull.GetYaxis().SetLabelSize(0.08)
+	hPull.GetXaxis().SetLabelSize(0.08)
+	hPull.GetYaxis().SetTitleSize(0.06)
+	hPull.GetYaxis().SetTitleOffset(0.6)
+	#hPull.Sumw2()
 	hPull.Draw("E")
 	line.Draw("L")
 	
 	pad3.cd()
 	gStyle.SetOptStat(0)
+	hResidual.GetXaxis().SetTitle("")
+	hResidual.GetYaxis().SetLabelSize(0.08)
+	hResidual.GetXaxis().SetLabelSize(0.08)
+	hResidual.GetYaxis().SetTitleSize(0.06)
+	hResidual.GetYaxis().SetTitleOffset(0.6)
+	#hResidual.SetMaximum(3)
+	#hResidual.SetMinimum(-2)
+	#hResidual.Sumw2()
 	hResidual.Draw("e")
 	line.Draw("L")
 	
 	c1.SaveAs(outputDir+histo+"_data_FitP4_RooFit.pdf")
 	c1.SaveAs(outputDir+histo+"_data_FitP4_RooFit.png")
 	del c1
-	
-	c2 = TCanvas('c2', 'c2',  10, 10, 750, 500 )
-	gStyle.SetOptStat(0)
-	hPull.Sumw2()
-	hPull.Draw("e")
-	line.Draw("L")
-	textBox.Draw("same")
-	c2.SaveAs(outputDir+histo+"_data_FitP4_Pull_RooFit.pdf")
-	c2.SaveAs(outputDir+histo+"_data_FitP4_Pull_RooFit.png")
-	del c2
-	
-	c3 = TCanvas('c3', 'c3',  10, 10, 750, 500 )
-	gStyle.SetOptStat(0)
-	#hResidual.Sumw2()
-	hResidual.Draw("e")
-	line.Draw("L")
-	textBox.Draw("same")
-	c3.SaveAs(outputDir+histo+"_data_FitP4_Residual_RooFit.pdf")
-	c3.SaveAs(outputDir+histo+"_data_FitP4_Residual_RooFit.png")
-	del c3
 	
 	c4 = TCanvas('c4', 'c4',  10, 10, 750, 500 )
 	gStyle.SetOptFit()
